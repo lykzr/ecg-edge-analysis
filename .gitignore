@@ -1,0 +1,49 @@
+# Vivado 自动生成的缓存、综合/实现结果和临时工程数据
+vivado/**/.*.cache/
+vivado/**/*.cache/
+vivado/**/*.gen/
+vivado/**/*.runs/
+vivado/**/*.hw/
+vivado/**/*.sim/
+vivado/**/ip_user_files/
+vivado/**/.Xil/
+vivado/**/bd/**/ui/
+
+# Vitis/Codex 等 IDE 的本机工作区和日志，不是项目源代码
+_ide/
+.metadata/
+*.vitisWorkspace.json
+
+# 工具日志、波形、报告和中间网表
+*.jou
+*.log
+*.str
+*.wdb
+*.vcd
+*.dcp
+*.pb
+*.rpt
+*.rpx
+*.wdf
+*.xpe
+*.backup.*
+
+# 编译、下载和硬件交付生成物；需要发布时放到 GitHub Release
+*.bit
+*.bin
+*.ltx
+*.mcs
+*.prm
+*.pdi
+*.elf
+*.hwh
+*.hwdef
+*.xsa
+
+# 旧脚本和通用构建目录
+build/
+export/
+logs/
+*.o
+*.d
+*.lock
