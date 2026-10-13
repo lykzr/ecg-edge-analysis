@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xF9889C9CBFC739E0",
+      "boundary_crc": "0xF9889C9CC3250B72",
       "device": "xc7z020clg400-2",
       "gen_directory": "../../../../ecg_edge.gen/sources_1/bd/ecg_system",
       "name": "ecg_system",
@@ -301,8 +301,14 @@
           "PCW_EN_CLK0_PORT": {
             "value": "1"
           },
-          "PCW_EN_UART1": {
+          "PCW_EN_EMIO_UART0": {
+            "value": "0"
+          },
+          "PCW_EN_UART0": {
             "value": "1"
+          },
+          "PCW_EN_UART1": {
+            "value": "0"
           },
           "PCW_FCLK_CLK0_BUF": {
             "value": "TRUE"
@@ -313,32 +319,32 @@
           "PCW_FPGA_FCLK0_ENABLE": {
             "value": "1"
           },
-          "PCW_MIO_48_IOTYPE": {
-            "value": "LVCMOS 1.8V"
+          "PCW_MIO_14_IOTYPE": {
+            "value": "LVCMOS 3.3V"
           },
-          "PCW_MIO_48_PULLUP": {
+          "PCW_MIO_14_PULLUP": {
             "value": "enabled"
           },
-          "PCW_MIO_48_SLEW": {
+          "PCW_MIO_14_SLEW": {
             "value": "slow"
           },
-          "PCW_MIO_49_IOTYPE": {
-            "value": "LVCMOS 1.8V"
+          "PCW_MIO_15_IOTYPE": {
+            "value": "LVCMOS 3.3V"
           },
-          "PCW_MIO_49_PULLUP": {
+          "PCW_MIO_15_PULLUP": {
             "value": "enabled"
           },
-          "PCW_MIO_49_SLEW": {
+          "PCW_MIO_15_SLEW": {
             "value": "slow"
           },
           "PCW_MIO_TREE_PERIPHERALS": {
             "value": [
-              "unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#UART",
-              "1#UART 1#unassigned#unassigned#unassigned#unassigned"
+              "unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#UART 0#UART",
+              "0#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned"
             ]
           },
           "PCW_MIO_TREE_SIGNALS": {
-            "value": "unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#tx#rx#unassigned#unassigned#unassigned#unassigned"
+            "value": "unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#rx#tx#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned#unassigned"
           },
           "PCW_PRESET_BANK0_VOLTAGE": {
             "value": "LVCMOS 3.3V"
@@ -346,14 +352,17 @@
           "PCW_PRESET_BANK1_VOLTAGE": {
             "value": "LVCMOS 1.8V"
           },
-          "PCW_UART1_GRP_FULL_ENABLE": {
+          "PCW_UART0_GRP_FULL_ENABLE": {
             "value": "0"
           },
-          "PCW_UART1_PERIPHERAL_ENABLE": {
+          "PCW_UART0_PERIPHERAL_ENABLE": {
             "value": "1"
           },
-          "PCW_UART1_UART1_IO": {
-            "value": "MIO 48 .. 49"
+          "PCW_UART0_UART0_IO": {
+            "value": "MIO 14 .. 15"
+          },
+          "PCW_UART1_PERIPHERAL_ENABLE": {
+            "value": "0"
           },
           "PCW_UART_PERIPHERAL_FREQMHZ": {
             "value": "100"
@@ -377,10 +386,10 @@
             "value": "533.333333"
           },
           "PCW_UIPARAM_DDR_MEMORY_TYPE": {
-            "value": "DDR 3"
+            "value": "DDR 3 (Low Voltage)"
           },
           "PCW_UIPARAM_DDR_PARTNO": {
-            "value": "MT41J256M16 RE-125"
+            "value": "MT41K256M16 RE-125"
           },
           "PCW_USE_M_AXI_GP0": {
             "value": "1"
@@ -530,6 +539,11 @@
         "xci_path": "ip\\ecg_system_ecg_qrs_axi_0_0\\ecg_system_ecg_qrs_axi_0_0.xci",
         "inst_hier_path": "ecg_qrs_axi_0",
         "has_run_ip_tcl": "true",
+        "parameters": {
+          "SAMPLE_RATE_HZ": {
+            "value": "360"
+          }
+        },
         "reference_info": {
           "ref_type": "hdl",
           "ref_name": "ecg_qrs_axi_lite",
@@ -1083,9 +1097,9 @@
           "processing_system7_0/M_AXI_GP0_ACLK",
           "ps7_0_axi_periph/S00_ACLK",
           "rst_ps7_0_100M/slowest_sync_clk",
-          "ecg_qrs_axi_0/s_axi_aclk",
           "ps7_0_axi_periph/M00_ACLK",
-          "ps7_0_axi_periph/ACLK"
+          "ps7_0_axi_periph/ACLK",
+          "ecg_qrs_axi_0/s_axi_aclk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {
@@ -1098,9 +1112,9 @@
         "ports": [
           "rst_ps7_0_100M/peripheral_aresetn",
           "ps7_0_axi_periph/S00_ARESETN",
-          "ecg_qrs_axi_0/s_axi_aresetn",
           "ps7_0_axi_periph/M00_ARESETN",
-          "ps7_0_axi_periph/ARESETN"
+          "ps7_0_axi_periph/ARESETN",
+          "ecg_qrs_axi_0/s_axi_aresetn"
         ]
       }
     },

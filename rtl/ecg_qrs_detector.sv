@@ -57,9 +57,12 @@ module ecg_qrs_detector #(
     logic [ENERGY_WIDTH-1:0]      derivative_term;
     logic [ENERGY_WIDTH-1:0]      energy_next;
     logic [ENERGY_WIDTH-1:0]      threshold_next;
+    logic [31:0]                  corrected_sample_index;
     integer                       reset_index;
 
     always_comb begin
+        corrected_sample_index = (sample_index >= WINDOW_CENTER)
+                               ? sample_index - WINDOW_CENTER : 0;
         // 计算相邻样本差分的绝对值，作为当前积分窗口的新输入。
         derivative = $signed({sample_in[SAMPLE_WIDTH-1], sample_in})
                    - $signed({previous_sample[SAMPLE_WIDTH-1], previous_sample});
@@ -142,17 +145,13 @@ module ecg_qrs_detector #(
                      && (refractory_remaining == 0)) begin
                         // 阈值上穿且不处于不应期时，输出一个 QRS 候选事件。
                         qrs_valid <= 1'b1;
-                        qrs_sample_index <= (sample_index >= WINDOW_CENTER)
-                                          ? sample_index - WINDOW_CENTER
-                                          : 0;
+                        qrs_sample_index <= corrected_sample_index;
 
                         if (have_last_qrs) begin
-                            rr_interval_samples <= sample_index - WINDOW_CENTER - last_qrs_index;
+                            rr_interval_samples <= corrected_sample_index - last_qrs_index;
                         end
 
-                        last_qrs_index <= (sample_index >= WINDOW_CENTER)
-                                        ? sample_index - WINDOW_CENTER
-                                        : 0;
+                        last_qrs_index <= corrected_sample_index;
                         have_last_qrs <= 1'b1;
                         refractory_remaining <= REFRACTORY_LENGTH - 1;
                         signal_level <= signal_level - (signal_level >> 3)

@@ -1,3 +1,2 @@
-# 兼容旧文件名：现在使用完整的一次性工程配置脚本。
-set script_dir [file dirname [file normalize [info script]]]
-source [file join $script_dir build_ac7020_ecg_system.tcl]
+# 兼容旧入口；使用领航者 V2 完整配置。
+source [file join [file dirname [file normalize [info script]]] build_navigator_ecg_system.tcl]
