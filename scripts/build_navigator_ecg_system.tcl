@@ -70,6 +70,8 @@ if {![llength [get_bd_cells -quiet processing_system7_0]]} {
 set ps_cell [require_one [get_bd_cells -quiet processing_system7_0] "processing_system7_0"]
 # 正点原子领航者 V2：PS 输入时钟 33.333 MHz、32 位 DDR3、533.333 MHz、UART0 在 MIO14/15。
 # 启用 100 MHz FCLK0 作为 AXI 时钟，并启用 PS 的 M_AXI_GP0 主接口。
+# QSPI 依据配套 Vitis 第 7 章及 6_axi_gpio_fsbl 的 PS7 配置：
+# 单片 W25Q256，Single SS 4bit IO、MIO1..6，无反馈时钟；供 FSBL 自启动。
 set_property -dict [list \
     CONFIG.PCW_CRYSTAL_PERIPHERAL_FREQMHZ {33.333333} \
     CONFIG.PCW_PRESET_BANK0_VOLTAGE {LVCMOS 3.3V} \
@@ -82,6 +84,15 @@ set_property -dict [list \
     CONFIG.PCW_UART1_PERIPHERAL_ENABLE {0} \
     CONFIG.PCW_UART0_PERIPHERAL_ENABLE {1} \
     CONFIG.PCW_UART0_UART0_IO {MIO 14 .. 15} \
+    CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1} \
+    CONFIG.PCW_QSPI_QSPI_IO {MIO 1 .. 6} \
+    CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1} \
+    CONFIG.PCW_QSPI_GRP_SINGLE_SS_IO {MIO 1 .. 6} \
+    CONFIG.PCW_QSPI_GRP_FBCLK_ENABLE {0} \
+    CONFIG.PCW_QSPI_GRP_IO1_ENABLE {0} \
+    CONFIG.PCW_QSPI_GRP_SS1_ENABLE {0} \
+    CONFIG.PCW_QSPI_PERIPHERAL_CLKSRC {IO PLL} \
+    CONFIG.PCW_QSPI_PERIPHERAL_FREQMHZ {200} \
     CONFIG.PCW_EN_CLK0_PORT {1} \
     CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100} \
     CONFIG.PCW_USE_M_AXI_GP0 {1} \

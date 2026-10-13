@@ -8,11 +8,13 @@
 - `scripts/`：领航者配置、完整工程创建和 RTL 自检脚本。
 - `tests/`：可复用接口自检。
 - `vivado/ecg_edge/ecg_edge.xpr`：现有 Vivado 工程。
-- `docs/`：项目计划、寄存器说明、资料说明和迁移记录。
-- `docs/reference/`：本地参考 PDF，默认不纳入公开交付。
-- `tmp/`：备份、资料索引、日志、波形和临时构建，全部忽略。
+- `docs/`：项目计划、寄存器说明、资料说明和下载教程；历史过程集中在 `lykzr.md`。
+- `tmp/`：构建工程、缓存、日志、备份和待验证产物；不自动清空。
+- `releases/latest/`：当前发布镜像和配套文件，见 [烧录说明与验证范围](releases/latest/README.md)。历史版本留在本地并被忽略，不删除；[归档约定](releases/README.md)。
 
-[项目计划](docs/project_plan.md) · [寄存器接口](docs/register_map.md) · [资料说明](docs/materials_review.md) · [迁移记录](docs/workspace_migration.md)
+[项目计划](docs/计划.md) · [寄存器接口](docs/register_map.md) · [资料说明](docs/materials_review.md) · [工程过程记录](lykzr.md)
+
+[Zynq 下载与串口通用教程](docs/如何下载.md)：包含 Vivado/Vitis 操作、独立工作区、平台与应用构建、Run 初始化及 QSPI 固化。QSPI 测试产物在 `tmp/qspi_boot_20261013_01/`，旧 JTAG 示例工作区保留在 `tmp/vitis_bringup/`。
 
 ## 领航者配置
 
@@ -52,8 +54,8 @@ source {<ecg_edge项目根目录>/scripts/build_navigator_ecg_system.tcl}
 
 ## 验证边界
 
-修复前的综合/实现/bitstream 已存在，但来自旧配置，不能继续视为领航者可用结果。修复后的 RTL 自检已经通过；当前 BD 的验证结果及修复后综合结果见 [迁移与验证记录](docs/workspace_migration.md)。没有执行下载、上板、真实心电输入或标注数据准确率验证。
+10 月 6 日旧 bitstream 早于领航者修复，不能继续作为新版输出。10 月 13 日的 JTAG 候选版本已记录 RTL 自检、BD 验证、整机综合/实现、bitstream 生成及 XSA 导出通过，证据在 `tmp/pre_download_20261013_01/`；用户也提供了 Hello World 板上串口输出。具体环境、产物和各阶段边界见 [工程过程记录](lykzr.md)。Vitis 工作区迁移后尚未再次上板验证，ECG 寄存器读写、真实心电输入与标注准确率仍未验证；QSPI 自启动另行验收。
 
-尚需完成 PS/Vitis 样本回放应用和平台、软件参考模型、带通/基线处理、信号质量评估以及 AFE/ADC 接入。硬件框架不会仅凭下载 bitstream 自动采集心电。采样率、幅值和模拟前端仍需确认。
+尚需完成基于现有 PS/Vitis 平台的 ECG 样本回放应用、软件参考模型、带通/基线处理、信号质量评估以及 AFE/ADC 接入。硬件框架不会仅凭下载 bitstream 自动采集心电。采样率、幅值和模拟前端仍需确认。
 
 Git 操作继续暂停。`.gitignore` 只影响未来未跟踪文件的选择，不能自动移除已经跟踪的生成物；本轮没有操作索引、提交、远端或 `.git`。

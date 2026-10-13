@@ -1,0 +1,80 @@
+{
+  "version": "20261013-hello-world-qspi-v1",
+  "publishedLocation": "releases/latest",
+  "board": "正点原子领航者 V2 / Zynq-7020，具体核心板与底板修订待核对",
+  "tools": "Vivado/Vitis/Bootgen 2026.1",
+  "application": "Hello World",
+  "validation": {
+    "hardwareBuild": "PASS",
+    "softwareBuild": "PASS",
+    "bootImageHeaderCheck": "PASS",
+    "flashVerify": "USER_REPORTED_PASS",
+    "resetUARTOutput": "USER_REPORTED_PASS",
+    "fullPowerCycleBoot": "NOT_SEPARATELY_CONFIRMED",
+    "ECGFunction": "NOT_TESTED"
+  },
+  "files": [
+    {
+      "path": "BOOT.BIN",
+      "source": "tmp/qspi_boot_20261013_01/BOOT.BIN",
+      "bytes": 4169224,
+      "sha256": "4B902DB837F8BB326F81775B745F651011403655D677EF0893D550C425F21A38"
+    },
+    {
+      "path": "fsbl.elf",
+      "source": "tmp/qspi_boot_20261013_01/vitis_workspace/ecg_platform/export/ecg_platform/sw/boot/fsbl.elf",
+      "bytes": 360312,
+      "sha256": "285A83914326DF5B57238CF6FEAE9F908F0B2682DD24500F49B89D2759762698"
+    },
+    {
+      "path": "ecg_system_candidate.bit",
+      "source": "tmp/qspi_boot_20261013_01/ecg_system_candidate.bit",
+      "bytes": 4045773,
+      "sha256": "D6471189437FAA4DD3FFB402C4A8CFF2F3B39A5349BA836A7A61F33273F50CFB"
+    },
+    {
+      "path": "ecg_system_candidate.xsa",
+      "source": "tmp/qspi_boot_20261013_01/ecg_system_candidate.xsa",
+      "bytes": 321430,
+      "sha256": "FEA241041311C9B40B0DB9806C66A6ADA2175B84C84FF571F72DE2EFD7BC6248"
+    },
+    {
+      "path": "hello_world.elf",
+      "source": "tmp/qspi_boot_20261013_01/vitis_workspace/hello_world/build/hello_world.elf",
+      "bytes": 124216,
+      "sha256": "450BE2879968C060B804680FDC6426B6CCECF98904181880A5D4D3ED9AF46A10"
+    },
+    {
+      "path": "boot.bif",
+      "source": "release packaging",
+      "bytes": 94,
+      "sha256": "269EE19A4881D6B5803CA6506CCC41E050DA79E0A0D96C3C2CB4E55D0196BB28"
+    },
+    {
+      "path": "README.md",
+      "source": "release packaging",
+      "bytes": 2300,
+      "sha256": "277EBC6B491EDEB29D3DEB6F8F947BE1F0246EAF20A3D7DB115E1B4A9C89DAB0"
+    },
+    {
+      "path": "validation.md",
+      "source": "release packaging",
+      "bytes": 1252,
+      "sha256": "09FDB69029836603254215CDE03EA012163B18E589A6440B19E4BB41B45930B2"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "scripts/build_navigator_ecg_system.tcl",
+      "sha256": "C90BE61D168C45F7B2CAB27819D2F16963404C60A0347749618D6C4B7B940B86"
+    },
+    {
+      "path": "rtl/ecg_qrs_detector.sv",
+      "sha256": "1572570170186BC657A0763335AFC88DAC0A29B8A228E6992C1883E5E9FE96F6"
+    },
+    {
+      "path": "rtl/ecg_qrs_axi_lite.sv",
+      "sha256": "419D11F310BCBABF96A34F0EDC2A5FD810B7FE0565ACBDB02E96D53FC119821C"
+    }
+  ]
+}
