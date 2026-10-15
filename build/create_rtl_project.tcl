@@ -1,5 +1,5 @@
-if {[llength $argv] != 1} {
-    puts stderr "用法：vivado -mode batch -source create_rtl_project.tcl -tclargs <Vivado器件完整型号>"
+if {[llength $argv] < 1 || [llength $argv] > 2} {
+    puts stderr "用法：vivado -mode batch -source create_rtl_project.tcl -tclargs <Vivado器件完整型号> ?新输出目录?"
     exit 2
 }
 
@@ -7,7 +7,8 @@ set device_part [lindex $argv 0]
 set script_dir [file dirname [file normalize [info script]]]
 set project_root [file normalize [file join $script_dir ..]]
 set project_dir [file join $project_root tmp vivado ecg_edge]
-set rtl_file [file join $project_root rtl ecg_qrs_detector.sv]
+if {[llength $argv] == 2} { set project_dir [file normalize [lindex $argv 1]] }
+set rtl_file [file join $project_root src rtl ecg_qrs_detector.sv]
 
 if {![file isfile $rtl_file]} {
     error "找不到 RTL 源文件：$rtl_file"

@@ -1,0 +1,111 @@
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "name": "smoke_waveform",
+      "config": {
+        "sample_width": 16,
+        "sample_rate_hz": 360,
+        "integration_ms": 120,
+        "refractory_ms": 200,
+        "energy_width": 24,
+        "initial_noise_level": 4096,
+        "initial_signal_level": 16384
+      },
+      "cycles": 11722,
+      "fields": 15,
+      "events": 16,
+      "result": "PASS"
+    },
+    {
+      "name": "random_360",
+      "config": {
+        "sample_width": 16,
+        "sample_rate_hz": 360,
+        "integration_ms": 120,
+        "refractory_ms": 200,
+        "energy_width": 24,
+        "initial_noise_level": 4096,
+        "initial_signal_level": 16384
+      },
+      "cycles": 2403,
+      "fields": 15,
+      "events": 3,
+      "result": "PASS"
+    },
+    {
+      "name": "random_500",
+      "config": {
+        "sample_width": 16,
+        "sample_rate_hz": 500,
+        "integration_ms": 120,
+        "refractory_ms": 200,
+        "energy_width": 24,
+        "initial_noise_level": 4096,
+        "initial_signal_level": 16384
+      },
+      "cycles": 2403,
+      "fields": 15,
+      "events": 3,
+      "result": "PASS"
+    },
+    {
+      "name": "window_one_zero_levels",
+      "config": {
+        "sample_width": 8,
+        "sample_rate_hz": 1000,
+        "integration_ms": 0,
+        "refractory_ms": 0,
+        "energy_width": 24,
+        "initial_noise_level": 0,
+        "initial_signal_level": 0
+      },
+      "cycles": 1162,
+      "fields": 15,
+      "events": 1,
+      "result": "PASS"
+    },
+    {
+      "name": "energy_wrap",
+      "config": {
+        "sample_width": 16,
+        "sample_rate_hz": 1000,
+        "integration_ms": 9,
+        "refractory_ms": 4,
+        "energy_width": 12,
+        "initial_noise_level": 4000,
+        "initial_signal_level": 100
+      },
+      "cycles": 2403,
+      "fields": 15,
+      "events": 232,
+      "result": "PASS"
+    },
+    {
+      "name": "noise_above_signal_32",
+      "config": {
+        "sample_width": 16,
+        "sample_rate_hz": 360,
+        "integration_ms": 120,
+        "refractory_ms": 200,
+        "energy_width": 32,
+        "initial_noise_level": 16,
+        "initial_signal_level": 8
+      },
+      "cycles": 822,
+      "fields": 15,
+      "events": 1,
+      "result": "PASS"
+    }
+  ],
+  "total_cycles": 20915,
+  "source_hashes": {
+    "src/rtl/ecg_qrs_detector.sv": "1572570170186bc657a0763335afc88dac0a29b8a228e6992c1883e5e9fe96f6",
+    "src/reference/ecg_reference.py": "12ecbb37a41a3b3735dc6595f0b6c18eb8c6f833471f9792df4c94914d911266",
+    "sim/tb_ecg_reference.sv": "4132a53521bffa5d68d6c7a3a58ef8a72a440534fafb61a6ed350cd4b5fde335",
+    "sim/check_ecg_reference.py": "d6f5d0e63dc8b2690524cfd62c54c42d47db9c0557f42695d8b052da0e3bcd72"
+  },
+  "scope": "detector cycle/state agreement; no AXI/FIFO/clinical accuracy validation",
+  "smoke_board_test": "NOT_TESTED",
+  "board_used": false
+}

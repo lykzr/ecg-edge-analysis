@@ -1,0 +1,57 @@
+{
+  "record": "100",
+  "lead": "MLII",
+  "sampling_hz": 360,
+  "samples": 650000,
+  "duration_seconds": 1805.5555555555557,
+  "input": "(digital_ADC - 1024), scale=1, no filtering",
+  "input_range": [
+    -543,
+    287
+  ],
+  "config": {
+    "sample_width": 16,
+    "sample_rate_hz": 360,
+    "integration_ms": 120,
+    "refractory_ms": 200,
+    "energy_width": 24,
+    "initial_noise_level": 4096,
+    "initial_signal_level": 16384
+  },
+  "protocol": "whole record, no warm-up exclusion; ordered one-to-one matching within +/-54 samples (150 ms); no offset correction",
+  "reference_beats": 2273,
+  "annotation_codes": {
+    "28": 1,
+    "1": 2239,
+    "8": 33,
+    "5": 1
+  },
+  "detected_beats": 0,
+  "diagnostic": {
+    "max_integrated_energy": 1002,
+    "min_threshold": 4129,
+    "max_threshold": 7168,
+    "final_signal_level": 16384,
+    "final_noise_level": 553,
+    "independent_window_check": "PASS"
+  },
+  "TP": 0,
+  "FN": 2273,
+  "FP": 0,
+  "sensitivity": 0.0,
+  "positive_predictivity": null,
+  "F1": 0.0,
+  "timing_ms": null,
+  "rr_ms": null,
+  "source_sha256": {
+    "100.dat": "b2ea3c250e56e48f4b7b90697832b8ecd1afa1e0bb31f2dcfea4ed6e1075a639",
+    "100.hea": "60ebc904c7bf3e04d142638d3fd5c903e8dc9f10f1ea3264e07926aa089ee75e",
+    "100.atr": "8d8a5349fb16638ebbf649f1779d12e96d91b736b2aafe59db43719ae583d471"
+  },
+  "implementation_sha256": {
+    "scripts\\evaluate_mitdb_100.py": "9313d77ee5c096931811aaa4d71d3b7492690dbc85f8ad4c2cb906c782f90818",
+    "software\\reference\\ecg_reference.py": "12ecbb37a41a3b3735dc6595f0b6c18eb8c6f833471f9792df4c94914d911266"
+  },
+  "smoke_board_test": "NOT_TESTED",
+  "scope": "single-record offline baseline; no RTL/board/clinical validation"
+}

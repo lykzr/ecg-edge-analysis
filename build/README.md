@@ -1,0 +1,13 @@
+# 可复现硬件构建入口
+
+本目录只保存正式Tcl脚本，工具工程、缓存和报告写入tmp/。
+
+```powershell
+& '<Vivado安装目录>/bin/vivado.bat' -mode batch -source build/create_rtl_project.tcl -tclargs xc7z020clg400-2
+```
+
+默认创建tmp/vivado/ecg_edge，已有目录即停止。可在器件参数之后另给一个新的输出目录，用于独立验证，不覆盖活动工程。此入口只创建并验证BD及生成输出，不自动综合、实现或生成bitstream。
+
+已有工程可执行build/build_navigator_ecg_system.tcl更新；迁移前生成的工程可能引用旧src路径，应从新入口重新生成，不能将旧缓存作为从零复现证明。完整综合/实现/导出的一键流水线、资源性能汇总与干净环境复现仍列在计划中。
+
+初级组PYNQ为推荐，非本工程当前依赖。实际板卡领航者V2，具体修订仍待实物核对；不可把当前配置当其他板卡预设。

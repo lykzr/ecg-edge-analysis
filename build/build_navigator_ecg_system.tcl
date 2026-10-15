@@ -32,8 +32,8 @@ if {[current_project -quiet] eq ""} {
 }
 
 set project_root [file normalize [file join [file dirname [info script]] ..]]
-set rtl_detector [file join $project_root rtl ecg_qrs_detector.sv]
-set rtl_axi [file join $project_root rtl ecg_qrs_axi_lite.sv]
+set rtl_detector [file join $project_root src rtl ecg_qrs_detector.sv]
+set rtl_axi [file join $project_root src rtl ecg_qrs_axi_lite.sv]
 foreach rtl_file [list $rtl_detector $rtl_axi] {
     if {![file isfile $rtl_file]} {
         error "找不到 RTL 文件：$rtl_file"

@@ -1,0 +1,173 @@
+{
+  "record": "100",
+  "lead": "MLII",
+  "sampling_hz": 360,
+  "samples": 650000,
+  "duration_seconds": 1805.5555555555557,
+  "input": "(digital_ADC - baseline) * 4096 / gain; symmetric rounding; int16 saturation; no filtering",
+  "profile": "peak",
+  "clipped_samples": 0,
+  "calibration": {
+    "samples": 720,
+    "seconds": 2,
+    "complete_windows": 677,
+    "method": "sorted full-window abs differences at floor((n-1)*p), p=0.5/0.9; no annotations",
+    "initial_noise_level": 1561,
+    "initial_signal_level": 12475,
+    "initial_threshold": 4289,
+    "startup_policy": "buffer prefix, estimate, reset detector and replay whole record; two-second startup buffering"
+  },
+  "input_range": [
+    -11121,
+    5878
+  ],
+  "config": {
+    "sample_width": 16,
+    "sample_rate_hz": 360,
+    "integration_ms": 120,
+    "refractory_ms": 200,
+    "energy_width": 24,
+    "initial_noise_level": 1561,
+    "initial_signal_level": 12475
+  },
+  "protocol": "whole record, no warm-up exclusion; ordered one-to-one matching within +/-54 samples (150 ms); no offset correction",
+  "reference_beats": 2273,
+  "annotation_codes": {
+    "28": 1,
+    "1": 2239,
+    "8": 33,
+    "5": 1
+  },
+  "detected_beats": 2273,
+  "diagnostic": {
+    "max_integrated_energy": 20522,
+    "min_threshold": 4124,
+    "max_threshold": 6573,
+    "final_signal_level": 14605,
+    "final_noise_level": 2481,
+    "independent_window_check": "PASS",
+    "samples_at_or_above_threshold": 114164,
+    "last_event_seconds": 1804.9055555555556
+  },
+  "TP": 2272,
+  "FN": 1,
+  "FP": 1,
+  "sensitivity": 0.9995600527936648,
+  "positive_predictivity": 0.9995600527936648,
+  "F1": 0.9995600527936648,
+  "timing_ms": {
+    "mean": 1.4879205790297338,
+    "median": 2.7777777777777777,
+    "mean_absolute": 1.490365805946792,
+    "minimum": -2.7777777777777777,
+    "maximum": 8.333333333333334
+  },
+  "rr_ms": {
+    "consecutive_matched_intervals": 2270,
+    "mean_absolute_error": 1.5198237885462555
+  },
+  "source_sha256": {
+    "100.dat": "b2ea3c250e56e48f4b7b90697832b8ecd1afa1e0bb31f2dcfea4ed6e1075a639",
+    "100.hea": "60ebc904c7bf3e04d142638d3fd5c903e8dc9f10f1ea3264e07926aa089ee75e",
+    "100.atr": "8d8a5349fb16638ebbf649f1779d12e96d91b736b2aafe59db43719ae583d471"
+  },
+  "implementation_sha256": {
+    "data\\evaluate_mitdb_100.py": "917ffcc505c5c140f9587ce9a29f3c228d2608fa3694fcbd6df5c70ad51cda92",
+    "src\\reference\\ecg_reference.py": "12ecbb37a41a3b3735dc6595f0b6c18eb8c6f833471f9792df4c94914d911266",
+    "src\\reference\\ecg_input.py": "53e4b0f0287255de0be648e5c8b72976f7f882da6980bb9c15fac7643ccf877d",
+    "src\\reference\\ecg_peak_reference.py": "3ca5ee2fd3adcf11e7964c9a2416d62acf4b4b2c66ad912838e68de90267c4e7"
+  },
+  "smoke_board_test": "NOT_TESTED",
+  "scope": "single-record offline baseline; no RTL/board/clinical validation",
+  "after_calibration": {
+    "start_sample": 720,
+    "reference_beats": 2270,
+    "detected_beats": 2270,
+    "TP": 2269,
+    "FN": 1,
+    "FP": 1,
+    "sensitivity": 0.9995594713656387,
+    "positive_predictivity": 0.9995594713656387,
+    "F1": 0.9995594713656387
+  },
+  "beat_types": {
+    "1": {
+      "reference": 2239,
+      "matched": 2238
+    },
+    "5": {
+      "reference": 1,
+      "matched": 1
+    },
+    "8": {
+      "reference": 33,
+      "matched": 33
+    }
+  },
+  "time_blocks": [
+    {
+      "start_seconds": 0.0,
+      "end_seconds": 300.0,
+      "TP": 371,
+      "FN": 0,
+      "FP": 0
+    },
+    {
+      "start_seconds": 300.0,
+      "end_seconds": 600.0,
+      "TP": 389,
+      "FN": 0,
+      "FP": 0
+    },
+    {
+      "start_seconds": 600.0,
+      "end_seconds": 900.0,
+      "TP": 381,
+      "FN": 0,
+      "FP": 0
+    },
+    {
+      "start_seconds": 900.0,
+      "end_seconds": 1200.0,
+      "TP": 373,
+      "FN": 0,
+      "FP": 0
+    },
+    {
+      "start_seconds": 1200.0,
+      "end_seconds": 1500.0,
+      "TP": 369,
+      "FN": 0,
+      "FP": 0
+    },
+    {
+      "start_seconds": 1500.0,
+      "end_seconds": 1800.0,
+      "TP": 382,
+      "FN": 0,
+      "FP": 1
+    },
+    {
+      "start_seconds": 1800.0,
+      "end_seconds": 1805.5555555555557,
+      "TP": 7,
+      "FN": 1,
+      "FP": 0
+    }
+  ],
+  "confirmation_delay_ms": {
+    "minimum": 22.22222222222222,
+    "maximum": 122.22222222222223,
+    "mean": 84.23766925746688
+  },
+  "development_gate": {
+    "result": "PASS",
+    "checks": {
+      "sensitivity_at_least_99_percent": true,
+      "positive_predictivity_at_least_99_percent": true,
+      "position_mae_at_most_10_ms": true,
+      "rr_mae_at_most_15_ms": true
+    },
+    "scope": "provisional record-100 development check only; not independent validation"
+  }
+}

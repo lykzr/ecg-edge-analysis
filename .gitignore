@@ -19,6 +19,7 @@ vivado/**/bd/**/ui/
 
 # Vitis/Codex 等 IDE 的本机工作区和日志，不是项目源代码
 _ide/
+.rigel_lopper/
 .metadata/
 *.vitisWorkspace.json
 **/__pycache__/
@@ -52,8 +53,12 @@ _ide/
 *.hwdef
 *.xsa
 
-# 旧脚本和通用构建目录
-build/
+# 子工程的编译目录；根 build/ 保存正式 Tcl 脚本
+**/build/
+!/build/
+/build/*
+!/build/*.tcl
+!/build/README.md
 export/
 logs/
 *.o

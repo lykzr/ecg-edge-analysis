@@ -26,9 +26,9 @@ JTAG 负责调试下载，UART 负责串口输入输出。连接 USB 串口并�
 
 ```text
 <project>/
-  rtl/                  正式硬件源码
-  scripts/              可复现构建脚本
-  software/             自己维护的应用源码（需要时建立）
+  src/rtl/                  正式硬件源码
+  build/                可复现硬件构建脚本
+  src/ps/               自己维护的应用源码
   docs/                 教程和说明
   tmp/
     vivado_build/       派生硬件工程及输出
@@ -183,7 +183,7 @@ Successfully ran Hello World application
 
 重新打开 Vitis 时，选择 **本项目根目录下 `tmp/vitis_bringup`**，然后按第 7—8 节打开串口和 Run。下一项 ECG 验证应先读配置寄存器，再送受控样本核对事件 FIFO；Hello World 示例没有完成这些动作。
 
-领航者接线、ECG 验收和资料依据见下列补充章节，ECG 接口见 [register_map.md](register_map.md)。
+领航者接线、ECG 验收和资料依据见下列补充章节，ECG 接口见 [register_map.md](../docs/register_map.md)。
 
 ## 12. 没有 SD 卡：将程序固化到 QSPI
 
@@ -236,7 +236,7 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 5. 匹配主目录手册的 `BOOT_CFG`：1=ON、2=ON 为 JTAG；1=ON、2=OFF 为 QSPI；两位 OFF 为 SD。按开关编号与 ON 丝印判断，设置后再上电。
 6. 用匹配电源供电并打开开关，分别确认 JTAG 器件和串口 COM 口。缺驱动时先查设备与系统，不自动运行下载盘安装器。串口使用 115200、8 数据位、无校验、1 停止位、无流控，COM 号按本机识别结果选择。
 
-构建时使用 `scripts/build_navigator_ecg_system.tcl` 生成或核对 BD；顶层为 `ecg_system_wrapper`，器件为 `xc7z020clg400-2`。记录所用源码、构建目录、bitstream 与 XSA，旧日志/XPR 中的历史路径需另行核对。BSP 标准输入输出应对应本设计的 UART0/MIO14–15；PS 初始化文件必须来自同一硬件设计。
+构建时使用 `build/build_navigator_ecg_system.tcl` 生成或核对 BD；顶层为 `ecg_system_wrapper`，器件为 `xc7z020clg400-2`。记录所用源码、构建目录、bitstream 与 XSA，旧日志/XPR 中的历史路径需另行核对。BSP 标准输入输出应对应本设计的 UART0/MIO14–15；PS 初始化文件必须来自同一硬件设计。
 
 10 月 6 日的 `vivado/ecg_edge/ecg_edge.runs/impl_1/ecg_system_wrapper.bit` 早于领航者修复，不能当新版产物。10 月 13 日的 JTAG 候选 bit/XSA 位于 `tmp/pre_download_20261013_01/`，Hello World ELF 位于 `tmp/vitis_bringup/hello_world/build/hello_world.elf`。原上板说明中“只有旧 bit、未找到 XSA/ELF”的描述已经过时。
 
@@ -256,7 +256,7 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 | PS 送样并消费事件 | 写 `0x43C00000`；读 FIFO 状态、位置、RR、序号，读完再弹出 | 单一消费者操作，定期记录溢出及丢弃计数 |
 | 固定 ECG 数据回放与比对 | 输入数、事件、RR、丢弃数及软件/仿真同输入参考 | 所测样本结果不能代替总体准确率或真实采集验证 |
 
-完整地址、权限及消费顺序见 [寄存器接口](register_map.md)。访问 PL 前必须初始化 PS、时钟和复位，避免把 AXI 访问异常误判为算法错误。过程和验证证据集中在 [lykzr.md](../lykzr.md)。
+完整地址、权限及消费顺序见 [寄存器接口](../docs/register_map.md)。访问 PL 前必须初始化 PS、时钟和复位，避免把 AXI 访问异常误判为算法错误。本机历史过程和完整验证证据集中在本地忽略的 lykzr.md；可共享阶段摘要见 [项目计划](../report/project_plan.md) 与 [100号结果说明](../data/README.md)。
 
 自动启动流程沿用第 12 节：固化 Hello World 只会运行示例，不会自动进行 ECG 检测。生成镜像、写介质和断电验收分别记录；本次文档合并未生成镜像或操作 Flash/SD，也未验证 QSPI 自启动。SD 路径另需准备匹配的 FAT32 卡和启动模式。
 
@@ -298,3 +298,203 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 本机入口为 `tmp/vitis_launcher/Open-Vitis.lnk`，先关闭已打开的 Vitis，再从文件资源管理器双击该入口；它使用绝对路径调用 vitis.bat，设置可写工作目录并打开当前软件工作区。之后仍可用 Vitis → Program Flash，选择 releases/latest 中的 BOOT.BIN 与 fsbl.elf。入口的语法、路径和工作目录检查通过，GUI 再次烧录尚待实际确认。无需为测试入口而重复擦写已成功的镜像。
 
 其他成员应核查自己的快捷方式和工作目录；本机路径只用于本机。原 AMD vitis.vbs 相对调用 vitis.bat，单独改原快捷方式的起始位置可能导致找不到工具，应使用绝对路径的启动入口或对应启动方式。不要为这个问题扩大安装目录写权限。
+
+2026-10-13 后续更新：用户选择直接修正原入口，系统级开始菜单的 Vitis 2026.1 快捷方式已备份并修改为绝对路径 vitis.bat，起始位置与 -w 参数均指向本机可写工作区。关闭旧 Vitis 后，从开始菜单重新启动即可；额外入口仍保留作备用。原安装目录权限未变。快捷方式回读检查成功，GUI 烧录完整重试尚未执行。
+
+## 20. PS 读取配置与受控样本/FIFO 自检
+
+正式应用源码在 `src/ps/ecg_smoke/main.c`，可复现构建脚本 `board/build_ecg_smoke.py`。当前已在独立工作区 `tmp/ecg_smoke/vitis_workspace` 构建平台及 `ecg_smoke` 应用，ELF 在该目录 `ecg_smoke/build/ecg_smoke.elf`。使用 latest 的匹配 XSA 和 bitstream，没有更改 RTL、PS 参数或当前 Hello World 发布镜像。此阶段先做 JTAG 运行，不写 Flash。
+
+### 用户运行
+
+1. 断电，将领航者 BOOT_CFG 设为 **1=ON、2=ON（JTAG）**，连接下载器并上电。
+2. Vitis 切换到本项目下 `tmp/ecg_smoke/vitis_workspace` 工作区；欢迎页可使用 Set Workspace。原开始菜单入口仍默认打开先前 QSPI 工作区，本次需要主动切换。
+3. 打开 COM14（若端口变化则选实际串口），115200。保持串口打开。
+4. 在左侧 FLOW 的 Component 下拉框选择应用 **ecg_smoke**，点击 **Run**。新工作区已构建，不需要创建新的平台或应用。
+5. 启动配置需要 Program Device=true、系统复位、匹配的 ps7_init.tcl、Cortex-A9 核 0、ecg_smoke.elf，且不停止入口；生成的本机配置已核对。没有软件复位寄存器，每次自检都要重新配置 PL，不能只对已运行的处理器下载 ELF。
+6. 保存从 BEGIN ECG_SMOKE 到最终结果的完整串口日志。应出现下列关键行：
+
+```text
+BEGIN ECG_SMOKE base=0x43C00000
+CONFIG rate=360 window_ms=120 refractory_ms=200
+PASS CONFIG
+PASS ZERO_INPUT
+EVENT seq=1 index=79 rr=0
+EVENT seq=2 index=439 rr=360
+EVENT seq=3 index=799 rr=360
+EVENT seq=4 index=1159 rr=360
+PASS EVENT_FIELDS_AND_POP
+PASS FIFO_OVERFLOW queued=8 total=16 dropped=4
+PASS FIFO_DRAIN_AND_OVERFLOW_CLEAR
+PASS ECG_SMOKE failures=0
+```
+
+失败会输出 FAIL 的字段、实际值和预期值。若停在 BEGIN 之后而没有 CONFIG，先保存调试输出并检查 PL 是否配置、PS 初始化/AXI 时钟复位及地址；不要据此直接认定算法有错。若初始计数或阈值不匹配，检查是否真正重新配置了 PL。
+
+### 测试内容与边界
+
+读取配置 360Hz、120ms、200ms，并检查新复位状态；先写 100 个零，再写 4 组交替正负的 ±20000 单样本脉冲，每组随后 359 个零，逐个读队首字段后弹出。默认积分窗口 43 点、位置回移 21 点，因此事件位置为 79、439、799、1159，首次 RR=0，后续 RR=360。脉冲后积分值应为 20000，间隔结束回到 0。
+
+接着送 12 组同样的脉冲而不消费：应保留前 8 个事件，队首位置 1519、序号 5 不变；总计 16 个事件、丢弃 4 个。清溢出提示不得清累计丢弃计数，再按序核对并消费 8 个事件，空队列字段归零。共发送 5860 个样本。
+
+输入是接口测试用合成波形，按 AXI 吞吐快速发送，不按墙钟每秒 360 次节拍发送。RR=360 是样本数，不能据此次测试声称实测心率、真实 ECG 准确率、延迟或 ADC 采集通过。
+
+本地 `sim/tb_ecg_smoke.sv` 使用真实 AXI 写样本驱动实际检测器（不强制注入 qrs_valid），已验证同一组事件、正负能量与 FIFO 行为。PS 平台及应用已构建，板上执行尚待用户提供日志；本地仿真不能替代 PS→PL 实测。
+
+### 复现构建
+
+在项目根目录，用本机安装路径替换占位符：
+
+```powershell
+& '<Vitis安装目录>/bin/vitis.bat' -s board/build_ecg_smoke.py
+./sim/run_ecg_smoke_test.ps1 -VivadoBin '<Vivado安装目录>/bin'
+```
+
+构建脚本默认读取 `releases/latest/ecg_system_candidate.xsa`；已有工作区时停止，避免覆盖。重建时用环境变量 ECG_SMOKE_WORKSPACE 指定新的空工作区，ECG_SMOKE_XSA 可显式选择匹配 XSA；仿真已有输出时用 OutputDir 参数选新的输出目录。正式源码修改后需要重新导入并构建，不能把 tmp 里的旧副本当最新版。
+
+本轮证据：`tmp/ecg_smoke_build.log`、`tmp/ecg_smoke/rtl_check/simulation.log`、`tmp/ecg_smoke/artifacts.json`。构建/仿真通过后按本节运行；通过实测后再决定是否制作新的启动镜像与更新 latest。
+
+## 21. 整数参考模型与 RTL 逐周期对照
+
+**smoke 尚未上板测试。** 它目前只有应用构建和合成输入 RTL 仿真通过；本节的参考模型也不能替代 PS→AXI→检测器→FIFO 板上验收。Hello World 的板上成功不等于 ECG smoke 成功。
+
+参考模型 `src/reference/ecg_reference.py` 用 Python 标准库实现当前 `ecg_qrs_detector.sv`，不是新的滤波或检测算法，也不模拟 AXI、FIFO、ADC 或真实心电准确率。默认 16 位有符号样本、360Hz、120ms（43点）、200ms（72点）、24位能量。保留位宽截断/回绕、整数右移、旧状态判断及同周期非阻塞更新语义。
+
+### 输入输出
+
+输入 CSV 至少有 `sample` 列，每行表示一个时钟周期；可选 `valid`、`reset_n`，默认均为 1。样本为已量化整数（默认 -32768..32767），不接受直接混入浮点毫伏。示例：
+
+```csv
+sample,valid,reset_n
+0,0,0
+0,1,1
+0,1,1
+20000,1,1
+20000,0,1
+0,1,1
+```
+
+`reset_n=0` 清状态，首个有效样本只建立上一采样；`valid=0` 不推进样本计数、积分或不应期，但 RTL 的阈值输出仍每时钟更新，事件 valid 清零。阈值上穿判断使用周期开始时的噪声/信号估计与旧不应期；不能先更新它们再判断事件。无新事件时位置和 RR 输出会保持，只有 qrs_valid=1 才登记新事件。
+
+在项目根目录运行（Python 3.10 或更新版本，无需安装额外库）：
+
+```powershell
+python -B src/reference/ecg_reference.py --input '<输入CSV路径>' --output-dir tmp/reference_run
+```
+
+输出目录已有内容时停止避免覆盖。输出 `trace.csv` 是每周期状态，`events.csv` 是事件周期、近似位置和 RR 样本数，`summary.json` 保存参数/边界。需要其他参数可使用 `--sample-rate-hz`、`--integration-ms`、`--refractory-ms` 等；参数必须与目标 RTL 一致，不能把修改软件模型当作修改了板上配置。
+
+程序接口（用 `python -B` 启动解释器，避免在正式源码目录生成字节码缓存）：
+
+```python
+from software.reference.ecg_reference import Config, Detector
+model = Detector(Config())
+model.tick(reset_n=False)
+state = model.tick(sample=0, valid=True)
+state = model.tick(sample=20000, valid=True)
+print(state.integrated_energy, state.adaptive_threshold, state.qrs_valid)
+```
+
+本模型支持采样位宽 2..16、能量位宽 1..32，并检查参数乘积不溢出 RTL 的 32 位 integer。支持范围不等于所有参数组合都已验证。
+
+### 对照验证
+
+```powershell
+python -B sim/check_ecg_reference.py --vivado-bin '<Vivado安装目录>/bin' --output-dir tmp/reference_check
+```
+
+检查脚本给真实 RTL 与 Python 同一批 reset/valid/sample 输入，逐周期比较 15 个字段：事件 valid/位置/RR、能量/阈值、噪声/信号估计、上一能量/样本/有效标志、采样计数、不应期、循环指针、上次位置及有效标志。失败时报告案例、周期、字段、RTL 值和模型值，输入、两侧 trace、日志保留在 tmp；不覆盖已有输出目录。
+
+2026-10-14 六组对照全部通过，共 20915 个周期：
+
+| 案例 | 周期数 | 目的 |
+| --- | ---: | --- |
+| smoke_waveform | 11722 | 16 个交替正负脉冲，含空拍；人工预期位置79+360×i，首次RR=0、后续360 |
+| random_360 | 2403 | 默认参数、随机值/满量程、有效停顿、途中复位 |
+| random_500 | 2403 | 500Hz参数、随机值、停顿、复位 |
+| window_one_zero_levels | 1162 | 窗口/不应期最小长度1、初始估计0、阈值下限 |
+| energy_wrap | 2403 | 12位能量回绕、噪声初值高于信号、随机值及复位 |
+| noise_above_signal_32 | 822 | 32位复位表达式逻辑右移及噪声分支 |
+
+证据在 `tmp/reference_check_20261014_01/report.json`，逐案例目录包含输入、RTL trace、Python trace 与比较记录。独立命令行运行 `tmp/reference_cli_20261014_01/` 的 trace/events 与对照脚本输出哈希一致。没有改 RTL 或发布镜像，没有使用板卡。
+
+这些结果支持已测场景下模型与 RTL 一致，不代表所有状态的形式证明或真实数据准确率。下一步可准备有标注 ECG 整数数据，先跑模型定位误检/漏检，再让 RTL 回放同一数据；拿到板子后仍需先执行尚未上板的 smoke。
+
+## 22. MIT-BIH 100 号记录离线基线（2026-10-15）
+
+**smoke 尚未上板测试。** 本节只评估 Python 整数参考模型，没有运行真实 ECG 的 RTL 回放、修改检测器、写 Flash 或更新发布镜像。
+
+数据来自 [MIT-BIH 1.0.0](https://physionet.org/content/mitdb/1.0.0/)，引用：Moody G, Mark R. MIT-BIH Arrhythmia Database, version 1.0.0, PhysioNet, DOI:10.13026/C2F305。仅下载 `100.hea`、`100.dat`、`100.atr` 和 `SHA256SUMS.txt`，原始文件保存在 `tmp/mitdb_100_20261015_01/raw/`；三项文件 SHA256 均与官方清单一致。
+
+使用 MLII（第0通道），360Hz、650000点，时长1805.556秒。输入为数字 ADC 减去文件头基线1024，整数比例1，范围[-543,287]；不滤波、不重采样、不按标注归一化。文件头增益200 ADC单位/mV只用于画图。模型使用默认360Hz/120ms/200ms、24位能量、噪声4096/信号16384初值，每个有效样本后插入一个空拍，不推进样本位置。完整记录计分，不排除启动阶段。
+
+解码依据 [WFDB format 212](https://physionet.org/physiotools/wag/signal-5.htm) 与 [MIT 标注格式](https://physionet.org/physiotools/wag/annot-5.htm)。除官方 SHA256 外，检查双通道首样本、采样数和文件头16位校验和；标注组成核对[官方100号说明](https://archive.physionet.org/physiobank/database/html/mitdbdir/records.htm)：N=2239、A=33、V=1，另1个节律标签不计为心搏。工具只支持已核查的100号格式，遇到不同组成会停止，不能直接当全库通用读取器。
+
+评估采用固定±54点（150ms）有序一对一匹配，不作事后时间平移；这是本项目的初步离线统计规则，不是完整标准合规评估。结果：参考心搏2273、检出0、TP=0、FN=2273、FP=0，灵敏度0%、F1=0；由于没有检出事件，阳性预测值、定位误差及RR误差均无定义，不能写成0误差或100%精度。
+
+已证实失败机制：43点差分绝对值窗口和最高1002，实际阈值最低4129（初始7168）。信号估计只在检出事件时更新，故全程维持16384，阈值无法降到输入能量范围；独立逐点重算窗口和与模型全部一致。此结论只适用于本次幅值映射和默认参数，不能推断所有幅值配置均失败。下一步应先明确输入幅值单位及启动期阈值校准方案，再用独立记录验证；本轮未实施算法修复。
+
+复现（Python需有已安装的matplotlib用于图形输出，本次未安装依赖）：
+
+```powershell
+python -B sim/test_mitdb_100.py
+python -B data/evaluate_mitdb_100.py --raw-dir tmp/mitdb_100_20261015_01/raw --output-dir tmp/mitdb_100_replay
+```
+
+输出目录必须不存在。完整核查结果在 `tmp/mitdb_100_20261015_01/baseline_verified/`：`summary.json` 为参数/指标/源码与数据哈希，`input.csv` 为模型输入，`reference_beats.csv` 为心搏标注，`events.csv` 为事件，`matches.csv`、`missed.csv`、`extra.csv` 为匹配/漏检/误检清单，`comparison.png` 为波形及能量/阈值对照。首次基线输出 `baseline/` 也保留，未覆盖删除。解析/匹配的三组单元测试通过。
+
+## 23. 固定幅值与启动校准重跑（2026-10-15）
+
+**smoke 仍未上板测试。** 本次仅修改离线输入与配置：新增 `src/reference/ecg_input.py`，评估工具增加 `--profile calibrated`，没有修改 `ecg_reference.py`、RTL、smoke、bitstream 或发布镜像。硬件目前不会自动执行本节幅值映射或校准，也没有增加运行时阈值寄存器。
+
+幅值固定为4096整数单位/mV，按头文件200 ADC单位/mV及基线1024换算，采用正负对称四舍五入，超出16位时饱和并统计。本次范围[-11121,5878]，饱和点0。不使用全记录最大值或专家标注选择增益。
+
+校准只读取最初720点（2秒），计算677个完整43点差分绝对值窗口和。排序后取下标floor((n-1)×0.5)及floor((n-1)×0.9)的值作为噪声/信号初值，下限分别为1及噪声+1；本次为1561/12475，初始阈值4289。先缓存这2秒，估计后重新初始化检测器并回放整个缓存及后续数据，因此包含2秒启动等待；开头2秒结果不能当作无等待的实时输出。校准不读取心搏位置，未按结果搜索参数；静默/高噪声启动和其他记录仍未验证。
+
+采用与第22节相同的全记录±150ms一对一计分，无事后位置修正：
+
+| 统计 | 原始幅值及默认初值 | 固定幅值及2秒校准 |
+| --- | ---: | ---: |
+| 参考心搏 | 2273 | 2273 |
+| 检出事件 | 0 | 106 |
+| 正确匹配TP | 0 | 44 |
+| 漏检FN | 2273 | 2229 |
+| 误检FP | 0 | 62 |
+| 灵敏度 | 0% | 1.94% |
+| 阳性预测值 | 无定义 | 41.51% |
+| F1 | 0% | 3.70% |
+
+仅评估2秒之后：参考2270、TP41/FN2229/FP62，灵敏度1.81%。44个匹配事件的平均绝对位置误差94.00ms；RR平均绝对误差3.17ms仅来自28个连续匹配间期，遗漏严重，不能据此宣称整体RR准确。
+
+本次积分能量最高20522，阈值最低853，末尾信号/噪声估计933/827；650000点中640535点（约98.54%）能量不低于当时阈值。前10秒图可见触发，约913秒的示例中阈值低于背景能量，不能再形成正常的上穿。结合信号估计在首次上穿时采样、而非在能量峰值更新的源码机制，提示需要改进持续阈值更新及候选峰处理；本次没有扩大范围修改检测逻辑，也不证明单改某一行就能解决。
+
+复现：
+
+```powershell
+python -B sim/test_mitdb_100.py
+python -B data/evaluate_mitdb_100.py --raw-dir tmp/mitdb_100_20261015_01/raw --output-dir tmp/mitdb_100_calibrated --profile calibrated
+```
+
+结果在 `tmp/mitdb_100_20261015_01/calibrated_verified/`，日志 `calibrated_verified.log`；输入、事件、匹配和漏检误检CSV及PNG图均保留。`baseline_regression/` 重跑原配置仍为零事件。五组测试通过，新增检查幅值单位、正负舍入、饱和计数、校准只依赖前缀与短记录拒绝。独立窗口和逐点核对通过；本节仍是单记录离线开发结果，尚未完成真实波形RTL对照或多记录评估。
+
+## 24. 候选峰软件原型与100号阶段检查
+
+**smoke仍尚未上板测试。** `ecg_reference.py`继续作为旧RTL逐周期模型；新增`src/reference/ecg_peak_reference.py`是不同检测逻辑的软件原型，不能将此前旧模型的20915周期一致性结果用于这个原型。没有修改RTL、PS程序或发布文件。
+
+保留4096单位/mV、前2秒无标注校准、43点积分及72点不应期。改动是：用能量局部峰启动候选，在固定21点确认期内保留最大能量峰，截止时间不随新峰延后；在确认后用峰能量更新信号估计，而非使用第一次上穿的低能量值。低于阈值的非不应期局部峰用于更新噪声。定位从该能量峰对应的43点原波形窗口中，选取偏离局部中位数最大的采样点，支持负向脉冲；检查定位后的不应期间隔，避免重复事件。软件只支持16位样本及能容纳完整窗口和的能量位宽，超出时拒绝，不声称具有RTL能量回绕行为。
+
+默认、仅初始化修正、候选峰三组结果均保留，最新`--profile peak`全记录结果为：参考2273、检出2273、TP2272/FN1/FP1，灵敏度/阳性预测值/F1均99.9560%。匹配事件位置MAE1.4904ms，误差范围[-2.778,8.333]ms；2270个连续匹配RR区间的MAE1.5198ms。2秒校准段之后TP2269/FN1/FP1，灵敏度与阳性预测值99.9559%。标注N匹配2238/2239、A33/33、V1/1；这是位置检测，不是异常类型分类。
+
+暂定单记录开发检查条件：灵敏度≥99%、阳性预测值≥99%、位置MAE≤10ms、连续匹配RR的MAE≤15ms，本次均达到。它是本项目当前开发检查，不是行业合规、临床验收或独立测试集结论；100号已参与开发，不能作为最终泛化证据。每5分钟分段统计也保存在报告中，前25分钟无误检漏检，25—30分钟误检1次，最后5.556秒漏检1次。
+
+剩余问题完整计入评分：漏检采样点649991，距离记录结束仅9点（约25ms），没有继续输入确认候选；未补零或删除尾端标注。误检在583009点（1619.469秒），图中该处有额外振荡，未因已有高分继续按该位置调整算法。原型确认延迟实测为22.22—122.22ms、均值84.24ms（从估计心搏位置到事件输出的采样差）；这不是硬件实测运行延迟，也不含首次2秒校准缓存等待。
+
+```powershell
+python -B sim/test_ecg_peak_reference.py
+python -B sim/test_mitdb_100.py
+python -B data/evaluate_mitdb_100.py --raw-dir tmp/mitdb_100_20261015_01/raw --output-dir tmp/mitdb_100_peak --profile peak
+```
+
+最终结果在 `tmp/mitdb_100_20261015_01/peak_verified/`，日志`peak_verified.log`。包含全输入、事件、匹配/漏检/误检清单及波形图；summary记录源码/数据哈希、逐类型/逐时段统计、确认延迟与development_gate=PASS。9项单元测试通过，候选峰新增测试覆盖5000点静默、16个正负脉冲位置与RR、空拍/复位、不应期去重与样本越界。所有650000点的积分值均与独立窗口和核对一致。
+
+原模型配置回归在 `peak_stage_baseline_regression/`（仍检出0）与`peak_stage_calibrated_regression/`（仍TP44/FN2229/FP62），旧失败记录未改写。下一阶段以固定方案开展多记录独立评估、RTL移植和逐周期对照；拿回板后仍需完成原smoke实测，不能跳过。
