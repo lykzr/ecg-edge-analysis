@@ -1,0 +1,88 @@
+{
+  "version": "cnn_context_v4_20261017",
+  "source_data_protocol": "data/cnn_mf_v1_protocol.json",
+  "data_policy": "New 128-point/144Hz window [R-128,R+192) at360Hz, 533.33ms post-R waveform wait, segment normalization; same original subject roles and retained beat IDs; only incomplete longer context excluded and counted. Old test already known.",
+  "source_references": [
+    "https://doi.org/10.3390/s23031365",
+    "https://arxiv.org/abs/1805.00794"
+  ],
+  "adaptation": "Independent PyTorch implementations of published MF-CNN and residual Conv1D patterns. No author weights/code copied. Fixed raw input64 and causal3 RR from v1; learned convolutions, train-only BN; MF filters random initialization. Residual uses3 blocks/width16 or32 with causal RR head, not paper architecture/score reproduction.",
+  "classes": [
+    "N",
+    "S",
+    "V",
+    "F"
+  ],
+  "gate": {
+    "macro_f1": 0.85,
+    "minimum_class_f1": 0.7,
+    "recall": [
+      0.95,
+      0.8,
+      0.8,
+      0.7
+    ],
+    "maximum_parameters": 100000,
+    "scope": "Assistant proposed engineering target before v2 runs, not user/competition/clinical requirement. Same gate applies validation and old-test replay. Passing does not establish independent generalization, INT8, or FPGA readiness."
+  },
+  "training": {
+    "max_epochs": 80,
+    "patience": 18,
+    "minimum_epochs": 30,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 20261017,
+    "cpu_threads": 4,
+    "sampling": "Natural TRAIN random permutation, no balanced sampling; TRAIN-only class-weighted CE",
+    "selection": "Best validation macro-F1; tie lower validation cross entropy. Among candidates choose highest validation macro-F1. Do not load test tensors until all candidate selection is finished.",
+    "augmentation": "Per-candidate augment flag controls train-only time/amplitude/noise perturbation",
+    "determinism": "seed Python/NumPy/torch and deterministic CPU algorithms; fixed thread count; versions/hashes saved"
+  },
+  "candidates": [
+    {
+      "id": "context_mf_both12",
+      "family": "mf",
+      "feature": "both",
+      "width": 12,
+      "input_samples": 128,
+      "batch_norm": "batch",
+      "weight_power": 0.5,
+      "augment": false
+    },
+    {
+      "id": "context_residual_both16_aug",
+      "family": "residual",
+      "feature": "both",
+      "width": 16,
+      "input_samples": 128,
+      "batch_norm": "none",
+      "weight_power": 0.5,
+      "augment": true
+    },
+    {
+      "id": "context_mf_both24_aug",
+      "family": "mf",
+      "feature": "both",
+      "width": 24,
+      "input_samples": 128,
+      "batch_norm": "batch",
+      "weight_power": 0.5,
+      "augment": true
+    },
+    {
+      "id": "context_mf_both12_weighted",
+      "family": "mf",
+      "feature": "both",
+      "width": 12,
+      "input_samples": 128,
+      "batch_norm": "batch",
+      "weight_power": 1.0,
+      "augment": false
+    }
+  ],
+  "test_policy": "One replay for validation-selected model after whole suite; failure remains failure. Never select another candidate or retune using that replay.",
+  "smoke_board_test": "NOT_TESTED",
+  "rr_normalization": "TRAIN mean/std floor0.01, standardized and clipped -5..5; no val/test fitting",
+  "design_reason": "Proposed from class concentration and validation-only underfitting/generalization diagnosis; more P/T/context without changing subject roles or dropping F."
+}

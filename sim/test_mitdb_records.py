@@ -12,6 +12,7 @@ from ecg_dataset import BEAT_CODES, load_record, metrics
 
 class MultiRecordChecks(unittest.TestCase):
     def test_reverse_lead_and_integrity(self):
+        (ROOT / 'tmp').mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as directory:
             raw = Path(directory)
             (raw/'999.hea').write_text('999 2 360 2\n999.dat 212 200 12 0 -2048 -1 0 V5\n999.dat 212 200(0)/mV 12 0 -1 -1 0 MLII\n')

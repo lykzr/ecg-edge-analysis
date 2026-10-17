@@ -13,3 +13,7 @@
 初级组PYNQ为推荐，非本工程当前依赖。实际板卡领航者V2，具体修订仍待实物核对；不可把当前配置当其他板卡预设。
 
 旧AC7020名称兼容入口已归档tmp/history/training_handoff_20261017/build/；正式入口仅使用领航者脚本，不再以旧板卡名引导新成员。
+
+## 直接打开的共享工程
+
+[正式Vivado工程](../vivado/ecg_edge/ecg_edge.xpr)与必要BD/wrapper随仓库交接，使用方法见[vivado说明](../vivado/README.md)。从空目录重新生成使用share.tcl，可另传新输出目录；它调用既有领航者构建配置，不综合、不下载。extract_gqrs_core.py是正式算法生成器，按固定WFDB版本复现GQRS派生核心到新目录，不覆盖已有源文件/许可。

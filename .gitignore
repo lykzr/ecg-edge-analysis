@@ -116,3 +116,25 @@ myself.md
 !/releases/latest/src/ps/ecg_smoke/
 /releases/latest/src/ps/ecg_smoke/*
 !/releases/latest/src/ps/ecg_smoke/main.c
+
+# 正式算法生成器与交接检查脚本，不属于构建缓存。
+!/build/extract_gqrs_core.py
+
+# 可直接打开的Vivado文本工程；只放行XPR、BD和顶层wrapper。
+/vivado/*
+!/vivado/README.md
+!/vivado/ecg_edge/
+/vivado/ecg_edge/*
+!/vivado/ecg_edge/ecg_edge.xpr
+!/vivado/ecg_edge/ecg_edge.srcs/
+/vivado/ecg_edge/ecg_edge.srcs/*
+!/vivado/ecg_edge/ecg_edge.srcs/sources_1/
+/vivado/ecg_edge/ecg_edge.srcs/sources_1/*
+!/vivado/ecg_edge/ecg_edge.srcs/sources_1/hdl/
+/vivado/ecg_edge/ecg_edge.srcs/sources_1/hdl/*
+!/vivado/ecg_edge/ecg_edge.srcs/sources_1/hdl/ecg_system_wrapper.v
+!/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/
+/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/*
+!/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/
+/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/*
+!/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/ecg_system.bd

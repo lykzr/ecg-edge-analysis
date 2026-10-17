@@ -1,0 +1,22 @@
+{
+  "version": "mf_cnn_causal_v1_20261017",
+  "classes": ["N", "S", "V", "F"],
+  "label_codes": {"N": [1, 2, 3, 11, 34], "S": [4, 7, 8, 9], "V": [5, 10], "F": [6]},
+  "records": {
+    "train": ["101", "106", "108", "109", "112", "114", "116", "119", "122", "124", "203", "208", "209", "215", "223", "230"],
+    "validation": ["115", "118", "205", "220"],
+    "test": ["100", "103", "105", "111", "113", "117", "121", "123", "200", "202", "210", "212", "213", "214", "219", "221", "222", "228", "231", "232", "233", "234"]
+  },
+  "subject_alias": {"201": "subject_201_202", "202": "subject_201_202"},
+  "split_design": "Published DS1/DS2 record scheme adapted to existing 42-record scope: exclude 201 because same subject as test 202; exclude 207 because current pool has no defined VF handling. DS1 remaining 20: four fixed validation records 115/118/205/220, remaining 16 train. This is NOT the exact published split or a fresh whole-system holdout; all 42 previously inspected in QRS research. Validation selection used annotation support audit, never CNN scores.",
+  "excluded_records": {"102,104,107,217": "paced records outside current task", "201": "same subject as test 202", "207": "VF contract not defined in current record pool"},
+  "excluded_labels": "Unmapped Q and non-beat annotations do not become N. Beat positions including Q still update prior RR history. No beat removed based on model result.",
+  "window": {"lead": "MLII", "before_360hz": 90, "after_360hz": 90, "interval": "[R-90,R+90)", "resample_up": 16, "resample_down": 45, "resample_pad": "constant_zero_at_segment_boundary", "output_samples": 64, "target_hz": 128, "std_floor_mv": 0.05, "normalization": "Within this complete 180-point beat only: resample, subtract mean, divide max(std,0.05mV). No whole-record statistics. Exclude incomplete edges and first beat without preceding RR; do not pad missing ECG at record EOF."},
+  "rr": {"features": ["preRR/past80_mean", "preRR/past400_mean", "past80_mean/past400_mean"], "startup": "If no earlier interval, means equal current preRR. Means otherwise exclude current interval.", "clip": [0,4], "scale_divisor": 4, "post_rr_used": false},
+  "model": {"source": "https://doi.org/10.3390/s23031365", "status": "Independent adaptation of fixed-template MF Conv1D + shared interval MLP + softmax. Not official code/weights or exact paper reproduction.", "kernels": "Four TRAIN-only superclass mean beat templates, center32, L2 normalized; frozen", "morphology": "SAME crosscorrelation stride1 left15/right16; globalmax; TRAIN-only feature standardization; tanh", "rr_shared_mlp": [1,32,16,8], "rr_activation": "relu", "output": "concat(4 morphology, 3*8 RR) -> linear4 -> softmax", "differences": ["four superclass templates rather than paper subclass templates", "causal three RR features rather than four pre/post features", "fixed train-only feature standardization rather than trainable BatchNorm", "window normalization and segment-local resampling", "frozen convolution; only RR MLP and head optimized"]},
+  "training": {"seed": 20261017, "optimizer": "Adam beta1=0.9 beta2=0.999 epsilon=1e-8", "learning_rate": 0.001, "batch_size": 512, "max_epochs": 80, "patience": 12, "class_weight": "sqrt(n_train/(4*n_class)), normalized to mean training sample weight 1", "selection": "maximum validation macro-F1, ties lower unweighted validation cross entropy; never select using test"},
+  "evaluation": {"metrics": ["confusion_matrix", "class_support", "precision", "recall", "f1", "macro_f1", "accuracy", "per_record"], "undefined_class_metric": "zero with support shown; macro averages all 4 target classes", "test_policy": "one final evaluation after validation selection; any later tuning makes this known-data exploratory evidence", "acceptance": "This first run establishes a reproducible baseline; no promised accuracy. No clinical/FPGA/INT8 acceptance inferred."},
+  "scope": "expert annotation centered classifier, not detected-beat end-to-end system",
+  "quantization": "NOT_IMPLEMENTED",
+  "smoke_board_test": "NOT_TESTED"
+}

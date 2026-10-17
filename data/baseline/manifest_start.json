@@ -1,0 +1,19 @@
+{
+  "protocol_sha256": "98341c579d519085f6d0c3048a32b349849754dc97763b272449ba4924722824",
+  "cache_manifest_sha256": "107c84d99ad7cccb6626abc0d99c6cc7bf7617f6cb54db49286cecd526248ded",
+  "environment": {
+    "python": "3.14.7",
+    "torch": "2.14.1+cpu",
+    "numpy": "2.5.2"
+  },
+  "source_sha256": {
+    "data/train_cnn_cv.py": "56a80afe975e7e89096eb86965b7b4db721ae5952fa19b029ee466eaa0c3f9f1",
+    "data/train_cnn_candidates.py": "b7a06e952ce0fb20618304390719de0bd074a766b78f9e9d12f988d9281aebb1",
+    "data/train_cnn_refined.py": "d301ea3f6e9de900d813237fc3f64fb1d91219a25336d5662ed317115c876f47",
+    "src/reference/ecg_temporal_cnn.py": "2225e5ca05f919e8e41635a48875327538ddae3c6ea89b4b49ada929b73c98bd",
+    "src/reference/ecg_trainable_cnn.py": "632d2c565bb5531720d958d2d8e79b417bcacfb5a66f59434e12a64e036e9260",
+    "src/reference/ecg_mf_cnn.py": "1f9f397d87189c6bbe3e0b9f694329855516f5ca357ff31c0b81e218045d8093"
+  },
+  "test_access": "NO_TEST_READER_IN_THIS_SCRIPT",
+  "smoke_board_test": "NOT_TESTED"
+}

@@ -24,7 +24,7 @@ python -m venv tmp/cnn_torch_env
 & './tmp/cnn_torch_env/Scripts/python.exe' -B sim/verify_cnn_cv.py --cache-dir tmp/cnn_git/cache --run-dir tmp/cnn_git/run_01 --output tmp/cnn_git/run_01_verify.json --replay-weights
 ```
 
-输出目录必须不存在；错误/中断缓存保留，用新目录重试。下载脚本校验已有文件，可继续未完成下载，但不覆盖错误字节。原始数据、环境、权重和预测留tmp，不通过Git提交。网络下载、环境安装受接收方授权与网络条件约束；本机已完成原始数据重建，未在第二台电脑安装运行，不承诺训练时长或跨框架位级一致。
+输出目录必须不存在；错误/中断缓存保留，用新目录重试。下载脚本校验已有文件，可继续未完成下载，但不覆盖错误字节。原始数据、环境和每轮新权重/预测留tmp；仅data/baseline保留已选旧开发对照的匹配小型复核包，不全量提交运行目录。网络下载、环境安装受接收方授权与网络条件约束；本机已完成原始数据重建，未在第二台电脑安装运行，不承诺训练时长或跨框架位级一致。
 
 ## 协议、代码和公共依赖
 
@@ -50,8 +50,18 @@ python -m venv tmp/cnn_torch_env
 
 建议模型负责人独立分支修改data/、分类模型和对应sim测试；板上/PS/PL工作由对应负责人维护，不同时覆盖同一文件。新实验日志放docs/records，README只写工程说明；根README.md和docs/materials_review.md保持原样。
 
-本轮已修正.gitignore，使docs/records的正式过程记录和原始.log可被跟踪；tmp/仍忽略。提交前按`git status`检查新增源码是否纳入、文件迁移删除是否正确，不把旧索引中其他成员改动一并提交。仅文件检查和准备不等于已commit/push，交接时提供实际提交号。
+当前.gitignore仅逐项放行精选原始.log，其他日志留本地；正式过程文档保留，tmp仍忽略。提交前按`git status`检查新增源码是否纳入、文件迁移删除是否正确，不把旧索引中其他成员改动一并提交。仅文件检查和准备不等于已commit/push，交接时提供实际提交号。
 
 ## smoke状态
 
 用户提供的2026-10-17领航者V2上板报告及完整UART已核查，结论为**PASS ECG_SMOKE failures=0**；证据见[上板记录](records/smoke_board_validation_20261017.md)。这是PS→AXI→原检测器→FIFO的合成样本自检，不验证CNN、ADS1292R、真实采集或QSPI掉电启动。早期冻结协议/旧训练产物中的NOT_TESTED是当时快照，不能覆盖这次板上证据；本训练脚本本身仍不执行板卡验证。
+
+## 不训练，只复核旧对照
+
+仓库提供[已选三折基线](../data/baseline/README.md)。使用标准库运行sim/check_baseline.py核对来源/哈希；NumPy环境加--metrics重算指标；按本文重建Git开发缓存后，在Torch环境运行：
+
+```powershell
+python -B sim/check_baseline.py --cache-dir tmp/cnn_git/cache --replay-weights
+```
+
+不重新训练、不使用独立6人测试。当前基线仍未合格；其他历史候选的完整缓存/权重不自动随Git交接，不能把已选对照复核当全部历史复现。完整交接清单另由sim/check_checkout.py检查，仍需实际提交号才能在远端克隆得到。

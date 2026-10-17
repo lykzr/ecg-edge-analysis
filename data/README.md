@@ -39,3 +39,9 @@ MIT原始文件校验官方SHA256及212首值/长度/校验和，按MLII选导�
 克隆后的数据下载、重建、训练与复核见[训练交接](../docs/model_training_handoff.md)，原始文件重建见[患者CV说明](../docs/cnn_patient_cv.md)。不要重新freeze覆盖已评估协议，不把已查看开发数据当新测试。
 
 独立旧脚本/协议/测试保存在tmp/history/training_handoff_20261017/，原路径、新路径与逐文件SHA256见其中manifest.json；恢复规则见交接文档。原始数据、环境和全部旧训练结果仍在原tmp位置，文字记录仍留[docs/records](../docs/README.md)。
+
+## 已选开发基线复核
+
+[baseline/](baseline/README.md)保留已选residual_verified三折权重、归一化、预测/指标及冻结协议，用sim/check_baseline.py核验；它是失败开发对照，不是最终模型。先用标准库核对哈希，再用NumPy重算指标，按Git入口重建开发缓存后可用Torch重放，不重新训练、不读独立测试。
+
+cnn_mf_v1/context_v4/trainable_v2/refined_v3四份协议仍被正式公共脚本的旧入口引用，故保留原字节以免默认路径缺失；它们不是推荐的新训练入口。完整旧实验数据准备/历史专用代码仍可能在tmp/history，接手新任务使用prepare_cnn_git.py；不能把四个协议存在解释成全部历史都已可从空目录复跑。

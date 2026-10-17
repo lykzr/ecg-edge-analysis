@@ -1,0 +1,127 @@
+{
+  "origin": "tmp/cnn_patient_cv_v8_20261017_02",
+  "candidate": "residual_verified",
+  "scope": "FAILED development CV baseline, not deployment or independent test",
+  "files": {
+    "protocol.json": {
+      "bytes": 25975,
+      "sha256": "98341c579d519085f6d0c3048a32b349849754dc97763b272449ba4924722824"
+    },
+    "manifest_start.json": {
+      "bytes": 1036,
+      "sha256": "7a6d81a4d6e8ceb2865e6fc216920ccdf38a3953b6f66ee247f9e0b2d9ca784e"
+    },
+    "decision.json": {
+      "bytes": 31247,
+      "sha256": "c22a44a8c182c1c503a97b069442661581887e8c7059c46528c95253e9dde469"
+    },
+    "residual_verified\\oof_metrics.json": {
+      "bytes": 24455,
+      "sha256": "561a1a1522b925f49cab5a7f0cb9fcf479a76425845d526055ce243575215a60"
+    },
+    "residual_verified\\oof_predictions.npz": {
+      "bytes": 452091,
+      "sha256": "a8892d9ac439aac377de631473e00d167c4f8c49c5b5c74da67a64063c6b6bdc"
+    },
+    "residual_verified\\fold_0\\best_validation.json": {
+      "bytes": 1126,
+      "sha256": "5938b3fe88c1c63e5f5fd612835836fc67fcfb707a0ed84c22542e40e0b1ea08"
+    },
+    "residual_verified\\fold_0\\best_weights.pt": {
+      "bytes": 55707,
+      "sha256": "6c1eba1fe8e24a4cb257970a78fe3d9a5c2800eaa785d4d7d9252d8599f90f3d"
+    },
+    "residual_verified\\fold_0\\epochs.jsonl": {
+      "bytes": 11340,
+      "sha256": "bea75a7db9a1e10f347c899a92be2b3252c6b61a63c14f4f46fefe25cf6f9e31"
+    },
+    "residual_verified\\fold_0\\normalization.json": {
+      "bytes": 235,
+      "sha256": "87ad8492f1aeefe952e1bbb45035428ddfba131aff5185863514e93bf0005bee"
+    },
+    "residual_verified\\fold_0\\result.json": {
+      "bytes": 2149,
+      "sha256": "c700608a219b8eb3c8756589e1712511d667a4a968b4d4f3c6084a7c208845d9"
+    },
+    "residual_verified\\fold_0\\train_metrics.json": {
+      "bytes": 784,
+      "sha256": "7a4470874c9ef675dc01aba88a9d8a8d71221d3ccbf6f423e95cd80b40ea225a"
+    },
+    "residual_verified\\fold_0\\validation_metrics.json": {
+      "bytes": 8989,
+      "sha256": "d484daee63acbea9c88c4ef3439d83e10e5a60c49979dc3fab35a461c84734d7"
+    },
+    "residual_verified\\fold_0\\validation_predictions.npz": {
+      "bytes": 164749,
+      "sha256": "14d675e1153dcf1ae8797e76212d0f34c48b7ccebdc39b4265ba06c10ba70da2"
+    },
+    "residual_verified\\fold_1\\best_validation.json": {
+      "bytes": 1076,
+      "sha256": "32eb6194b3168a653441170972676a6202a49276cdc2ed3dd35e3281de03e572"
+    },
+    "residual_verified\\fold_1\\best_weights.pt": {
+      "bytes": 55707,
+      "sha256": "33de075bf4f9dd963030fdc516ed7a6c24841694d0183a20aa0e39ae112c4541"
+    },
+    "residual_verified\\fold_1\\epochs.jsonl": {
+      "bytes": 11455,
+      "sha256": "256e40c74acf122beb16c70abbcf5aa754bdde26fe0ce6d3a268d6b6139f8bb2"
+    },
+    "residual_verified\\fold_1\\normalization.json": {
+      "bytes": 234,
+      "sha256": "77a5c666b42bec07a51d21c392d69982204adcb8129abc93f66acb9041d2ca6b"
+    },
+    "residual_verified\\fold_1\\result.json": {
+      "bytes": 2096,
+      "sha256": "e7cb5d340cc6da09b90a6f57a3dbea67fc43b4212fdd19b4ecf423c5c4cea0d0"
+    },
+    "residual_verified\\fold_1\\train_metrics.json": {
+      "bytes": 784,
+      "sha256": "2af93f1809f1a99110f3c5f190ad4c6191a57559792b0cd6cc81a92d9d4e44b3"
+    },
+    "residual_verified\\fold_1\\validation_metrics.json": {
+      "bytes": 8946,
+      "sha256": "e3652bff105de5e0ad7f0634ab69abec80cce3f913a14438d81c2a533cebcbb3"
+    },
+    "residual_verified\\fold_1\\validation_predictions.npz": {
+      "bytes": 166763,
+      "sha256": "80253ceb151d56db9759d9c6b4a547687be7a770373828eb3e9c7505fd266852"
+    },
+    "residual_verified\\fold_2\\best_validation.json": {
+      "bytes": 1111,
+      "sha256": "23712f5383f029cb9f9e70bc5c5a25f12cf802ca99290d0de1623f0aeb7c20b9"
+    },
+    "residual_verified\\fold_2\\best_weights.pt": {
+      "bytes": 55707,
+      "sha256": "041e8f1a78832908c293639704f8b9a4119aa0a19b304dc88bec96e9ec529ddf"
+    },
+    "residual_verified\\fold_2\\epochs.jsonl": {
+      "bytes": 11435,
+      "sha256": "7469d0695e1854713d7b4df5d22e5682daa851394f6b7d37a3cd2fbc2b9bd376"
+    },
+    "residual_verified\\fold_2\\normalization.json": {
+      "bytes": 236,
+      "sha256": "8a290356a31efbc20d50d8b589c9fb5cd01e7b02fc298bd766112b5cb3d8b449"
+    },
+    "residual_verified\\fold_2\\result.json": {
+      "bytes": 2131,
+      "sha256": "c1e6c800f3f5d0e7e130b8c8d25d23a288f9d0584fab2830a81d1d8a403b00f7"
+    },
+    "residual_verified\\fold_2\\train_metrics.json": {
+      "bytes": 782,
+      "sha256": "4252f145e7f3f1253f8dace6fcb6a42a582352f6288e7f287a6911d6bf64f64e"
+    },
+    "residual_verified\\fold_2\\validation_metrics.json": {
+      "bytes": 8115,
+      "sha256": "ff3405df5e3654813918f99ea2452a971a7e7846f7c87eb9ee76aa075739c544"
+    },
+    "residual_verified\\fold_2\\validation_predictions.npz": {
+      "bytes": 122982,
+      "sha256": "5747411abfbc243205758d637bb5451aa3d1a632913c8f48523a1745cbc7582f"
+    }
+  },
+  "source_protocol": "data/cnn_git_v1_protocol.json",
+  "source_protocol_sha256": "6e67e1e322d2737f7912b2ae12188c9ad8d430e5cbc5c72a2cc514338d5e73aa",
+  "waveform_included": false,
+  "test_loaded": false
+}

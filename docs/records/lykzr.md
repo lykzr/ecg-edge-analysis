@@ -1,16 +1,28 @@
-# ECG 边缘分析工程过程记录
+# ECG边缘分析工程过程记录
 
-本文按日期追加问题、设计想法、失败尝试和验证证据，供实验报告使用。观察、分析、计划与已验证结果分别记录；不将历史日志或仿真结论写成板上实测。
+按与[计划书](../../report/project_plan.md)一致的三类归档：信息采集、项目主体、模型训练。每类内部保持原时间顺序；跨类混合记录整条放在主要工作所属类，不拆写成多次试验。原题目/正文、失败过程、旧状态和证据路径保留；历史“smoke未上板”等是当时快照，当前smoke已按用户返回证据通过，模型仍未合格。当前任务状态以计划为准，教程与原始专题报告不合并改写。
 
-## 2026-10-13：约束核对与下一阶段设计评审
+新记录追加到相应类别末尾；涉及其他类时引用任务编号或原证据，不重复计算成果。
 
-### 任务目标与范围
+## 一、信息采集
+
+当前尚无独立AFE/ADC实采成功记录。采集参数、电平/限幅、接口与采样验收见计划A01—A05；芯片候选讨论见[范围记录](ecg_scope_20261017.md)，它不等于实物联调完成。后续实际采集修改/验证追加本类。
+
+### 2026-10-17：更正信息采集边界，纳入滤波与输出接口
+
+用户指出原采集类别缺少滤波和输出接口。本轮在计划新增A06滤波/基线与工频抑制、A07采集输出接口和A08相关噪声验证；原B02迁到A06，不按部署位置强行把滤波留在主体。采样率/位宽/单位、原始/滤波序号及群延迟、有效/就绪、背压/丢样等交接待定义。主体保留板端与电脑的通信、PC显示/保存，二者输出接口不混用。仅修改计划/日志，没有采集、滤波实现或实测；历史混合滤波/QRS记录不拆改。
+
+## 二、项目主体
+
+### 2026-10-13：约束核对与下一阶段设计评审
+
+#### 任务目标与范围
 
 核对当前协作约束、参赛交付要求、工程实际组成与已有验证证据，确定下一步实施顺序。本轮是静态核查和设计评审，没有修改 RTL、PS7、BD、XDC 或构建脚本，没有重新运行仿真、综合、实现或下载。Git 持续暂停，没有执行 Git 命令，也未检查索引或远端状态。
 
 当前项目根目录为 `C:/Users/23006/Desktop/ecg_edge`。根目录 `AGENTS.md` 是当前操作约束；递归文件清单只发现该文件，没有发现子目录专属 `AGENTS.md`。
 
-### 环境与阅读依据
+#### 环境与阅读依据
 
 - 当前可见 Vivado/Vitis 启动文件分别位于 `D:/AMDDesignTools/2026.1/Vivado/bin/vivado.bat` 和 `D:/AMDDesignTools/2026.1/Vitis/bin/vitis.bat`。本轮仅核实文件存在，未启动工具或重新验证许可证。
 - 历史验证日志声明 Vivado 2026.1；实际 XPR/BD 也记录 2026.1。
@@ -18,7 +30,7 @@
 - 读取实际 `vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/ecg_system.bd` 及 XPR 引用；核查 `tmp/rtl_tests/xsim.log`、`tmp/validate_navigator.log`、`tmp/rebuild.log`、`tmp/rtl_synth.log` 的完成记录。
 - 本地竞赛指南 `docs/reference/amd_track_guide_2026.pdf`：完整阅读第 3.3 节相关内容，实际渲染查看 PDF 第 22–25 页（印刷第 19–22 页）。派生文本与页面放 `tmp/next_step_review/`。结论依据该本地版本，本轮没有查询后续赛事公告或报名后台。
 
-### 约束与交付要求
+#### 约束与交付要求
 
 1. 板卡用户确认领航者 V2，但核心板/底板具体版本尚待实物核实。修改板级参数前须核查匹配版本的原理图、指南和官方例程，旧 AC7020 配置不能作为实物适配依据。
 2. 禁止 Computer Use；正式文字中文、接口标识英文；临时和派生输出放 `tmp/`，保留原始资料和无关改动。
@@ -28,7 +40,7 @@
 6. 指南评分为创新/应用 30、性能/资源 20、正确性/完整性 20、大模型协作/技能包 15、文档/复现 15。工程包目录结构是推荐项；采用现有结构可行，但 README 须给推荐目录的对照。
 7. 指南强烈要求开源并使用允许再分发的协议；项目正式文件名用英文规则。实际队伍年级、报名组别仍需确认。本轮不选择许可证、不恢复 Git、不公开归档对话或第三方资料。
 
-### 观察事实：现状和缺口
+#### 观察事实：现状和缺口
 
 - 保存的 BD 参数与领航者构建脚本中所列核心字段一致：`xc7z020clg400-2`、输入时钟 33.333333 MHz、FCLK0 100 MHz、32 位低电压 DDR3、533.333333 MHz、兼容配置 `MT41K256M16 RE-125`、UART0/MIO14–15、UART1 关闭、ECG 地址 `0x43C00000`/64K。这里是静态一致性核查，不是硬件适配确认。
 - 实际 BD 将 FCLK0 接 GP0、互连和 ECG，ECG 复位由 `rst_ps7_0_100M/peripheral_aresetn` 提供；保存状态为 `validated=true`，本轮未调用 `validate_bd_design`。
@@ -40,13 +52,13 @@
 - 当前目录已移到 `Desktop/ecg_edge`，旧日志和 XPR 的 Project Path 仍指向 `Desktop/fpga/ecg_edge`，旧绝对目录当前不存在。XPR 中两个 RTL 引用是相对路径，脚本按自身路径定位；不能仅凭旧绝对路径断言工程损坏，但当前目录的实际打开/重建尚未验证。
 - `.gitignore` 忽略 `tmp/`、`build/` 和所有 `*.rpt`。这是生成物管理规则，但正式交付仍需另行导出和保留经过筛选的资源/时序/验证证据，不能只留下被忽略的原始日志。
 
-### 分析与取舍
+#### 分析与取舍
 
 目前主要缺口是算法和真实数据的证据链。先生成 bitstream 可以验证工具链，却不能回答“检测是否正确”。先迁移 PYNQ 或加入 DMA/LSM 会增加环境与模块变量，也不能填补软件参考缺口。
 
 因此建议先保留现有 AXI-Lite 送样方式，建立 PC 数据回放与逐样本对照，暴露算法问题后再作有依据的修改。低采样率下是否需要 DMA，要通过持续吞吐、占用和丢样测量决定。软件参考分两层：按位复现当前 RTL 的定点模型用于查实现一致性；浮点/标准检测基线用于判断算法效果。两者职责不同，RTL 与自身模型一致不等于检出算法准确。
 
-### 下一步计划与验收条件（尚未实施）
+#### 下一步计划与验收条件（尚未实施）
 
 1. **先建立离线数据与参考验证闭环。** 从少量公开 ECG 记录开始，锁定记录、导联、采样率、ADC 基线/缩放/裁剪规则与标注类型，保留来源、许可、校验和。用固定转换生成有符号 16 位样本；开发/测试按记录或受试者分开，参数不在保留测试集上调优。
 2. **建立当前 RTL 定点参考和自动对照。** 覆盖差分、历史窗口、定宽算术、阈值更新、初始状态、不应期、事件索引和 RR。导出同一输入下参考轨迹与 RTL 轨迹；失败定位到第一个不同样本/状态。加入连续与有间隔 sample_valid、复位、零/直流、满量程正负跳变、首个事件和窗口边界测试。正常案例验收为数值/事件逐项一致且输入样本计数一致。
@@ -57,17 +69,17 @@
 
 最近一个阶段的具体验收目标：**同一批公开 ECG 样本可以在 PC 参考与 RTL 仿真中重复运行，自动报告实现差异和标注检测指标。**这部分可以在没有确认实物版本、没有 AFE 的情况下先推进。
 
-### 本轮结果与限制
+#### 本轮结果与限制
 
 完成静态文件、历史日志和本地指南页面核对，形成以上顺序；只新增本过程记录及 `tmp/next_step_review/` 派生阅读文件。没有修复源代码或补写未做实验，未验证当前路径下 Vivado 实际加载与重建，未确认最新赛事公告和实物版本。
 
-## 2026-10-13：上板状态分析与下载流程核查
+### 2026-10-13：上板状态分析与下载流程核查
 
-### 目标与执行范围
+#### 目标与执行范围
 
 用户询问当前程序上板后的状态及如何烧录，并再次指定 A 盘本地资料目录。本轮读取资料、核查文件并编写操作说明，没有操作实际板卡，Git 仍暂停。用户提供的是资料路径，不能据此推断实物核心板/底板版本或下载器型号。
 
-### 观察与依据
+#### 观察与依据
 
 - 当前 RTL 接收 PS 的 AXI-Lite 寄存器送样；没有串口采样、ADC、显示、用户 LED 控制或 ECG PS 应用。仅下载 bitstream 不会自动得到 ECG 波形或心率输出。当前 PL 时钟与复位依赖 PS FCLK0 和复位网络，须通过匹配初始化流程启动。
 - 使用 `rg --files --hidden --no-ignore` 重新检查生成物，找到唯一旧 bitstream `vivado/ecg_edge/ecg_edge.runs/impl_1/ecg_system_wrapper.bit`，大小 4045773 字节，修改时间 2026-10-06 16:41:40；当前 BD 修改时间为 2026-10-13 16:49:48，AXI RTL 为 16:24:46。不能把旧 bitstream 当新版输出。本轮在 vivado/tmp 搜索未发现 XSA 或 ELF。
@@ -75,19 +87,19 @@
 - 核对 AMD UG908 2026.1 Hardware Manager 流程及 UG1400 2026.1 平台、应用、启动配置和 Standalone Debug 文档。2026.1 用 Platform/Application Component 和 Debug Settings/Launch Configuration；旧教程界面不能机械套用。新文档明确允许同平台 FSBL 或 Tcl 初始化板卡，并配置 bitstream 与应用 ELF。
 - 本机 XSDB 启动文件实际存在于 Vivado/Vitis 的 bin 中。本轮未启动 XSDB 或 hw_server，也未发现或连接实际 JTAG 目标。
 
-### 现象、尝试与限制
+#### 现象、尝试与限制
 
 第一次默认 `rg --files` 会遵从 `.gitignore`，看不到旧 bitstream，改用 `--hidden --no-ignore` 后找到文件；因此不把默认列表的空结果写成磁盘不存在。PowerShell 下传递目录 `*` 给 rg 产生无效路径错误，改为直接搜索目录。PDF 渲染出现 Symbol/ArialUnicode 字体提示，实际已打开关键页面核对，接线与启动表清晰可读。部分猜测的 AMD 文档 URL 无法打开，改为从当前正式目录链接读取；未沿用 UltraScale+ 的初始化命令作为 Zynq-7020 步骤。
 
-### 方案与产出
+#### 方案与产出
 
 新增 `docs/board_bringup.md`，分别解释 `.bit`、XSA、ELF、PS 初始化和 BOOT.BIN；给出实物核对、JTAG/串口连接、重建新硬件、Vivado 配置下载、Vitis 初始化并运行应用的步骤。初次上板建议先同平台 Hello World 检查 PS/串口，再用 ECG 回放应用读取参数、送样和消费 FIFO；Hello World 与 DONE 都不能证明 ECG 检测精度。
 
 暂不制作硬件下载脚本或固化镜像：用户当前要求是核查怎么做，且没有确认实物版本、下载器、新 bitstream 或应用 ELF。后续执行前先补齐这些具体条件；不覆盖出厂 QSPI/SD 内容。渲染与提取材料留在 `tmp/board_bringup_review/`。
 
-## 2026-10-13：多人协作规则拆分与当前源码下载前验证
+### 2026-10-13：多人协作规则拆分与当前源码下载前验证
 
-### 目标、范围与规则变更
+#### 目标、范围与规则变更
 
 用户要求从所贴 Obsidian AGENTS 中适当引入 DeepSeek 约束，区分团队共用与本机专属规则，记录资料位置，然后核查程序以准备下载。本轮修改 `AGENTS.md`，在独立 `tmp/pre_download_20261013_01/` 检查源码并生成当前硬件输出，追加本文；没有修改 RTL、正式构建脚本、现有测试或正式 Vivado 工程，没有执行 Git 或连接硬件。
 
@@ -95,13 +107,13 @@
 
 修改前备份为 `tmp/backup/agents_before_shared_split_20261013_01/AGENTS.md`，核对 SHA256 一致。源文件初始哈希在检查目录 `before.json`，结束时再次核对源码/脚本/测试未变化；AGENTS 差异、章节范围和基本格式检查通过，记录为 `agents.diff`。没有进行 DeepSeek 实际模型任务验证，不宣称规则成为工具层硬限制。
 
-### 环境、失败尝试与原因分析
+#### 环境、失败尝试与原因分析
 
 环境为 Windows / Vivado 2026.1，工具在本机 `D:/AMDDesignTools/2026.1/Vivado/bin/`。默认受限环境运行 vivado.bat 时出现 Access is denied，随后 setupEnv/loader 定位错误；RTL 分析能通过，但 xelab 编译生成 C 文件失败（XSIM 43-3409/43-3915）。没有把这些现象当成源码故障或修改安装权限。
 
 保留失败输出和 `interface/` 日志，通过受控权限重试同一源码；Vivado 检测到有效 BASIC 许可证，重试的接口自检和完整构建通过，初次失败与受限执行环境有关。临时检查脚本仅在 `tmp/`，创建独立工程，不覆盖旧工程和既有日志。一次报告检索误把 PowerShell 的 ErrorAction 参数传给 rg，修正检索命令后读到实际报告，没有改变验证结果。
 
-### 本轮实际完成的验证
+#### 本轮实际完成的验证
 
 - 现有 `tests/tb_axi_lite.sv` 自检通过：AW/W 分开、响应反压、零 WSTRB、FIFO 快照/溢出/满时入出队、非法地址和参数读回，测试深度 2、500 Hz，部分事件受控注入。日志 `interface_retry/xsim.log`。
 - 新临时边界 testbench 检查默认 360 Hz/43 点积分：100 个零样本、1000 个满量程正负交替样本（含停顿）、44 个直流样本与复位通过，滑动窗口满量程和为 2818005；包含后续事件发生时的 RR 一致性断言，不能把条件断言当全场景 RR 认证。日志 `detector/xsim.log`。这不是标注 ECG 指标测试。
@@ -110,27 +122,27 @@
 - DRC 检查违规数 0，报告 `drc.rpt`。资源 LUT 1309、FF 1663、BRAM Tile 0、DSP 0，报告 `utilization.rpt`。打包、参数依赖分析及未加载端口优化等警告仍存在，不声称所有警告消除。
 - XSA ZIP CRC 完整性通过，内嵌 bitstream 与单独输出的 SHA256 一致；源文件与开始快照一致。产物清单及哈希在 `artifacts.json`。
 
-### 产物、结论与下一步
+#### 产物、结论与下一步
 
 当前检查输出：`tmp/pre_download_20261013_01/ecg_system_candidate.bit` 与 `ecg_system_candidate.xsa`，独立工程为该目录 `build/ecg_check.xpr`；本轮没有替换 10 月 6 日旧 bitstream。完整报告见同目录 `report.md`。这些是当前代码的可下载候选输出，非板上验证成果。
 
 本轮未发现阻止所测接口行为、默认检测器边界及整机实现/生成 bitstream 的故障；未修改设计。仍缺 ECG PS 应用 ELF、真实 ECG 标注指标、采集/显示链路和实物版本确认。单独 JTAG 配置只能检查下载/DONE，需按匹配 XSA 初始化 PS 后运行送样应用，才有检测结果。下一次实物测试应先核对核心板/底板版本和下载器，使用上述新版产物，保留初始化、串口及寄存器结果；没有做实际 JTAG 下载、PS 初始化、Flash/SD 写入或人体采集。
 
-## 2026-10-13：首次连接 JTAG 未发现目标器件
+### 2026-10-13：首次连接 JTAG 未发现目标器件
 
 用户提供 Vivado Messages 截图，显示 `[Labtools 27-2269] No devices detected on target localhost:3121/xilinx_tcf/Digilent/...`，提示检查接线与目标板供电并重连硬件服务器。观察事实：工具已枚举 Digilent 下载器目标，但未识别链上器件；尚无 bitstream 下载成功证据。不能由该截图判定是 RTL、DDR 配置、驱动或板卡损坏。
 
 建议先检查板卡独立供电和电源指示、断电后核查 JTAG 插口/方向/连接，然后上电重新连接目标。截图建议的 `disconnect_hw_server`、`connect_hw_server` 和 `open_hw_target` 仅交由用户在 Vivado Tcl Console 操作，本助手未执行硬件命令。若仍不识别，可依据 AMD UG908 2026.1 Troubleshooting a Hardware Target 检查/降低 JTAG TCK 频率。实物接线、供电、重连及降速是否有效均待用户实际反馈。
 
-## 2026-10-13：USB 供电后识别器件与 Hello World 板上运行
+### 2026-10-13：USB 供电后识别器件与 Hello World 板上运行
 
-### 用户实际操作与观察
+#### 用户实际操作与观察
 
 用户表示连接 USB 并打开电源开关后，Vivado 识别出 `arm_dap_0` 和 `xc7z020_1`；之后确认新版 bitstream 下载步骤正常。此前 JTAG 未发现器件的问题随用户补充供电/打开开关而解除，尚未单独测量供电各路电压，不能据此进一步认定所有电源指标通过。
 
 用户在 Vitis 2026.1 创建并构建 `ecg_platform`、`hello_world`；截图中平台状态为 Platform Build Finished successfully。串口设为 115200，用户直接点击左侧 Run，提供输出末尾为 `Hello World` 和 `Successfully ran Hello World application`。这是本项目平台上的 PS Hello World 应用执行并经 UART 输出的板上证据；不是 ECG 送样或 QRS 检测验证。
 
-### 本地配置核查
+#### 本地配置核查
 
 本轮实际读取 `hello_world/src/helloworld.c`，其中确实打印上述两个字符串。读取 `hello_world/_ide/launch.json`：本地 zynq/baremetal 启动、resetSystem=true、programDevice=true，使用 `hello_world/_ide/bitstream/ecg_system_candidate.bit`；初始化选择 Tcl（isFsbl=false），runPs7Init=true、runPs7PostInit=true；下载 `hello_world/build/hello_world.elf` 到 `ps7_cortexa9_0`，stopAtEntry=false。UART 是输出通道，Run 配置仍通过本地调试连接启动硬件应用，不是把 ELF 经串口烧录。
 
@@ -138,21 +150,21 @@
 
 串口前段含 U-Boot 2018.01、从 QSPI 读取 `navigator_7020_wrapper`（2018.3 / 2021-07-09）、SD 初始化及 PHY 错误，是原有启动软件输出。`Xilinx Zynq ZC702` 是该 U-Boot 的软件板级标识，不能推翻用户确认的领航者实物型号；未修改或修复原有 QSPI 环境。时间顺序依据用户提供的输出，未经独立重现每次复位行为。
 
-### 结论与下一步
+#### 结论与下一步
 
 可以确认用户侧已取得器件识别和 Hello World 板上串口输出。已具备下一阶段测试条件：让 PS 读取 ECG 配置寄存器（360 Hz、120 ms、200 ms），再送入受控数字样本并核对 FIFO 的 QRS/RR/事件序号及丢弃计数。该读写测试、真实 ECG 准确率和 AFE/ADC 采集仍未完成。此次只核查并记录用户证据，没有修改应用、运行硬件命令或操作 Git。
 
-## 2026-10-13：通用下载教程与 Vitis 工作区归置
+### 2026-10-13：通用下载教程与 Vitis 工作区归置
 
 用户要求编写通用教程并移除根目录新增的两个组件，随后明确回复 Vitis“已关闭”。本轮范围为 `ecg_platform`、`hello_world` 的可恢复归档、新工作区重建及教程；未修改 RTL、PS7 参数或原始下载资料，未运行 Git 或板卡下载命令。
 
-### 原因与取舍
+#### 原因与取舍
 
 实际读取平台和应用的 `vitis-comp.json`、应用源码、`_ide/launch.json`。平台输入 XSA 是 `tmp/pre_download_20261013_01/ecg_system_candidate.xsa`；组件却位于仓库根目录，启动配置用 `${workspaceFolder}` 引用根目录下两个组件。说明原创建流程的工作区/组件 Location 选在根目录。前面的指导没有充分强调创建向导的 Location，通用教程补齐这个检查点。
 
 不直接剪切带旧 CMake 缓存的目录作为最终工作区。先将两个原组件可恢复地移到 `tmp/backup/vitis_root_components_20261013_01/`，对 2058 个文件记录路径、大小和 SHA256；移动前后哈希全部一致，清单为该目录 `manifest_before.json`。原根目录 `_ide` 等其他元数据保留，避免扩大清理范围。
 
-### 本机重建与核查
+#### 本机重建与核查
 
 环境 Windows / Vitis 2026.1。依据安装目录 `cli/examples/embedded/platform_creation_standalone.py` 和 `platform_uc4_zynq.py` 的 Python API，在 `tmp/vitis_bringup` 用同一份自定义 XSA 重建 `ecg_platform`，domain 为 `standalone_ps7_cortexa9_0`；再创建 Hello World 应用，分别 Build。未使用官方 zc702 预设。一次性脚本为 `tmp/rebuild_vitis_workspace.py`，拒绝覆盖已有工作区。
 
@@ -160,13 +172,13 @@
 
 恢复运行配置时先采用“不覆盖已有文件”的保护检查，发现新工作区已经存在 launch.json、bitstream 和 psinit，停止该复制动作并重新读取实际文件，没有覆盖。随后核查现有配置仍使用 Tcl 初始化、系统复位、配置 PL、Cortex-A9 核 0、对应 ELF 且不停止入口；所有引用文件均存在。新工作区复制本机 Local target 的 `.peers.ini`（仅在目标缺失时）。新工作区 bitstream SHA256 为 `C12F39430FAA114B9D9A7D85628FC5020C48F1BF368A4E2E87CC4AC4A9DCB650`，与本次硬件候选输出一致。核查摘要为归档目录 `verification.json`。
 
-### 文档与验证边界
+#### 文档与验证边界
 
 新增 `docs/zynq_jtag_uart_tutorial.md`，正文按通用工具流程组织，说明 bit/XSA/ELF、独立工作区与 Location、硬件识别、平台/应用 Build、115200 串口、PS 初始化、Run/Debug、旧 U-Boot 输出及断电后启动的区别；项目当前路径放在末节。依据 AMD UG1400 2026.1 平台创建、示例应用、Serial Monitor 和启动配置章节在线复核菜单，README 增加入口。
 
 根目录两个组件已不存在，原组件完整保留，新工作区本地构建通过，启动引用有效。此次未打开 IDE 界面或重新上板；用户此前提供的 Hello World 成功输出属于迁移前板上证据。用户下次启动 Vitis 应选择本项目 `tmp/vitis_bringup` 工作区，再打开串口并 Run；迁移后的运行结果和 ECG 接口功能仍待实测。
 
-## 2026-10-13：无 SD 卡时 QSPI 自启动流程核查
+### 2026-10-13：无 SD 卡时 QSPI 自启动流程核查
 
 用户询问如何把程序固化到板载 QSPI。本轮只核查并说明步骤，未获设计修改或实际写 Flash 指令，未生成启动镜像、修改 PS 配置或执行硬件命令。
 
@@ -176,13 +188,13 @@
 
 当前前置工作应先按匹配核心板原理图和官方例程启用 QSPI，再重建 bit/XSA/平台/FSBL/应用。后续生成 BOOT.BIN 并从 JTAG 模式写 QSPI 的启动位置，断电切到 QSPI 后验证串口；写入启动区域会替换原有引导内容，需要了解保留/恢复方案。上述流程尚未实际执行，不能将现有候选产物宣称为已验证 QSPI 镜像。
 
-## 2026-10-13：合并补录早期工作区归并与领航者修复记录
+### 2026-10-13：合并补录早期工作区归并与领航者修复记录
 
 以下内容迁自原 `docs/workspace_migration.md`，记录的是早期修复阶段，原有结论和证据路径保留，不代表本次重新运行验证。该阶段环境为 Windows / Vivado 2026.1；当时项目根目录为 `Desktop/fpga/ecg_edge`，当前已经迁至 `C:/Users/23006/Desktop/ecg_edge`。下文“没有做整机实现、生成 bitstream 或上板”等仅限当时阶段，后续整机构建和用户 Hello World 板上输出见本文前面的对应日期任务。历史剩余工作也不是当前进度清单。
 
 日期：2026-10-13。
 
-### 统一项目根目录
+#### 统一项目根目录
 
 `C:/Users/23006/Desktop/fpga/ecg_edge` 是现有仓库及统一项目根目录，外层 `Desktop/fpga` 只保留此目录。没有执行 Git 命令，没有暂存、提交、推送或修改 `.git`。没有迁移或修改 `Desktop/VHDL` 的内容。
 
@@ -197,13 +209,13 @@
 
 原始文件采用移动，没有删除。`ecg_edge/vivado/ecg_edge` 原有工程目录保持原位置，避免破坏 Vivado 相对路径。A 盘下载资料仍在原来的 D 盘目录，没有把整个资料盘塞进仓库。
 
-### 忽略范围
+#### 忽略范围
 
 `.gitignore` 排除项目 `tmp/`、Vivado 缓存/生成/运行目录、bitstream/XSA/ELF、中间网表、日志和波形、本机 IDE、Python/Node 环境及本地凭证。`docs/reference/` 是本地第三方资料，也默认忽略。
 
 正式 RTL、测试、Tcl/PowerShell 构建脚本、README、项目计划、寄存器接口、XPR/BD/XCI 等保留为项目文件。忽略规则不能从 Git 历史或现有索引中自动移除文件，本轮未操作这些状态。
 
-### 修复内容
+#### 修复内容
 
 1. 现有 BD 与新构建脚本改为 UART0/MIO14–15，关闭 UART1；DDR 改为 `DDR 3 (Low Voltage)` 和兼容配置 `MT41K256M16 RE-125`。
 2. `build_navigator_ecg_system.tcl` 负责领航者配置。旧 AC7020 名称脚本仅作兼容入口，转发到新脚本。
@@ -214,7 +226,7 @@
 7. AXI 包装层传入采样率/积分窗口/不应期参数，增加只读参数寄存器；RR 使用与事件位置一致的非负回移索引计算。
 8. 新增正式接口自检 `tests/tb_axi_lite.sv` 和 `scripts/run_rtl_tests.ps1`。详见 [寄存器说明](../register_map.md)。
 
-### 验证结果
+#### 验证结果
 
 | 检查 | 结果 | 证据 |
 | --- | --- | --- |
@@ -231,27 +243,27 @@ Vivado 仍有 SystemVerilog 模块打包支持、内部 localparam 依赖分析�
 
 没有做修复后整个系统的实现/时序收敛、新 bitstream 生成、XSA 导出、PS 应用构建、下载或板上运行。原 `.runs/impl_1` 中的 bitstream 是旧配置，不能当作修复后的输出使用。独立 RTL 综合不代表整机时序通过，合成样本/事件测试不代表真实心电检测准确率。
 
-### 备份和剩余工作
+#### 备份和剩余工作
 
 修改前的 RTL、脚本、README、忽略文件、XPR、BD 保存在 `tmp/backup/ecg_before_navigator_fix_20261013/`。核查报告在 `tmp/engineering_audit/report.md`，它描述修复前状态。
 
 下一阶段仍需核实实物核心板/底板版本及实际采样率，重建整机结果和硬件平台，完成 PS 样本回放程序与软件参考模型，再验证真实 ECG 数据和采集前端。Git 继续暂停，直到用户明确恢复。
 
-## 2026-10-13：文档合并与入口修正
+### 2026-10-13：文档合并与入口修正
 
-### 目标、取舍与实际修改
+#### 目标、取舍与实际修改
 
 用户授权合并上板说明和历史迁移记录，明确要求 `docs/materials_review.md` 不动。Windows 文件编辑环境下，将原上板说明的领航者接线、启动拨码、ECG 验收和来源定位合并到 `docs/如何下载.md`，通用下载流程沿用教程前半部分；去掉已过时的“只有旧 bit、没有 XSA/ELF”现状描述。迁移表、忽略范围、修复细节、原验证表和备份位置在上一节保留，并标明历史阶段，避免覆盖其他成员记录。
 
 原 `docs/board_bringup.md` 和 `docs/workspace_migration.md` 原样归档到 `tmp/backup/docs_merge_20261013_01/docs/`。README 改用实际存在的 `docs/计划.md`、`docs/如何下载.md` 和 `lykzr.md` 入口，更新为已有构建记录和用户 Hello World 输出所支持的验证阶段；`myself.md` 仅修正下载说明路径。`docs/materials_review.md` 和 `docs/register_map.md` 均保持原样。
 
-### 检查与边界
+#### 检查与边界
 
 备份目录保存修改前文件、SHA256 清单、局部差异和检查结果；脚本在 `tmp/doc_merge_20261013/merge_docs.py`。写入前核对当前文件字节，追加前保护 `lykzr.md` 原内容；发生并发变化时停止并重新读取。检查本次入口和 Markdown 本地链接，核对两份归档与原文件字节一致，核对资料入口和寄存器说明哈希不变。检查结果见备份目录 `verification.json`。
 
 这次只修改文档并归档两份旧文档，没有改 RTL、BD、PS7、XDC 或工程构建脚本，没有运行 Git、仿真、综合、实现、IDE 或硬件命令。整机构建和板上输出来自既有记录，不是本轮新实验；QSPI 工作由原聊天继续推进，本轮没有宣称其完成。
 
-## 2026-10-13：QSPI 配置修改与 Hello World 启动镜像生成
+### 2026-10-13：QSPI 配置修改与 Hello World 启动镜像生成
 
 用户明确授权“那你改吧，如果有我改不了的踢我”。本轮由本机 Codex 修改 `scripts/build_navigator_ecg_system.tcl`，仅增加 QSPI 参数和依据注释；RTL 两文件哈希与先前验证快照相同。读取官方 Vitis 指南第 7.1—7.6 节相关内容，查看配置图与核心板原理图实际页面，使用 tar 从原始 RAR 提取官方 `6_axi_gpio_fsbl` 的 system.bd 到独立 tmp 目录并逐项核对 QSPI 参数。7z 的 WindowsApps 启动别名不可访问，未改权限或安装软件；改用已有 tar 正常完成资料提取。PDF 渲染提示字体替代警告，实际配置图及原理图可读。
 
@@ -267,7 +279,7 @@ Vivado 仍有 SystemVerilog 模块打包支持、内部 localparam 依赖分析�
 
 没有连接板卡或写 Flash，没有备份原有 QSPI，也没有断电自启动实测；生成的是 Hello World 固化候选，不是 ECG 应用。用户剩余动作：JTAG 模式下 Program Flash 写 BOOT.BIN 到 offset 0，类型 qspi_single，Init File 选本次 fsbl.elf 并 Verify；成功后断电切 BOOT_CFG 1=ON、2=OFF，再看 115200 串口。该写入将替换原有引导区域，用户执行前应明确是否保留原厂启动内容。Git 保持暂停。
 
-## 2026-10-13：构建目录与正式发布归档约定
+### 2026-10-13：构建目录与正式发布归档约定
 
 用户认可“构建放 tmp、验证后的发布文件放 releases/<版本>”，要求写入并询问工程大小。本轮更新 AGENTS.md 开头和第 5 节、新建 releases/README.md、README 增加目录入口。发布仅复制已验收的同组镜像及匹配 FSBL、必要配套文件、SHA256 清单和验收记录，不复制整套缓存、不覆盖旧版本、不自动清理原工作区。现有二进制忽略规则保留；本地归档不等于 Git 共享或远端发布。
 
@@ -275,25 +287,25 @@ Windows 文件长度统计快照在 tmp/release_size_20261013.json：rtl/scripts
 
 重新读取实际文件，核对 README 的本地链接和新增文件编码。此次仅写归置规则及记录，未移动已完成构建、未复制候选镜像为正式发布、未删除文件或修改设计，没有操作 Git。当前 Hello World 候选仍待 QSPI 断电自启动验收，验收后才按该约定形成正式版本目录。
 
-## 2026-10-13：首次 QSPI 烧录擦除成功、写入前临时文件失败
+### 2026-10-13：首次 QSPI 烧录擦除成功、写入前临时文件失败
 
 用户提供 Program Flash 2026.1 日志：BOOT_MODE=0（JTAG），匹配 FSBL 已运行，工具 mini U-Boot 在 OCM 中识别 w25q256/32MiB；sf erase 0 400000 显示 4194304 bytes Erased OK。Program Operation 在 0% 失败，明确错误为 Could not create temporary file D:\AMDDesignTools\2026.1\Vitis\bin\xicom_zynq_bin21344。观察事实是起始 4MiB 已擦除、镜像尚未成功写入和校验，不是文件容量超限；Flash Mismatched 为此前警告，实际终止错误是临时文件创建失败。hw_server 最初连接失败后已自动启动并连接，也不是本次终止点。
 
 本轮读取安装目录 program_flash.bat 与 program_flash -help（只帮助，不连接板卡），确认 2026.1 支持 qspi-x4-single、-f、-fsbl、-offset、-verify、-url。帮助输出保留在 tmp/qspi_boot_20261013_01/program_flash_help.txt。建议用户保持 JTAG，使用 PowerShell 切换到项目可写产物目录，再调用该工具完成同一镜像的编程和校验；根据路径推断 GUI 调用的工作位置在不可写安装目录，但该绕开安装目录的办法尚待用户实际重试验证。未修改安装权限、未要求全盘擦除，也未由本助手执行 Flash 命令。不能把原有 QSPI 引导状态描述为仍完整；起始区域已擦除，需成功重写后再切 QSPI 测试。
 
-## 2026-10-13：QSPI 写入后校验成功，待断电自启动验收
+### 2026-10-13：QSPI 写入后校验成功，待断电自启动验收
 
 用户从项目可写目录运行 Program Flash，并在一次 Ctrl+C 中断后重试。最新提供日志末尾：cmp.b FFFC0000 FFFC8000 1E08、Total of 7688 byte(s) were the same、Verify Operation successful，校验阶段报告耗时 38 秒。工具报告本次校验成功；7688 字节是日志中最后一个比较块，不把它误写为整个镜像仅有 7688 字节。命令执行与板卡操作由用户完成，本助手未执行硬件写入。
 
 先前安装目录临时文件错误未在这次成功校验的末尾再次出现，说明用户侧已取得重试成功结果；是否完全由工作目录造成仍未独立复现。此次证据支持写入后工具校验完成，不等同于 QSPI 自启动验收。下一步用户断电切 BOOT_CFG 1=ON、2=OFF，打开 115200 串口再上电，不点击 Run；自动出现 Hello World 后才能归档为通过自启动验收的发布版本。当前候选保持原位置，未发布或移动。
 
-## 2026-10-13：串口 COM14 输出与复位操作说明
+### 2026-10-13：串口 COM14 输出与复位操作说明
 
 用户提供 COM14/115200 输出：Hello World、Successfully ran Hello World application，连续出现两组；并反馈应该直接提醒 reset。按会话上下文，记录为用户复位后重新观察到应用输出，不把连续两组打印自行解释成算法故障。先前已提供 Flash Verify Operation successful；本次补充串口应用运行证据。具体完整断电上电过程未由这条反馈单独明确，不将 PS 复位观察扩大为掉电保持全流程验收。
 
 纠正指导顺序：对已经处于 QSPI 启动模式的板子，打开串口后按 PS 复位即可重新观察只打印一次的 Hello World；无需每次开关电源。完整断电自启动验收另外进行。提醒 PS 复位与用户按键不同，JTAG 易失应用复位后的重跑不能照搬 QSPI 操作。教程 docs/如何下载.md 串口节补入该说明，未改硬件、镜像或运行配置。
 
-## 2026-10-13：发布 latest，历史忽略但不删除
+### 2026-10-13：发布 latest，历史忽略但不删除
 
 用户明确要求“然后release那个啊，只留最新版本，其他的都ignore掉但不删除”。本轮据此将当前 Hello World/QSPI 文件复制到 releases/latest/，保留原 tmp 工作区及全部历史文件；当前首次建立 latest，没有旧 latest 需要迁移。后续更新约定为先将旧 latest 可恢复归档到 releases/history/<版本>/，不覆盖历史、不删除。
 
@@ -303,7 +315,7 @@ Windows 文件长度统计快照在 tmp/release_size_20261013.json：rtl/scripts
 
 清单逐项区分：硬件/软件/镜像检查通过，烧录校验与复位后串口为用户提供的通过证据；完整断电启动未单独确认，ECG 功能未验证。用户本轮授权按这个实际范围归档，不将复位证据补写为掉电验收。Git 持续暂停，未调用 Git 或修改索引；忽略规则只影响未跟踪文件，已跟踪旧文件不能据此自动取消跟踪，此轮也未提交、推送、上传远端。
 
-## 2026-10-13：确认 GUI 烧录临时文件失败的工作目录原因
+### 2026-10-13：确认 GUI 烧录临时文件失败的工作目录原因
 
 用户询问是否能恢复图形界面烧录，以及每次是否阅读全部 Markdown。本轮核查本机安装文件和快捷方式，没有运行硬件写入。
 
@@ -315,7 +327,7 @@ Windows 文件长度统计快照在 tmp/release_size_20261013.json：rtl/scripts
 
 文档阅读原则解释：每项工程工作先读当前适用约束、相关当前文件和最近记录；计划、寄存器、资料说明、教程按任务关联读取，不宣称每次逐字通读所有 Markdown。事实以实际代码/配置/工具日志和用户板上证据为准，不创建额外重复说明文档。本轮仅在已有教程和本机配置追加定位及启动入口，当前 ECG 业务链路尚未全部验证。
 
-## 2026-10-13：修改原 Vitis 开始菜单快捷方式的工作目录
+### 2026-10-13：修改原 Vitis 开始菜单快捷方式的工作目录
 
 用户明确选择“改启动工作目录更合适”。本轮备份原系统级 Vitis 2026.1.lnk 到 tmp/backup/vitis_shortcut_20261013_01，副本哈希与原始一致。原链接位于 C:/ProgramData/Microsoft/Windows/Start Menu/Programs/AMD Adaptive SoC and FPGA Tools/Vitis 2026.1，原目标 vitis.vbs，相对启动器不适合只改起始位置。
 
@@ -323,7 +335,7 @@ Windows 文件长度统计快照在 tmp/release_size_20261013.json：rtl/scripts
 
 仅修改快捷方式，没有改安装目录 ACL、工具脚本、设计或烧录文件；未启动 IDE 或写 Flash。myself.md 更新本机状态。用户下次先关闭现有 Vitis 后从开始菜单重开，才能使用新进程工作目录；图形界面再次烧录仍未实测，不能仅凭链接回读宣称全流程通过。原始快捷方式与额外本机启动入口均保留，Git 未操作。
 
-## 2026-10-14：PS 配置读回与真实样本 FIFO 自检应用
+### 2026-10-14：PS 配置读回与真实样本 FIFO 自检应用
 
 用户引用并确认下一阶段 PS→ECG 接口验证，本轮编写 software/ecg_smoke/main.c，新增 scripts/build_ecg_smoke.py、scripts/run_ecg_smoke_test.ps1、tests/tb_ecg_smoke.sv；README 增加应用入口，现有下载教程增加第 20 节，没有新增重复 Markdown。读取当前 AGENTS/myself、register_map、检测器与 AXI RTL、现有接口 testbench、安装目录 BSP xil_io.h 及官方 Vitis Python 示例后实施；未修改设计、现有硬件工程、Flash 或 releases/latest。
 
@@ -337,7 +349,7 @@ Windows 文件长度统计快照在 tmp/release_size_20261013.json：rtl/scripts
 
 源文件、ELF、现有发布镜像哈希及验证状态在 tmp/ecg_smoke/artifacts.json。latest BOOT.BIN仍为4B902DB837F8BB326F81775B745F651011403655D677EF0893D550C425F21A38，没有替换Hello World。未运行PS应用上板、未写Flash、未更新发布版本或操作Git；待用户提供BEGIN到最终PASS/FAIL串口日志后才能判断真实PS→AXI→检测器→FIFO链路。若卡在首次MMIO读，需查匹配bit/PS初始化/时钟复位，不能以本地仿真或构建替代实物诊断。
 
-## 2026-10-14：逐周期整数参考模型与 RTL 对照
+### 2026-10-14：逐周期整数参考模型与 RTL 对照
 
 用户授权先实现软件参考模型，并特别要求记住 smoke 尚未测试。本轮在 README、下载教程及对照报告明确记录 smoke_board_test=NOT_TESTED；沿用 tmp/ecg_smoke/artifacts.json 的 boardExecution=NOT_EXECUTED，没有把假设测试完成转成实际结果。参考模型不改变这个边界。
 
@@ -351,7 +363,7 @@ README新增模型入口，移除“整数参考模型尚未实现”的过时�
 
 最终复核：对照报告中的4个源码哈希与当前文件一致，smoke产物与latest镜像未改，smoke boardExecution仍为NOT_EXECUTED。教程命令使用python -B，模型导入产生的本次字节码缓存可恢复移动到tmp/reference_python_cache，未删除文件。CLI与完整对照均退出码0。
 
-## 2026-10-15：MIT-BIH 100号记录默认整数模型失败基线
+### 2026-10-15：MIT-BIH 100号记录默认整数模型失败基线
 
 用户授权先用100号真实标注记录评估现有参考模型，并再次强调smoke尚未上板。本轮只做离线回放，未修改RTL、参考检测器、PS配置、发布镜像或操作Git；smoke_board_test明确为NOT_TESTED。环境为本机Python3.14及已安装matplotlib，无新增安装。
 
@@ -363,7 +375,7 @@ MLII输入ADC减1024，比例1、范围[-543,287]，360Hz，不滤波/重采样/
 
 证据：tmp/mitdb_100_20261015_01/baseline_verified/summary.json含配置、诊断统计和源码/数据SHA256；input.csv、reference_beats.csv、events.csv、matches.csv、missed.csv、extra.csv保留完整输入与计分清单；comparison.png已打开检查，前10秒及中段漏检示例清楚显示阈值高于积分能量。首次baseline目录保留未覆盖删除。README与原下载教程第22节同步实际失败结论及复现命令，不新增重复说明文档。没有上板、写Flash或确认断电启动；smoke仍须拿回板后实测。
 
-## 2026-10-15：幅值映射及无标注初始化重跑100号
+### 2026-10-15：幅值映射及无标注初始化重跑100号
 
 用户授权先改幅值和阈值初始化再评估，再次要求保留smoke未上板状态。本轮采用离线预处理与Config显式初值，不改变逐周期参考检测器或RTL，避免把尚未移植的校准宣称为板上已具备。新增software/reference/ecg_input.py，修改scripts/evaluate_mitdb_100.py及tests/test_mitdb_100.py；原脚本/测试备份tmp/backup/mitdb_calibration_20261015_01。原记录、默认失败报告及发布文件保留。
 
@@ -375,7 +387,7 @@ MLII输入ADC减1024，比例1、范围[-543,287]，360Hz，不滤波/重采样/
 
 证据在tmp/mitdb_100_20261015_01/calibrated_verified/及同名.log，五组测试日志calibration_tests.log；calibrated_01和全部历史基线保留。baseline_regression重跑默认输入及参数仍0事件，检查旧流程无改变。README及下载教程第23节记录方法、指标和等待边界。smoke_board_test=NOT_TESTED；没有操作Git、写Flash或更新latest，硬件仍待实测。
 
-## 2026-10-15：持续阈值与候选峰的软件阶段完成
+### 2026-10-15：持续阈值与候选峰的软件阶段完成
 
 用户要求不要逐步反复询问，直接完成当前步骤并告知测试是否合格。依据此前阈值衰减观察，本轮新增software/reference/ecg_peak_reference.py和tests/test_ecg_peak_reference.py，扩展评估工具profile=peak。没有替换旧ecg_reference.py或RTL，保留旧逐周期语义；新文件明确是未移植的软件算法原型，旧模型一致性测试不替新模型背书。
 
@@ -391,7 +403,7 @@ MLII输入ADC减1024，比例1、范围[-543,287]，360Hz，不滤波/重采样/
 
 同步README、下载教程第24节；原基线与仅校准回归分别存peak_stage_baseline_regression、peak_stage_calibrated_regression，防止评估入口改变旧算法结果。smoke仍NOT_TESTED/NOT_EXECUTED，没有PS/RTL移植、硬件构建、写Flash、替换发布或Git操作。下一阶段需要独立记录评估及候选峰RTL实现/一致性验证，板子取回后仍先补原smoke实测。
 
-## 2026-10-15：竞赛计划缺项、英文目录与开源交付准备
+### 2026-10-15：竞赛计划缺项、英文目录与开源交付准备
 
 用户授权把未完成事项加入计划，并先完成当前能做的目录/规范修改，工程未完成的最终报告和实测材料暂不编造。本轮据指南3.3.3—3.3.5迁移22个正式文件：RTL到src/rtl，PS源码到src/ps/ecg_smoke，软件参考到src/reference，测试与仿真到sim，硬件Tcl到build，PS构建到board，数据评估到data。计划docs/计划.md移为report/project_plan.md，教程docs/如何下载.md移为board/download_guide.md。旧源码/脚本/测试空目录只在确认无文件后移除；原tmp/vivado/Vitis工作区和发布版本不搬动、不删除。已有smoke的ELF/bit/launch仍可按原工作区Run，源码迁移不代表新检测算法已在板上。
 
@@ -409,7 +421,7 @@ build/create_rtl_project.tcl增加可选新输出目录参数，以便从独立t
 
 最终复核：正式Markdown相对链接无缺失、正式目录名无中文空格；源码新路径哈希与回放报告一致，releases/latest仍9文件，BOOT.BIN哈希保持4B902DB837F8BB326F81775B745F651011403655D677EF0893D550C425F21A38，全部发布文件未改写。docs/materials_review.md未修改，参考PDF未移动。smoke boardExecution仍NOT_EXECUTED，板上/掉电/新算法RTL均未补写为通过。目录整理及许可证添加不代表完整作品已完成或仓库已公开。
 
-## 2026-10-15：按11月4日18点截止重排计划
+### 2026-10-15：按11月4日18点截止重排计划
 
 用户要求写入已确认的2026-11-04 18:00北京时间截止，并优先安排必须完成项。只修改report/project_plan.md正文与本过程记录：页首突出截止，第8节改为当前推进顺序，第10节列赛程来源、P0/P1/P2、分阶段日期和延期风险处理。以10月15日为起点约20天，内部目标11月1日完成包、11月2—3日上传核查，11月4日留作异常补救，不默认延期。
 
@@ -417,19 +429,19 @@ P0为smoke与板上核心链路、独立记录/软件RTL/板上回放、同器�
 
 已读取保存后的计划并核查截止、内部目标、优先级、日期表及smoke边界；smoke仍尚未上板测试，未勾选任何实验完成项。没有运行硬件、修改算法、重建镜像或操作Git；本次为计划调整，无需重复功能测试。
 
-## 2026-10-15：将根README恢复为项目入口
+### 2026-10-15：将根README恢复为项目入口
 
 用户指出README变成验证流水账。本轮按项目介绍、组成、目录、软件/硬件快速开始、文档导航与许可重写根README；移除逐日构建记录、默认失败/调参指标、历史缓存路径、旧板迁移过程和本机会话Git状态。详细数据与失败历史已在data/results、下载教程和本记录保留，没有删除这些证据。保留一段简短开发状态，明确候选峰尚未移植RTL、smoke尚未上板，避免读者误认功能完成。
 
 写前备份tmp/backup/readme_entry_20261015_01/README.md并核对写前版本；保存后检查全部Markdown目标存在及状态文字。未修改代码、计划、镜像或Git；本轮为文档调整，没有重跑功能测试。
 
-## 2026-10-15：复核旧smoke运行步骤在目录迁移后是否有效
+### 2026-10-15：复核旧smoke运行步骤在目录迁移后是否有效
 
 用户粘贴旧步骤要求核对及必要路径修正。实际tmp/ecg_smoke/vitis_workspace仍在，ecg_smoke/_ide/launch.json配置名ecg_smoke_app_hw_1、resetSystem/programDevice为true、核0且stopAtEntry=false。核对bit、ps7_init.tcl、FSBL和应用ELF均存在，正式src/ps/ecg_smoke/main.c与已编译工作区副本SHA256一致，ELF仍2E573BA9A9244CD4A9EF0F5CE80ECA8957E1B512594B9B9389FC616353285BF7，配置bit与latest相同。旧步骤可以继续用，无需修改启动文件或重建。
 
 首次只读检查命令中PowerShell提前展开workspaceFolder占位符，导致路径替换断言失败；改用字符构造保留字面量后，实际配置文件路径核对全部通过，没有修改launch。更新board/download_guide.md第20节，补充迁移后仍有效、准确配置位置/名称及串口8N1无流控；旧聊天中的docs/如何下载.md链接应改为board/download_guide.md。未写Flash、未运行板卡或操作Git，smoke仍未上板测试。
 
-## 2026-10-16：按最新报名目标、多人协作与工具要求对齐计划
+### 2026-10-16：按最新报名目标、多人协作与工具要求对齐计划
 
 用户要求综合最近所有要求更新现有计划。本轮只修改report/project_plan.md，并追加本记录。完整读取当前计划/规则/本机边界、源码目录及已有验证说明，原计划备份tmp/backup/plan_alignment_20261016_01/project_plan.md（SHA256 98543A393429F0B56C32099579E12F6AB85C3C260BDDC95E989FD6493A253E66）。未覆盖其他成员源码、未修改README或旧实验报告。
 
@@ -445,7 +457,7 @@ P0为smoke与板上核心链路、独立记录/软件RTL/板上回放、同器�
 
 保存后核查12个编号章节顺序、日期/截止、27项未完成清单、目标关键字及本地Markdown链接，并检查原“分类后续”“最低仅QRS”冲突条款已撤换。未勾选实验通过项，未执行新功能测试、安装、下载、构建、写Flash或Git操作；本次为计划和范围更新，不声称已完成CNN、人体采集或板上smoke。
 
-## 2026-10-16：冻结QRS多记录评估与因果滤波参考
+### 2026-10-16：冻结QRS多记录评估与因果滤波参考
 
 任务：按用户授权先推进离线算法/仿真，不分派多人、不做板上操作和CNN训练。保留100号为开发记录，在运行前固定101、103、105、108、119、200六条新记录，四配置raw/bandpass/notch/bandpass_notch；协议及原候选峰、幅值、初始化哈希保存在data/multi_record_protocol.json。未根据结果换记录、导联或调参数。
 
@@ -465,7 +477,7 @@ P0为smoke与板上核心链路、独立记录/软件RTL/板上回放、同器�
 
 完成后复核：tmp/multi_record_20261016_01/artifact_checks.json记录28行统计、12872参考心搏、时间块/类别计数、源文件及协议哈希、精选摘要复制、Markdown本地链接、原smoke源码及BOOT.BIN不变等检查通过。用本轮备份对照四份已有说明/计划的实际差异，并检查新增源码语法和本次文本尾随空格；没有运行Git diff。该核查不改变上述尚未上板与算法未合格的结论。
 
-## 2026-10-16第二轮：v2重复触发改进及新四记录检查
+### 2026-10-16第二轮：v2重复触发改进及新四记录检查
 
 目标与授权：用户“可以，下一轮”，继续离线软件改进108/119失败，保留旧冻结基线，不做板上操作、CNN训练或多人分派。先读当前AGENTS/myself、源代码、首轮协议和报告；Git持续暂停，Computer Use禁用。原七条（100+101/103/105/108/119/200）全部转为开发验证用途；事先选106/109/111/203为新检查记录，不能交叉调参。复用官方获取脚本，在工具网络权限下下载新四条约8MB并校验SHA256；开发期间不查看新记录波形/标注/指标。
 
@@ -489,7 +501,7 @@ v2使用360Hz、4096单位/mV输入；检测特征分支5–20Hz浮点IIR→相�
 
 收尾核查：artifact_checks.json确认22行对照、52610个事件的范围/单调性/不应期/RR及计数一致，匹配容差、类别/时间块统计、两份摘要复制、冻结源文件和配置、Markdown本地链接、源码语法均通过。另用未冻结协议和不存在的raw路径作负向检查：入口先拒绝冻结缺失，未创建输出或读取数据。BOOT.BIN及原smoke C源码哈希保持不变；这仍不是上板测试。人工查看106失败对照图，保留其启动错误和V漏检证据，不再据新检查调参。
 
-## 2026-10-16第三轮：成熟算法对照、GQRS流式复用与v3失败
+### 2026-10-16第三轮：成熟算法对照、GQRS流式复用与v3失败
 
 用户授权继续改进至满意，并同意先用成熟算法对照。曾暂停解释对照用途，后获用户继续指令；同时按专用接口查询账号额度，未使用重置。工程仍只做离线软件，不运行Git、不操作板卡。先读当前AGENTS/myself和冻结源文件/结果；旧v1/v2及其协议保持不变。
 
@@ -509,7 +521,7 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 
 因此继续v4，v3及15项冻结来源不再修改；把已看19条转为开发集，新预留23条写入data/qrs_v4_protocol.json，排除起搏记录102/104/107/217、与202同受试者的201，以及VF区间计分合同未定义的207。这是42条无起搏QRS范围的选择，不冒充完整48条或CNN划分。v4拟在输出侧加入近邻宽波检查，并保留双相/高幅值/高斜率救援，必须重新验证V召回；尚未据此标记测试通过。smoke仍未上板，旧PS/RTL/发布包无改动。
 
-## 2026-10-16第四轮：有界流式候选的宽后波抑制与冻结检查
+### 2026-10-16第四轮：有界流式候选的宽后波抑制与冻结检查
 
 目标：在不牺牲低幅度/宽QRS召回的前提下处理v3的219额外触发，并用预留的新23条验证；当前用户允许继续离线修改，仍不做CNN、多人任务或板上操作。环境沿用Windows/Python3.14、tmp/qrs_benchmark_env隔离环境（WFDB4.3.1、NumPy2.4.4、SciPy1.18.1、matplotlib3.10.9），Git保持暂停。原19条全部用于开发，不再包装成独立测试。
 
@@ -529,7 +541,7 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 
 独立复核脚本tmp/qrs_v4_20261016_01/audit.py和audit.json检查：v2/v3/v4冻结8/15/18项哈希；55/40/19/92行结果的CSV数量、匹配±54点范围、逐类/时间块合计、RR与事件/不应期、汇总重算；全部通过，流式stale_events均0。smoke main.c和releases/latest/BOOT.BIN与原哈希一致。修改前文档快照在tmp/backup/qrs_v34_20261016_01/，保留前几轮失败与原始资料，无删除/Flash写入/Git操作。**smoke仍未上板（NOT_TESTED），未改RTL/PS/bitstream或发布镜像，未训练CNN，也未验证真实AFE/ADC输入。**
 
-## 2026-10-16：按用户要求归档历史算法版本
+### 2026-10-16：按用户要求归档历史算法版本
 
 用户要求先不训练ECG分类模型，先规范文件，将上一轮历史版本放tmp。本次移动23个历史文件到tmp/history/qrs_20261016/，包括v1/v2/v3候选、旧单记录/各轮计分与下载入口、协议、专属测试和旧摘要。额外复制29个匹配依赖/整理前文档/当前结果快照，共52项记录在归档manifest.json中；所有原字节SHA256核对通过，未删除原实验、数据或历史证据。保留当前v4与两份v4正式摘要；摘要仍含当时历史方法的对照行，不篡改成新路径/新结果。Git持续暂停，未执行索引、提交或其他Git操作。
 
@@ -541,7 +553,7 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 
 文档整理：data/README.md和results/README.md仅保留当前入口/结果说明；report/offline_qrs_evaluation.md保留当前方法与结果，逐轮历史报告在归档；root README、sim/README、board/download_guide.md中的旧运行命令修正，项目计划补充归档位置。根实验记录历史段落不改写，docs/materials_review.md未动。发布BOOT.BIN与smoke main.c哈希未变；未训练CNN、未操作板卡/Flash，**smoke仍未上板测试**。本地tmp忽略不等于远端共享，交接历史需单独提供归档。
 
-## 2026-10-16：日志统一到docs与全42条准确性复现
+### 2026-10-16：日志统一到docs与全42条准确性复现
 
 用户明确要求README以后只写工程说明，实验/调试/验证日志统一放docs，拆分后再测准确性。本次以该最新要求替代旧根lykzr.md约定，更新AGENTS.md第5/6节，后续本机实验记录改为docs/records/lykzr.md；保留其历史正文和原有忽略约定。board/download_guide.md移到docs/download_guide.md；report/offline_qrs_evaluation.md移到docs/records/offline_qrs_evaluation.md；发布validation.md移到docs/records/hello_world_validation.md。当前源码/仿真/发布README只保留用途、依赖、接口、运行/构建和文档导航；原README正文及其验证经过保存在docs/records/readme_history.md，计划中的详细既有实验成绩迁到project_status_snapshot.md。报告素材入口为docs/README.md。
 
@@ -554,7 +566,7 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 本次没有训练CNN、修改RTL/PS、安装依赖、操作板卡或Flash；发布二进制未变，**smoke仍未上板测试**。旧工具工作区和tmp历史不批量搬动，新需归档的文本日志按照本次用户要求统一进入docs/records/，README不再承载实验日志。
 
 
-## 2026-10-16：按确认清单补全并重整AGENTS
+### 2026-10-16：按确认清单补全并重整AGENTS
 
 用户确认将上一条27项回顾中除第7、16、24项外的要求补入工程规则，并规范结构。本次逐项检查24项覆盖，不新增被排除三项的具体本机会话状态或工作安排；原有通用授权和并发文件保护条款保留，不将“不新增”解释为擅自删除原约束。
 
@@ -563,65 +575,7 @@ AGENTS.md重整为：1上下文/授权/沟通，2项目目标/竞赛/优先级�
 写前备份、差异和24项对应表位于tmp/backup/agents_rules_20261016/，coverage.json逐项对应原编号与新章节；verification.json记录检查结果。验证一级章节1—10及DeepSeek子节9.1—9.3连续，DeepSeek原文除编号/共用章节范围外不变，编码/链接检查通过，正文不新增被排除的具体状态。统一AGENTS换行为LF；当前算法11项冻结哈希不变，未修改源码或重复运行算法实验。本次只改规则/本机资料入口并追加本条过程记录，未执行Git操作。
 
 
-## 2026-10-16：CNN训练准备与现成模型调查
-
-用户明确开始分类训练准备，随后要求多找现成且质量高的ECG模型。本次先检查现有环境和42条标签，新增data/profile_classification.py用于官方SHA校验、类别盘点和候选切拍边界统计，不安装PyTorch或启动训练。当前Python3.14.7环境没有torch/torchvision/sklearn；CIM硬件查询未成功，PATH没有nvidia-smi，GPU仍未知，不推断为一定无GPU。
-
-候选N/S/V/F计数86947/2546/6601/801，另Q15；256点前96后160窗口完整数86909/2546/6600/800。N包含束支阻滞和逸搏，不能当作健康标签。代码仅借QRS协议确定已下载记录池，没有沿用QRS集合为CNN划分，也没有冻结四组任务或窗口。42条全部原始标注与WFDB rdann解析的位置/类型完全一致；盘点、独立对照JSON在tmp/cnn_prepare_20261016，原始文本日志在docs/records/cnn_data_audit_20261016.log。
-
-通过论文作者/维护者的公开入口核对十条路线：CLEF、ECGFounder、ECG-FM、torch_ecg、Tiny MF-CNN论文、PTB-XL作者基准、Mousavi seq2seq、TenzinDhonyoe单心拍分类器及两个FPGA案例。详见docs/records/cnn_model_survey_20261016.md，区分官方权重、框架、论文结构和第三方复现，不把README成绩当本机验证。重要发现：CLEF-Small约448K参数、Zenodo checkpoint约5.5MB，但仓库已归档；ECGFounder单导联权重约370MB；Tiny MF-CNN体积小且做跨受试者研究，本轮未找到作者官方权重；同7020的SE案例是ECG5000二分类、24位定点和自报DSP210/220，不能套作本项目INT8多分类。另一ML605案例软件INT8与硬件16位Q8.8、类别口径也不同。
-
-推荐优先核查现成小预训练模型的输入/许可/最小推理，并与任务匹配的小1D-CNN基线比较；尚未选最终模型、加载权重或划分CNN集合。训练前检查预训练数据与测试受试者重叠，通用表征需适配分类头，参数/模型文件大小不等于7020资源占用。完整代码、权重校验、算子/MAC/缓存预算及量化均未验证。
-
-计划按最新授权调整为CNN选型/划分/训练优先，不再把QRS先移植RTL写成训练前置；计划修改前快照在tmp/cnn_prepare_20261016/project_plan_before.md。README只新增盘点工具使用命令，研究结果写docs/records。代码语法、文档链接及原QRS11项冻结哈希检查通过。未运行Git、安装训练软件、修改QRS/RTL/PS或发布镜像，smoke仍未上板。
-
-
-## 2026-10-17：01:00续接文档维护与轻量CNN首版训练
-
-用户要求先规范正式Markdown，根README.md不动，凌晨在本对话推进小型CNN并把CLEF-Small另存备选。上轮只写了整理脚本、未完成落盘；本轮重读AGENTS/myself/目标文件后执行，备份在tmp/backup/doc_maintenance_20261016。下载教程的历史成绩和排错迁入docs/records/bringup_history.md，保留原章节入口；修正旧board教程自指、结果链接、Flash类型与当前发布说明的不一致；计划和docs导航同步，AGENTS补随手维护及根README保护。保护文件和发布README/清单哈希未变；当前冻结QRS11项哈希未变。文档清单/链接证据见tmp/doc_maintenance_20261016/verification.json，维护范围见docs/records/doc_maintenance_20261016.md。
-
-CLEF备选保存docs/model_candidates/clef_small.md。本机已有两套Python均无torch/TensorFlow，未安装依赖；为了先建立可复现基线，按Farag 2023固定模板MF-CNN思路独立实现NumPy版本，明确四个超类模板、三个因果RR、固定训练特征标准化等改编，非官方模型或完整可训练卷积。代码src/reference/ecg_mf_cnn.py、data/train_ecg_cnn.py，协议data/cnn_mf_v1_protocol.json，说明docs/cnn_baseline.md。参数844可训练/128固定卷积/8标准化，浮点MAC初算10320/拍，不代表硬件资源/延迟或INT8通过。
-
-训练16条38236拍、验证4条8930拍、测试22条49675拍，201/202同人隔离；专家位置切拍且全42条已参与过QRS研究，不称全系统未见数据。seed20261017，Adam0.001/batch512，上限80轮，验证macro-F1选权重、耐心12；实际15轮，选第3轮。验证macro-F1为0.567899；测试总体准确率92.4429%，macro-F1仅0.423830，S召回0.8710%、F召回0，首版分类质量不合格。训练本身S召回8.14%、F为0，可能存在简化特征/模板不足等问题，尚无消融证明，不归咎单一原因。保留全部失败，不改测试阈值、划分、类别或删除困难记录，也不更新发布镜像。后续优先检查公开可训练卷积变体，已查看测试不得再冒充独立。
-
-数值梯度、标量卷积对照、玩具数据学习、因果RR与同人隔离等6项检查通过，全部29项活动软件检查通过；独立循环重算保存预测的混淆矩阵/macro-F1及哈希/集合核对通过。权重、数据NPZ、逐轮日志、源快照和JSON在tmp/cnn_mf_v1_20261017_01，详细结果及原始文本日志在docs/records/cnn_mf_v1_20261017.md及关联log。没有Git、安装软件、Computer Use、多人分派或板卡/Flash操作；smoke仍未上板测试。
-
-
-## 2026-10-17：连续18组可训练CNN实验，严格四分类仍未合格
-
-用户要求一直尝试直至合格，实在不行明确告知；并明确允许仅项目独立环境安装CPU PyTorch及必要依赖。本次创建tmp/cnn_torch_env，确保临时/缓存在项目tmp；ensurepip默认临时目录权限失败和沙箱代理访问失败均留原日志，改项目TEMP并获工具联网权限后安装PyTorch2.14.1+cpu/NumPy2.5.2，没有改系统Python、驱动、ACL或代理。
-
-预先固定本轮工程目标macro-F1≥0.85、各类F1≥0.70、N/S/V/F召回≥0.95/0.80/0.80/0.70、参数≤100000，注明是助手提出的原型目标，不是比赛/用户/临床要求，后续不降。新增可训练MF/残差结构及训练脚本；v2六配置均衡采样，v3四配置标准化RR/自然加权/去BN/增强，v4四配置长128点上下文，v5四配置针对验证较好的双通道MF继续自然加权/增强；18组共636轮。全部保持同一受试者角色和四类，无随机心拍跨人泄漏或删除F。每轮选权重/候选只看验证，之后旧测试回放均标已查看探索性证据。
-
-训练已经能达到macro-F1约0.95，跨人验证/旧测试仍下降。按验证选的全局候选context_residual_both16_aug，训练0.952439、验证0.749199、旧测试0.530255，S/F召回分别33.642%/4.897%，accepted=false。未按别的候选测试较高分改选模型。训练S516中383来自209，F401中372来自208，验证F仅11拍，覆盖集中为已确认风险，但尚无证据证明唯一原因。18组比较和失败分析见docs/records/cnn_trainable_20261017.md；记录停止当前调参依据及需要新数据/建模/独立评估，不能把当前模型算合格或偷偷删F。
-
-8项PyTorch检查通过，原环境29通过/8跳过且跳过项已在新环境实测通过；独立循环重算各轮混淆矩阵/macro-F1、权重/协议/运行源码快照及按验证选择结果均通过。相同8928个验证ID比较确认排序不变。上下文等待R后约533ms、额外15个N边界样本排除如实记录；各轮源快照保留64/128点兼容扩展前后版本。v3继承的augmentation文字标签瑕疵已披露，实际候选augment与源码决定行为，冻结原文不事后改。正式说明、数据README、计划、第三方来源及本机环境同步维护；根README/资料索引/发布包未改，不写README成绩。未运行Git或使用板卡/Flash、Computer Use、多Agent，smoke仍未上板。
-
-## 2026-10-17：扩大S/F来源、冻结新患者测试，4候选81轮仍未合格
-
-用户要求优先补S/F受试者数据并重新安排独立测试后训练。本次沿用已有CPU PyTorch2.14.1+cpu/NumPy2.5.2环境及WFDB4.3.1/SciPy1.18.1数据环境，没有新安装。先获取官方元数据/标注并核对患者映射与许可，再冻结v6：INCART75条/32名患者，20人训练、6人验证、6人测试；同人I文件不跨组。INCART带S/F患者19/14人，实际新增训练S/F患者11/8人。SVDB78条身份/导联位置不明，仅辅助训练，不称78人。旧MIT42条全部转本版已知开发训练，旧协议/成绩不改，201/202别名仍受控。
-
-主站完整波形下载长时间无完成，Range诊断观察1MiB主站约50秒、官方归档约6秒；停止自己持有的下载会话后改有限Range分块/可恢复缓存，完整文件仍核对固定版本官方SHA256。CIM进程查询被系统拒绝，未改权限；使用已有会话中断。INCART/SVDB新波形886593600字节通过校验，所用导联首值/模和通过。首次跨采样率最大差检查在零边界失败，定位为滤波瞬态；分别核对主体差、全窗RMS、R位置，并验证360Hz与旧上下文一致。原因、失败和完整日志在扩库记录，不删失败历史。
-
-v6使用128点/144Hz、约356ms前窗/533ms后窗、物理mV逐拍归一化、因果RR及训练独立标准化；训练上限按患者/类别限定，SVDB按记录作为采样单位而非患者。训练84727拍，N/S/V/F为46497/12064/25214/952，可确认S/F患者41/24人，分别较原训练11/8人扩大；验证31928拍，测试31835拍。v6残差/MF两候选共41轮，只按验证选残差，macro-F1为0.554281，S/F召回35.621%/3.125%，失败保留，新测试不评估。
-
-补查欧洲ST-T90条元数据，F354/S1095，尚未训练；需单独处理同人映射与MLI/MLIII/胸导联。LTDB7条长程元数据有F2908，6条记录带F，但身份仍不明，约94%F来自两条；不能称新增6名F患者。发现原始gain0被WFDB解析代填200，本次另立v7明确用未标定ADC逐拍归一化（下限1ADC），不称恢复mV；只辅助训练。LTDB214072320字节波形（含310格式）官方SHA、首值/模和通过。预选训练拍按固定哈希与上限，RR仍更新全部标注拍，用401间隔有界历史并验证与全历史等价。v6验证/测试缓存逐字节复制至v7，身份角色不变。
-
-v7训练99554拍，N/S/V/F为47897/13564/34478/3615；未知身份数据不计可确认患者数，仍为S41/F24。两候选40轮，验证选MF24（2532参数、198816Conv/Linear MAC仅算术预算），macro-F1为0.558534，S/F召回53.595%/21.875%，精确率仅11.824%/14.894%，F1为0.193739/0.177215，accepted=false。两轮4候选共81轮，按同一验证比较选v7 MF，未按旧测试挑模型，不把小差异当稳定收益。验证失败后保持新6人测试未用于模型评估，两输出目录无开封标志/测试预测；正式入口增加验证失败拒绝开封检查，v6旧运行快照与v7新快照均保留。
-
-本轮49项软件检查分环境实测：数据环境38通过/11因无PyTorch跳过，独立PyTorch环境8个卷积/训练检查和3个测试保护检查通过；不把跳过说成单环境全过。独立循环重算两轮预测混淆矩阵、macro-F1、训练RR统计，核对协议/数据/权重/运行源快照以及相同验证/测试字节，均通过。14个变更文件语法/尾空白检查通过，文档链接和受保护文件/QRS冻结哈希检查通过，最终入口见扩库记录。源码/脚本和两协议在data，工程说明docs/cnn_expanded.md，实验docs/records/cnn_expansion_20261017.md，原始数据/缓存/失败模型/备份均tmp；计划与来源同步维护。
-
-数据扩充完成不等于分类合格。下一阶段先按来源消融和开发患者分组验证，审查输入/RR与有效S/F覆盖，再决定新建模方案；不重复消耗保留测试、不删F/困难患者或降低门槛，不直接进入INT8/PL。未运行Git/Computer Use、多Agent、板卡/Flash或发布操作，根README、资料索引及原发布包未改；smoke仍未上板测试。
-
-## 2026-10-17：记录心拍分类、节律与疾病判断的范围
-
-用户要求保存近期关于ADS1292R、四分类覆盖和根据心拍提示疾病的讨论。新增docs/records/ecg_scope_20261017.md，引用PhysioNet底层标注、常用五组研究映射、TI官方资料及NIH诊断说明，区分事实、当前实现和候选后续方向。记录N/S/V/F属于限定单拍分组，N含束支传导阻滞等不等于健康，S不等于房颤、V不等于室速/室颤，F不是房颤；Q/起搏/未知不在当前训练输出，五组也不等于完整疾病分类。
-
-心拍与连续ECG可以提供部分心律异常线索，具体疾病判断不能由单个分组直接推出。记录采集→检测/切拍→分类→连续节律/事件→异常提示的功能层次，节律种类/窗口/标注/验收及未知、低质量出口仍待定义，不把讨论当成功能已完成。原简介的采集、CNN、INT8、PL、显示及ARM/FPGA对比目标保留。ADS1292R作为采集候选，芯片能力与实际模块联调分别表述；500SPS仅讨论选项，未核对模块不记为前端已实现。
-
-同步docs/README.md入口、docs/cnn_expanded.md解释及report/project_plan.md的范围/待办；本次为文档维护，未改变训练类别、源码、冻结协议或结果，未训练、未操作Git/板卡/Flash或安装依赖。写入前备份四个目标至tmp/backup/ecg_scope_20261017_01并核对字节，追加前确认本日志未发生并发变化。文档链接、冻结协议/运行源码与受保护文件检查见本次检查记录；未重跑无代码变更的软件训练。分类质量仍未合格，新6人测试未用于模型评估，smoke仍未上板测试。
-
-## 2026-10-17：制作供其他电脑运行的 smoke 工程包
+### 2026-10-17：制作供其他电脑运行的 smoke 工程包
 
 用户要求把 smoke 拷给另一台电脑测试。核对正式 main.c 与原工作区副本/ELF哈希，采用同一组合的bit、XSA和ps7_init，不拷带本机绝对路径的完整旧工作区。新增board/package_ecg_smoke.py、board/smoke_handoff模板和sim/check_smoke_handoff.py；包内提供预编译XSDB运行与本机重新创建Vitis GUI工作区两条入口，串口使用接收方实际COM、115200 8N1无流控，每次复位系统并重新配置PL。
 
@@ -633,61 +587,7 @@ v7训练99554拍，N/S/V/F为47897/13564/34478/3615；未知身份数据不计�
 
 原先授权的CNN患者交叉验证训练未取消。交接期间发现原会话训练进程已结束但未完成（旧日志止于residual_verified第1折第6轮，原因未确认），保留tmp/cnn_patient_cv_v8_20261017_01全部产物，按相同冻结协议另启tmp/cnn_patient_cv_v8_20261017_02，日志docs/records/cnn_cv_training_20261017_02.log；当前尚在运行，不写成12组已完成或新模型合格，不读取保留的独立测试患者。
 
-## 2026-10-17：完成患者CV、来源对比及新时序CNN训练
-
-用户要求继续模型训练。接续当前v8进程，完成4方案×3折共12次训练、336个epoch；原中断31轮保留，不并入完整轮数。新源码为data/prepare_cnn_cv.py、data/train_cnn_cv.py、src/reference/ecg_temporal_cnn.py及冻结data/cnn_patient_cv_v8_protocol.json；本轮补独立sim/verify_cnn_cv.py，更新sim/test_cnn_cv.py、工程说明/数据说明/来源和计划。训练期间未改运行中的模型/训练源码，也未改变冻结协议。
-
-26名INCART已知开发患者三折9/9/8，143916拍，N/S/V/F=125997/1508/16250/161；原6名独立测试完全排除。128点/144Hz公共网格、仅历史RR、每折训练拟合RR标准化、自然构成验证、训练内部采样上限。来源对比为可确认身份MIT+INCART，与额外加入SVDB/LTDB未知身份辅助；结构对比为既有残差与两层Conv1D/16段时间池化/RR分支，自有实现无预训练权重。CPU4线程、batch256、AdamW、平方根类别权重及冻结早停；环境Python3.14.7/PyTorch2.14.1+cpu/NumPy2.5.2，未安装新依赖。
-
-按预定三折平均macro-F1：residual_verified0.641363、residual_all0.575238、temporal_verified0.617226、temporal_all0.581724，全部accepted=false。所选残差的合并开发OOF macro-F1为0.623916，S精确率29.163%/召回86.870%/F1 0.436667，F精确率10.390%/召回44.720%/F1 0.168618；不能用准确率96.492%称合格，也不和旧v7不同验证池的0.5585直接比较提升。新小网络虽减至10468参数/119472Conv-Linear MAC，未提高总体质量，未称FPGA实测加速。
-
-实际观察：加入辅助来源在这组配置下未改善；不能据组合对比单独归因SVDB或LTDB。MIT辅助800个F中734个来自两名患者，INCART开发池161个F来自11人且多数很少，覆盖局限保留；不能把拍数增加当泛化问题已解决。完整逐患者与混淆矩阵见docs/records/cnn_patient_cv_20261017.md及运行目录。后续需受控审查患者均衡/来源差异/表示或校准，不能继续相同轮次冒充解决，也不降门槛或删除困难类别。
-
-独立检查器重建采样/患者分离/RR统计，复算每折/逐患者/合并指标与门槛，核对协议/数据/源码快照/权重哈希，并从12组权重重放575664个开发验证预测，全部一致。证据tmp/cnn_cv_verification_20261017.json及docs/records/cnn_cv_verification_20261017.log；复核通过表示失败结论可信，不表示模型合格。新4项软件检查在数据环境2通过/2跳过、Torch环境3通过/1跳过，互补覆盖4项；5份Python语法通过。首次中断前31轮与重跑除耗时外逐字段相同。准备缓存的NPZ懒读取核对曾因重复解压缓慢中断，改一次加载后22050原训练拍/31928原验证拍的x/rr/y/subject逐字节一致，未改数据或分数。
-
-说明在docs/cnn_patient_cv.md，结果/失败在docs/records/cnn_patient_cv_20261017.md，备份tmp/backup/cnn_cv_docs_20261017_01。计划将来源/患者CV实验标完成，将合格四分类、受控后续训练、INT8和PL仍保留未完成。独立6人测试没有开封标记或预测，没有训练全量最终模型、量化、部署、发布或操作Git/Computer Use/板卡/Flash。根README、资料索引、latest及11项QRS冻结哈希检查保持一致；文档全库另有未修改HDMI.md行号锚点报错，本轮文档链接正常。smoke仍未上板测试，专家切拍分类不代表自动检测或真实输入链路验收。
-
-## 2026-10-17：v9目标来源微调、患者权重和训练比例校正
-
-用户在v8后要求继续。先读当前规则、代码和完整结果，冻结data/cnn_target_adapt_v9_protocol.json，SHA3b831db2fcdc82cb5601034e67338cd2e87d4ee7def1e8b09318ee701063e4e2。新增data/freeze_cnn_adapt.py、data/train_cnn_adapt.py与sim/test_cnn_adapt.py、sim/verify_cnn_adapt.py；保留全部v8文件和失败结果。仍用26名开发患者原三折，独立6人测试完全排除，每折只能加载自己v8 residual_verified权重与训练RR统计。
-
-比较base原权重、natural普通损失微调、patient患者/类别平方根权重微调；后两者只用当前折INCART训练患者，N每患者最多2000，其余全部保留，验证不截断。相同初始化、低学习率1e-4、AdamW/weight_decay1e-3、既有增强、batch256、CPU4、固定seed2026101709+fold、12—25轮/耐心6。仅按alpha0验证macro-F1选checkpoint。每阶段再比较预先冻结的alpha0/0.5/1输出比例校正，目标比例只从本折完整训练患者计算，不用验证标签或测试；条件分布不变、训练收敛等假设未保证，不能称得到已校准真实概率。
-
-六次微调共91轮，三阶段×三alpha共9方案27折分数，全不合格。按预定三折平均macro-F1仍选base alpha0=0.641363，旧权重对照逐拍复现v8。新微调中natural alpha0.5三折平均0.629485，合并OOF0.665553，S F1从0.4367升0.5900，但S召回86.870%降67.175%、F召回44.720%降18.012%，F1降至0.1514。patient alpha1合并OOF最高0.667731，但三折平均0.605710、F召回仅16.770%；不能看到汇总更高就改选型规则。第一折base半强度校正F精确率54.0%升92.9%但召回56.7%降21.7%，完整结果证实误报减少常伴随更多漏分，不报为成功。
-
-3项软件检查通过，验证患者权重/排列、训练比例不受验证标签影响、训练N截断、校正和非法输入；4份Python语法通过。独立检查重构采样/损失权重/比例、患者分离和各项哈希，从9组权重重放431748个原始验证样本、1295244条校正预测，原始logits容差检查和所有预测/逐类/逐患者指标/门槛/选择均通过。证据tmp/cnn_adapt_verification_20261017.json及docs/records/cnn_adapt_verification_20261017.log，决策SHA e1602203d4bc90efb4545e6432f2c5d29a76e9880215852ddb526faca00a5b9a；检查通过只说明比较可信，不等于模型达标。
-
-代码、参数、权重、训练索引/损失权重、原始logits及全部alpha预测放tmp/cnn_target_adapt_v9_20261017_01，失败全保留。说明docs/cnn_target_adapt.md，实际日志/表格/混淆矩阵/分析docs/records/cnn_target_adapt_20261017.md；更新data/README、docs导航/CV说明与计划。文档写前备份tmp/backup/cnn_adapt_docs_20261017_01，保留新出现的HDMI导航等并发修改。40份Markdown/258链接检查仍仅未修改HDMI.md的#L181锚点报错，本轮链接、受保护README/资料索引/latest和11项QRS哈希通过；不把全库检查说成无错误。
-
-本轮没有新依赖/预训练权重下载、Git、Computer Use、板卡/Flash或发布操作；训练结束时6名独立测试仍未评估，没有全量最终拟合、INT8或PL部署。四分类仍未合格，已把进一步审查因果邻拍/患者背景表示或有效F患者来源列为待办，不以继续相同轮次/固定比例变换冒充解决。smoke仍未上板测试。
-
-## 2026-10-17：标签无关历史背景、完整重建及冻结支路训练
-
-用户要求按前轮方向继续改。新增src/reference/ecg_causal_background.py与ecg_context_cnn.py、data/prepare_cnn_background.py与train_cnn_background.py，冻结v10协议2fb7c2c9d0983cee604025e49a3b2567536426e3d156704b8451e5a4929575bd。背景取此前最多8个完整窗口逐点中位数，必须满足原生窗口结束R+ceil(fs*后窗)<=当前R；每记录重置，使用全部心拍而不按N/S/V/F选择模板，无历史给零/count0不删除评分拍。仍依赖专家心拍位置，当前拍等待原约533ms后窗，不能称自动QRS或端到端通过。
-
-首次缓存生成在I35首标注(-15,V)被last_time=-1误拒绝，查明是合法负位置首标注且后续递增；改用None初始状态并补测，未动原始标注或删除记录。失败01目录/日志保留，最终02缓存开发143916拍、MIT辅助30842拍；背景参考240846个完整窗口，无背景46/5拍保留。新缓存原x/rr/y/记录/患者/R位置/代码/采样单位与父缓存逐字节相同。独立检索算法不用队列状态机重建174758个背景/计数/末端，全量一致；源文件官方SHA及导联首值/模和核对。数据证据tmp/cnn_background_parent_match_20261017.json、tmp/cnn_background_data_verification_20261017.json与对应docs/records日志。
-
-v10同样本/初始父权重/损失/种子比较当前拍与新增历史支路，全量更新；新卷积/RR支路零初始化，增加232参数，起始预测核对与本折v8父模型一致。6次各18轮合计108轮，所有最优都为epoch0，更新后验证均未超过父模型。第一折没有收益后另立v11协议64a0fb5ca1156c316cedf23042662a15e83d2540381c50872288497671fe3bf5，只训练新支路232参数、主干逐字节冻结；lr0.001/新seed/12—25轮，不能只将差异归因冻结。三次各12轮36轮，同样全部最优epoch0。两轮9次144轮，候选最佳三折平均0.641363、合并OOF0.623916，S/F F1为0.436667/0.168618，未合格；保存最佳checkpoint为父模型/零新支路，不把它称为已学会历史表示，未声称保存每个舍弃epoch的权重。
-
-5项功能检查在数据环境2通过/3缺Torch跳过，Torch环境4通过/1缺WFDB跳过，互补覆盖5项：可用时刻/负首位置/记录重置、当前R后原波形扰动不影响背景、零支路父模型等价及可训练、同步增强、冻结主干不变。8份Python语法通过；本机Python3.14.7/CPU PyTorch2.14.1+cpu/NumPy2.5.2与既有WFDB/SciPy环境，未安装新依赖。模型独立重放v10 287832条、v11 143916条，合计431748个验证预测与保存结果一致，采样/患者隔离、RR来源、CE/逐类/逐患者指标、门槛、初始checkpoint与代码/权重哈希均通过；v11还逐项检查原参数未变。检查通过说明结果可信，不证明新表示有效。
-
-训练模型/缓存/源码快照/日志与预测留tmp/cnn_background_v10_20261017_01、tmp/cnn_background_adapter_v11_20261017_01等，不删历史；正式工程说明docs/cnn_background.md，完整失败/矩阵与证据docs/records/cnn_background_20261017.md。更新data/README、docs导航/微调说明和计划，文档备份tmp/backup/cnn_background_docs_20261017_01，保留HDMI导航并发改动。42份Markdown/282链接检查仅未修改HDMI.md行号锚点报错，本轮链接/根README/资料索引/latest和11项QRS哈希正常。
-
-历史架构12684总参数、635296Conv/Linear MAC/拍，v11只训练232不等于部署只需232；预算排除历史缓存、中位数和预处理/传输，未做7020实测或综合。此方案本轮未获得验证收益，不建议继续相同表示加轮次；下一阶段先审查F患者覆盖、跨来源形态/标注位置和当前输入可分性。保留6名独立测试未用，未最终全量拟合、INT8、PL、板卡/Flash、Git、Computer Use或发布；smoke仍未上板测试。
-
-## 2026-10-17：结构归档与模型训练交接
-
-用户要求规范结构、把不用内容放tmp，准备交接模型训练；本轮停止增加训练实验。读取规则、当前文件/导入和最近结果，Win32_Process未发现Vivado/Vitis/Python/Java/loader/hw_server活动进程。按依赖保留当前v8、v6/v7父数据准备以及仍被调用的旧名公共函数文件，不为了归档改冻结源码或哈希。
-
-32个旧专属脚本/协议/测试或工具目录可恢复移至tmp/history/training_handoff_20261017，293文件/43857578字节，逐文件SHA256一致，保留67项工程/协议/发布哈希一致。旧AC7020脚本是转发领航者的兼容包装；旧根vivado/_ide/.rigel_lopper/.Xil/torchinductor均归档，XPR内部历史路径未改。当前smoke/QSPI工作区、数据/环境/全部训练结果未移动；文字记录仍在docs/records。映射和校验在归档manifest.json，文档写前副本tmp/backup/training_handoff_20261017。
-
-更新data/sim/build说明、历史教程提示与迁移链接、docs导航、计划和myself旧bit路径；新增docs/model_training_handoff.md与data/package_training_handoff.py。接手入口、输入/类别/患者/独立测试边界、对照权重、命令及交回要求均明确。生成含开发缓存/完整v8对照/文本工程和SHA清单的本地ZIP，不带原始数据、环境、独立测试缓存、旧工具工程或板卡镜像，不发送上传。历史恢复需在另一项目副本按原位置恢复，归档目录不直接执行。
-
-数据环境44项测试34通过/10跳过，Torch环境34项22通过/12跳过，跳过因各环境缺不同依赖；37份Python语法及归档模块导入检查通过。原路径和实际解压后另一目录分别完整重放12组权重575664条已知开发预测，逐拍/逐类/逐患者/哈希/RR/门槛/选型一致，无新训练；源码和数据不变，因此分类分数不变、仍未合格。解压文件345项SHA一致，同机改路径不等于另一台电脑实测。详细记录docs/records/structure_handoff_20261017.md，相关原始日志同目录，最终包/校验在tmp/handoff。
-
-全库44份Markdown/306链接检查发现4处指向缺失HDMI.md（README一处，新uart_protocol.md三处）；这些文件属于其他工作，本轮未移动/恢复，保留并发状态，未声称全库链接通过。当前根README/资料索引/latest保护及11项QRS冻结SHA通过，Git持续暂停。独立6人测试未使用，四分类仍未合格，无最终全量模型、INT8、PL或板卡/Flash操作；smoke仍未上板测试。
-
-## 2026-10-17：更正为Git交接并接收smoke板上通过证据
+### 2026-10-17：更正为Git交接并接收smoke板上通过证据
 
 用户明确指出要通过Git交接，上一轮ZIP交接误解需求。本轮改为克隆仓库后从官方固定原始文件直接生成开发缓存，无本机tmp/父缓存/ZIP/预训练权重依赖。新增data/prepare_cnn_git.py、cnn_git_v1_protocol.json、requirements_cnn_data.txt以及sim/check_training_checkout.py、test_cnn_git.py；ZIP打包器移至本地tmp历史，不再作为正式入口，已有ZIP不删除。更新训练交接说明、data说明、docs导航和计划；根README和资料索引仍受保护，未改写。
 
@@ -703,7 +603,7 @@ v10同样本/初始父权重/损失/种子比较当前拍与新增历史支路�
 
 文档检查仍仅4处HDMI.md缺失链接（其他工作已有内容，未恢复）；保护README/资料索引/latest及11项QRS哈希通过，scoped git diff --check无问题。没有安装、Computer Use、板卡/Flash操作或发布。四分类仍未合格，独立测试保留，后续模型训练由队友负责。
 
-## 2026-10-17：smoke替换latest、旧版归档与串口辅助功能合并
+### 2026-10-17：smoke替换latest、旧版归档与串口辅助功能合并
 
 用户授权本地更新release：归档Hello World、latest换成这次板上跑通的smoke，相关新功能合并，并再次提醒更新gitignore；明确不提交推送。先读规则、当前源码/发布清单和原始板上报告，核对返回ZIP与本地源文件，不把附件说明当其他操作授权。旧版releases/latest全部8文件原字节移至releases/history/20261013-hello-world-qspi-v1，目标不存在才移动，前后SHA256一致。新版本20261017-ecg-smoke-jtag-v1以hardware/prebuilt/board/src相对层级交付，manifest供脚本校验、artifacts记录原包来源/源码/证据与验收；主程序、ELF、bit/XSA及初始化五项与用户通过包相同。没有BOOT.BIN/FSBL/hello_world或QSPI启动声明。
 
@@ -715,10 +615,216 @@ v10同样本/初始父权重/损失/种子比较当前拍与新增历史支路�
 
 实际发布过程与限制见docs/records/smoke_release_20261017.md，离线最终检查docs/records/smoke_release_checks_20261017.log及tmp/smoke_release_final_verification_20261017.json，归档映射/旧哈希tmp/smoke_release_update_20261017.json。全库48 Markdown/328链接复查仅4处既有HDMI.md缺失，发布新增链接及QRS11项冻结SHA/根受保护文件/旧归档原字节检查通过；未恢复他人文档，未称全库无错误。当前smoke合成自检已据用户报告通过，JTAG掉电需重下载，ADS1292R实采/CNN/INT8/PL/新候选QRS RTL和QSPI启动仍分开未验。旧Hello World的QSPI证据保留，不混成smoke成绩。
 
-## 2026-10-17：收紧日志跟踪与暂停训练
+### 2026-10-17：收紧日志跟踪与暂停训练
 
 用户要求先解决238项更改中原始日志过多的问题，同时询问smoke之后做什么。核查当前238项均暂存，docs/records共120项，其中97份.log；97份全为新增暂存，HEAD中无这些日志。本次授权下只对日志索引和.gitignore作定向处理：取消91份下载/安装/逐轮训练/重复检查等原始日志的暂存/跟踪，本地文件不移动不删除；6份精选日志仍跟踪：smoke UART、JTAG启动、发布检查、QRS开发/评估复核、当前CNN CV权重复核。正式md报告、源码和发布文件继续保留。
 
 .gitignore移除两条全量日志放行，改为逐文件6项例外；同步本次规则至索引，避免随后提交旧放行规则。操作前备份.gitignore、Git索引及各路径/哈希至tmp/backup/log_tracking_20261017。逐项比较索引，除91日志移除和.gitignore对应更新外，其余索引条目不变；97个日志文件SHA256全部不变。没有全局reset/stash/restore、没有清理文件、提交或推送。改动条目从238降至147，剩余仍是多个此前阶段累计，不能统称一次smoke更新。
 
 docs导航补充精选日志跟踪约定：其他原始日志留本地，历史链接可能仅作者机器可用，不为补链接重新全量放行。计划记录用户当前暂停模型训练，下一阶段做PC串口协议解析/离线演示和波形事件记录，再做PS受控连续送样与板上联调；采样率/滤波来源/序号与命令能力不预先伪定。本次不写新协议/显示程序，不动当前已通过smoke镜像，也不跑模型训练。
+
+### 2026-10-17：UART第1步计划与武断表述审查
+
+用户指定先完成协议关键定义、先写计划，不明确标记并检查是否存在武断；本轮仅修改report/project_plan.md、docs/uart_protocol.md与已有导航/本记录。完整读取原草案及当前计划/寄存器，核对RTL计数、FIFO实现、PS smoke及构建Tcl；不启动模型、PC/PS程序、仿真/板卡或发布。原文副本及目标哈希保留tmp/backup/uart_stage1_plan_20261017。
+
+计划第13节拆为协议、PC离线、独立PS流式、板上连续验收四个工作包，逐项列进入条件/交付/验收/当前状态，顶部注明本轮只做第1步文档、训练暂停。第1步文档审查已补齐，最小线协议仍有待决，不把草案冒充最终冻结。
+
+协议改为事实/建议/待确认三类：源码事实是样本0基、事件32位首1，rpos为积分窗口回移后的候选位置，0x20计事件丢弃不是丢样，当前无运行时SET_RATE/软件复位/滤波波形读出。UART统一0基、能力位0—6、filt=NA、分类?/-1等明确为待冻结建议；不能拿原始值/积分能量当滤波，也不能拿数字4096映射当真实ADC已标定。U01—U07列真实采样/滤波来源/会话同步/末批和统计/命令/波特率校验/记录策略，并写明最迟决定节点。
+
+纠正未确认默认真实360Hz、DMA必选、缩批保证节拍、事件固定1Hz、连接必收H、PS协议默认不改RTL却保证滤波输出、重编协议必改smoke、CRC确定留v2、手写PNG与PC必为HDMI备份等口径。HDMI.md当前缺失，移除协议对缺失页的链接，不恢复他人文件或据缺页决定分工。示例无省略报文且注明离线示意，未知分类不写虚构N/90。
+
+带宽按8对满宽int16、uint32最大10位序号、LF/无校验计算125字节/批（CRLF126），360Hz为5625字节/秒、500Hz为7812.5，占115200/8N1理论11520字节/秒的48.83%/67.82%；仅规划估算，事件/状态/日志/校验和峰值另计，不当无丢样实测。未知真采样参数没有强行选择，10分钟仅候选验收时长。
+
+本轮文档检查：完整示例字段数/NA/分类未知值、RR/心率换算、125/126字节最坏W帧及360/500估算通过；协议/计划锚点链接通过，仍仅docs/README中他人HDMI缺失链接，协议本轮已不依赖缺失页。第1步七组待决均可定位，根README/资料索引/.gitignore与Git索引哈希不变，未暂存/提交/推送；未启动PC/PS实现或模型。核验摘要tmp/uart_stage1_plan_verification_20261017.json。
+
+### 2026-10-17：PC离线监视器初版
+
+用户授权先将“未知采集硬件不阻塞PC开发”写入计划，再开始编写。读取当前规则、计划、协议和相关源码后，正式代码放src/pc，单元测试sim/test_pc_monitor.py，教程docs/pc_monitor.md；同步协议、目录说明和计划第13节。目标文档原字节及保护文件哈希保留tmp/backup/pc_monitor_20261017。没有新装依赖；现有Python3.14.7/Tk9.0.4可用，PySerial缺失，本轮只用标准库。
+
+采用独立流解析/会话记录/界面三层。软件v1补H的session/source/detector、W实际批量n=1..8、T三类独立丢弃统计；旧未发布草案不静默猜测兼容。256字节行限、回绕/重复/倒退检测、未知单位/滤波/类别明确显示，事件按实际样本位置匹配。Tkinter演示与快速文件回放提供波形、事件、心率/RR及错误统计，SVG为补充；数学波形和指定事件不是QRS/CNN输出。初稿演示曾将无真实FIFO/UART队列的丢弃计数填0，检查后改为-1未知，保留早期tmp输出，不把旧文件当最终证据。
+
+记录新目录排他创建，保存原字节、三个CSV、会话JSONL及摘要；默认数据总量64MiB，到限额停止，不覆盖/删除/轮转历史。原始块先写，限额中止可能CSV不完整，结束原因需一起检查；完全磁盘满时摘要也可能失败。显示缓存有界，完整记录另存。尚无实际串口输入、PC命令发送、PS流式或ADC驱动，不改板卡/RTL/smoke发布、不训练模型。
+
+最终检查：14项测试通过（合法与拆包/坏行恢复、超长/非ASCII、无H/截断、重复及新会话、32位回绕/缺口/倒退、事件早到、未知值/能力、容量与非覆盖、CLI原文重放）。隐藏窗口自检通过：1084样本、1个波形图元和4个事件图元，Tk9.0.4；仅构建/绘图对象检查，不是人工操作验收。10.01秒数学演示接收3604样本、13事件、451个W、11个T，30993原始字节，坏帧/缺口为0；原始日志重放后raw/样本/事件/状态/会话五文件字节一致，不作为算法准确率或真实采样节拍成绩。最终证据tmp/pc_monitor_demo_20261017_02、tmp/pc_monitor_replay_20261017_02、tmp/pc_monitor_ui_check_20261017_02；摘要tmp/pc_monitor_verification_20261017.json。
+
+根README、资料索引、gitignore、latest和Git索引哈希保持原样；未暂存/提交/推送。已有HDMI文档缺失不恢复。下一步先人工使用离线界面，再单独实现PS流式和串口适配/上板连续验收；真实fs/ADC位宽/增益/电压映射、滤波来源及延迟仍需实物核查。已通过的合成smoke与本次软件检查各自保留，不宣称ADS1292R实采或分类/INT8/PL已验证。
+### 2026-10-17：按三类整合计划和修改日志
+
+用户要求把全部未完成工作分为信息采集、项目主体、模型训练，并整合计划和修改日志，教程不管。本轮只重整report/project_plan.md、docs/records/lykzr.md和文档导航。计划用A/B/C编号集中列当前状态、优先级、接口与验收：采集交付连续数字样本；训练交付浮点/INT8整数参考；FPGA推理部署、PS/PC、滤波/QRS、自动切拍、整机验证与竞赛交付归主体。不将仅完成软件检查的PC或原smoke推成整机验收，训练暂停状态不变。
+
+旧计划重复/过时的“smoke待上板”及“当前只做文档”等不再作为当前任务；历史正文没有回写。原日志整条分组并保持类内顺序，混合记录保留完整，分组映射和原字节备份在tmp/backup/three_category_plan_20261017_01。信息采集没有独立实采成功条目，明确留空缺口，不拿芯片讨论或USB供电记录冒充。专题实验报告、原始日志与教程原位保留，避免破坏证据/链接。
+
+本轮仅文档结构检查与文件哈希对照，未重跑算法、模型或板卡；不改变原验收成绩。保留旧UART第13节锚点以兼容未修改的协议链接；核对三类任务和原日志无遗漏、保护文件与源码/教程/发布及Git索引未变，验证摘要tmp/three_category_plan_verification_20261017.json。没有提交或推送，也没有新增授权。
+
+### 2026-10-17：明确项目主体的电脑通信与显示范围
+
+用户指出分类概述没有突出电脑通信显示，本轮明确B08—B11含板端发送、PC串口接收/解析、原始/滤波波形、事件/心率/RR/分类显示、原文/CSV保存与连续联调。已有离线初版不等于真实串口已完成。与A07采集数据输出口分别交付，和模型C11/C13的整数参考/端到端检查关联更新。仅文档更正，不修改教程、接口源码或发布。
+
+### 2026-10-17：三类计划拆成独立文档
+
+用户确认计划书修改后，要求三块分别成文。本轮新增report/acquisition_plan.md、system_plan.md、model_training_plan.md，分别保留A类8项、B类16项、C类13阶段的任务/状态/验收及交接内容；project_plan.md改为总览、共同排期和入口，专题不再各自复制排期。原B02已迁A06，滤波和采集输出接口在采集专题，电脑通信/PC显示在主体专题，模型完整流程和训练暂停/失败边界保持。旧UART第13节锚点在总计划保留并指向主体专题，教程/接口规范不需要改动。修改日志仍按原三类维护，不搬动专题报告或原始验收证据。
+
+同步docs/README.md导航，写前保存原字节和哈希至tmp/backup/split_plans_20261017_01。仅文档拆分，没有开发/模型/板卡验证或新成绩，未暂存提交推送；根README、资料索引、教程、源码、发布与Git索引保护。任务完整性、链接/锚点与保护哈希检查摘要tmp/split_plans_verification_20261017.json；既有HDMI缺页未恢复。
+
+### 2026-10-17：增加计划完成勾选标记
+
+用户要求以后每做完一项都打钩。本轮在三份专题的37项任务表增加“完成”列，☐代表未完成/进行中/暂停/待验，☑仅代表该项全部验收通过；完成时同步日期及证据，复验失败取消勾选并追加原因。总计划统一说明维护规则，不复制状态表。当前37项整体条件尚未全满足，保持☐，已有成果仍在状态列说明；主体计划用独立已勾选子项标出原检测器smoke验收和PC离线软件检查，不把后者当真实串口或整机验收。
+
+仅更新四份计划和本记录，备份tmp/backup/plan_checkboxes_20261017_01。核对新增勾选列去除后37项原任务/状态/验收文字保持一致、两条已验收子项证据链接有效；教程、源码、发布、根README及Git索引未变。检查摘要tmp/plan_checkboxes_verification_20261017.json；没有新训练、模型/板卡测试或提交推送。
+
+### 2026-10-17：简化计划文件名并分类文档导航
+
+用户希望Markdown命名更朴实好找，并要求docs/README.md分类。本轮将三份新计划改为report/capture.md（采集）、report/system.md（主体）、report/model.md（模型），总计划project_plan.md和标准README/AGENTS入口保留；正式命名继续英文。只同步当前计划间和总计划/文档导航的链接，旧日志中的原文件名是当时事实，不批量替换。三类任务和完成勾选内容不变。
+
+docs/README.md按信息采集/项目主体/模型训练分组，原先段落中重复的交接/发布入口收入相应分类；共有目标和三类日志在开头提供。既有HDMI缺页注明待补，不恢复文件。教程、历史专题报告、源码及发布均未改名/改内容。备份与重命名映射tmp/backup/simple_names_20261017_01，链接/任务内容/保护哈希检查tmp/simple_names_verification_20261017.json；未运行模型/板卡测试或Git提交推送。
+
+### 2026-10-17：合并重复smoke文档入口与过程记录
+
+用户同意合并重复的smoke说明。保留docs/smoke_handoff.md为自检/跨电脑统一入口，操作细节复用下载教程和latest；将原smoke_handoff_20261017.md与smoke_release_20261017.md按阶段合为后者，原正文仅调整标题层级，早期未上板明确为当时状态，失败/数值/来源不删改。板上通过证据smoke_board_validation_20261017.md及原始UART/报告保持原字节，避免破坏当前发布钉住的证据哈希。
+
+旧交接记录原字节移至tmp/history/smoke_docs_20261017_01，其他目标原副本在tmp/backup/merge_smoke_docs_20261017_01。docs导航原4个分散smoke入口缩成1个，记录/交付通过统一入口访问；旧日志的原路径不回写，新归档映射随本记录保留。没有删工程/旧数据、改源码/教程主文档或修改release。检查合并正文完整、原字节归档、链接及当前smoke发布离线核验，摘要tmp/merge_smoke_docs_verification_20261017.json；没有实物复跑、Flash操作、训练或Git提交推送。
+
+### 2026-10-17：详细核查Git交接、工程与算法验证依赖
+
+用户确认需可直接打开的Vivado工程，并要求详细查看模型/算法验证等遗漏。本轮审查正式导入/默认协议、XPR引用、根ignore、旧权重/预测和验证入口；不操作Git索引/提交推送。旧tmp XPR仍引用迁移前rtl，故从既有配置在正式vivado/ecg_edge生成新文本工程，复制wrapper出.gen并只放行3文本文件；旧工程/历史不动。修正build忽略遗漏，放行extract_gqrs_core.py；从归档原字节补4份仍被正式代码引用的旧协议。没有改变RTL/PS参数或6项冻结训练/模型源文件。
+
+已选residual_verified三折29原始文件1,229,443字节复制data/baseline，附来源清单与说明；新增check_baseline核验来源/身份/指标及可选权重重放，check_checkout与清单覆盖124项当前交接文件。首个干净副本软件测试因test_mitdb_records假定tmp存在失败，只补测试目录创建，在新02副本通过。数据环境61项51通过/10跳过，Torch环境51项39通过/12跳过；同机已有解释器，不假称接收电脑已安装。GQRS生成3文件逐字节复现；Vivado新路径无原缓存打开、引用及BD验证通过，IP恢复/解析警告保留；不综合/实现/bit/上板。
+
+干净副本RTL首轮xelab生成C文件失败，临时目录仅在重试子进程内改为项目tmp后成功；六配置20,915周期×15字段一致，未证唯一根因，失败目录保留。模型143,916个已知开发心拍重放与原预测一致，平均折macro-F1=0.6413631469852122、合并OOF=0.6239157252749785，仍未合格；未训练、未读6人测试。smoke发布离线检查通过，原报告/UART与latest全字节不变。
+
+同步build/data/sim/vivado工程说明、训练交接的精选日志口径、文档入口与计划子项勾选；C12/B12整体仍未完成。其他历史专用实验仍本地可恢复，未承诺全部旧实验Git复现；根规则核查不冒称实际索引或远端状态。完整发现/命令/限制见docs/records/checkout_20261017.md；备份tmp/backup/checkout_audit_20261017_01，最终摘要tmp/checkout_audit_verification_20261017.json。根README、资料索引、冻结源/协议、Git索引和当前发布保护；无安装、Computer Use或Flash操作。
+
+### 2026-10-17：补齐跨模块输入、异常恢复与演示验收
+
+用户同意把完整链路核查的七处缺项补进计划。本轮在capture1.4、system2.5、model3.6细化原A/B/C任务的验收条件，并在对应表格引用，没有新增编号或勾选未验项目。优先输入训练/实采一致、原始/滤波/事件切拍时轴、启动/缺口/恢复；另补实际时钟跨域/复位约束、CNN与PS事务接口、完整延迟/吞吐预算、最终JTAG或QSPI启动方式。无信号/削顶/接触异常按实际可监测条件说明，不臆定模块能力或疾病输出。
+
+强调源丢样与PC显示缺口分别处理、不能无依据全链路重置；窗口/预处理变更另立实验版，实际状态字段需协议同步；DDR/DMA、异步FIFO、心跳停流和看门狗均未默认选定。QSPI仅计划确认/验收，未获烧写授权，不操作Flash。记录当前后窗约533ms只是协议等待预算，未当硬件实测，也不把所有流水等待机械相加。
+
+仅修改三份计划及本记录，教程/接口规范、源码/模型/发布、根README及Git索引不动。备份tmp/backup/integration_plan_20261017_01；任务编号/完成状态、跨文档链接/锚点和保护哈希检查见tmp/integration_plan_verification_20261017.json。没有新训练、算法/板卡测试或提交推送；所有细化子项保持待验。
+
+## 三、模型训练
+
+### 2026-10-16：CNN训练准备与现成模型调查
+
+用户明确开始分类训练准备，随后要求多找现成且质量高的ECG模型。本次先检查现有环境和42条标签，新增data/profile_classification.py用于官方SHA校验、类别盘点和候选切拍边界统计，不安装PyTorch或启动训练。当前Python3.14.7环境没有torch/torchvision/sklearn；CIM硬件查询未成功，PATH没有nvidia-smi，GPU仍未知，不推断为一定无GPU。
+
+候选N/S/V/F计数86947/2546/6601/801，另Q15；256点前96后160窗口完整数86909/2546/6600/800。N包含束支阻滞和逸搏，不能当作健康标签。代码仅借QRS协议确定已下载记录池，没有沿用QRS集合为CNN划分，也没有冻结四组任务或窗口。42条全部原始标注与WFDB rdann解析的位置/类型完全一致；盘点、独立对照JSON在tmp/cnn_prepare_20261016，原始文本日志在docs/records/cnn_data_audit_20261016.log。
+
+通过论文作者/维护者的公开入口核对十条路线：CLEF、ECGFounder、ECG-FM、torch_ecg、Tiny MF-CNN论文、PTB-XL作者基准、Mousavi seq2seq、TenzinDhonyoe单心拍分类器及两个FPGA案例。详见docs/records/cnn_model_survey_20261016.md，区分官方权重、框架、论文结构和第三方复现，不把README成绩当本机验证。重要发现：CLEF-Small约448K参数、Zenodo checkpoint约5.5MB，但仓库已归档；ECGFounder单导联权重约370MB；Tiny MF-CNN体积小且做跨受试者研究，本轮未找到作者官方权重；同7020的SE案例是ECG5000二分类、24位定点和自报DSP210/220，不能套作本项目INT8多分类。另一ML605案例软件INT8与硬件16位Q8.8、类别口径也不同。
+
+推荐优先核查现成小预训练模型的输入/许可/最小推理，并与任务匹配的小1D-CNN基线比较；尚未选最终模型、加载权重或划分CNN集合。训练前检查预训练数据与测试受试者重叠，通用表征需适配分类头，参数/模型文件大小不等于7020资源占用。完整代码、权重校验、算子/MAC/缓存预算及量化均未验证。
+
+计划按最新授权调整为CNN选型/划分/训练优先，不再把QRS先移植RTL写成训练前置；计划修改前快照在tmp/cnn_prepare_20261016/project_plan_before.md。README只新增盘点工具使用命令，研究结果写docs/records。代码语法、文档链接及原QRS11项冻结哈希检查通过。未运行Git、安装训练软件、修改QRS/RTL/PS或发布镜像，smoke仍未上板。
+
+
+### 2026-10-17：01:00续接文档维护与轻量CNN首版训练
+
+用户要求先规范正式Markdown，根README.md不动，凌晨在本对话推进小型CNN并把CLEF-Small另存备选。上轮只写了整理脚本、未完成落盘；本轮重读AGENTS/myself/目标文件后执行，备份在tmp/backup/doc_maintenance_20261016。下载教程的历史成绩和排错迁入docs/records/bringup_history.md，保留原章节入口；修正旧board教程自指、结果链接、Flash类型与当前发布说明的不一致；计划和docs导航同步，AGENTS补随手维护及根README保护。保护文件和发布README/清单哈希未变；当前冻结QRS11项哈希未变。文档清单/链接证据见tmp/doc_maintenance_20261016/verification.json，维护范围见docs/records/doc_maintenance_20261016.md。
+
+CLEF备选保存docs/model_candidates/clef_small.md。本机已有两套Python均无torch/TensorFlow，未安装依赖；为了先建立可复现基线，按Farag 2023固定模板MF-CNN思路独立实现NumPy版本，明确四个超类模板、三个因果RR、固定训练特征标准化等改编，非官方模型或完整可训练卷积。代码src/reference/ecg_mf_cnn.py、data/train_ecg_cnn.py，协议data/cnn_mf_v1_protocol.json，说明docs/cnn_baseline.md。参数844可训练/128固定卷积/8标准化，浮点MAC初算10320/拍，不代表硬件资源/延迟或INT8通过。
+
+训练16条38236拍、验证4条8930拍、测试22条49675拍，201/202同人隔离；专家位置切拍且全42条已参与过QRS研究，不称全系统未见数据。seed20261017，Adam0.001/batch512，上限80轮，验证macro-F1选权重、耐心12；实际15轮，选第3轮。验证macro-F1为0.567899；测试总体准确率92.4429%，macro-F1仅0.423830，S召回0.8710%、F召回0，首版分类质量不合格。训练本身S召回8.14%、F为0，可能存在简化特征/模板不足等问题，尚无消融证明，不归咎单一原因。保留全部失败，不改测试阈值、划分、类别或删除困难记录，也不更新发布镜像。后续优先检查公开可训练卷积变体，已查看测试不得再冒充独立。
+
+数值梯度、标量卷积对照、玩具数据学习、因果RR与同人隔离等6项检查通过，全部29项活动软件检查通过；独立循环重算保存预测的混淆矩阵/macro-F1及哈希/集合核对通过。权重、数据NPZ、逐轮日志、源快照和JSON在tmp/cnn_mf_v1_20261017_01，详细结果及原始文本日志在docs/records/cnn_mf_v1_20261017.md及关联log。没有Git、安装软件、Computer Use、多人分派或板卡/Flash操作；smoke仍未上板测试。
+
+
+### 2026-10-17：连续18组可训练CNN实验，严格四分类仍未合格
+
+用户要求一直尝试直至合格，实在不行明确告知；并明确允许仅项目独立环境安装CPU PyTorch及必要依赖。本次创建tmp/cnn_torch_env，确保临时/缓存在项目tmp；ensurepip默认临时目录权限失败和沙箱代理访问失败均留原日志，改项目TEMP并获工具联网权限后安装PyTorch2.14.1+cpu/NumPy2.5.2，没有改系统Python、驱动、ACL或代理。
+
+预先固定本轮工程目标macro-F1≥0.85、各类F1≥0.70、N/S/V/F召回≥0.95/0.80/0.80/0.70、参数≤100000，注明是助手提出的原型目标，不是比赛/用户/临床要求，后续不降。新增可训练MF/残差结构及训练脚本；v2六配置均衡采样，v3四配置标准化RR/自然加权/去BN/增强，v4四配置长128点上下文，v5四配置针对验证较好的双通道MF继续自然加权/增强；18组共636轮。全部保持同一受试者角色和四类，无随机心拍跨人泄漏或删除F。每轮选权重/候选只看验证，之后旧测试回放均标已查看探索性证据。
+
+训练已经能达到macro-F1约0.95，跨人验证/旧测试仍下降。按验证选的全局候选context_residual_both16_aug，训练0.952439、验证0.749199、旧测试0.530255，S/F召回分别33.642%/4.897%，accepted=false。未按别的候选测试较高分改选模型。训练S516中383来自209，F401中372来自208，验证F仅11拍，覆盖集中为已确认风险，但尚无证据证明唯一原因。18组比较和失败分析见docs/records/cnn_trainable_20261017.md；记录停止当前调参依据及需要新数据/建模/独立评估，不能把当前模型算合格或偷偷删F。
+
+8项PyTorch检查通过，原环境29通过/8跳过且跳过项已在新环境实测通过；独立循环重算各轮混淆矩阵/macro-F1、权重/协议/运行源码快照及按验证选择结果均通过。相同8928个验证ID比较确认排序不变。上下文等待R后约533ms、额外15个N边界样本排除如实记录；各轮源快照保留64/128点兼容扩展前后版本。v3继承的augmentation文字标签瑕疵已披露，实际候选augment与源码决定行为，冻结原文不事后改。正式说明、数据README、计划、第三方来源及本机环境同步维护；根README/资料索引/发布包未改，不写README成绩。未运行Git或使用板卡/Flash、Computer Use、多Agent，smoke仍未上板。
+
+### 2026-10-17：扩大S/F来源、冻结新患者测试，4候选81轮仍未合格
+
+用户要求优先补S/F受试者数据并重新安排独立测试后训练。本次沿用已有CPU PyTorch2.14.1+cpu/NumPy2.5.2环境及WFDB4.3.1/SciPy1.18.1数据环境，没有新安装。先获取官方元数据/标注并核对患者映射与许可，再冻结v6：INCART75条/32名患者，20人训练、6人验证、6人测试；同人I文件不跨组。INCART带S/F患者19/14人，实际新增训练S/F患者11/8人。SVDB78条身份/导联位置不明，仅辅助训练，不称78人。旧MIT42条全部转本版已知开发训练，旧协议/成绩不改，201/202别名仍受控。
+
+主站完整波形下载长时间无完成，Range诊断观察1MiB主站约50秒、官方归档约6秒；停止自己持有的下载会话后改有限Range分块/可恢复缓存，完整文件仍核对固定版本官方SHA256。CIM进程查询被系统拒绝，未改权限；使用已有会话中断。INCART/SVDB新波形886593600字节通过校验，所用导联首值/模和通过。首次跨采样率最大差检查在零边界失败，定位为滤波瞬态；分别核对主体差、全窗RMS、R位置，并验证360Hz与旧上下文一致。原因、失败和完整日志在扩库记录，不删失败历史。
+
+v6使用128点/144Hz、约356ms前窗/533ms后窗、物理mV逐拍归一化、因果RR及训练独立标准化；训练上限按患者/类别限定，SVDB按记录作为采样单位而非患者。训练84727拍，N/S/V/F为46497/12064/25214/952，可确认S/F患者41/24人，分别较原训练11/8人扩大；验证31928拍，测试31835拍。v6残差/MF两候选共41轮，只按验证选残差，macro-F1为0.554281，S/F召回35.621%/3.125%，失败保留，新测试不评估。
+
+补查欧洲ST-T90条元数据，F354/S1095，尚未训练；需单独处理同人映射与MLI/MLIII/胸导联。LTDB7条长程元数据有F2908，6条记录带F，但身份仍不明，约94%F来自两条；不能称新增6名F患者。发现原始gain0被WFDB解析代填200，本次另立v7明确用未标定ADC逐拍归一化（下限1ADC），不称恢复mV；只辅助训练。LTDB214072320字节波形（含310格式）官方SHA、首值/模和通过。预选训练拍按固定哈希与上限，RR仍更新全部标注拍，用401间隔有界历史并验证与全历史等价。v6验证/测试缓存逐字节复制至v7，身份角色不变。
+
+v7训练99554拍，N/S/V/F为47897/13564/34478/3615；未知身份数据不计可确认患者数，仍为S41/F24。两候选40轮，验证选MF24（2532参数、198816Conv/Linear MAC仅算术预算），macro-F1为0.558534，S/F召回53.595%/21.875%，精确率仅11.824%/14.894%，F1为0.193739/0.177215，accepted=false。两轮4候选共81轮，按同一验证比较选v7 MF，未按旧测试挑模型，不把小差异当稳定收益。验证失败后保持新6人测试未用于模型评估，两输出目录无开封标志/测试预测；正式入口增加验证失败拒绝开封检查，v6旧运行快照与v7新快照均保留。
+
+本轮49项软件检查分环境实测：数据环境38通过/11因无PyTorch跳过，独立PyTorch环境8个卷积/训练检查和3个测试保护检查通过；不把跳过说成单环境全过。独立循环重算两轮预测混淆矩阵、macro-F1、训练RR统计，核对协议/数据/权重/运行源快照以及相同验证/测试字节，均通过。14个变更文件语法/尾空白检查通过，文档链接和受保护文件/QRS冻结哈希检查通过，最终入口见扩库记录。源码/脚本和两协议在data，工程说明docs/cnn_expanded.md，实验docs/records/cnn_expansion_20261017.md，原始数据/缓存/失败模型/备份均tmp；计划与来源同步维护。
+
+数据扩充完成不等于分类合格。下一阶段先按来源消融和开发患者分组验证，审查输入/RR与有效S/F覆盖，再决定新建模方案；不重复消耗保留测试、不删F/困难患者或降低门槛，不直接进入INT8/PL。未运行Git/Computer Use、多Agent、板卡/Flash或发布操作，根README、资料索引及原发布包未改；smoke仍未上板测试。
+
+### 2026-10-17：记录心拍分类、节律与疾病判断的范围
+
+用户要求保存近期关于ADS1292R、四分类覆盖和根据心拍提示疾病的讨论。新增docs/records/ecg_scope_20261017.md，引用PhysioNet底层标注、常用五组研究映射、TI官方资料及NIH诊断说明，区分事实、当前实现和候选后续方向。记录N/S/V/F属于限定单拍分组，N含束支传导阻滞等不等于健康，S不等于房颤、V不等于室速/室颤，F不是房颤；Q/起搏/未知不在当前训练输出，五组也不等于完整疾病分类。
+
+心拍与连续ECG可以提供部分心律异常线索，具体疾病判断不能由单个分组直接推出。记录采集→检测/切拍→分类→连续节律/事件→异常提示的功能层次，节律种类/窗口/标注/验收及未知、低质量出口仍待定义，不把讨论当成功能已完成。原简介的采集、CNN、INT8、PL、显示及ARM/FPGA对比目标保留。ADS1292R作为采集候选，芯片能力与实际模块联调分别表述；500SPS仅讨论选项，未核对模块不记为前端已实现。
+
+同步docs/README.md入口、docs/cnn_expanded.md解释及report/project_plan.md的范围/待办；本次为文档维护，未改变训练类别、源码、冻结协议或结果，未训练、未操作Git/板卡/Flash或安装依赖。写入前备份四个目标至tmp/backup/ecg_scope_20261017_01并核对字节，追加前确认本日志未发生并发变化。文档链接、冻结协议/运行源码与受保护文件检查见本次检查记录；未重跑无代码变更的软件训练。分类质量仍未合格，新6人测试未用于模型评估，smoke仍未上板测试。
+
+### 2026-10-17：完成患者CV、来源对比及新时序CNN训练
+
+用户要求继续模型训练。接续当前v8进程，完成4方案×3折共12次训练、336个epoch；原中断31轮保留，不并入完整轮数。新源码为data/prepare_cnn_cv.py、data/train_cnn_cv.py、src/reference/ecg_temporal_cnn.py及冻结data/cnn_patient_cv_v8_protocol.json；本轮补独立sim/verify_cnn_cv.py，更新sim/test_cnn_cv.py、工程说明/数据说明/来源和计划。训练期间未改运行中的模型/训练源码，也未改变冻结协议。
+
+26名INCART已知开发患者三折9/9/8，143916拍，N/S/V/F=125997/1508/16250/161；原6名独立测试完全排除。128点/144Hz公共网格、仅历史RR、每折训练拟合RR标准化、自然构成验证、训练内部采样上限。来源对比为可确认身份MIT+INCART，与额外加入SVDB/LTDB未知身份辅助；结构对比为既有残差与两层Conv1D/16段时间池化/RR分支，自有实现无预训练权重。CPU4线程、batch256、AdamW、平方根类别权重及冻结早停；环境Python3.14.7/PyTorch2.14.1+cpu/NumPy2.5.2，未安装新依赖。
+
+按预定三折平均macro-F1：residual_verified0.641363、residual_all0.575238、temporal_verified0.617226、temporal_all0.581724，全部accepted=false。所选残差的合并开发OOF macro-F1为0.623916，S精确率29.163%/召回86.870%/F1 0.436667，F精确率10.390%/召回44.720%/F1 0.168618；不能用准确率96.492%称合格，也不和旧v7不同验证池的0.5585直接比较提升。新小网络虽减至10468参数/119472Conv-Linear MAC，未提高总体质量，未称FPGA实测加速。
+
+实际观察：加入辅助来源在这组配置下未改善；不能据组合对比单独归因SVDB或LTDB。MIT辅助800个F中734个来自两名患者，INCART开发池161个F来自11人且多数很少，覆盖局限保留；不能把拍数增加当泛化问题已解决。完整逐患者与混淆矩阵见docs/records/cnn_patient_cv_20261017.md及运行目录。后续需受控审查患者均衡/来源差异/表示或校准，不能继续相同轮次冒充解决，也不降门槛或删除困难类别。
+
+独立检查器重建采样/患者分离/RR统计，复算每折/逐患者/合并指标与门槛，核对协议/数据/源码快照/权重哈希，并从12组权重重放575664个开发验证预测，全部一致。证据tmp/cnn_cv_verification_20261017.json及docs/records/cnn_cv_verification_20261017.log；复核通过表示失败结论可信，不表示模型合格。新4项软件检查在数据环境2通过/2跳过、Torch环境3通过/1跳过，互补覆盖4项；5份Python语法通过。首次中断前31轮与重跑除耗时外逐字段相同。准备缓存的NPZ懒读取核对曾因重复解压缓慢中断，改一次加载后22050原训练拍/31928原验证拍的x/rr/y/subject逐字节一致，未改数据或分数。
+
+说明在docs/cnn_patient_cv.md，结果/失败在docs/records/cnn_patient_cv_20261017.md，备份tmp/backup/cnn_cv_docs_20261017_01。计划将来源/患者CV实验标完成，将合格四分类、受控后续训练、INT8和PL仍保留未完成。独立6人测试没有开封标记或预测，没有训练全量最终模型、量化、部署、发布或操作Git/Computer Use/板卡/Flash。根README、资料索引、latest及11项QRS冻结哈希检查保持一致；文档全库另有未修改HDMI.md行号锚点报错，本轮文档链接正常。smoke仍未上板测试，专家切拍分类不代表自动检测或真实输入链路验收。
+
+### 2026-10-17：v9目标来源微调、患者权重和训练比例校正
+
+用户在v8后要求继续。先读当前规则、代码和完整结果，冻结data/cnn_target_adapt_v9_protocol.json，SHA3b831db2fcdc82cb5601034e67338cd2e87d4ee7def1e8b09318ee701063e4e2。新增data/freeze_cnn_adapt.py、data/train_cnn_adapt.py与sim/test_cnn_adapt.py、sim/verify_cnn_adapt.py；保留全部v8文件和失败结果。仍用26名开发患者原三折，独立6人测试完全排除，每折只能加载自己v8 residual_verified权重与训练RR统计。
+
+比较base原权重、natural普通损失微调、patient患者/类别平方根权重微调；后两者只用当前折INCART训练患者，N每患者最多2000，其余全部保留，验证不截断。相同初始化、低学习率1e-4、AdamW/weight_decay1e-3、既有增强、batch256、CPU4、固定seed2026101709+fold、12—25轮/耐心6。仅按alpha0验证macro-F1选checkpoint。每阶段再比较预先冻结的alpha0/0.5/1输出比例校正，目标比例只从本折完整训练患者计算，不用验证标签或测试；条件分布不变、训练收敛等假设未保证，不能称得到已校准真实概率。
+
+六次微调共91轮，三阶段×三alpha共9方案27折分数，全不合格。按预定三折平均macro-F1仍选base alpha0=0.641363，旧权重对照逐拍复现v8。新微调中natural alpha0.5三折平均0.629485，合并OOF0.665553，S F1从0.4367升0.5900，但S召回86.870%降67.175%、F召回44.720%降18.012%，F1降至0.1514。patient alpha1合并OOF最高0.667731，但三折平均0.605710、F召回仅16.770%；不能看到汇总更高就改选型规则。第一折base半强度校正F精确率54.0%升92.9%但召回56.7%降21.7%，完整结果证实误报减少常伴随更多漏分，不报为成功。
+
+3项软件检查通过，验证患者权重/排列、训练比例不受验证标签影响、训练N截断、校正和非法输入；4份Python语法通过。独立检查重构采样/损失权重/比例、患者分离和各项哈希，从9组权重重放431748个原始验证样本、1295244条校正预测，原始logits容差检查和所有预测/逐类/逐患者指标/门槛/选择均通过。证据tmp/cnn_adapt_verification_20261017.json及docs/records/cnn_adapt_verification_20261017.log，决策SHA e1602203d4bc90efb4545e6432f2c5d29a76e9880215852ddb526faca00a5b9a；检查通过只说明比较可信，不等于模型达标。
+
+代码、参数、权重、训练索引/损失权重、原始logits及全部alpha预测放tmp/cnn_target_adapt_v9_20261017_01，失败全保留。说明docs/cnn_target_adapt.md，实际日志/表格/混淆矩阵/分析docs/records/cnn_target_adapt_20261017.md；更新data/README、docs导航/CV说明与计划。文档写前备份tmp/backup/cnn_adapt_docs_20261017_01，保留新出现的HDMI导航等并发修改。40份Markdown/258链接检查仍仅未修改HDMI.md的#L181锚点报错，本轮链接、受保护README/资料索引/latest和11项QRS哈希通过；不把全库检查说成无错误。
+
+本轮没有新依赖/预训练权重下载、Git、Computer Use、板卡/Flash或发布操作；训练结束时6名独立测试仍未评估，没有全量最终拟合、INT8或PL部署。四分类仍未合格，已把进一步审查因果邻拍/患者背景表示或有效F患者来源列为待办，不以继续相同轮次/固定比例变换冒充解决。smoke仍未上板测试。
+
+### 2026-10-17：标签无关历史背景、完整重建及冻结支路训练
+
+用户要求按前轮方向继续改。新增src/reference/ecg_causal_background.py与ecg_context_cnn.py、data/prepare_cnn_background.py与train_cnn_background.py，冻结v10协议2fb7c2c9d0983cee604025e49a3b2567536426e3d156704b8451e5a4929575bd。背景取此前最多8个完整窗口逐点中位数，必须满足原生窗口结束R+ceil(fs*后窗)<=当前R；每记录重置，使用全部心拍而不按N/S/V/F选择模板，无历史给零/count0不删除评分拍。仍依赖专家心拍位置，当前拍等待原约533ms后窗，不能称自动QRS或端到端通过。
+
+首次缓存生成在I35首标注(-15,V)被last_time=-1误拒绝，查明是合法负位置首标注且后续递增；改用None初始状态并补测，未动原始标注或删除记录。失败01目录/日志保留，最终02缓存开发143916拍、MIT辅助30842拍；背景参考240846个完整窗口，无背景46/5拍保留。新缓存原x/rr/y/记录/患者/R位置/代码/采样单位与父缓存逐字节相同。独立检索算法不用队列状态机重建174758个背景/计数/末端，全量一致；源文件官方SHA及导联首值/模和核对。数据证据tmp/cnn_background_parent_match_20261017.json、tmp/cnn_background_data_verification_20261017.json与对应docs/records日志。
+
+v10同样本/初始父权重/损失/种子比较当前拍与新增历史支路，全量更新；新卷积/RR支路零初始化，增加232参数，起始预测核对与本折v8父模型一致。6次各18轮合计108轮，所有最优都为epoch0，更新后验证均未超过父模型。第一折没有收益后另立v11协议64a0fb5ca1156c316cedf23042662a15e83d2540381c50872288497671fe3bf5，只训练新支路232参数、主干逐字节冻结；lr0.001/新seed/12—25轮，不能只将差异归因冻结。三次各12轮36轮，同样全部最优epoch0。两轮9次144轮，候选最佳三折平均0.641363、合并OOF0.623916，S/F F1为0.436667/0.168618，未合格；保存最佳checkpoint为父模型/零新支路，不把它称为已学会历史表示，未声称保存每个舍弃epoch的权重。
+
+5项功能检查在数据环境2通过/3缺Torch跳过，Torch环境4通过/1缺WFDB跳过，互补覆盖5项：可用时刻/负首位置/记录重置、当前R后原波形扰动不影响背景、零支路父模型等价及可训练、同步增强、冻结主干不变。8份Python语法通过；本机Python3.14.7/CPU PyTorch2.14.1+cpu/NumPy2.5.2与既有WFDB/SciPy环境，未安装新依赖。模型独立重放v10 287832条、v11 143916条，合计431748个验证预测与保存结果一致，采样/患者隔离、RR来源、CE/逐类/逐患者指标、门槛、初始checkpoint与代码/权重哈希均通过；v11还逐项检查原参数未变。检查通过说明结果可信，不证明新表示有效。
+
+训练模型/缓存/源码快照/日志与预测留tmp/cnn_background_v10_20261017_01、tmp/cnn_background_adapter_v11_20261017_01等，不删历史；正式工程说明docs/cnn_background.md，完整失败/矩阵与证据docs/records/cnn_background_20261017.md。更新data/README、docs导航/微调说明和计划，文档备份tmp/backup/cnn_background_docs_20261017_01，保留HDMI导航并发改动。42份Markdown/282链接检查仅未修改HDMI.md行号锚点报错，本轮链接/根README/资料索引/latest和11项QRS哈希正常。
+
+历史架构12684总参数、635296Conv/Linear MAC/拍，v11只训练232不等于部署只需232；预算排除历史缓存、中位数和预处理/传输，未做7020实测或综合。此方案本轮未获得验证收益，不建议继续相同表示加轮次；下一阶段先审查F患者覆盖、跨来源形态/标注位置和当前输入可分性。保留6名独立测试未用，未最终全量拟合、INT8、PL、板卡/Flash、Git、Computer Use或发布；smoke仍未上板测试。
+
+### 2026-10-17：结构归档与模型训练交接
+
+用户要求规范结构、把不用内容放tmp，准备交接模型训练；本轮停止增加训练实验。读取规则、当前文件/导入和最近结果，Win32_Process未发现Vivado/Vitis/Python/Java/loader/hw_server活动进程。按依赖保留当前v8、v6/v7父数据准备以及仍被调用的旧名公共函数文件，不为了归档改冻结源码或哈希。
+
+32个旧专属脚本/协议/测试或工具目录可恢复移至tmp/history/training_handoff_20261017，293文件/43857578字节，逐文件SHA256一致，保留67项工程/协议/发布哈希一致。旧AC7020脚本是转发领航者的兼容包装；旧根vivado/_ide/.rigel_lopper/.Xil/torchinductor均归档，XPR内部历史路径未改。当前smoke/QSPI工作区、数据/环境/全部训练结果未移动；文字记录仍在docs/records。映射和校验在归档manifest.json，文档写前副本tmp/backup/training_handoff_20261017。
+
+更新data/sim/build说明、历史教程提示与迁移链接、docs导航、计划和myself旧bit路径；新增docs/model_training_handoff.md与data/package_training_handoff.py。接手入口、输入/类别/患者/独立测试边界、对照权重、命令及交回要求均明确。生成含开发缓存/完整v8对照/文本工程和SHA清单的本地ZIP，不带原始数据、环境、独立测试缓存、旧工具工程或板卡镜像，不发送上传。历史恢复需在另一项目副本按原位置恢复，归档目录不直接执行。
+
+数据环境44项测试34通过/10跳过，Torch环境34项22通过/12跳过，跳过因各环境缺不同依赖；37份Python语法及归档模块导入检查通过。原路径和实际解压后另一目录分别完整重放12组权重575664条已知开发预测，逐拍/逐类/逐患者/哈希/RR/门槛/选型一致，无新训练；源码和数据不变，因此分类分数不变、仍未合格。解压文件345项SHA一致，同机改路径不等于另一台电脑实测。详细记录docs/records/structure_handoff_20261017.md，相关原始日志同目录，最终包/校验在tmp/handoff。
+
+全库44份Markdown/306链接检查发现4处指向缺失HDMI.md（README一处，新uart_protocol.md三处）；这些文件属于其他工作，本轮未移动/恢复，保留并发状态，未声称全库链接通过。当前根README/资料索引/latest保护及11项QRS冻结SHA通过，Git持续暂停。独立6人测试未使用，四分类仍未合格，无最终全量模型、INT8、PL或板卡/Flash操作；smoke仍未上板测试。
+
+### 2026-10-17：按一般模型开发流程补全训练计划
+
+用户指出模型类不只训练/量化/交接，应包含从零建立或复用对照的完整步骤。本轮将C01—C13按任务/标准、可复用资料、数据质量、划分协议、预处理、基线对照、实验设计、调试训练、验证诊断迭代、冻结独立测试、INT8、导出复现及端到端集成组织。明确已有阶段可复核复用，不要求废弃成果从零重来；对照模型用来判断改动收益，不替代专家标注。若复用外部权重还要核查其训练患者与测试集重叠。失败四分类和新6人测试边界保留，不因计划完善恢复训练或加载CLEF。
+
+同步前两次用户纠正，滤波/工频与采集输出归A06—A08，项目主体明确电脑通信显示并使用C11整数参考。备份tmp/backup/model_workflow_plan_20261017_01；本次仅计划和本日志两文件变化，教程、根README、资料索引、源码、发布和Git索引保护。任务编号/跨类引用、Markdown链接和保护哈希检查见tmp/model_workflow_plan_verification_20261017.json；未训练、测试模型或操作板卡，没有新准确率/性能结果，未提交推送。
+
+### 2026-10-17：记录模型增强与7020资源选型原则
+
+用户要求把板卡是否能运行更高级网络的讨论写入计划。本轮在report/model.md新增3.5节：当前小网络作固定对照，先查数据/输入/逐类误判，再按假设适度增强，使用患者隔离开发验证评估收益；对有收益候选核算INT8、权重/激活缓冲、算子、带宽与延迟，再交主体B05核实。记录官方7020总资源和当前12,452参数/606,616次Conv/Linear MAC每拍的预算来源，不把它写成剩余资源、实测性能或资源已经到顶。已有100k参数门槛不冒称硬件上限，变更须另立确认的协议。
+
+仅增加计划待办，不勾选模型增强/量化/硬件结果，不恢复训练、不读独立测试、不安装或操作板卡。备份tmp/backup/model_capacity_plan_20261017_01；核对原任务/勾选保留、新链接及受保护文件哈希，摘要tmp/model_capacity_plan_verification_20261017.json。当前四分类仍未合格、CNN硬件实现未验，未提交推送。
+
