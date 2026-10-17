@@ -1,0 +1,3758 @@
+{
+  "version": "cnn_expanded_v6_20261017",
+  "classes": [
+    "N",
+    "S",
+    "V",
+    "F"
+  ],
+  "label_symbols": {
+    "N": [
+      "N",
+      "L",
+      "R",
+      "j",
+      "e"
+    ],
+    "S": [
+      "a",
+      "J",
+      "A",
+      "S"
+    ],
+    "V": [
+      "V",
+      "E"
+    ],
+    "F": [
+      "F"
+    ]
+  },
+  "splits": {
+    "train": [
+      {
+        "database": "incartdb",
+        "record": "I01",
+        "subject": "incart:1",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2413,
+          "S": 0,
+          "V": 344,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2413,
+          "V": 344
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I02",
+        "subject": "incart:1",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2445,
+          "S": 0,
+          "V": 229,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2445,
+          "V": 229
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I08",
+        "subject": "incart:4",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1777,
+          "S": 2,
+          "V": 351,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1777,
+          "V": 351,
+          "A": 2,
+          "Q": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I09",
+        "subject": "incart:5",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2948,
+          "S": 0,
+          "V": 41,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2948,
+          "V": 41,
+          "n": 8
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I10",
+        "subject": "incart:5",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 3599,
+          "S": 0,
+          "V": 83,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 3599,
+          "V": 83
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I11",
+        "subject": "incart:5",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2078,
+          "S": 0,
+          "V": 4,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2078,
+          "n": 24,
+          "V": 4
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I12",
+        "subject": "incart:6",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2800,
+          "S": 1,
+          "V": 6,
+          "F": 2
+        },
+        "all_symbols": {
+          "N": 2800,
+          "V": 6,
+          "F": 2,
+          "A": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I13",
+        "subject": "incart:6",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1793,
+          "S": 0,
+          "V": 230,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1793,
+          "V": 230
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I14",
+        "subject": "incart:6",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1802,
+          "S": 0,
+          "V": 64,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1802,
+          "V": 64
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I15",
+        "subject": "incart:7",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2632,
+          "S": 0,
+          "V": 3,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2632,
+          "V": 3
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I18",
+        "subject": "incart:9",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2662,
+          "S": 0,
+          "V": 366,
+          "F": 56
+        },
+        "all_symbols": {
+          "N": 2662,
+          "V": 366,
+          "F": 56
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I19",
+        "subject": "incart:9",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1212,
+          "S": 0,
+          "V": 850,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1212,
+          "V": 850,
+          "B": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I23",
+        "subject": "incart:11",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2192,
+          "S": 0,
+          "V": 13,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2192,
+          "V": 13
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I24",
+        "subject": "incart:11",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2565,
+          "S": 0,
+          "V": 6,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2565,
+          "V": 6
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I25",
+        "subject": "incart:12",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1705,
+          "S": 2,
+          "V": 5,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1705,
+          "V": 5,
+          "A": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I26",
+        "subject": "incart:12",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1498,
+          "S": 7,
+          "V": 4,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1498,
+          "V": 4,
+          "A": 5,
+          "S": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I27",
+        "subject": "incart:13",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1885,
+          "S": 0,
+          "V": 720,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1885,
+          "V": 720
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I28",
+        "subject": "incart:13",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1713,
+          "S": 0,
+          "V": 4,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1713,
+          "V": 4
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I29",
+        "subject": "incart:14",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1837,
+          "S": 0,
+          "V": 783,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1837,
+          "V": 783,
+          "Q": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I30",
+        "subject": "incart:14",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1706,
+          "S": 0,
+          "V": 756,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1706,
+          "V": 756
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I31",
+        "subject": "incart:14",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1844,
+          "S": 0,
+          "V": 1365,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1844,
+          "V": 1365,
+          "Q": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I32",
+        "subject": "incart:14",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1562,
+          "S": 0,
+          "V": 57,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1562,
+          "V": 57
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I33",
+        "subject": "incart:15",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1245,
+          "S": 591,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "A": 591,
+          "N": 1245,
+          "V": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I34",
+        "subject": "incart:15",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1429,
+          "S": 536,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1429,
+          "A": 536
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I35",
+        "subject": "incart:16",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 3200,
+          "S": 0,
+          "V": 458,
+          "F": 18
+        },
+        "all_symbols": {
+          "V": 458,
+          "N": 3200,
+          "F": 18
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I36",
+        "subject": "incart:16",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 3449,
+          "S": 0,
+          "V": 450,
+          "F": 12
+        },
+        "all_symbols": {
+          "N": 3449,
+          "V": 450,
+          "F": 12
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I37",
+        "subject": "incart:16",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2009,
+          "S": 0,
+          "V": 452,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2009,
+          "V": 452
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I40",
+        "subject": "incart:18",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2568,
+          "S": 6,
+          "V": 92,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2568,
+          "A": 6,
+          "V": 92
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I41",
+        "subject": "incart:18",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1624,
+          "S": 5,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1624,
+          "A": 5,
+          "V": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I42",
+        "subject": "incart:19",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1546,
+          "S": 0,
+          "V": 1554,
+          "F": 9
+        },
+        "all_symbols": {
+          "N": 1546,
+          "V": 1554,
+          "F": 9
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I43",
+        "subject": "incart:19",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1087,
+          "S": 0,
+          "V": 1120,
+          "F": 2
+        },
+        "all_symbols": {
+          "N": 1087,
+          "V": 1120,
+          "F": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I44",
+        "subject": "incart:20",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1803,
+          "S": 8,
+          "V": 684,
+          "F": 0
+        },
+        "all_symbols": {
+          "V": 684,
+          "N": 1803,
+          "A": 8
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I45",
+        "subject": "incart:20",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1437,
+          "S": 0,
+          "V": 491,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1437,
+          "V": 491
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I46",
+        "subject": "incart:20",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2232,
+          "S": 1,
+          "V": 422,
+          "F": 3
+        },
+        "all_symbols": {
+          "N": 2232,
+          "V": 422,
+          "F": 3,
+          "A": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I54",
+        "subject": "incart:24",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2340,
+          "S": 1,
+          "V": 22,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2340,
+          "V": 22,
+          "A": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I55",
+        "subject": "incart:24",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2148,
+          "S": 1,
+          "V": 17,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2148,
+          "V": 17,
+          "A": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I56",
+        "subject": "incart:24",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1672,
+          "S": 26,
+          "V": 7,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1672,
+          "V": 7,
+          "A": 26
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I57",
+        "subject": "incart:25",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2842,
+          "S": 3,
+          "V": 21,
+          "F": 3
+        },
+        "all_symbols": {
+          "N": 2842,
+          "V": 21,
+          "F": 3,
+          "Q": 2,
+          "A": 3
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I58",
+        "subject": "incart:25",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2313,
+          "S": 0,
+          "V": 12,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2313,
+          "V": 12
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I59",
+        "subject": "incart:26",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2067,
+          "S": 0,
+          "V": 81,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2026,
+          "j": 41,
+          "V": 81
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I60",
+        "subject": "incart:26",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2475,
+          "S": 0,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2424,
+          "j": 51
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I61",
+        "subject": "incart:26",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1453,
+          "S": 1,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1453,
+          "A": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I62",
+        "subject": "incart:27",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1453,
+          "S": 9,
+          "V": 795,
+          "F": 12
+        },
+        "all_symbols": {
+          "N": 1453,
+          "A": 5,
+          "V": 795,
+          "F": 12,
+          "S": 4
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I63",
+        "subject": "incart:27",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1847,
+          "S": 1,
+          "V": 138,
+          "F": 8
+        },
+        "all_symbols": {
+          "N": 1847,
+          "V": 138,
+          "S": 1,
+          "F": 8
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I64",
+        "subject": "incart:27",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1887,
+          "S": 0,
+          "V": 23,
+          "F": 3
+        },
+        "all_symbols": {
+          "N": 1887,
+          "V": 23,
+          "F": 3
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I68",
+        "subject": "incart:29",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2481,
+          "S": 2,
+          "V": 161,
+          "F": 0
+        },
+        "all_symbols": {
+          "+": 1,
+          "N": 2481,
+          "V": 161,
+          "A": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I69",
+        "subject": "incart:29",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2000,
+          "S": 1,
+          "V": 167,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 2000,
+          "+": 1,
+          "V": 167,
+          "F": 1,
+          "A": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "800",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1846,
+          "S": 30,
+          "V": 6,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 1846,
+          "S": 30,
+          "~": 28,
+          "|": 10,
+          "V": 6,
+          "F": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "801",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2175,
+          "S": 66,
+          "V": 268,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2175,
+          "V": 268,
+          "S": 66,
+          "~": 68
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "802",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1586,
+          "S": 0,
+          "V": 85,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1586,
+          "V": 85,
+          "|": 4,
+          "~": 4
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "803",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1924,
+          "S": 0,
+          "V": 143,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 1924,
+          "V": 143,
+          "~": 2,
+          "|": 1,
+          "F": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "804",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2653,
+          "S": 0,
+          "V": 181,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2653,
+          "V": 181,
+          "~": 51,
+          "|": 3
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "805",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2091,
+          "S": 0,
+          "V": 207,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2091,
+          "V": 207,
+          "|": 120
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "806",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2952,
+          "S": 40,
+          "V": 29,
+          "F": 2
+        },
+        "all_symbols": {
+          "N": 2952,
+          "S": 40,
+          "V": 29,
+          "F": 2
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "807",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1913,
+          "S": 29,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1913,
+          "S": 29,
+          "~": 12
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "808",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1746,
+          "S": 20,
+          "V": 8,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1746,
+          "V": 8,
+          "|": 3,
+          "S": 20
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "809",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2432,
+          "S": 112,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2432,
+          "S": 112,
+          "|": 9,
+          "~": 7
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "810",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1839,
+          "S": 8,
+          "V": 56,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1839,
+          "V": 56,
+          "|": 39,
+          "~": 4,
+          "S": 8
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "811",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1406,
+          "S": 1,
+          "V": 28,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 1406,
+          "S": 1,
+          "V": 28,
+          "F": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "812",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1758,
+          "S": 14,
+          "V": 70,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1758,
+          "V": 70,
+          "~": 22,
+          "|": 9,
+          "S": 14
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "820",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2163,
+          "S": 185,
+          "V": 3,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2163,
+          "S": 185,
+          "V": 3,
+          "|": 4,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "821",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2482,
+          "S": 614,
+          "V": 36,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2482,
+          "S": 613,
+          "V": 36,
+          "a": 1,
+          "Q": 1,
+          "~": 2
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "822",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1675,
+          "S": 658,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1675,
+          "S": 658,
+          "|": 3,
+          "V": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "823",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2479,
+          "S": 382,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2479,
+          "S": 382,
+          "|": 3
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "824",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2216,
+          "S": 196,
+          "V": 7,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2216,
+          "S": 196,
+          "V": 7
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "825",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2653,
+          "S": 145,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2653,
+          "S": 145
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "826",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2581,
+          "S": 80,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2581,
+          "S": 80
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "827",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1844,
+          "S": 18,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1844,
+          "S": 18
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "828",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1757,
+          "S": 150,
+          "V": 6,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1757,
+          "S": 150,
+          "V": 6
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "829",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1887,
+          "S": 80,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1887,
+          "S": 80,
+          "|": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "840",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2341,
+          "S": 44,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2341,
+          "S": 44,
+          "|": 3,
+          "~": 2,
+          "V": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "841",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1491,
+          "S": 106,
+          "V": 254,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1491,
+          "S": 106,
+          "V": 254,
+          "Q": 3
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "842",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2394,
+          "S": 104,
+          "V": 61,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2394,
+          "S": 104,
+          "V": 61
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "843",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2649,
+          "S": 21,
+          "V": 38,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2649,
+          "V": 38,
+          "S": 21
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "844",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1650,
+          "S": 59,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1650,
+          "S": 59
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "845",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2828,
+          "S": 27,
+          "V": 30,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2828,
+          "S": 27,
+          "V": 30,
+          "Q": 2
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "846",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1661,
+          "S": 20,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1661,
+          "~": 2,
+          "|": 2,
+          "S": 20
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "847",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1667,
+          "S": 51,
+          "V": 44,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1667,
+          "V": 44,
+          "S": 51,
+          "~": 33,
+          "|": 41
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "848",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 4228,
+          "S": 30,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 4228,
+          "~": 26,
+          "|": 4,
+          "S": 30,
+          "V": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "849",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2060,
+          "S": 74,
+          "V": 6,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2060,
+          "S": 74,
+          "V": 6,
+          "Q": 21
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "850",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1830,
+          "S": 8,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1830,
+          "S": 8,
+          "~": 2
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "851",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2169,
+          "S": 32,
+          "V": 427,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2169,
+          "V": 427,
+          "|": 131,
+          "S": 32,
+          "~": 10
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "852",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2334,
+          "S": 321,
+          "V": 9,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2334,
+          "V": 9,
+          "S": 321,
+          "+": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "853",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2107,
+          "S": 48,
+          "V": 64,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2107,
+          "V": 64,
+          "S": 48,
+          "Q": 12,
+          "|": 14
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "854",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1790,
+          "S": 460,
+          "V": 478,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1790,
+          "V": 478,
+          "|": 285,
+          "~": 92,
+          "S": 460,
+          "Q": 4
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "855",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2035,
+          "S": 227,
+          "V": 277,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2035,
+          "S": 227,
+          "~": 31,
+          "V": 277,
+          "|": 6,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "856",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2812,
+          "S": 12,
+          "V": 28,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2812,
+          "V": 28,
+          "S": 12,
+          "~": 15,
+          "|": 8,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "857",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2402,
+          "S": 38,
+          "V": 144,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2402,
+          "S": 38,
+          "V": 144,
+          "~": 22,
+          "|": 4
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "858",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2169,
+          "S": 8,
+          "V": 3,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2169,
+          "~": 2,
+          "S": 8,
+          "V": 3,
+          "|": 5
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "859",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 3009,
+          "S": 69,
+          "V": 464,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 3009,
+          "V": 464,
+          "S": 69,
+          "~": 14,
+          "|": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "860",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1674,
+          "S": 17,
+          "V": 727,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1674,
+          "V": 727,
+          "|": 25,
+          "S": 17,
+          "~": 20
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "861",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1875,
+          "S": 569,
+          "V": 27,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1875,
+          "S": 569,
+          "~": 56,
+          "V": 27,
+          "|": 54,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "862",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2134,
+          "S": 26,
+          "V": 23,
+          "F": 0
+        },
+        "all_symbols": {
+          "|": 393,
+          "N": 2134,
+          "V": 23,
+          "S": 26,
+          "~": 16,
+          "Q": 5
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "863",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2561,
+          "S": 322,
+          "V": 240,
+          "F": 0
+        },
+        "all_symbols": {
+          "S": 322,
+          "N": 2561,
+          "V": 240,
+          "Q": 1,
+          "|": 1,
+          "~": 4
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "864",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1744,
+          "S": 19,
+          "V": 132,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1744,
+          "V": 132,
+          "S": 19,
+          "~": 12
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "865",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1102,
+          "S": 1818,
+          "V": 235,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1102,
+          "V": 235,
+          "|": 508,
+          "Q": 7,
+          "S": 1818,
+          "~": 31
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "866",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2052,
+          "S": 167,
+          "V": 447,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2052,
+          "S": 167,
+          "V": 447
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "867",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2789,
+          "S": 136,
+          "V": 75,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2789,
+          "V": 75,
+          "S": 136
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "868",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2554,
+          "S": 227,
+          "V": 555,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2554,
+          "V": 555,
+          "S": 227,
+          "~": 91,
+          "|": 6,
+          "Q": 11,
+          "B": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "869",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1507,
+          "S": 632,
+          "V": 22,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1507,
+          "S": 632,
+          "V": 22,
+          "~": 2
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "870",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1786,
+          "S": 454,
+          "V": 438,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1786,
+          "V": 438,
+          "S": 454,
+          "~": 33,
+          "|": 80
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "871",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1776,
+          "S": 12,
+          "V": 8,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1776,
+          "S": 12,
+          "V": 8,
+          "~": 4,
+          "|": 3
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "872",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1898,
+          "S": 9,
+          "V": 74,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1898,
+          "S": 9,
+          "V": 74
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "873",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1626,
+          "S": 15,
+          "V": 26,
+          "F": 17
+        },
+        "all_symbols": {
+          "N": 1626,
+          "S": 15,
+          "F": 17,
+          "V": 26
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "874",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2190,
+          "S": 9,
+          "V": 41,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2190,
+          "V": 41,
+          "S": 9
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "875",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1946,
+          "S": 8,
+          "V": 97,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 1946,
+          "V": 97,
+          "F": 1,
+          "S": 8
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "876",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2006,
+          "S": 135,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2006,
+          "S": 135,
+          "|": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "877",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1841,
+          "S": 196,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1841,
+          "S": 196,
+          "V": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "878",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1591,
+          "S": 64,
+          "V": 256,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1591,
+          "~": 10,
+          "V": 256,
+          "S": 55,
+          "J": 9,
+          "|": 6
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "879",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1472,
+          "S": 48,
+          "V": 542,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1472,
+          "V": 542,
+          "S": 48,
+          "|": 7,
+          "~": 20
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "880",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 3105,
+          "S": 241,
+          "V": 141,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 3105,
+          "S": 241,
+          "V": 141
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "881",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1324,
+          "S": 629,
+          "V": 307,
+          "F": 0
+        },
+        "all_symbols": {
+          "S": 629,
+          "N": 1324,
+          "V": 307,
+          "~": 29,
+          "|": 10,
+          "Q": 3
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "882",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1889,
+          "S": 41,
+          "V": 5,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1889,
+          "S": 41,
+          "V": 5
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "883",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1773,
+          "S": 40,
+          "V": 7,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1773,
+          "S": 40,
+          "V": 7,
+          "|": 2
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "884",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2485,
+          "S": 53,
+          "V": 344,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2485,
+          "V": 344,
+          "|": 125,
+          "~": 14,
+          "S": 53,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "885",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1506,
+          "S": 399,
+          "V": 54,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1506,
+          "S": 399,
+          "~": 57,
+          "|": 37,
+          "V": 54,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "886",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2169,
+          "S": 26,
+          "V": 28,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2169,
+          "V": 28,
+          "S": 26
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "887",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2354,
+          "S": 125,
+          "V": 210,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2354,
+          "V": 210,
+          "~": 110,
+          "S": 125,
+          "|": 22,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "888",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2191,
+          "S": 68,
+          "V": 54,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2191,
+          "S": 68,
+          "V": 54,
+          "|": 21,
+          "~": 16
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "889",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1466,
+          "S": 152,
+          "V": 91,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1466,
+          "S": 152,
+          "V": 91,
+          "~": 24,
+          "|": 5
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "890",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2003,
+          "S": 74,
+          "V": 97,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2003,
+          "V": 97,
+          "S": 74
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "891",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2122,
+          "S": 277,
+          "V": 207,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2122,
+          "|": 165,
+          "S": 277,
+          "V": 207,
+          "~": 8
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "892",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 1742,
+          "S": 523,
+          "V": 577,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1742,
+          "V": 577,
+          "S": 523,
+          "|": 6,
+          "~": 8,
+          "Q": 1
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "893",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2189,
+          "S": 0,
+          "V": 339,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2189,
+          "V": 339
+        }
+      },
+      {
+        "database": "svdb",
+        "record": "894",
+        "subject": "svdb:identity_unknown_pool",
+        "lead": "ECG1",
+        "fs": 128,
+        "samples": 230400,
+        "counts": {
+          "N": 2213,
+          "S": 80,
+          "V": 53,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2213,
+          "S": 80,
+          "V": 53,
+          "|": 21,
+          "~": 66,
+          "Q": 1
+        }
+      },
+      {
+        "database": "mitdb",
+        "record": "100",
+        "subject": "mit:100",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "101",
+        "subject": "mit:101",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "103",
+        "subject": "mit:103",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "105",
+        "subject": "mit:105",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "106",
+        "subject": "mit:106",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "108",
+        "subject": "mit:108",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "109",
+        "subject": "mit:109",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "111",
+        "subject": "mit:111",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "112",
+        "subject": "mit:112",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "113",
+        "subject": "mit:113",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "114",
+        "subject": "mit:114",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "115",
+        "subject": "mit:115",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "116",
+        "subject": "mit:116",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "117",
+        "subject": "mit:117",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "118",
+        "subject": "mit:118",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "119",
+        "subject": "mit:119",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "121",
+        "subject": "mit:121",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "122",
+        "subject": "mit:122",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "123",
+        "subject": "mit:123",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "124",
+        "subject": "mit:124",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "200",
+        "subject": "mit:200",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "202",
+        "subject": "mit:subject_201_202",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "203",
+        "subject": "mit:203",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "205",
+        "subject": "mit:205",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "208",
+        "subject": "mit:208",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "209",
+        "subject": "mit:209",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "210",
+        "subject": "mit:210",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "212",
+        "subject": "mit:212",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "213",
+        "subject": "mit:213",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "214",
+        "subject": "mit:214",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "215",
+        "subject": "mit:215",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "219",
+        "subject": "mit:219",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "220",
+        "subject": "mit:220",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "221",
+        "subject": "mit:221",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "222",
+        "subject": "mit:222",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "223",
+        "subject": "mit:223",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "228",
+        "subject": "mit:228",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "230",
+        "subject": "mit:230",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "231",
+        "subject": "mit:231",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "232",
+        "subject": "mit:232",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "233",
+        "subject": "mit:233",
+        "lead": "MLII",
+        "fs": 360
+      },
+      {
+        "database": "mitdb",
+        "record": "234",
+        "subject": "mit:234",
+        "lead": "MLII",
+        "fs": 360
+      }
+    ],
+    "validation": [
+      {
+        "database": "incartdb",
+        "record": "I03",
+        "subject": "incart:2",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2325,
+          "S": 2,
+          "V": 125,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2325,
+          "V": 125,
+          "A": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I04",
+        "subject": "incart:2",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2270,
+          "S": 16,
+          "V": 121,
+          "F": 17
+        },
+        "all_symbols": {
+          "N": 2270,
+          "F": 17,
+          "A": 16,
+          "V": 121
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I05",
+        "subject": "incart:2",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1520,
+          "S": 0,
+          "V": 247,
+          "F": 9
+        },
+        "all_symbols": {
+          "N": 1520,
+          "V": 247,
+          "F": 9
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I06",
+        "subject": "incart:3",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2436,
+          "S": 48,
+          "V": 9,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2436,
+          "A": 48,
+          "V": 9
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I07",
+        "subject": "incart:3",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2640,
+          "S": 65,
+          "V": 1,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2640,
+          "A": 65,
+          "V": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I38",
+        "subject": "incart:17",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2153,
+          "S": 0,
+          "V": 545,
+          "F": 0
+        },
+        "all_symbols": {
+          "V": 545,
+          "N": 2153,
+          "Q": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I39",
+        "subject": "incart:17",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1462,
+          "S": 0,
+          "V": 313,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1462,
+          "V": 313
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I47",
+        "subject": "incart:21",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1859,
+          "S": 1,
+          "V": 93,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1859,
+          "V": 93,
+          "A": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I48",
+        "subject": "incart:21",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2119,
+          "S": 2,
+          "V": 235,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 2119,
+          "V": 235,
+          "F": 1,
+          "A": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I65",
+        "subject": "incart:28",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2273,
+          "S": 5,
+          "V": 382,
+          "F": 4
+        },
+        "all_symbols": {
+          "N": 2273,
+          "V": 382,
+          "A": 2,
+          "F": 4,
+          "S": 3
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I66",
+        "subject": "incart:28",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2139,
+          "S": 1,
+          "V": 200,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2139,
+          "V": 200,
+          "S": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I67",
+        "subject": "incart:28",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2438,
+          "S": 5,
+          "V": 531,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 2438,
+          "V": 531,
+          "S": 5,
+          "F": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I70",
+        "subject": "incart:30",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1540,
+          "S": 126,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "+": 1,
+          "N": 1540,
+          "A": 126
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I71",
+        "subject": "incart:30",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1635,
+          "S": 35,
+          "V": 0,
+          "F": 0
+        },
+        "all_symbols": {
+          "+": 7,
+          "N": 1627,
+          "A": 35,
+          "R": 8
+        }
+      }
+    ],
+    "test": [
+      {
+        "database": "incartdb",
+        "record": "I16",
+        "subject": "incart:8",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1520,
+          "S": 0,
+          "V": 2,
+          "F": 0
+        },
+        "all_symbols": {
+          "R": 1520,
+          "V": 2
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I17",
+        "subject": "incart:8",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1646,
+          "S": 0,
+          "V": 27,
+          "F": 0
+        },
+        "all_symbols": {
+          "R": 1646,
+          "V": 27
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I20",
+        "subject": "incart:10",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2361,
+          "S": 179,
+          "V": 111,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 2361,
+          "A": 179,
+          "V": 111,
+          "F": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I21",
+        "subject": "incart:10",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2072,
+          "S": 104,
+          "V": 8,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 2072,
+          "A": 104,
+          "V": 8
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I22",
+        "subject": "incart:10",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2816,
+          "S": 124,
+          "V": 185,
+          "F": 1
+        },
+        "all_symbols": {
+          "N": 2816,
+          "V": 185,
+          "A": 124,
+          "F": 1
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I49",
+        "subject": "incart:22",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2120,
+          "S": 0,
+          "V": 27,
+          "F": 0
+        },
+        "all_symbols": {
+          "+": 1,
+          "N": 2120,
+          "V": 27
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I50",
+        "subject": "incart:22",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2994,
+          "S": 0,
+          "V": 4,
+          "F": 0
+        },
+        "all_symbols": {
+          "+": 1,
+          "N": 2994,
+          "V": 4
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I51",
+        "subject": "incart:23",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1970,
+          "S": 3,
+          "V": 803,
+          "F": 1
+        },
+        "all_symbols": {
+          "V": 803,
+          "N": 1970,
+          "F": 1,
+          "A": 3
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I52",
+        "subject": "incart:23",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1610,
+          "S": 0,
+          "V": 137,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1610,
+          "V": 137
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I53",
+        "subject": "incart:23",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1151,
+          "S": 0,
+          "V": 1111,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1151,
+          "V": 1111
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I72",
+        "subject": "incart:31",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1876,
+          "S": 8,
+          "V": 386,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1876,
+          "V": 386,
+          "A": 8
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I73",
+        "subject": "incart:31",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1890,
+          "S": 32,
+          "V": 70,
+          "F": 0
+        },
+        "all_symbols": {
+          "N": 1890,
+          "V": 70,
+          "A": 32
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I74",
+        "subject": "incart:32",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 2083,
+          "S": 0,
+          "V": 274,
+          "F": 48
+        },
+        "all_symbols": {
+          "N": 2083,
+          "V": 274,
+          "F": 48
+        }
+      },
+      {
+        "database": "incartdb",
+        "record": "I75",
+        "subject": "incart:32",
+        "lead": "II",
+        "fs": 257,
+        "samples": 462600,
+        "counts": {
+          "N": 1483,
+          "S": 0,
+          "V": 613,
+          "F": 7
+        },
+        "all_symbols": {
+          "N": 1483,
+          "V": 613,
+          "F": 7
+        }
+      }
+    ]
+  },
+  "split_design": {
+    "seed": 2026101706,
+    "draws": 20000,
+    "minimum_S_and_F_subjects_per_role": 3,
+    "minimum_S_beats_in_validation_or_test": 100,
+    "target_subject_counts": [
+      20,
+      6,
+      6
+    ],
+    "annotation_balance_cost": 0.016469631845792112
+  },
+  "metadata_sha256": {
+    "incartdb/I01.hea": "734b7a5416377b45b0a947f7a44a9e151b9591b9c933aa48b5e427a18361718e",
+    "incartdb/I01.atr": "950fda1d165ca1670d847e2dfa893da75590785c1a6d277653cb909e75e31950",
+    "incartdb/I02.hea": "59f3c58ec5af13a3500c726cd7fbb25e63d1558d6a03b0d05e2faa4a58e7090a",
+    "incartdb/I02.atr": "041f9b25f92ebce30a5ae2826c37c2b3d43eda5980583dcf62a6fbcb1e3166e7",
+    "incartdb/I03.hea": "1cb52b21056590e3ebb4e89882da4011065ac2b9493520f799109f13ef8c2c70",
+    "incartdb/I03.atr": "8c242de60d1b7c6b8297a9b06bd0758fbeff3a35b23e0be34c33918489c92967",
+    "incartdb/I04.hea": "dda6d1bbbacf86b69c8a7c62d650a95dcd90eaee4b118570edfc7760418c4cc1",
+    "incartdb/I04.atr": "229c7d199311531998d385be034696c21e4594efc93356791aa61f2f244ca1c2",
+    "incartdb/I05.hea": "1c25305ce083841b85136f1682d60381880c4109c5316066ae5c8f35e40162c2",
+    "incartdb/I05.atr": "90283f40ccf0c5c921bba8dd699dc943d57bbeaa1bcee003aab3abca450fb14b",
+    "incartdb/I06.hea": "d493d80dc80fb8fb85b1cbc6865182e5628ee774891607e2d1ad44d11bd6e03c",
+    "incartdb/I06.atr": "369c9ae509f88fdd373bdcfdccbfcf1c2873e5b4f704c0937d0c04e193f6d287",
+    "incartdb/I07.hea": "36d46773eb9d49d189bdfcaa79c7c738956732619f056a6521c772c7af3ff877",
+    "incartdb/I07.atr": "db03e7678ae850d9e3850de6cbd91dcf510a4bb5266d092af0b19c0b9ba5b01d",
+    "incartdb/I08.hea": "894685a526257fc568ca0703d5dbbf48627e058dc1de1afb24293184ab4810e5",
+    "incartdb/I08.atr": "7caba653d33e45628bf106a12d682edf8529ec1252489a9d9050054599998fae",
+    "incartdb/I09.hea": "6d7d49b06ca1dc47e7a643b53066bbc05c7d187ca490b01234c4a79917210423",
+    "incartdb/I09.atr": "428895f5f28a042bd8f19bbf80dbfd7c4401c4d59606c52ec36bb547473b884a",
+    "incartdb/I10.hea": "1b39c97d3f4e4a2669d5e9caf40b1d72f2e9833069023d03d8dc7d98f8f92f87",
+    "incartdb/I10.atr": "c58b7e57a82bca0389cd7ba07103beb8a2c2c9a59786227e7232c133cd954cd0",
+    "incartdb/I11.hea": "6f9e22584061a0728d7dcaeb8d907f6736cab58d1e047d74144739193048ae9c",
+    "incartdb/I11.atr": "4a5148a975972f0808ad80c17dbe145074f7bed8112aa83d4f757d66fd012f5f",
+    "incartdb/I12.hea": "1439ee5e899748b882997c157f4f8a597d1987250b1b55b8f48360e426b211d1",
+    "incartdb/I12.atr": "dc7ecebae64e5a205501e51ad6ee8457cef7cdf5d2892f789a700f337fc12322",
+    "incartdb/I13.hea": "10cd2d58b1693266a3a3efa077fed1389201e666d8345e3d23c8e1b0232c461d",
+    "incartdb/I13.atr": "710cdd70ec1765b8a10f82a584bd48ac3ca0bee88bdc527a547042c136c970a8",
+    "incartdb/I14.hea": "e3b1e932207f0dee874bdf95209a17197e62b4d7be38fc19b319db48324102a0",
+    "incartdb/I14.atr": "90801c0ef87fa543862feef531c1664cd617fd124bce2f5c997f621cd65f4ae5",
+    "incartdb/I15.hea": "f690411552810ffb4bdc3e8459cfd85132bd72e6c0c770691f0a76696e4bae25",
+    "incartdb/I15.atr": "cbcdda2d1bf92ec844dc858c21b2cefaa6deccf6875bac175bbb772849a38e15",
+    "incartdb/I16.hea": "b5db0fe974ca3a00d16a442bd6bb8cf86250e69a5e23ea0db885ecd7a7dc6df1",
+    "incartdb/I16.atr": "b5d895fc53c24312e999b8821d1e1fba55f2e8ae4bb87620715cc4fcd179290c",
+    "incartdb/I17.hea": "d5d4cd8f6940cbf224379fe2f1bd8374be874763d6a8fc8e7e2ad41ff40510cc",
+    "incartdb/I17.atr": "c94cd80e5a4e1ae991391f1e4347380652e3263359ca02203ce02e5e090fee8d",
+    "incartdb/I18.hea": "baa4f1d600383f9b2db09c246634440ab708b7c7246125c6381cbc7e7b15bd4a",
+    "incartdb/I18.atr": "426938eadd7a71d3ce8445714e82682251a8cde74a93302c084a0f2ad6b86018",
+    "incartdb/I19.hea": "8ae33fd482c36859c86f98a71e59067ec70abd943a1958ffbe5a4920bcc0e262",
+    "incartdb/I19.atr": "f6ac027fa3bcaf10978f144cd6bffc91c13990b12dba6a7bf0c5cef3648c84ae",
+    "incartdb/I20.hea": "e66092da6d8be6b8ec12e7c3d761d01a8ed2e095862ca45e7ef2ca123267fca5",
+    "incartdb/I20.atr": "8f77201834c86a7ef376500bafa8f272d3ccded9d912427c557a3d1b8564496e",
+    "incartdb/I21.hea": "71c1099b0250f551ac1db15e65e1f1c646d7422edb6c03833708e4019d302e69",
+    "incartdb/I21.atr": "5b9f405a71b3507f576db9fef23a702a648ce39adcfdab5b7f9883a0e30967fe",
+    "incartdb/I22.hea": "2ce647ab74c103f248c1fe57c367a2254975b0c574f502aab871eb6bb84874a9",
+    "incartdb/I22.atr": "9d3723ccac9e4c5bb7940d74c2401bea51f8a3ea1df29fb9b50bccfca18d4257",
+    "incartdb/I23.hea": "ca99b703a0dc038cfe1673d025dc5a5e22812dd63c6a641095fd23881ce35d3a",
+    "incartdb/I23.atr": "2eb49326a65e82861edeca207e2f537823a6bc2a60e3ffefd3446e3d7777a2d7",
+    "incartdb/I24.hea": "100bfa20b3c8648ca1c6dcf0b663d7e30d03e1683f437cd09fcd766dd30921a0",
+    "incartdb/I24.atr": "1199b73bb8bf74075774ddb8ce5306f5249544ce1ace1a8acae71291aafa7b49",
+    "incartdb/I25.hea": "2e424334f671f630cff05119f978ca38e46511cdb58e1a215e1548e887f5ec5a",
+    "incartdb/I25.atr": "48674bafbb7bd4261b34c33b80733c54cbd9873ec06afa679554875df76bc471",
+    "incartdb/I26.hea": "bb582fc7f10d8a3b8e118becdd2652da588f8ae72e0efe2111182d81f80b3532",
+    "incartdb/I26.atr": "30dbba8349c32ec0a9f604877d1f7d584fa539af96679dadfa4ab846f989080b",
+    "incartdb/I27.hea": "14fd4c86c98a83cb2e178ff10a74cae3845f457bc57e6f4ba0fb6df045717cd8",
+    "incartdb/I27.atr": "b4756835b108aed3cb7bc82ff4fee3a18e38dc5b3f40693867256a5edc09e824",
+    "incartdb/I28.hea": "0e879a4cea2eef171fa8f2eb1295c5bbc20ef7f66e9aafad3495992590f83f42",
+    "incartdb/I28.atr": "ba9515fc96606b68621f77eef7f43f8b3f76ecd73c6d18b2083a65c4ae2b28da",
+    "incartdb/I29.hea": "063a013dda4f6deec2564db13806cf69fa731495831bb0b196b64ed633fe8c67",
+    "incartdb/I29.atr": "5f64a171e4a91ba9f6bcefd85ffff20653e453419541092e660b95fb49a887e8",
+    "incartdb/I30.hea": "f86520c03d1a8f16e49353462eff3009ecfa011e772ab022454c463d34a81d04",
+    "incartdb/I30.atr": "60388954bbf5ba1faa98c17d1d2297af829a12620c50caa9de93d4650eb7b100",
+    "incartdb/I31.hea": "208e2b77b52d193e0594b5293e48125f8253571fec3e9ea0e374f61be79c326e",
+    "incartdb/I31.atr": "7d021db6bc55e2a48bd4e86eee708b3135f850013914e605f3489c94c67ec01d",
+    "incartdb/I32.hea": "b593166c2d79e3dcc04a9f261dc670c2b5538e39d1502c68fd396247c307adc2",
+    "incartdb/I32.atr": "a70c2229e10cab3de2842a2513c2d8d050a42bcddf2e07f8310dde9d48d246a1",
+    "incartdb/I33.hea": "8cd4c60954e67fc98e1f287f31459200cb2fc37e4afb4f8f2ea5209726d0860f",
+    "incartdb/I33.atr": "57ac0345ebdbfb0f84ad92115ae8fbac87ad6c92fbf38051ca268ea9ae259a8a",
+    "incartdb/I34.hea": "24b84f1aef4ebf75a4aebdc8ce8cbb551c70f69ed9d8f4ff0d61df38836de6ee",
+    "incartdb/I34.atr": "32a2694acc115e3bc0af05257bcb639133fe48fab718823fe17cc2669c66b6fa",
+    "incartdb/I35.hea": "1a95f57d4c6dc634d581d6bf4c526b829860294f0d3dce40492991918fdd14ce",
+    "incartdb/I35.atr": "656f2a3169eacda183f392de2457e346b027c21aa43468be727d5c43622a4491",
+    "incartdb/I36.hea": "a03d5466bf356ff398bf7aeea86c27afd7708a05344e13a525c7a74407ad60a1",
+    "incartdb/I36.atr": "a500fd25ea896a082e6facae0ede7f7ff4409ad0f8d0317479059d021ce23084",
+    "incartdb/I37.hea": "5e762514d6cacc872910ded17c41554bb1fd7ac6668b2c05c3e6607951b67811",
+    "incartdb/I37.atr": "803d32ad080bb4a577353783139552647ec4092759b9070ec80afd3e706e4b7e",
+    "incartdb/I38.hea": "926e126f5f224071112ea02b14bbf079c091d13a99a37b5f434d224d60fca979",
+    "incartdb/I38.atr": "afbb56e8c782b28e574caf425d30a24491a5982c175e4ad5f4205c59d216deeb",
+    "incartdb/I39.hea": "56a03543d3ada9158d7ef84f58dd6bae2395175898436c07be30251ca979e078",
+    "incartdb/I39.atr": "17d94c5450895bad8ee2be46d7b7066185c17c83a64addc7fc45b0c67eb849a1",
+    "incartdb/I40.hea": "57ca4322cdd1521b82d5035d2f944280614fbd72c5c362a3837588fc2d417816",
+    "incartdb/I40.atr": "7b119c78be7a7378e4f331db6586a5a7514c9200dc7453307932bb0932753420",
+    "incartdb/I41.hea": "44145265c023f8df2a8d06bdcacdee93f722e8b8b90fcba600fb348915c43337",
+    "incartdb/I41.atr": "49a17526ece6ff808ec9a3cbd8996c9176b78b4c33c0e740bde4a525253547eb",
+    "incartdb/I42.hea": "eb72e7ae6e2275f53f2b5e38c62374b8ab1a288e6e1758b40db5c26ac23d02bc",
+    "incartdb/I42.atr": "7421ccbac2269f57a768633ee301929d48ed8eade5336d080c0f3aba376f9109",
+    "incartdb/I43.hea": "2577cb1632c04c91aa7045ae5d89311b6a52961a23bcac898cae261efe781a51",
+    "incartdb/I43.atr": "e090ea810a34f83b53ac92535c02bb2b843e79b1928fdc427b6544715aea4045",
+    "incartdb/I44.hea": "01661ec6ebf0ca183bf9eca0a5248aa7441deff72c22a714344560f1191c2e3f",
+    "incartdb/I44.atr": "d21f96ae3557ae3a440cd6285da1c0d28a8fee3971c3b70d357a47e1cc4e4755",
+    "incartdb/I45.hea": "8d5b3763f9e1e9272a8ddd1e643f4ecf1f45736331429480554e5fe9e9fa7562",
+    "incartdb/I45.atr": "e025b037cdba62e078472af72f579f60354f78eaaa8700fd042d8c0812a96bd2",
+    "incartdb/I46.hea": "74c3e2e0d6a86039f02b3bdaeee97360801d0c0923ac58ccf98d72b3bb20dbb0",
+    "incartdb/I46.atr": "909dcb96cbb5838ec1ebee54b63e9a7ba782e75c3322ddc274367e8c8f5ebe1e",
+    "incartdb/I47.hea": "485a6fea03694c261b89f98235603da3b806b50a2899780a4d849d925d9348d4",
+    "incartdb/I47.atr": "7f77c8c9524843f6994289bfce280a4348fd594c199b253af62ae551187c7992",
+    "incartdb/I48.hea": "ab13f35c1cd6a65af0e6d80c57ed7d0f3a37271b66634369a186213891e44b8e",
+    "incartdb/I48.atr": "5cc53bbdc5df7ea60d41e32a13d2190d096622f10464b90b78d673cdf42b59a9",
+    "incartdb/I49.hea": "5702e1daad6220ae534da428382e69ab156b7805cff2fd72d9d6ea13594e49c4",
+    "incartdb/I49.atr": "680f1f29177a34cc866ec50df2c7331b212595ad0f29bcf91980deb4215da182",
+    "incartdb/I50.hea": "3c1cc4be9ac73fe8b000eb5cdd37ae0f310ad761d4e5a1e8f1084ea252ec33cb",
+    "incartdb/I50.atr": "908b7ac9da971ee88b6c1c34fe27bbc61a6c2c6ace6c4508bb1d8bf0404a71f1",
+    "incartdb/I51.hea": "ec7e9d6590c2661e2e96fbeea984a1e296172165af191e4c399f2f8813c6452d",
+    "incartdb/I51.atr": "9ceecaf067eb78ffe728655af82da8861a3e0134e2d47e6f351494681d0495cf",
+    "incartdb/I52.hea": "5b4ae1ef9f668b2598cee1c83ca519bc7cc43fef176e0e2ceac2dbc72eb4d5c7",
+    "incartdb/I52.atr": "35e6052940bfd6b08cf014d42fd7bc67f9270277d55a3aafa654a4ab1be425dc",
+    "incartdb/I53.hea": "486af4ab84464e7d602d1840502382b74debe3704ce3fe08f043f8098909f494",
+    "incartdb/I53.atr": "241701f2f327ee28c8bdaee6a7acb657fb496a0cd12e7946c1d38cdd6a32de9b",
+    "incartdb/I54.hea": "8f1349fb7903051cc3579288b46d42306cfe314986258eae8668eeae7d807e6e",
+    "incartdb/I54.atr": "bd511bb51f17053b5997079159a41f09f54bc18cbce94837366ac9c899708fdf",
+    "incartdb/I55.hea": "680499bc4d630e8f0a0576c4608a5602c25c5a166c552a065402f7257061514c",
+    "incartdb/I55.atr": "38801400117eb4a4031ee9b7355ae3d7a8e9ed1c355e2831a183c49841f022db",
+    "incartdb/I56.hea": "b4e772a4280d5bcc0c32e104aea3378ee15ca9c788e335fe0787493c248cbf03",
+    "incartdb/I56.atr": "8d68a83efd40bf1caf0853b2a3c88dfaeff6ce7ddbf55129ecbdcf14e89b5b9a",
+    "incartdb/I57.hea": "faba1ae6e77a084702caccd6970c7b53956ae2543b310b98629b32f99acba977",
+    "incartdb/I57.atr": "8affa6b05cdb83d715548e7db28b4b956b61b1233ff645bce048b7f09a3d05d5",
+    "incartdb/I58.hea": "aa57d169bcbf4019ad30ad76f68b948fb6533d51294545ed7e09e86119076205",
+    "incartdb/I58.atr": "901a13894c60bdd65adb586022f9957164f45afb43a6eacd572dbea4eaacdd7f",
+    "incartdb/I59.hea": "486d6f10d7f435062e33e7f4d1ed88a5f6781a68fcee8e06e501ff162d6f2277",
+    "incartdb/I59.atr": "4d67492637fd83b0e962ebd2192032637abf0b43bbd1da50b7d3fac05c160bc4",
+    "incartdb/I60.hea": "28176f894492ee0eac6956347ad9cbdadc014f41328a5872c36ffe19cdda6361",
+    "incartdb/I60.atr": "6b39f4c8fc416db6b705885ae1037fdfbaa9da61b5b1f328a9552778064bf0b2",
+    "incartdb/I61.hea": "ef951a77fb8bcb113f0ed5b35acb3118f400d3a334893281e07afd567fafacce",
+    "incartdb/I61.atr": "848b0ddff236cad933fa035476c8a165e471827541f7fc918fa7996a4757706c",
+    "incartdb/I62.hea": "a118e3714a5bf37323d16b5260065e1fde5f476c0caabf3ea1a00b1c014d0846",
+    "incartdb/I62.atr": "debe783045c47fa9c530c9b9adfe82e23a404c8336eac8fc1142483d506526cd",
+    "incartdb/I63.hea": "8aebbf7b977b7801d0d53814c1ce41bf0dc98ae44429a20ee828eb33117cb3c5",
+    "incartdb/I63.atr": "e93231920456d308c78f07886e3380c582811e28a583907add2249a86b77b188",
+    "incartdb/I64.hea": "496cbc81c976908113be178dd6c0b28c725a1697b439a06e66a8a4f3eee21572",
+    "incartdb/I64.atr": "d2595631d0a5aba842c997b226e64892e22b5cc091d1627f47e748ad7407e5f9",
+    "incartdb/I65.hea": "10cb9da38ad8d30e89d8fc3361de26e36d8cc290baba8dbaa504001c88393c62",
+    "incartdb/I65.atr": "e9804855419564f6027a9b2b2c976b3c22ec440ba93de25042048fc2ebf5695e",
+    "incartdb/I66.hea": "b4e46f545be038a6ede66c86239cc8665962156a8b87dae5dde23a7571dfd399",
+    "incartdb/I66.atr": "b1445b26be3a8accba9db73a5b01161296f530e54e80ed46783d09f03b9670d4",
+    "incartdb/I67.hea": "7d212d3b55a8b833ec14d96124af64e5274a9d3256cd85e04811240aed8d3839",
+    "incartdb/I67.atr": "d2ee49f20f6e77dc40d3ddde8090931a1df55d7e254d950364572a0752fb12c3",
+    "incartdb/I68.hea": "87cb6d533ee73f19b180f0a1c009e5c08244de0d2e88c107bf3644bb7b705958",
+    "incartdb/I68.atr": "fe70a194595de76bb139d32cc8949947bdb3c03382569573a3d3f41bc97ff0df",
+    "incartdb/I69.hea": "0b0c621e97275f71cf79619e6edeb0a64a77beee31bcc37e10989af6cd59bcd1",
+    "incartdb/I69.atr": "5eace4b371a3fd1e9b86d96b175bd577804fcf3a248724e86276013231cce490",
+    "incartdb/I70.hea": "b477c34f1f43856077bf831984b88d11e7f153657587b07810d0abd238f20087",
+    "incartdb/I70.atr": "db5e4e729d2c750bd04ef4ec1ad0e8d0732d16269d2c7dad8783316fba6aeabc",
+    "incartdb/I71.hea": "de9fa9c7a2425481f53f3e10dff494e943dd16804c1d19ff2795f1adaa4cbd5a",
+    "incartdb/I71.atr": "bd5f2817f15c9f1641535905938706a34666ecc711ffca4b777a8e9793437f76",
+    "incartdb/I72.hea": "1f3259a5265d0fdcef3171ea46700e0a6a73001a0252b5eb6008ff04334a97a9",
+    "incartdb/I72.atr": "44c0dfa0e14e3ec0167efed59fa9a8200ab54e3a3d18e07d917e489181734463",
+    "incartdb/I73.hea": "97a33e3be8698c701b048e4aecc5ceabc1274dd32c5d2ce28346486fee348198",
+    "incartdb/I73.atr": "3e6f3936ad23d17ad9bf07929482a5a653601128fc3c333562328326781e717f",
+    "incartdb/I74.hea": "22a01e833ab4a796569e3cb42490be0adf6ed91561f7c87be240d377c7636fb6",
+    "incartdb/I74.atr": "382d3e4eff33c912fa99c4b3ab0964f439457417ad44b9cc3404a09e305d4ca8",
+    "incartdb/I75.hea": "0b4fb9264764d5e8be48752cdf7487613dd5f08122c0d1479626bce3c779edf0",
+    "incartdb/I75.atr": "91db7da83d10601b8f6a664f515c000a9af588763b95571ef5f8e4322d620c9b",
+    "svdb/800.hea": "760d205758d870c682ff9133284ac461eccaddb2334150f825f659793c990bc8",
+    "svdb/800.atr": "56823aba0dc0863860547db74e63f678825bec6e2afe097642b0619745e0b756",
+    "svdb/801.hea": "b626a524ae15ad8a807f756c0f48abe1b8abd5c1a6871de7b06479624e951c0d",
+    "svdb/801.atr": "189b5f38a84f76fa835f11865db0c1b7aa1a71411b34887ee48e4b3534460622",
+    "svdb/802.hea": "49a6aeb1fe21264e2a83b8be93a216eb5151b7c8b63ae33b782a45a589c2ad3b",
+    "svdb/802.atr": "766d58a0fa53ac81a9571c7aadcfa8d2c30a41036cd3889fc5a2a90208cb5333",
+    "svdb/803.hea": "91acf504f04460051f74ceadcff52f9c22925e7981c477d9d7e1243e5f6d0d58",
+    "svdb/803.atr": "13301ad643f7849a983c35d87701409479cd090bffd28a980c506c202bc99fc1",
+    "svdb/804.hea": "9c5d202805be1286af1e0f34ed62f2d4a837cc9e1a774126ffe9387a932e27a4",
+    "svdb/804.atr": "112597b4c8c32099b7443fe18bbd720db9bba4cb60767f68b3733a391a08c555",
+    "svdb/805.hea": "f4e48eac4ef756b78f3cbcd589d5373db6ffdacf3d4165abd218ab58dc076950",
+    "svdb/805.atr": "97eafe360ed77445cfa885d1fbd318675011ce8d2a8feba29d0b56a46f290048",
+    "svdb/806.hea": "94628852977377ed0ebcec5e8e92e7436fa7cd9d620070d0043e3bbe6202abb4",
+    "svdb/806.atr": "5a7b11ecace164cf07125378b384ca48a41f5b959bc750b1fb008e864376b50b",
+    "svdb/807.hea": "b18d27dbd067dbe3f87665e13fc8bb36b85895e9cfd228b00c8c5e077f1a535f",
+    "svdb/807.atr": "df29b7e5d8bbf304e45b75e04ab7423e36e0eec3e1270bf7089364552a930909",
+    "svdb/808.hea": "520952569a8e1abe9c8e043473692842d4f594c5ef63517c5d67daa7b94c091a",
+    "svdb/808.atr": "3adee760d7d269d08d762411fc562b123e564fdbd4fcdce74f44d00822cad798",
+    "svdb/809.hea": "f72cf6c1ea3d5968b20ebcc0ac58737ccd37b5af108abc7016105666385e6742",
+    "svdb/809.atr": "c91e7ed1217d4e21f368c2c6fe402a460befb61ba4bc0d6154501ce126d0392c",
+    "svdb/810.hea": "3d860ceae5d25abfc317ede36f91415bbed51a486fa6419f1813f2d8c147dcbb",
+    "svdb/810.atr": "3052bccbab14c26b50e1b7b99859dd7862a46ce3be9979983160d4d3177b20c6",
+    "svdb/811.hea": "a6c42b82b46cad607eb8a8758a61a6b536836b18e8adc91187ee19468bbba5f9",
+    "svdb/811.atr": "854e91a035240e7387d1326fdf197fa3931fcdb2528b9a280e7aedc9fa70771f",
+    "svdb/812.hea": "93efa93fdac306ff6b8d961fc8c0b896c292ef154484a35919313583431f8524",
+    "svdb/812.atr": "ea64b7c21ba4c18a58a8efd5d909ab30f8211f373faae5d478afd9c382b3bb1a",
+    "svdb/820.hea": "261350acd2e4b279fbb7a8f6390a762584272af30627e4b3dbd3c42e0845a92a",
+    "svdb/820.atr": "d523da5f8f9a61f0ffa0adb0ccbc48193ce93e6e4c954319cec848bda330a13b",
+    "svdb/821.hea": "7463f2e0093774556c10e3f3b548f3d6efa4e5b3e85c6f9fc437f060230ac63a",
+    "svdb/821.atr": "2818d1c29b83e881bbcfd2bfb042ab28a529fa8ec5342307c4d0a8691ac185da",
+    "svdb/822.hea": "0c5b3c59c656180c44d57459f25b07cf5f8b7744a33c82dd008cbb52a41a2410",
+    "svdb/822.atr": "ff5a855134de045c051000cd11ea534d50a54c99d9e392cace0f9dda6c24b2e2",
+    "svdb/823.hea": "33438dd573d54f8f3aeea18b97e544e21ec8c8799f2856cdd6d5e6d33d8e836e",
+    "svdb/823.atr": "d0ff04e05754a7154e8d2f473f730c07dd860210245d8c3810e652d5c981420a",
+    "svdb/824.hea": "7181c52e596e88800da6ab0c71fd724c78b26ead0bf067bd83d69e48b840ea70",
+    "svdb/824.atr": "1a1788add9b760cb59247959448ddfaf7e6ff5b0ecfee9b607db9c4f4319777a",
+    "svdb/825.hea": "60dece3170f6d8c50cc150652ba14eba1548d424d1be53488f6ee3777e491522",
+    "svdb/825.atr": "a75810b0d438e32067d3a5bba9f6b75f399c6b80b7d9fdeada367d155144fcd8",
+    "svdb/826.hea": "d328e6bd70413df1246a16a1856a740ea84114da1590815fbc27a12f0e4b5236",
+    "svdb/826.atr": "7bb22a140120e92caac8da3454ed9c312a1c56751a2ab8ffe628488a868e01ac",
+    "svdb/827.hea": "ac8054c2ac850cefb348018a59752f25be785b1a11b7cbfea055abb66a6c8def",
+    "svdb/827.atr": "efe4e7cd6b9d32d7e722bf7903e8c2987c3099035f4c692b411b229c85f73291",
+    "svdb/828.hea": "668194e57b21bd87007d54d2d73e6ca90a4ae35f61cf99e350b970c3b734b5dd",
+    "svdb/828.atr": "1ef8aa06453187984d1ae01fb8e4c950975dc70aaadf0097c1e9715bd2689f46",
+    "svdb/829.hea": "aa383e8ffa1aa9cec11692bd6d1f3f63cfc0e755c4f705914787a9b152f5a8c6",
+    "svdb/829.atr": "6aaf39db89df797e105a3bb00ee66ecca35398fb0930071b44833b5ecef3b37d",
+    "svdb/840.hea": "7d3feb4bfd0188580bf294569841ba400fa9b373ef9b381a4f6b4cbdf3569b87",
+    "svdb/840.atr": "d55e8e7b5f2b0857c1365747736bac63ce34309edcadbf7cc9681ff598b5eac0",
+    "svdb/841.hea": "5aa835214bb60e6b825edc418293b6a573584b6311bb915853fc01fee2074839",
+    "svdb/841.atr": "ff20381feafa47629f3715c2c1508155156c58af892beacd1cf5575e9b5da0d4",
+    "svdb/842.hea": "9282ca7e32a517d701dd9a30d4d365abf11081a1a95eb0abcc1c1a69eaf50d58",
+    "svdb/842.atr": "d1349f5805563cdf87ba68385124e833d477c379acf0ade47c148d8048f0f853",
+    "svdb/843.hea": "bdbfff536704f23ce3f0cac33f92b130682ae546da8e06ac620d2d3ff582694c",
+    "svdb/843.atr": "f9a20aa50e97044fd826347b87018a302d9b7cf8a0dcf32fff54f185bbcc29f6",
+    "svdb/844.hea": "b1a6377269b129170a5c82bbe784ce345f82d92aeefa0edcce97922cceb9b1e9",
+    "svdb/844.atr": "3a12ed3f3343ce95a6eb432c093cd3a3f248e92fab0c644b87fb47856c30f57b",
+    "svdb/845.hea": "809a4748fc028a354b6239e9928e05c602c9a53abb0bf3a6c3c0d00b9f303743",
+    "svdb/845.atr": "38677dee98576f7bd48444266556ddeea2c572deb926e4209485e563b037eaef",
+    "svdb/846.hea": "346707d9f823660a307737b39a4ef5f0b7f256992728a54d14e9ceef182d561a",
+    "svdb/846.atr": "045c1335c6fea0bc56e64ee60a392cafe7547fa5b13a85187c1ed9717be856a8",
+    "svdb/847.hea": "698c64eac8c1ffbf73e1371fa3d96776e69a4648d5b8e6039e92f79de6d28b9d",
+    "svdb/847.atr": "9406b232dc4e935d1ec5c7af803dc72329e487c41ccf71cce6f131a8508684f8",
+    "svdb/848.hea": "4bd78d91a30854eac223068c24f48e1391c6921b6181302128560fc5694894f2",
+    "svdb/848.atr": "4f1ecc05f786b9a978e1a73b9ca0c34957f6444783ebc3ff15715ea251cddfb6",
+    "svdb/849.hea": "ecfc645275fac26aa182488b10f868c4cf31d22f592b6644ac820c571c2e7b6d",
+    "svdb/849.atr": "7d7797e167a02f14aa41ceaea1f688b9d6a5372620da5a46a797d8033f159f36",
+    "svdb/850.hea": "16df6d5cd586d488db0f2ced1dbc6f7ea37dff53f125ce18f14067d3e91a8028",
+    "svdb/850.atr": "8f38408c91018d83dc343eda8c47b7f363cf49d5ba4a50cd9ea46897d5b0f9da",
+    "svdb/851.hea": "a98cbef1d07422fc1646b28cac94ba00cc34ce6f59b6286874b0f93b785e0719",
+    "svdb/851.atr": "b93e45fd5fb4fe86182a95ed44207ab6d7131e92eb1067ce83ce546de37fe787",
+    "svdb/852.hea": "594e4e5e4387eb2212d7f415dddbc73adb0ade79c07de8431c0c7ed0744fd8a5",
+    "svdb/852.atr": "989b2ff8bf2f48d57f80c5509072e1816db4e9aa9f13cfcef70168874bb05a93",
+    "svdb/853.hea": "7a65aa796d21968ed39a83513ada80dc77c15f9a607f3d2b2ffd8a13ddc2ecf5",
+    "svdb/853.atr": "99d8cf57294a9d3453cbd5fa9d3bd43584af208f66bdaae89115d7124d5e77f5",
+    "svdb/854.hea": "74c0a02375ce1c813b79f86019a906bd2c5306f450f6daf30127d2723de3714e",
+    "svdb/854.atr": "81f271d0a9604f0f00972a6137795530d5a6b2feadd334d325f4f642eaee4d72",
+    "svdb/855.hea": "bca60d63c86397e26616f2fc1a1f8b306c8af58ffdd92e7ecef537914418025a",
+    "svdb/855.atr": "e794a97d62616b4f176133c9956c3928a59ac47436dbf4420320c0fc29e5cb2e",
+    "svdb/856.hea": "a90183bc70f04657b7ad76da893fba01cb673e29a1df4fbce8baafa2a654c8d5",
+    "svdb/856.atr": "d748a6aebe01f5849640392fa24c68c6f7277b44809ee7d3fd03e6f0bf5e274a",
+    "svdb/857.hea": "52e89c08346c253d1925777e4646428600ad0f46fb73399a7aa8277d5dda32a9",
+    "svdb/857.atr": "8aaefb8d7e2b515f15d71b1c9048f9af944908dacfafaa95fb09525bdcb2a3ff",
+    "svdb/858.hea": "192affe1a3a78e37caf6606cfc72b5f71943f7e1ab1ec360cf1f88a04752ff9d",
+    "svdb/858.atr": "b66951af9fce17c632b44ac4301ac62000a6a0b0a88293af04ed553a0d47819e",
+    "svdb/859.hea": "3cb2ee9be29ef94a5d2a8d1767673637333325d995f8a007985a670a2ab26d50",
+    "svdb/859.atr": "6b0ebaeb68f964788fadf57be5e46f2d5e8203c5dc51c48ceb1a8e2c00159107",
+    "svdb/860.hea": "2f31ae80b656d415900a3c785d5d0e897be68353d0a4605e43e49f878aa04d08",
+    "svdb/860.atr": "3de33d129cd2dba8f9d391579d13f66d3a0b64853ac79335ea67df17992d5777",
+    "svdb/861.hea": "8d9f18f2a6703cbfbba1485a811e6a007eed31cc6a8e334e5bd9e126d067deec",
+    "svdb/861.atr": "3748c29ea54cbc080356181c1c80c6bd7df77e70c5805dbe05b252d8e23b5ae0",
+    "svdb/862.hea": "d6ae01b7f27e6610c4652dc02123351f22bbce4e6e21c7fd54632a5d42b066a7",
+    "svdb/862.atr": "7be268e46a444c5f6df01a7449d3849aaeb1bb109ec0862783758b992ff25146",
+    "svdb/863.hea": "1d31f675f80cfb22bec5a9eb6e228d16b922b9b6740188fa1293747dbc2ee3e7",
+    "svdb/863.atr": "8e1cb06f577080650d3dff2e3a656944e46516ae9e93a4b6c666a8031b99ab5f",
+    "svdb/864.hea": "b51c32411eeead7fe81fb1021098e4146eb9a9f2dea2c1927b14f8b986147dd5",
+    "svdb/864.atr": "1ae365fa525e58b23f040f07b3fc3e2a74eea0233c76ff78c15ecbe4844866bc",
+    "svdb/865.hea": "20e0d4332bf35d2cee5c445001895d3e27643c703458175d39ea66f21b920756",
+    "svdb/865.atr": "bc71eef0d9b04c5719b8a0e4b246b4c4fc440ee7c1edd6183d4d87e4dfbe43c9",
+    "svdb/866.hea": "83e649e40b7ac79e3a1b6d9686c545007c61bc6d4b457d76a8422eaf87f3b53d",
+    "svdb/866.atr": "f12bb41836859eb6f44d5b9914805ae4282a7d03a312e6d8e6c40db407739669",
+    "svdb/867.hea": "c673cd7b2d73d9948608814518bc4bd7df1c6bb21434a7b49a182ed7cd03afb0",
+    "svdb/867.atr": "72d54e09a58dcf323d2aadc898c8dcaee87ec169f86fc0d631dcd0fe8044c15a",
+    "svdb/868.hea": "6e8912c7c8746523bedb3675ebfcc0c1a6d87c98898b893f20dfc008458630d1",
+    "svdb/868.atr": "1bd1a3b5ff39e4b39f1fbf3e209203f8686dce98f7333647392f9d727842e373",
+    "svdb/869.hea": "ae29da576a92ba17b7c1f37d282028a6cf48d2eb1bbfaab38b9c129d0ecd28cb",
+    "svdb/869.atr": "4e5c4f84d098e5b282d58c3283416e32700a92a8e359dad3f2ffcf4e6f8441ee",
+    "svdb/870.hea": "d5e45a93bd990bbd40efd349e4e23d7c5e270f7ff2655a082dd57d6760b76ab0",
+    "svdb/870.atr": "b0c773c7bbb31ed7d3b48035acb9efcd685b28f1b8e8f89b3389c5a71f158d6c",
+    "svdb/871.hea": "4e07b4bb7cda9c18e96852978b4aad0209e2ab17ad015ac58ff46746e6ec819a",
+    "svdb/871.atr": "ed91a028b62786326a8a4cbbfad025e5f6a91d6cfd34fbb28b1e25cb50dedfa1",
+    "svdb/872.hea": "b099d26a78049bdcc96342a8c410408c8ef206adea7a73f9efbc1898b0493dc3",
+    "svdb/872.atr": "e2db6962e55e19873d09ac20edd73267caea984781435e9e13839fcd5066267a",
+    "svdb/873.hea": "42cae491f107b7c26051a71d07fdb733ee34933e2ae52fd3d55e6c4cc5fa0014",
+    "svdb/873.atr": "348ae443c2530cc2e996f2609a1d4e9595060945c94b46a9492b1181f0fa09d2",
+    "svdb/874.hea": "060d8d3ff439f0edc2ef33f0a263b245d76a5f0b6663c294e22a0582e80343ab",
+    "svdb/874.atr": "1c3e7f9201d9b9e63ed1de88d94a3933f7ce366df46317e7a27c2463e1e60935",
+    "svdb/875.hea": "af85396f0f24057687e0bd3bed6ed025a1919529a358e75dfc19464b2cd66968",
+    "svdb/875.atr": "3142f80c54858ba67a1bfc4e0567f6c0e0791ba86dc35959beed953890fd9ed6",
+    "svdb/876.hea": "8a04c5fd9669b295f57f472d21391b724318c2b5194c59371d8f79cecaf0fe09",
+    "svdb/876.atr": "59cd516bc0caab08ad47f370c809b8adf4af9ae5322343599e74b7716705bb44",
+    "svdb/877.hea": "0f4ab1bc63ff98f9220aa5a04ddd548f01b7be6e9cac3d8aec62085a5ada3403",
+    "svdb/877.atr": "28ad832231daa542700ad9705272d0bbfbd6588dbae7ec48f3c4943963d87982",
+    "svdb/878.hea": "c3a50753d379535f98eb3219512980f51c0be94012c8861adc2bd8f1b45113c1",
+    "svdb/878.atr": "d53ee523391a9755b314e35d4c115911cea18d418adddc3947fa64ec44514a90",
+    "svdb/879.hea": "73f73cb4cf5baf1ddc4a5771c6f5715f0d7d7eb6965f8c348efdd5cfba40f9d3",
+    "svdb/879.atr": "360b26e15bcc5cf0a7ef3148fe7c6b1d4044e6a98d3d41e351cd0132d15c3dd9",
+    "svdb/880.hea": "429564d6c7e09521c88db567899a2b1032857bcdce4a090ae733a814130645e6",
+    "svdb/880.atr": "d3edeaf7638f89e5a50c75e8a80a33b85083a723dacd41455849c73a2ea9f991",
+    "svdb/881.hea": "baffd0b71f29ecbc7bc77d9ba42a6cf96209d5d60549376e606516e94cf85543",
+    "svdb/881.atr": "9701d9c60969325a73478744dccc9a00ff3da4b33f22123e8985e2c0d5354096",
+    "svdb/882.hea": "38cd4a5ea7bf974f0278c0fe70aa2b265ecf919ecfabc29b7dcfa65ce3a8d71d",
+    "svdb/882.atr": "0e135636384837c2c22113615b9b88ca4bfd1df305062c496bf0f4fa95f4b06c",
+    "svdb/883.hea": "23d189ac3a46d4674cb3dbcf37e6cffc768fa4132ad3ec50931111fad7ec762a",
+    "svdb/883.atr": "0f0d70c68277027765993c2bc0bef77babc138974503e98a6a44012a223e34f2",
+    "svdb/884.hea": "c5a06ab1cc8a307e0592683a7ff9be0e445d89cfe2b93758490ba2a890cc6c80",
+    "svdb/884.atr": "57ddda32e1e7ad2112439903f7c548ae6031d706f51b8583ba8338396d78360e",
+    "svdb/885.hea": "1b7c4e26c5dc63b520b7394f76c0b9fbcece434188547e4100435ec375d84b09",
+    "svdb/885.atr": "b49d1465ce6084609eeae0e0c6b2e51c30854312d290c4eba46fd828ab09d7ac",
+    "svdb/886.hea": "6aca5cbd2b6686d87eee80c576e06acaa8f00d062b06ac9d4f97231b6e574c67",
+    "svdb/886.atr": "76ec376617315cabaf772f42339b27b617ec60ff5d1a81c22831034ca8e928c2",
+    "svdb/887.hea": "4c648269b43cb911758781577f4d067d6af6afe01d2b3db22bb1cfffc561f7fb",
+    "svdb/887.atr": "8234ea4317a8e7838034dc998b86ff3f8923713cfdadd76f9b29680c7435747e",
+    "svdb/888.hea": "32a2568bf8c6f9fbb82fd096d61d6e18fef4da6ec0f88e5c5a5a390f5d1cc208",
+    "svdb/888.atr": "c8f7a3825ff421c1ffeb3d11d341ea2aab90962238e9a48ef9cc03183959f4ce",
+    "svdb/889.hea": "399d8815847e764c0b4b0906b46d21b96fd28ae5827064e62483cb956d3095e6",
+    "svdb/889.atr": "24a08e9492bf9615975c6c9cb6cf91470b20946d14499d7f1d2a6f7fba2d08af",
+    "svdb/890.hea": "a3e6e7b3ea307b41efae7c75cc304dd0daed3f58da0165f9c4ed84f5fa8c1f30",
+    "svdb/890.atr": "9d7d86c3ca25c39cc79e2a9192852168139cebee32475aa5e030e3a8e8e5a229",
+    "svdb/891.hea": "ee615d2c5e402df5bc3c4fe2363656a349de747e6356705e1d058675617dc7e4",
+    "svdb/891.atr": "5856c34ba9139fb1d31fc738eeebe7d411d265f294ca4c0b0d6b6c2795d780f2",
+    "svdb/892.hea": "579a76e6fa83b4149469c9f1242f6653d312154505eebb5e32b3c81a520cabb4",
+    "svdb/892.atr": "1c3691288b2378ea742eb372aacb822f0fbf028bbc2a5d00e3789f4072586af0",
+    "svdb/893.hea": "b3e2766c358ae376f896d336bdcd1cb402048effe05ad2092e6d4ee10349d6ba",
+    "svdb/893.atr": "4019f877e3eee1866514d416aaa756d22fc3e2394a74e7b9bf0ec04d1f840ae2",
+    "svdb/894.hea": "bfb8107741023c54b8eacd6f054cd2a4b9790dbee0c61fdcce4257c7d70a1d45",
+    "svdb/894.atr": "b93b24b9505f9b1b6d8401472d4cb7066e95432195227c0f160ae4cfe3843e5d"
+  },
+  "metadata_only_selection": true,
+  "identity_policy": "INCART official patient IDs grouped across all I files; MIT201/202 alias (only202 included). SVDB patient identities unproven: single conservative group, train-only, never counted as78 subjects. Independent new validation/test exclusively INCART patients; provenance differs from MIT/SVDB, cross-database identity cannot be proved from deidentified records.",
+  "old_data_policy": "All42 old MIT records demoted to known development training in this new version, including old validation/test already inspected; old protocols/results preserved unchanged. New scores not comparable as same benchmark.",
+  "window": {
+    "before_seconds": 0.35555555555555557,
+    "after_seconds": 0.5333333333333333,
+    "target_hz": 144,
+    "output_samples": 128,
+    "std_floor_mv": 0.05,
+    "method": "native crop ceil(fs*before/after); segment-local polyphase resample to144Hz with constant boundary; interpolate onto exact common time grid; mean/std per beat. No whole-record fit. Expert annotations; INCART timing not manually corrected. No fitted time offset."
+  },
+  "train_sampling": {
+    "seed": 2026101706,
+    "per_verified_subject_per_class": [
+      500,
+      1500,
+      1500,
+      1500
+    ],
+    "svdb_per_record_per_class": [
+      200,
+      300,
+      300,
+      300
+    ],
+    "selection": "deterministic hash smallest; train-only cap, never validation/test; SVDB record unit is not a verified subject"
+  },
+  "rr": {
+    "features": [
+      "preRR/past80mean",
+      "preRR/past400mean",
+      "past80mean/past400mean"
+    ],
+    "startup": "past means exclude current; empty past uses current",
+    "clip": [
+      0,
+      4
+    ],
+    "divide": 4,
+    "post_rr": false
+  },
+  "gate": {
+    "macro_f1": 0.85,
+    "minimum_class_f1": 0.7,
+    "recall": [
+      0.95,
+      0.8,
+      0.8,
+      0.7
+    ],
+    "maximum_parameters": 100000,
+    "scope": "Assistant proposed engineering target before v2 runs, not user/competition/clinical requirement. Same gate applies validation and old-test replay. Passing does not establish independent generalization, INT8, or FPGA readiness."
+  },
+  "training": {
+    "max_epochs": 50,
+    "patience": 10,
+    "minimum_epochs": 20,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 2026101706,
+    "cpu_threads": 4,
+    "sampling": "Natural TRAIN random permutation, no balanced sampling; TRAIN-only class-weighted CE",
+    "selection": "Best validation macro-F1; tie lower validation cross entropy. Among candidates choose highest validation macro-F1. Do not load test tensors until all candidate selection is finished.",
+    "augmentation": "Per-candidate augment flag controls train-only time/amplitude/noise perturbation",
+    "determinism": "seed Python/NumPy/torch and deterministic CPU algorithms; fixed thread count; versions/hashes saved"
+  },
+  "candidates": [
+    {
+      "id": "expanded_residual_both16_aug",
+      "family": "residual",
+      "feature": "both",
+      "width": 16,
+      "input_samples": 128,
+      "batch_norm": "none",
+      "weight_power": 0.5,
+      "augment": true
+    },
+    {
+      "id": "expanded_mf_both24_aug",
+      "family": "mf",
+      "feature": "both",
+      "width": 24,
+      "input_samples": 128,
+      "batch_norm": "batch",
+      "weight_power": 0.5,
+      "augment": true
+    }
+  ],
+  "test_policy": "Freeze before waveforms. Train and select all candidates by new validation only; save selection first, then one evaluation of selected model on new test. Once viewed this test becomes known; do not tune on its scores.",
+  "scope": "expert-centered cross-patient external-domain classification; not auto-QRS, INT8, FPGA or clinical validation",
+  "smoke_board_test": "NOT_TESTED",
+  "sources": [
+    "https://physionet.org/content/incartdb/1.0.0/",
+    "https://physionet.org/content/svdb/1.0.0/"
+  ],
+  "data_license": "INCART and SVDB ODC Attribution v1.0; raw data remains tmp; retain source attribution"
+}

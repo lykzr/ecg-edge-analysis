@@ -1,0 +1,24 @@
+112 v4 {'TP': 2538, 'FN': 1, 'FP': 1, 'position_mae_ms': 0.7737938884510989, 'v_recall': None}
+113 v4 {'TP': 1794, 'FN': 1, 'FP': 6, 'position_mae_ms': 1.5684999380651554, 'v_recall': None}
+115 v4 {'TP': 1952, 'FN': 1, 'FP': 0, 'position_mae_ms': 3.3114184881602915, 'v_recall': None}
+116 v4 {'TP': 2394, 'FN': 18, 'FP': 4, 'position_mae_ms': 3.253504130697113, 'v_recall': 0.9908256880733946}
+117 v4 {'TP': 1534, 'FN': 1, 'FP': 0, 'position_mae_ms': 14.52267130233232, 'v_recall': None}
+121 v4 {'TP': 1861, 'FN': 2, 'FP': 0, 'position_mae_ms': 1.9045913188847094, 'v_recall': 1.0}
+122 v4 {'TP': 2475, 'FN': 1, 'FP': 0, 'position_mae_ms': 1.1604938271604939, 'v_recall': None}
+123 v4 {'TP': 1517, 'FN': 1, 'FP': 1, 'position_mae_ms': 3.1623086501135282, 'v_recall': 1.0}
+124 v4 {'TP': 1618, 'FN': 1, 'FP': 1, 'position_mae_ms': 2.0292542233209723, 'v_recall': 1.0}
+205 v4 {'TP': 2652, 'FN': 4, 'FP': 0, 'position_mae_ms': 1.2349170437405732, 'v_recall': 0.9859154929577465}
+209 v4 {'TP': 3004, 'FN': 1, 'FP': 1, 'position_mae_ms': 2.471704394141145, 'v_recall': 1.0}
+210 v4 {'TP': 2635, 'FN': 15, 'FP': 6, 'position_mae_ms': 0.9550917141049968, 'v_recall': 0.9536082474226805}
+212 v4 {'TP': 2747, 'FN': 1, 'FP': 4, 'position_mae_ms': 2.101282206851919, 'v_recall': None}
+214 v4 {'TP': 2258, 'FN': 4, 'FP': 3, 'position_mae_ms': 3.0324279106387166, 'v_recall': 1.0}
+215 v4 {'TP': 3361, 'FN': 2, 'FP': 0, 'position_mae_ms': 2.2918112995470925, 'v_recall': 1.0}
+220 v4 {'TP': 2046, 'FN': 2, 'FP': 0, 'position_mae_ms': 3.4294558488106874, 'v_recall': None}
+222 v4 {'TP': 2471, 'FN': 12, 'FP': 1, 'position_mae_ms': 1.2286973335131974, 'v_recall': None}
+223 v4 {'TP': 2604, 'FN': 1, 'FP': 0, 'position_mae_ms': 4.3000085338795015, 'v_recall': 1.0}
+230 v4 {'TP': 2255, 'FN': 1, 'FP': 5, 'position_mae_ms': 3.1263858093126387, 'v_recall': 1.0}
+231 v4 {'TP': 1570, 'FN': 1, 'FP': 0, 'position_mae_ms': 0.5095541401273885, 'v_recall': 1.0}
+232 v4 {'TP': 1778, 'FN': 2, 'FP': 16, 'position_mae_ms': 3.2949006374203225, 'v_recall': None}
+233 v4 {'TP': 3075, 'FN': 4, 'FP': 1, 'position_mae_ms': 3.996386630532972, 'v_recall': 0.9975932611311673}
+234 v4 {'TP': 2753, 'FN': 0, 'FP': 1, 'position_mae_ms': 0.7194172014368164, 'v_recall': 1.0}
+DONE {'v4': {'TP': 52892, 'FN': 77, 'FP': 51, 'sensitivity': 0.9985463195453945, 'positive_predictivity': 0.9990366998470053, 'F1': 0.9987914495052497, 'position_mae_ms': 2.6199089129210886, 'rr_mae_ms': 1.979571216570364, 'records': 23, 'records_passing': 20, 'v_reference': 2156, 'v_matched': 2143, 'v_recall': 0.9939703153988868}}

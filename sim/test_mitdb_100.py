@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'data'))
-from evaluate_mitdb_100 import annotations, decode212, match_beats
+from ecg_dataset import annotations, decode212, match_beats
 from ecg_input import map_adc, calibrate
 from ecg_reference import Config
 

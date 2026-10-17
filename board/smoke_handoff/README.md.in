@@ -1,0 +1,60 @@
+# ECG smoke 跨电脑运行工程
+
+用于正点原子领航者 V2、Zynq-7020 的 PS→AXI→原检测器→事件 FIFO 自检。不需要 ECG 电极、AFE 或 ADC 输入。包中已有 ELF、bit、XSA、PS 初始化文件、PS 源码及工作区创建脚本；无需拷贝原电脑的工具缓存。接收电脑需自行安装 AMD 工具及下载器驱动，推荐与生成端一致的 Vivado/Vitis 2026.1。
+
+## 连接与串口
+
+1. 完整解压，例如 `D:\ecg_smoke_kit`，不要在压缩包内部运行。创建 Vitis 工作区必须使用无空格英文路径，脚本会先检查。只接一块目标板；核对实物为对应的领航者 V2/7020，核心板/底板修订仍需实物确认。
+2. 断电，把 BOOT_CFG 设为 **1=ON、2=ON（JTAG）**，再连接可靠电源、JTAG、USB_UART，上电。若实物开关标识不同，先核对该版本手册。
+3. 在串口工具选择接收电脑实际 COM 号，**115200、8N1、无流控**，保持串口打开并准备保存日志。COM14 只是原电脑历史端口，不可照搬。
+
+## 方式一：直接运行包内已编译程序
+
+可先在另一个PowerShell窗口被动保存串口输出；替换实际COM号和一个不存在的日志路径：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\board\capture_uart.ps1 -PortName COM3 -LogPath '..\uart_smoke_new.log'
+```
+
+看到`UART_CAPTURE_READY`后再执行JTAG运行命令。采集器固定115200/8N1/无流控、不发送串口命令，拒绝覆盖日志；超时或捕获FAIL会报错并保留文本。COM3仅为示例。`-CheckOnly`只检查路径参数，不打开串口、不创建日志。新增通用参数/防覆盖处理只完成离线检查，未在本会话重新操作板卡。
+
+无需重建 Vitis 工程。在解压目录打开 PowerShell，把下面安装路径换成接收电脑实际路径：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\board\run_smoke.ps1 -VitisBin 'D:\AMDDesignTools\2026.1\Vitis\bin' -CheckOnly
+powershell -NoProfile -ExecutionPolicy Bypass -File .\board\run_smoke.ps1 -VitisBin 'D:\AMDDesignTools\2026.1\Vitis\bin'
+```
+
+第一行只校验包，不连接板卡；第二行会通过 JTAG 复位系统、重新配置 PL、初始化 PS 并运行 ecg_smoke.elf。需要已启动本机 hw_server（可在 Vivado 中 Open Hardware Manager → Open Target → Auto Connect）。默认服务器 localhost:3121；若实际地址不同，使用 `-ServerUrl 'TCP:地址:端口'`。每次重跑执行第二行，不能只复位 CPU 后重复运行旧 PL 状态。
+
+`ExecutionPolicy Bypass` 仅用于本次 PowerShell 进程，不修改系统策略。连接失败先检查供电、下载器驱动、连接及服务器；保留完整报错，不改为烧写 Flash。
+
+## 方式二：在接收电脑创建 Vitis GUI 工程
+
+在完整解压且尚无 workspace 子目录的包中执行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\board\create_workspace.ps1 -VitisBin 'D:\AMDDesignTools\2026.1\Vitis\bin'
+```
+
+脚本用本机 Vitis 从包内 XSA 和 main.c 新建平台、构建应用，完成后写入匹配 bit、PS 初始化及相对路径启动配置。不会连接板卡。创建失败保留日志，重新尝试请解压到另一个新目录，不覆盖已有工作区。构建好的 workspace 依赖创建时本机路径，之后不要再移动它；需要迁移时从原 ZIP 重新生成。
+
+1. 打开 Vitis Unified IDE，欢迎页 **Set Workspace** 选择包内新建的 `workspace`。
+2. 左侧应有 `ecg_platform` 和 `ecg_smoke`；FLOW → Component 选 **ecg_smoke**。
+3. 保持串口打开，点 **Run**，配置选 `ecg_smoke_app_hw_1`。确认 **Reset System** 和 **Program Device** 启用，使用 `ps7_init.tcl`，Cortex-A9 核 0；不要选旧 hello_world。
+4. 每次重跑都重新配置 PL。不同 AMD 版本的 XSA/API 兼容性需要另行确认，不保证直接重建。
+
+## 成功判据及反馈
+
+完整预期关键行见 [expected_uart.txt](expected_uart.txt)。最后必须出现 **`PASS ECG_SMOKE failures=0`**，中间不得有 FAIL。把从 BEGIN 到结尾的完整串口文本、Vitis/JTAG 报错、工具版本和实物板版本一起带回。
+
+仅有 Hello World 表示运行了其他应用；停在 BEGIN 后无 CONFIG，先保存现象，检查 PL 配置、PS 初始化及 AXI 地址/时钟/复位。应用写入的是受控合成输入，不按每秒 360 拍的墙钟节拍发送。
+
+这是 JTAG 临时运行，掉电后不保留；包中没有 BOOT.BIN，也不写 QSPI。测试不验证新候选 QRS、CNN、INT8、真实采集或疾病诊断。当前板上状态以 [manifest.json](manifest.json) 为准，不能把打包/构建成功当成上板通过。
+
+## 文件与许可
+
+- `src/ps/ecg_smoke/main.c`：自检源码；`board/build_ecg_smoke.py`：Vitis 构建入口。
+- `hardware/`：必须成套使用的 bit、XSA 和 ps7_init.tcl；`prebuilt/ecg_smoke.elf`：匹配源码的已编译应用。
+- `manifest.json`：文件大小、SHA256、原始来源和验证边界。
+- 自有脚本/源码适用 [LICENSE](LICENSE)；AMD IP、BSP、生成文件保留其原有权利，参见 [third_party.md](third_party.md)。包内不含 AMD 工具安装包、原厂下载盘或第三方数据集，不将工具生成内容改标 MIT。

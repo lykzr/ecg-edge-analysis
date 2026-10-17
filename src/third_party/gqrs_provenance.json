@@ -1,0 +1,15 @@
+{
+  "package": "wfdb",
+  "version": "4.3.1",
+  "upstream_url": "https://github.com/MIT-LCP/wfdb-python/blob/v4.3.1/wfdb/processing/qrs.py",
+  "upstream_module_sha256": "ea01fb189275a636a39d139d3c3dbe6e21a36d606f84987b7a2f5c5fd035284a",
+  "upstream_method_sha256": "8114999d4f49f83a8e3dd36ddaa0a2a7dbf4d1471af4418debe27352b9d9b08f",
+  "generated_sha256": "de6e6dee4a09920e95a983544f364fb60379e87a611627783864c743677f6223",
+  "changes": [
+    "yield before each sample step",
+    "remove EOF padding and cleanup",
+    "probe mature peaks every configured interval, not only on a new peak",
+    "bound peak queue scan to 64 nodes",
+    "clear unused diagnostic arrays"
+  ]
+}

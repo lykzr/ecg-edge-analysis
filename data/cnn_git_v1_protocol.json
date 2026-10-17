@@ -1,0 +1,1936 @@
+{
+  "version": "cnn_git_verified_v1_20261017",
+  "classes": [
+    "N",
+    "S",
+    "V",
+    "F"
+  ],
+  "label_symbols": {
+    "N": [
+      "N",
+      "L",
+      "R",
+      "j",
+      "e"
+    ],
+    "S": [
+      "a",
+      "J",
+      "A",
+      "S"
+    ],
+    "V": [
+      "V",
+      "E"
+    ],
+    "F": [
+      "F"
+    ]
+  },
+  "development_records": [
+    {
+      "database": "incartdb",
+      "record": "I01",
+      "subject": "incart:1",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2413,
+        "S": 0,
+        "V": 344,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2413,
+        "V": 344
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I02",
+      "subject": "incart:1",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2445,
+        "S": 0,
+        "V": 229,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2445,
+        "V": 229
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I08",
+      "subject": "incart:4",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1777,
+        "S": 2,
+        "V": 351,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1777,
+        "V": 351,
+        "A": 2,
+        "Q": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I09",
+      "subject": "incart:5",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2948,
+        "S": 0,
+        "V": 41,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2948,
+        "V": 41,
+        "n": 8
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I10",
+      "subject": "incart:5",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 3599,
+        "S": 0,
+        "V": 83,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 3599,
+        "V": 83
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I11",
+      "subject": "incart:5",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2078,
+        "S": 0,
+        "V": 4,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2078,
+        "n": 24,
+        "V": 4
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I12",
+      "subject": "incart:6",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2800,
+        "S": 1,
+        "V": 6,
+        "F": 2
+      },
+      "all_symbols": {
+        "N": 2800,
+        "V": 6,
+        "F": 2,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I13",
+      "subject": "incart:6",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1793,
+        "S": 0,
+        "V": 230,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1793,
+        "V": 230
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I14",
+      "subject": "incart:6",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1802,
+        "S": 0,
+        "V": 64,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1802,
+        "V": 64
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I15",
+      "subject": "incart:7",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2632,
+        "S": 0,
+        "V": 3,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2632,
+        "V": 3
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I18",
+      "subject": "incart:9",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2662,
+        "S": 0,
+        "V": 366,
+        "F": 56
+      },
+      "all_symbols": {
+        "N": 2662,
+        "V": 366,
+        "F": 56
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I19",
+      "subject": "incart:9",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1212,
+        "S": 0,
+        "V": 850,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1212,
+        "V": 850,
+        "B": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I23",
+      "subject": "incart:11",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2192,
+        "S": 0,
+        "V": 13,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2192,
+        "V": 13
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I24",
+      "subject": "incart:11",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2565,
+        "S": 0,
+        "V": 6,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2565,
+        "V": 6
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I25",
+      "subject": "incart:12",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1705,
+        "S": 2,
+        "V": 5,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1705,
+        "V": 5,
+        "A": 2
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I26",
+      "subject": "incart:12",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1498,
+        "S": 7,
+        "V": 4,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1498,
+        "V": 4,
+        "A": 5,
+        "S": 2
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I27",
+      "subject": "incart:13",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1885,
+        "S": 0,
+        "V": 720,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1885,
+        "V": 720
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I28",
+      "subject": "incart:13",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1713,
+        "S": 0,
+        "V": 4,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1713,
+        "V": 4
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I29",
+      "subject": "incart:14",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1837,
+        "S": 0,
+        "V": 783,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1837,
+        "V": 783,
+        "Q": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I30",
+      "subject": "incart:14",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1706,
+        "S": 0,
+        "V": 756,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1706,
+        "V": 756
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I31",
+      "subject": "incart:14",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1844,
+        "S": 0,
+        "V": 1365,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1844,
+        "V": 1365,
+        "Q": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I32",
+      "subject": "incart:14",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1562,
+        "S": 0,
+        "V": 57,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1562,
+        "V": 57
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I33",
+      "subject": "incart:15",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1245,
+        "S": 591,
+        "V": 1,
+        "F": 0
+      },
+      "all_symbols": {
+        "A": 591,
+        "N": 1245,
+        "V": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I34",
+      "subject": "incart:15",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1429,
+        "S": 536,
+        "V": 0,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1429,
+        "A": 536
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I35",
+      "subject": "incart:16",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 3200,
+        "S": 0,
+        "V": 458,
+        "F": 18
+      },
+      "all_symbols": {
+        "V": 458,
+        "N": 3200,
+        "F": 18
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I36",
+      "subject": "incart:16",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 3449,
+        "S": 0,
+        "V": 450,
+        "F": 12
+      },
+      "all_symbols": {
+        "N": 3449,
+        "V": 450,
+        "F": 12
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I37",
+      "subject": "incart:16",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2009,
+        "S": 0,
+        "V": 452,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2009,
+        "V": 452
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I40",
+      "subject": "incart:18",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2568,
+        "S": 6,
+        "V": 92,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2568,
+        "A": 6,
+        "V": 92
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I41",
+      "subject": "incart:18",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1624,
+        "S": 5,
+        "V": 1,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1624,
+        "A": 5,
+        "V": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I42",
+      "subject": "incart:19",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1546,
+        "S": 0,
+        "V": 1554,
+        "F": 9
+      },
+      "all_symbols": {
+        "N": 1546,
+        "V": 1554,
+        "F": 9
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I43",
+      "subject": "incart:19",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1087,
+        "S": 0,
+        "V": 1120,
+        "F": 2
+      },
+      "all_symbols": {
+        "N": 1087,
+        "V": 1120,
+        "F": 2
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I44",
+      "subject": "incart:20",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1803,
+        "S": 8,
+        "V": 684,
+        "F": 0
+      },
+      "all_symbols": {
+        "V": 684,
+        "N": 1803,
+        "A": 8
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I45",
+      "subject": "incart:20",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1437,
+        "S": 0,
+        "V": 491,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1437,
+        "V": 491
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I46",
+      "subject": "incart:20",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2232,
+        "S": 1,
+        "V": 422,
+        "F": 3
+      },
+      "all_symbols": {
+        "N": 2232,
+        "V": 422,
+        "F": 3,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I54",
+      "subject": "incart:24",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2340,
+        "S": 1,
+        "V": 22,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2340,
+        "V": 22,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I55",
+      "subject": "incart:24",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2148,
+        "S": 1,
+        "V": 17,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2148,
+        "V": 17,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I56",
+      "subject": "incart:24",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1672,
+        "S": 26,
+        "V": 7,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1672,
+        "V": 7,
+        "A": 26
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I57",
+      "subject": "incart:25",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2842,
+        "S": 3,
+        "V": 21,
+        "F": 3
+      },
+      "all_symbols": {
+        "N": 2842,
+        "V": 21,
+        "F": 3,
+        "Q": 2,
+        "A": 3
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I58",
+      "subject": "incart:25",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2313,
+        "S": 0,
+        "V": 12,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2313,
+        "V": 12
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I59",
+      "subject": "incart:26",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2067,
+        "S": 0,
+        "V": 81,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2026,
+        "j": 41,
+        "V": 81
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I60",
+      "subject": "incart:26",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2475,
+        "S": 0,
+        "V": 0,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2424,
+        "j": 51
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I61",
+      "subject": "incart:26",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1453,
+        "S": 1,
+        "V": 0,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1453,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I62",
+      "subject": "incart:27",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1453,
+        "S": 9,
+        "V": 795,
+        "F": 12
+      },
+      "all_symbols": {
+        "N": 1453,
+        "A": 5,
+        "V": 795,
+        "F": 12,
+        "S": 4
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I63",
+      "subject": "incart:27",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1847,
+        "S": 1,
+        "V": 138,
+        "F": 8
+      },
+      "all_symbols": {
+        "N": 1847,
+        "V": 138,
+        "S": 1,
+        "F": 8
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I64",
+      "subject": "incart:27",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1887,
+        "S": 0,
+        "V": 23,
+        "F": 3
+      },
+      "all_symbols": {
+        "N": 1887,
+        "V": 23,
+        "F": 3
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I68",
+      "subject": "incart:29",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2481,
+        "S": 2,
+        "V": 161,
+        "F": 0
+      },
+      "all_symbols": {
+        "+": 1,
+        "N": 2481,
+        "V": 161,
+        "A": 2
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I69",
+      "subject": "incart:29",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2000,
+        "S": 1,
+        "V": 167,
+        "F": 1
+      },
+      "all_symbols": {
+        "N": 2000,
+        "+": 1,
+        "V": 167,
+        "F": 1,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I03",
+      "subject": "incart:2",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2325,
+        "S": 2,
+        "V": 125,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2325,
+        "V": 125,
+        "A": 2
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I04",
+      "subject": "incart:2",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2270,
+        "S": 16,
+        "V": 121,
+        "F": 17
+      },
+      "all_symbols": {
+        "N": 2270,
+        "F": 17,
+        "A": 16,
+        "V": 121
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I05",
+      "subject": "incart:2",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1520,
+        "S": 0,
+        "V": 247,
+        "F": 9
+      },
+      "all_symbols": {
+        "N": 1520,
+        "V": 247,
+        "F": 9
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I06",
+      "subject": "incart:3",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2436,
+        "S": 48,
+        "V": 9,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2436,
+        "A": 48,
+        "V": 9
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I07",
+      "subject": "incart:3",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2640,
+        "S": 65,
+        "V": 1,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2640,
+        "A": 65,
+        "V": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I38",
+      "subject": "incart:17",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2153,
+        "S": 0,
+        "V": 545,
+        "F": 0
+      },
+      "all_symbols": {
+        "V": 545,
+        "N": 2153,
+        "Q": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I39",
+      "subject": "incart:17",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1462,
+        "S": 0,
+        "V": 313,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1462,
+        "V": 313
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I47",
+      "subject": "incart:21",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1859,
+        "S": 1,
+        "V": 93,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 1859,
+        "V": 93,
+        "A": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I48",
+      "subject": "incart:21",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2119,
+        "S": 2,
+        "V": 235,
+        "F": 1
+      },
+      "all_symbols": {
+        "N": 2119,
+        "V": 235,
+        "F": 1,
+        "A": 2
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I65",
+      "subject": "incart:28",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2273,
+        "S": 5,
+        "V": 382,
+        "F": 4
+      },
+      "all_symbols": {
+        "N": 2273,
+        "V": 382,
+        "A": 2,
+        "F": 4,
+        "S": 3
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I66",
+      "subject": "incart:28",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2139,
+        "S": 1,
+        "V": 200,
+        "F": 0
+      },
+      "all_symbols": {
+        "N": 2139,
+        "V": 200,
+        "S": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I67",
+      "subject": "incart:28",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 2438,
+        "S": 5,
+        "V": 531,
+        "F": 1
+      },
+      "all_symbols": {
+        "N": 2438,
+        "V": 531,
+        "S": 5,
+        "F": 1
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I70",
+      "subject": "incart:30",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1540,
+        "S": 126,
+        "V": 0,
+        "F": 0
+      },
+      "all_symbols": {
+        "+": 1,
+        "N": 1540,
+        "A": 126
+      }
+    },
+    {
+      "database": "incartdb",
+      "record": "I71",
+      "subject": "incart:30",
+      "lead": "II",
+      "fs": 257,
+      "samples": 462600,
+      "counts": {
+        "N": 1635,
+        "S": 35,
+        "V": 0,
+        "F": 0
+      },
+      "all_symbols": {
+        "+": 7,
+        "N": 1627,
+        "A": 35,
+        "R": 8
+      }
+    }
+  ],
+  "folds": [
+    [
+      "incart:9",
+      "incart:21",
+      "incart:26",
+      "incart:6",
+      "incart:29",
+      "incart:11",
+      "incart:24",
+      "incart:30",
+      "incart:14"
+    ],
+    [
+      "incart:28",
+      "incart:15",
+      "incart:1",
+      "incart:25",
+      "incart:5",
+      "incart:16",
+      "incart:19",
+      "incart:13",
+      "incart:12"
+    ],
+    [
+      "incart:17",
+      "incart:18",
+      "incart:20",
+      "incart:7",
+      "incart:4",
+      "incart:3",
+      "incart:27",
+      "incart:2"
+    ]
+  ],
+  "excluded_independent_test_subjects": [
+    "incart:10",
+    "incart:22",
+    "incart:23",
+    "incart:31",
+    "incart:32",
+    "incart:8"
+  ],
+  "fold_design": {
+    "seed": 2026101708,
+    "draws": 20000,
+    "subject_counts": [
+      9,
+      9,
+      8
+    ],
+    "minimum_S_F_subjects_each": 3,
+    "minimum_S_beats_each": 100,
+    "annotation_only_cost": 0.26951638795100985
+  },
+  "window": {
+    "before_seconds": 0.35555555555555557,
+    "after_seconds": 0.5333333333333333,
+    "target_hz": 144,
+    "output_samples": 128,
+    "std_floor_mv": 0.05,
+    "method": "native crop ceil(fs*before/after); segment-local polyphase resample to144Hz with constant boundary; interpolate onto exact common time grid; mean/std per beat. No whole-record fit. Expert annotations; INCART timing not manually corrected. No fitted time offset."
+  },
+  "train_sampling": {
+    "seed": 2026101706,
+    "per_verified_subject_per_class": [
+      500,
+      1500,
+      1500,
+      1500
+    ],
+    "svdb_per_record_per_class": [
+      200,
+      300,
+      300,
+      300
+    ],
+    "selection": "deterministic hash smallest; train-only cap, never validation/test; SVDB record unit is not a verified subject"
+  },
+  "gate": {
+    "macro_f1": 0.85,
+    "minimum_class_f1": 0.7,
+    "recall": [
+      0.95,
+      0.8,
+      0.8,
+      0.7
+    ],
+    "maximum_parameters": 100000,
+    "scope": "Unchanged assistant engineering gate on pooled development OOF and each fold; not clinical or competition standard."
+  },
+  "training": {
+    "seed": 2026101708,
+    "cpu_threads": 4,
+    "batch_size": 256,
+    "max_epochs": 50,
+    "minimum_epochs": 25,
+    "patience": 10,
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "scheduler": "CosineAnnealingLR T_max50 eta_min1e-5",
+    "class_weight_power": 0.5,
+    "selection": "mean of3 fold validation macro-F1; tie lower mean validation CE; no independent test access"
+  },
+  "candidates": [
+    {
+      "id": "residual_verified",
+      "family": "residual",
+      "sources": "verified"
+    }
+  ],
+  "source_policy": "Only verified MIT MLII auxiliary + INCART II development; preserves v8 residual_verified exact model inputs; no SVDB/LTDB, no parent cache, no independent test reader.",
+  "evaluation": "Each fold validation INCART subjects held out from that fit; natural prevalence, no cap. Training caps applied inside each fold only. All26 patients previously used for development, OOF is development cross-validation, not a fresh independent test.",
+  "test_policy": "Do not load or evaluate independent6 patients in this script. Any later final fit/test requires explicit frozen procedure after CV passes; do not treat an individual fold model as full-data final.",
+  "smoke_board_test": "NOT_TESTED",
+  "parent_v8_protocol_sha256": "98341c579d519085f6d0c3048a32b349849754dc97763b272449ba4924722824",
+  "auxiliary_records": [
+    {
+      "database": "mitdb",
+      "record": "100",
+      "subject": "mit:100",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "101",
+      "subject": "mit:101",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "103",
+      "subject": "mit:103",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "105",
+      "subject": "mit:105",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "106",
+      "subject": "mit:106",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "108",
+      "subject": "mit:108",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "109",
+      "subject": "mit:109",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "111",
+      "subject": "mit:111",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "112",
+      "subject": "mit:112",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "113",
+      "subject": "mit:113",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "114",
+      "subject": "mit:114",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "115",
+      "subject": "mit:115",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "116",
+      "subject": "mit:116",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "117",
+      "subject": "mit:117",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "118",
+      "subject": "mit:118",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "119",
+      "subject": "mit:119",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "121",
+      "subject": "mit:121",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "122",
+      "subject": "mit:122",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "123",
+      "subject": "mit:123",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "124",
+      "subject": "mit:124",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "200",
+      "subject": "mit:200",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "202",
+      "subject": "mit:subject_201_202",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "203",
+      "subject": "mit:203",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "205",
+      "subject": "mit:205",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "208",
+      "subject": "mit:208",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "209",
+      "subject": "mit:209",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "210",
+      "subject": "mit:210",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "212",
+      "subject": "mit:212",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "213",
+      "subject": "mit:213",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "214",
+      "subject": "mit:214",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "215",
+      "subject": "mit:215",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "219",
+      "subject": "mit:219",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "220",
+      "subject": "mit:220",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "221",
+      "subject": "mit:221",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "222",
+      "subject": "mit:222",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "223",
+      "subject": "mit:223",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "228",
+      "subject": "mit:228",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "230",
+      "subject": "mit:230",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "231",
+      "subject": "mit:231",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "232",
+      "subject": "mit:232",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "233",
+      "subject": "mit:233",
+      "lead": "MLII",
+      "fs": 360
+    },
+    {
+      "database": "mitdb",
+      "record": "234",
+      "subject": "mit:234",
+      "lead": "MLII",
+      "fs": 360
+    }
+  ],
+  "raw_sha256": {
+    "incartdb/I01.dat": "101f884d41f9e28a381bcfb90f706da907d34383ce7d799cbb13ff985757f061",
+    "incartdb/I01.hea": "734b7a5416377b45b0a947f7a44a9e151b9591b9c933aa48b5e427a18361718e",
+    "incartdb/I01.atr": "950fda1d165ca1670d847e2dfa893da75590785c1a6d277653cb909e75e31950",
+    "incartdb/I02.dat": "63415c543f8641cdc03a92af09a2e041a8eac0056595f1448e926cc749e99471",
+    "incartdb/I02.hea": "59f3c58ec5af13a3500c726cd7fbb25e63d1558d6a03b0d05e2faa4a58e7090a",
+    "incartdb/I02.atr": "041f9b25f92ebce30a5ae2826c37c2b3d43eda5980583dcf62a6fbcb1e3166e7",
+    "incartdb/I08.dat": "fc046a96e339e9f5cc6d96325a042fee9d9e69424c71a50d506dafa755fc8ffb",
+    "incartdb/I08.hea": "894685a526257fc568ca0703d5dbbf48627e058dc1de1afb24293184ab4810e5",
+    "incartdb/I08.atr": "7caba653d33e45628bf106a12d682edf8529ec1252489a9d9050054599998fae",
+    "incartdb/I09.dat": "42f035b369d56798a5eadec6b9739b6ef71d8850b0dda77c432e8c75ef30856a",
+    "incartdb/I09.hea": "6d7d49b06ca1dc47e7a643b53066bbc05c7d187ca490b01234c4a79917210423",
+    "incartdb/I09.atr": "428895f5f28a042bd8f19bbf80dbfd7c4401c4d59606c52ec36bb547473b884a",
+    "incartdb/I10.dat": "a4d70bae40833850ae7699f7ed71c922aee8dec702a402cfee1057fdab2be32c",
+    "incartdb/I10.hea": "1b39c97d3f4e4a2669d5e9caf40b1d72f2e9833069023d03d8dc7d98f8f92f87",
+    "incartdb/I10.atr": "c58b7e57a82bca0389cd7ba07103beb8a2c2c9a59786227e7232c133cd954cd0",
+    "incartdb/I11.dat": "77376f50a7339c8877edc112fada4df45d97f846fa8990739cd2020e543db178",
+    "incartdb/I11.hea": "6f9e22584061a0728d7dcaeb8d907f6736cab58d1e047d74144739193048ae9c",
+    "incartdb/I11.atr": "4a5148a975972f0808ad80c17dbe145074f7bed8112aa83d4f757d66fd012f5f",
+    "incartdb/I12.dat": "8e5f1946364b01a6308e3dfca5839795f274a152285266be0e0228cbfdcea765",
+    "incartdb/I12.hea": "1439ee5e899748b882997c157f4f8a597d1987250b1b55b8f48360e426b211d1",
+    "incartdb/I12.atr": "dc7ecebae64e5a205501e51ad6ee8457cef7cdf5d2892f789a700f337fc12322",
+    "incartdb/I13.dat": "e00ebdd32ddf660e0785d09b7e9bf713adc5f6e9a906e795e38fec8c5d771f7d",
+    "incartdb/I13.hea": "10cd2d58b1693266a3a3efa077fed1389201e666d8345e3d23c8e1b0232c461d",
+    "incartdb/I13.atr": "710cdd70ec1765b8a10f82a584bd48ac3ca0bee88bdc527a547042c136c970a8",
+    "incartdb/I14.dat": "e82b3ec1c770359ee6f1c5b34f0ccedd28b4741feba0375f29c841e9bc885510",
+    "incartdb/I14.hea": "e3b1e932207f0dee874bdf95209a17197e62b4d7be38fc19b319db48324102a0",
+    "incartdb/I14.atr": "90801c0ef87fa543862feef531c1664cd617fd124bce2f5c997f621cd65f4ae5",
+    "incartdb/I15.dat": "9c1f62447f60d3a052968ff01ac55809fce894b26e10ce9ce6c46325fb13cf5e",
+    "incartdb/I15.hea": "f690411552810ffb4bdc3e8459cfd85132bd72e6c0c770691f0a76696e4bae25",
+    "incartdb/I15.atr": "cbcdda2d1bf92ec844dc858c21b2cefaa6deccf6875bac175bbb772849a38e15",
+    "incartdb/I18.dat": "e4954b2d19803cdec22a66652c89560f2efb9d0bb853f4a1a949fb4fbefd615a",
+    "incartdb/I18.hea": "baa4f1d600383f9b2db09c246634440ab708b7c7246125c6381cbc7e7b15bd4a",
+    "incartdb/I18.atr": "426938eadd7a71d3ce8445714e82682251a8cde74a93302c084a0f2ad6b86018",
+    "incartdb/I19.dat": "906c896a1fde495b0a5278cdc5f445686da54e2e7e75addaf8c120453de7eea5",
+    "incartdb/I19.hea": "8ae33fd482c36859c86f98a71e59067ec70abd943a1958ffbe5a4920bcc0e262",
+    "incartdb/I19.atr": "f6ac027fa3bcaf10978f144cd6bffc91c13990b12dba6a7bf0c5cef3648c84ae",
+    "incartdb/I23.dat": "0f88f840a1d6e936504e2539dad9442831140226c12a6cf6ec6dbc1896164755",
+    "incartdb/I23.hea": "ca99b703a0dc038cfe1673d025dc5a5e22812dd63c6a641095fd23881ce35d3a",
+    "incartdb/I23.atr": "2eb49326a65e82861edeca207e2f537823a6bc2a60e3ffefd3446e3d7777a2d7",
+    "incartdb/I24.dat": "72bc571c9f5ae3cc57f2e2aea08893bed0661385b0a63a7922340c7b06c5b724",
+    "incartdb/I24.hea": "100bfa20b3c8648ca1c6dcf0b663d7e30d03e1683f437cd09fcd766dd30921a0",
+    "incartdb/I24.atr": "1199b73bb8bf74075774ddb8ce5306f5249544ce1ace1a8acae71291aafa7b49",
+    "incartdb/I25.dat": "eefd598588344b898ed68c8d4f4088ca420f127a913fd18ffa136e0b4b948479",
+    "incartdb/I25.hea": "2e424334f671f630cff05119f978ca38e46511cdb58e1a215e1548e887f5ec5a",
+    "incartdb/I25.atr": "48674bafbb7bd4261b34c33b80733c54cbd9873ec06afa679554875df76bc471",
+    "incartdb/I26.dat": "44a2af1fb4687ea342899005b7a0d50b5c3ed83e082ebe909cff04c92610dc2e",
+    "incartdb/I26.hea": "bb582fc7f10d8a3b8e118becdd2652da588f8ae72e0efe2111182d81f80b3532",
+    "incartdb/I26.atr": "30dbba8349c32ec0a9f604877d1f7d584fa539af96679dadfa4ab846f989080b",
+    "incartdb/I27.dat": "7a1e5ae242289ba3e8f91a07d08087f7f51b30debdb68d0094bec3f5c7460638",
+    "incartdb/I27.hea": "14fd4c86c98a83cb2e178ff10a74cae3845f457bc57e6f4ba0fb6df045717cd8",
+    "incartdb/I27.atr": "b4756835b108aed3cb7bc82ff4fee3a18e38dc5b3f40693867256a5edc09e824",
+    "incartdb/I28.dat": "a3e24f518db68dd81bc786e252b9d12f16137658c26944a2cb0334c243358b58",
+    "incartdb/I28.hea": "0e879a4cea2eef171fa8f2eb1295c5bbc20ef7f66e9aafad3495992590f83f42",
+    "incartdb/I28.atr": "ba9515fc96606b68621f77eef7f43f8b3f76ecd73c6d18b2083a65c4ae2b28da",
+    "incartdb/I29.dat": "646d086efaa3e860e4d63af0342fcf987d2a1434d9e1ddc00c3653ccbfc8a170",
+    "incartdb/I29.hea": "063a013dda4f6deec2564db13806cf69fa731495831bb0b196b64ed633fe8c67",
+    "incartdb/I29.atr": "5f64a171e4a91ba9f6bcefd85ffff20653e453419541092e660b95fb49a887e8",
+    "incartdb/I30.dat": "1f3e4e5c97139e37eef7f6d8ea49515faadd20f938bddd322ed3a291366a243d",
+    "incartdb/I30.hea": "f86520c03d1a8f16e49353462eff3009ecfa011e772ab022454c463d34a81d04",
+    "incartdb/I30.atr": "60388954bbf5ba1faa98c17d1d2297af829a12620c50caa9de93d4650eb7b100",
+    "incartdb/I31.dat": "295c733e9840e0daac2e99591eac2766664574b53a76b6c03eb18a77b0a4bad3",
+    "incartdb/I31.hea": "208e2b77b52d193e0594b5293e48125f8253571fec3e9ea0e374f61be79c326e",
+    "incartdb/I31.atr": "7d021db6bc55e2a48bd4e86eee708b3135f850013914e605f3489c94c67ec01d",
+    "incartdb/I32.dat": "cca607402a5dcf6aa08349903cf523fdadf79b76448aef6d6499a8fde97d60c2",
+    "incartdb/I32.hea": "b593166c2d79e3dcc04a9f261dc670c2b5538e39d1502c68fd396247c307adc2",
+    "incartdb/I32.atr": "a70c2229e10cab3de2842a2513c2d8d050a42bcddf2e07f8310dde9d48d246a1",
+    "incartdb/I33.dat": "6c2a29a87cedf9d4d2ca36defb1bde846f3b305c42790f61201814d9e3760b9b",
+    "incartdb/I33.hea": "8cd4c60954e67fc98e1f287f31459200cb2fc37e4afb4f8f2ea5209726d0860f",
+    "incartdb/I33.atr": "57ac0345ebdbfb0f84ad92115ae8fbac87ad6c92fbf38051ca268ea9ae259a8a",
+    "incartdb/I34.dat": "1f369a29e6af6ce2f94e653b281829f9cebb783024d8f90b7750ba0b7981d113",
+    "incartdb/I34.hea": "24b84f1aef4ebf75a4aebdc8ce8cbb551c70f69ed9d8f4ff0d61df38836de6ee",
+    "incartdb/I34.atr": "32a2694acc115e3bc0af05257bcb639133fe48fab718823fe17cc2669c66b6fa",
+    "incartdb/I35.dat": "b3d93152884827bb52cd6a94bffbc9b6186c7cc438be8e2d2fdb1a61c6e8762a",
+    "incartdb/I35.hea": "1a95f57d4c6dc634d581d6bf4c526b829860294f0d3dce40492991918fdd14ce",
+    "incartdb/I35.atr": "656f2a3169eacda183f392de2457e346b027c21aa43468be727d5c43622a4491",
+    "incartdb/I36.dat": "aac3c31eb9838583ecc08390b32535c194a4d4ff1ecce9b7f780e664b7f3534e",
+    "incartdb/I36.hea": "a03d5466bf356ff398bf7aeea86c27afd7708a05344e13a525c7a74407ad60a1",
+    "incartdb/I36.atr": "a500fd25ea896a082e6facae0ede7f7ff4409ad0f8d0317479059d021ce23084",
+    "incartdb/I37.dat": "01b72af56ec13bd71910f1d7423fab64bde86a74fafae582df49e67dd421665a",
+    "incartdb/I37.hea": "5e762514d6cacc872910ded17c41554bb1fd7ac6668b2c05c3e6607951b67811",
+    "incartdb/I37.atr": "803d32ad080bb4a577353783139552647ec4092759b9070ec80afd3e706e4b7e",
+    "incartdb/I40.dat": "416fd47b77a2d6709d94c3dcdd9a1ea9eda5611a6c4ffd8b57ba81b8a49fc55f",
+    "incartdb/I40.hea": "57ca4322cdd1521b82d5035d2f944280614fbd72c5c362a3837588fc2d417816",
+    "incartdb/I40.atr": "7b119c78be7a7378e4f331db6586a5a7514c9200dc7453307932bb0932753420",
+    "incartdb/I41.dat": "2c7ae73cae4db67365c1928c30b42f9ed8343d7d017f287b0ceb379de69cb895",
+    "incartdb/I41.hea": "44145265c023f8df2a8d06bdcacdee93f722e8b8b90fcba600fb348915c43337",
+    "incartdb/I41.atr": "49a17526ece6ff808ec9a3cbd8996c9176b78b4c33c0e740bde4a525253547eb",
+    "incartdb/I42.dat": "1ed5c6039a2bbb6dd6932a6c45e05ecad2fedb054a479d2a0f444a9134429ede",
+    "incartdb/I42.hea": "eb72e7ae6e2275f53f2b5e38c62374b8ab1a288e6e1758b40db5c26ac23d02bc",
+    "incartdb/I42.atr": "7421ccbac2269f57a768633ee301929d48ed8eade5336d080c0f3aba376f9109",
+    "incartdb/I43.dat": "55ccacb5cb8c8d2ec3afeeeb65e115ed31b59182e70a6bb0d1eca86b0d180a4b",
+    "incartdb/I43.hea": "2577cb1632c04c91aa7045ae5d89311b6a52961a23bcac898cae261efe781a51",
+    "incartdb/I43.atr": "e090ea810a34f83b53ac92535c02bb2b843e79b1928fdc427b6544715aea4045",
+    "incartdb/I44.dat": "af5cd2747bce6ed243018631ca73c8ca1e6d4b1b76161d695bf0791c1bd4face",
+    "incartdb/I44.hea": "01661ec6ebf0ca183bf9eca0a5248aa7441deff72c22a714344560f1191c2e3f",
+    "incartdb/I44.atr": "d21f96ae3557ae3a440cd6285da1c0d28a8fee3971c3b70d357a47e1cc4e4755",
+    "incartdb/I45.dat": "7e301e3efc8c8231ef2f31b8e1708adcd7cc0e6a548089fcd96291ef8e905b68",
+    "incartdb/I45.hea": "8d5b3763f9e1e9272a8ddd1e643f4ecf1f45736331429480554e5fe9e9fa7562",
+    "incartdb/I45.atr": "e025b037cdba62e078472af72f579f60354f78eaaa8700fd042d8c0812a96bd2",
+    "incartdb/I46.dat": "1933369b0f2198d462715dfaf73dee6696cd7cf18470835df269739a985b235a",
+    "incartdb/I46.hea": "74c3e2e0d6a86039f02b3bdaeee97360801d0c0923ac58ccf98d72b3bb20dbb0",
+    "incartdb/I46.atr": "909dcb96cbb5838ec1ebee54b63e9a7ba782e75c3322ddc274367e8c8f5ebe1e",
+    "incartdb/I54.dat": "143683d40c79962bdfc88e37684cb73755911770018d435b1640c8d1710a2c5b",
+    "incartdb/I54.hea": "8f1349fb7903051cc3579288b46d42306cfe314986258eae8668eeae7d807e6e",
+    "incartdb/I54.atr": "bd511bb51f17053b5997079159a41f09f54bc18cbce94837366ac9c899708fdf",
+    "incartdb/I55.dat": "85e37cc7fe8e13814f8ed78aec7448923fd3f2de772ebb32543d3748631c7b4e",
+    "incartdb/I55.hea": "680499bc4d630e8f0a0576c4608a5602c25c5a166c552a065402f7257061514c",
+    "incartdb/I55.atr": "38801400117eb4a4031ee9b7355ae3d7a8e9ed1c355e2831a183c49841f022db",
+    "incartdb/I56.dat": "423422e4928fdf457dc18b4734866d698a20d2a3f849856232b9f8296a54f11b",
+    "incartdb/I56.hea": "b4e772a4280d5bcc0c32e104aea3378ee15ca9c788e335fe0787493c248cbf03",
+    "incartdb/I56.atr": "8d68a83efd40bf1caf0853b2a3c88dfaeff6ce7ddbf55129ecbdcf14e89b5b9a",
+    "incartdb/I57.dat": "8ddb3aae6a134ab4767662d54f7613ee2548e8106da0af745af060ca5a46c31e",
+    "incartdb/I57.hea": "faba1ae6e77a084702caccd6970c7b53956ae2543b310b98629b32f99acba977",
+    "incartdb/I57.atr": "8affa6b05cdb83d715548e7db28b4b956b61b1233ff645bce048b7f09a3d05d5",
+    "incartdb/I58.dat": "1f7c8f08b0f8fe3d3ef84d91c0f268bc44705fc83ab3e59c9fcf1b3fdc12a8e1",
+    "incartdb/I58.hea": "aa57d169bcbf4019ad30ad76f68b948fb6533d51294545ed7e09e86119076205",
+    "incartdb/I58.atr": "901a13894c60bdd65adb586022f9957164f45afb43a6eacd572dbea4eaacdd7f",
+    "incartdb/I59.dat": "ce7a536b36f01a1d2917637391f9ddcbc3e2619930e1ce62a52ccc4f163326d8",
+    "incartdb/I59.hea": "486d6f10d7f435062e33e7f4d1ed88a5f6781a68fcee8e06e501ff162d6f2277",
+    "incartdb/I59.atr": "4d67492637fd83b0e962ebd2192032637abf0b43bbd1da50b7d3fac05c160bc4",
+    "incartdb/I60.dat": "7b06dea7fc6e37477daf4afe410cfffb61283479241c2ed423ecb0190b69aac8",
+    "incartdb/I60.hea": "28176f894492ee0eac6956347ad9cbdadc014f41328a5872c36ffe19cdda6361",
+    "incartdb/I60.atr": "6b39f4c8fc416db6b705885ae1037fdfbaa9da61b5b1f328a9552778064bf0b2",
+    "incartdb/I61.dat": "47cf7af05bf8dddf01aa92e78ff978e3d926f297cc3ac39171ccda7e73074ecc",
+    "incartdb/I61.hea": "ef951a77fb8bcb113f0ed5b35acb3118f400d3a334893281e07afd567fafacce",
+    "incartdb/I61.atr": "848b0ddff236cad933fa035476c8a165e471827541f7fc918fa7996a4757706c",
+    "incartdb/I62.dat": "b3d0790bb60d51375a80ef8ee3ba86367d1cfcbebbbf5e91babc64c1fe404439",
+    "incartdb/I62.hea": "a118e3714a5bf37323d16b5260065e1fde5f476c0caabf3ea1a00b1c014d0846",
+    "incartdb/I62.atr": "debe783045c47fa9c530c9b9adfe82e23a404c8336eac8fc1142483d506526cd",
+    "incartdb/I63.dat": "477f38d37b0265b0e0d574a6ce22ff751099dd930b61be6b9e9b76554859bf93",
+    "incartdb/I63.hea": "8aebbf7b977b7801d0d53814c1ce41bf0dc98ae44429a20ee828eb33117cb3c5",
+    "incartdb/I63.atr": "e93231920456d308c78f07886e3380c582811e28a583907add2249a86b77b188",
+    "incartdb/I64.dat": "63d1bc9f58c4412aaa097aa5a1e20ee18ebcc8e25b431b04ef2cdb553c46312e",
+    "incartdb/I64.hea": "496cbc81c976908113be178dd6c0b28c725a1697b439a06e66a8a4f3eee21572",
+    "incartdb/I64.atr": "d2595631d0a5aba842c997b226e64892e22b5cc091d1627f47e748ad7407e5f9",
+    "incartdb/I68.dat": "485c6c2f3b8e591067adcc7b7ee7469a5e91f077667e5927f74fcfd80c1f4e49",
+    "incartdb/I68.hea": "87cb6d533ee73f19b180f0a1c009e5c08244de0d2e88c107bf3644bb7b705958",
+    "incartdb/I68.atr": "fe70a194595de76bb139d32cc8949947bdb3c03382569573a3d3f41bc97ff0df",
+    "incartdb/I69.dat": "61ed97b5f47ff88b5c59cb199da8308c66b7d3231a67dc046ecfc21af7532980",
+    "incartdb/I69.hea": "0b0c621e97275f71cf79619e6edeb0a64a77beee31bcc37e10989af6cd59bcd1",
+    "incartdb/I69.atr": "5eace4b371a3fd1e9b86d96b175bd577804fcf3a248724e86276013231cce490",
+    "incartdb/I03.dat": "5d40077d3f11fa6029b7b0d889997f7ed8ff953d668ac3b1d799cd383c2120f8",
+    "incartdb/I03.hea": "1cb52b21056590e3ebb4e89882da4011065ac2b9493520f799109f13ef8c2c70",
+    "incartdb/I03.atr": "8c242de60d1b7c6b8297a9b06bd0758fbeff3a35b23e0be34c33918489c92967",
+    "incartdb/I04.dat": "caa43ababdc17f7a6e758b7dcc1b2140c11f9257d3d67a686b03bb5c96a3159b",
+    "incartdb/I04.hea": "dda6d1bbbacf86b69c8a7c62d650a95dcd90eaee4b118570edfc7760418c4cc1",
+    "incartdb/I04.atr": "229c7d199311531998d385be034696c21e4594efc93356791aa61f2f244ca1c2",
+    "incartdb/I05.dat": "e2fd0d9d723e940b371fdee4a7936c45be6b64a67e036b6f88c1c1f6ad3b7df3",
+    "incartdb/I05.hea": "1c25305ce083841b85136f1682d60381880c4109c5316066ae5c8f35e40162c2",
+    "incartdb/I05.atr": "90283f40ccf0c5c921bba8dd699dc943d57bbeaa1bcee003aab3abca450fb14b",
+    "incartdb/I06.dat": "e25c67410e6e376b523e961f191b0fb2f82c90f489aae39d475f36ac41d3a643",
+    "incartdb/I06.hea": "d493d80dc80fb8fb85b1cbc6865182e5628ee774891607e2d1ad44d11bd6e03c",
+    "incartdb/I06.atr": "369c9ae509f88fdd373bdcfdccbfcf1c2873e5b4f704c0937d0c04e193f6d287",
+    "incartdb/I07.dat": "8f3d49d724f9586e771604e657dabaebbb7b4e1c8e5183473da20e1205ce266b",
+    "incartdb/I07.hea": "36d46773eb9d49d189bdfcaa79c7c738956732619f056a6521c772c7af3ff877",
+    "incartdb/I07.atr": "db03e7678ae850d9e3850de6cbd91dcf510a4bb5266d092af0b19c0b9ba5b01d",
+    "incartdb/I38.dat": "bce6876878630a90430315a6aa0592e32a894613565ca8ea56f8f8e5ea983a07",
+    "incartdb/I38.hea": "926e126f5f224071112ea02b14bbf079c091d13a99a37b5f434d224d60fca979",
+    "incartdb/I38.atr": "afbb56e8c782b28e574caf425d30a24491a5982c175e4ad5f4205c59d216deeb",
+    "incartdb/I39.dat": "c8eaf04e4766036b16e616850c8ef8086f25eaada3034d6262b9ce283bbc995a",
+    "incartdb/I39.hea": "56a03543d3ada9158d7ef84f58dd6bae2395175898436c07be30251ca979e078",
+    "incartdb/I39.atr": "17d94c5450895bad8ee2be46d7b7066185c17c83a64addc7fc45b0c67eb849a1",
+    "incartdb/I47.dat": "518c638194d299edf0ecf42e71b6156b0cca5161f16e6d266b0a4f1c847c7128",
+    "incartdb/I47.hea": "485a6fea03694c261b89f98235603da3b806b50a2899780a4d849d925d9348d4",
+    "incartdb/I47.atr": "7f77c8c9524843f6994289bfce280a4348fd594c199b253af62ae551187c7992",
+    "incartdb/I48.dat": "1f7c58f2d570852f0f4a57535e7ffd5e2be5381786d6e905d49fcaceb175c59c",
+    "incartdb/I48.hea": "ab13f35c1cd6a65af0e6d80c57ed7d0f3a37271b66634369a186213891e44b8e",
+    "incartdb/I48.atr": "5cc53bbdc5df7ea60d41e32a13d2190d096622f10464b90b78d673cdf42b59a9",
+    "incartdb/I65.dat": "5c34230a97bb1c592d452ccd1ba94423207918bb60159f2ce94499d6ae1d7473",
+    "incartdb/I65.hea": "10cb9da38ad8d30e89d8fc3361de26e36d8cc290baba8dbaa504001c88393c62",
+    "incartdb/I65.atr": "e9804855419564f6027a9b2b2c976b3c22ec440ba93de25042048fc2ebf5695e",
+    "incartdb/I66.dat": "1fcd9f2a38599b9ef22588528417ff93b64c5454cae71e4b9d593e73bab93f3c",
+    "incartdb/I66.hea": "b4e46f545be038a6ede66c86239cc8665962156a8b87dae5dde23a7571dfd399",
+    "incartdb/I66.atr": "b1445b26be3a8accba9db73a5b01161296f530e54e80ed46783d09f03b9670d4",
+    "incartdb/I67.dat": "3b51970f6d42626db067ce891bc3c3f7588963ea8c0dafecf01a1582b1ae5b0f",
+    "incartdb/I67.hea": "7d212d3b55a8b833ec14d96124af64e5274a9d3256cd85e04811240aed8d3839",
+    "incartdb/I67.atr": "d2ee49f20f6e77dc40d3ddde8090931a1df55d7e254d950364572a0752fb12c3",
+    "incartdb/I70.dat": "c2d9a9d490853f8f667ddcde89f69924c076d60fa4a14ccb7ef827ddc4863551",
+    "incartdb/I70.hea": "b477c34f1f43856077bf831984b88d11e7f153657587b07810d0abd238f20087",
+    "incartdb/I70.atr": "db5e4e729d2c750bd04ef4ec1ad0e8d0732d16269d2c7dad8783316fba6aeabc",
+    "incartdb/I71.dat": "ce4aa8526756d62985ad7bcdc87e6ef02d954b7403d6ac43d438bc719f0e8d35",
+    "incartdb/I71.hea": "de9fa9c7a2425481f53f3e10dff494e943dd16804c1d19ff2795f1adaa4cbd5a",
+    "incartdb/I71.atr": "bd5f2817f15c9f1641535905938706a34666ecc711ffca4b777a8e9793437f76",
+    "mitdb/100.dat": "b2ea3c250e56e48f4b7b90697832b8ecd1afa1e0bb31f2dcfea4ed6e1075a639",
+    "mitdb/100.hea": "60ebc904c7bf3e04d142638d3fd5c903e8dc9f10f1ea3264e07926aa089ee75e",
+    "mitdb/100.atr": "8d8a5349fb16638ebbf649f1779d12e96d91b736b2aafe59db43719ae583d471",
+    "mitdb/101.dat": "698d1ea6f472d23ca50317c72c96cda2698badd8578220ed0380cdf241e39006",
+    "mitdb/101.hea": "d5f02fbe8673fa05465442191b98ca0d28a1670e7ef0e83fb9ef8723113a311c",
+    "mitdb/101.atr": "441cdd6486cfdf4c53e344d1048ab81296773e7058d53069022adc68543a0663",
+    "mitdb/103.dat": "f7994f0bd196730779998b4bddf26cb47f396599fb370a08b5cb29a3ac4d555d",
+    "mitdb/103.hea": "3da9706fc27cc5d627a31b04b74b908ac0b6e061843a87cbd57801e5ea0fed7b",
+    "mitdb/103.atr": "392ce37fbc7e89b3f14998e197a844f23cce6a3db6edaa71b4b49bf3ca5b6596",
+    "mitdb/105.dat": "fcd0153dfea69c749194bb73de7db124588857cfa2f6aecb72754894c8afde02",
+    "mitdb/105.hea": "9a024eebf8e9baf630308815e689d7e3eab471ab0069db6aded127c396418d48",
+    "mitdb/105.atr": "278d534c1ad952a6d41db963b6b2b00be070d8dd5fa66545caa5c18edcc36497",
+    "mitdb/106.dat": "c017bc18b95b1f970bca143a044ee5d54168648b541e47aa656f2737a59c1202",
+    "mitdb/106.hea": "ad5ed3ee5603926a07a09f0d0c9e2a7ff10a705dbafcde3d185317730a8839ab",
+    "mitdb/106.atr": "585347e6d1bd3ad89cdb52cb80945878a5e51026d81f871a376bb6e13936f7fa",
+    "mitdb/108.dat": "229a4ef62679dc5c6ea781bfbaec2bd784151fc9f9517f4cdecd533a9431eb20",
+    "mitdb/108.hea": "1c461d963db1883589a975daa80b4104eee6cabb2f5cfec3e0d63b78e7a6a405",
+    "mitdb/108.atr": "ea227008ac3bc4ada87807117909e77ae0643d5a8bc09f32b9096a35f140cbf3",
+    "mitdb/109.dat": "267afd6ced7a1fd5a8bcd21fcc2b83287e37e3ef57f32e8a0fe39a6e021951cd",
+    "mitdb/109.hea": "3b21402a9a096acb6a2199b25681e40b0dd201494cb023ded514cd9726bb7fad",
+    "mitdb/109.atr": "2eef456587bab17263a126063321c040affa29bc4ccfdf2a2bc7fe50709fa1b8",
+    "mitdb/111.dat": "8372d98ae59fbfd023502a9d0fc03fb5383083da92584b964484e18593e08485",
+    "mitdb/111.hea": "9e635a715d6cc44a716a7a73c6dd365bd94099f94e63accb2a65c5b25b4b69b5",
+    "mitdb/111.atr": "372ed78bb0bbe7d5d9dc7e676c03d72530729775b5cfa94501485329fc47b8cb",
+    "mitdb/112.dat": "3c7af9758687314255b5d946a58d9509d53ecf2a300230684fa8ecf00b774bdb",
+    "mitdb/112.hea": "a78dc4b0907b3db806395cff76b3a2e9a70e889b9dc3702c7de55aa8b41abd7d",
+    "mitdb/112.atr": "69cf7ee24d65a5430162ae9b6452be9d4855c2af47f91976b7f02038ea115002",
+    "mitdb/113.dat": "f5509b71dabaaa11c53f687ee17aab0071bce3d471e2ab77c71a6434f5b7aacf",
+    "mitdb/113.hea": "848ed5243adaf3b53c72b36b1a5a8b5b8cf585a1d78a02e7b25c1d38818d4343",
+    "mitdb/113.atr": "39527d597a246410d2c16f062600c73271a73a7503d49cafd1d17508af4cd432",
+    "mitdb/114.dat": "2ae83463edcfec256b79ce93716dcb40f289bacbe9e5e7a66cd00d0a31099d4b",
+    "mitdb/114.hea": "830ba89cebf60945db0c78332e3cc6c64acbe218f6f16594660d4f17423ee889",
+    "mitdb/114.atr": "5280acb082b654d64944137987a00fbc2105b3a3fcdda75d0bf11d4644e40d9f",
+    "mitdb/115.dat": "34185efe9889608c76ebfbf5a467d3457970c6d11b77a2bf81b94bcf46e07c41",
+    "mitdb/115.hea": "3212847a692bf3bc5e1dde0343d272e7d56735983276031420060d51d0cdd41c",
+    "mitdb/115.atr": "4980667b19b7a637729d40762f071b483d69f5431db818cbddc9a8ae64cc4da2",
+    "mitdb/116.dat": "0ab38cfca76d816673213dcd570504bb3ab02ef76d51540fd7a6075bc580ad85",
+    "mitdb/116.hea": "5553273cafa68c106468ddfaa3bd1d6a30daec53cff1642d3592a20110b2edad",
+    "mitdb/116.atr": "abd31e2c878073e67319d5a6fa34923fe117cca02e5c80318378405c853ccbef",
+    "mitdb/117.dat": "2ce7de6f20baf4cfef0369f9a13fa53784d18e2da78c11afa1e4c55e8ad1900e",
+    "mitdb/117.hea": "452e70b5eb3fe3ebc3fc61284f70b788dbf83bb98f951c2b0bb5f0b95156d06a",
+    "mitdb/117.atr": "232beaacf4a4eb4b6d2f2242f01ecae3d2842be1dd0afe890037ae050f91ce63",
+    "mitdb/118.dat": "66ea4b70b7d64abd0f49089ae1b8f0f577664c46e5b29ac23b291934e063df15",
+    "mitdb/118.hea": "48a3d0c4e7742ca0e39a2cbb3ea5142a4d41261adbd0bb25651e0fcd9c6aef2b",
+    "mitdb/118.atr": "77afd5400648d128223d5029a49c442f5abd65ba997f732489cb8eed39d71551",
+    "mitdb/119.dat": "02a286a28e69b441568add915f16a2856b22bab893bf8729ee9654411ed3a5aa",
+    "mitdb/119.hea": "658f01382d7280a06e2f4c06363569d477394a6898c69ee788bb383f6092df63",
+    "mitdb/119.atr": "fd919c8ea20eed4a22fb37984977f30ce48d382eefd2d90934bf947a88e0fd7b",
+    "mitdb/121.dat": "679f374a7b2557fed04a4bc5648301ce9bdd38e5a4f13b2e63ebbcf7cb3fb482",
+    "mitdb/121.hea": "1838d38ff54fed9b831207761d7321682dad0b693f944e4c3a4e6388c46ca6ff",
+    "mitdb/121.atr": "dbda472aa08eeb6bbbf775b8123e466a7ee57638caecd156407de3141c9fa71c",
+    "mitdb/122.dat": "a700c794bfe23565603d75dc5706915f5436e522802d260e758683d11f5b9e13",
+    "mitdb/122.hea": "b43ca64ed2c6e69d15def2c30f8cb2cbf25cb807f9530b1e7d5cfed2fd496f70",
+    "mitdb/122.atr": "34966d92a94c72126253c0297407cff78e53be1f72c6814e28676bcda8be90de",
+    "mitdb/123.dat": "8a685a846b82d72aac4dd86171ad0fe5b19c0bd9ce51ddc1e6f015f73b2d8c3a",
+    "mitdb/123.hea": "aab5351e9da6f4beb22392f1a469df4a9e4b8017fea820432cf7d1846244d094",
+    "mitdb/123.atr": "061bfd2590fd9d6040d32741a19697491dedb65cbbc5b3865a5c50d49f52d709",
+    "mitdb/124.dat": "296988e49d2653eb499ad0b17c46826b4296b7eaf94df3f76f1ba2dcdf6bc48b",
+    "mitdb/124.hea": "2200f917fe7a1fa817b79069a274d3291a6fa66289521af5e7d38edeb3e82bce",
+    "mitdb/124.atr": "f9c8cac368f1f6ba8895ae47f5771c82597374c1e6b030385ca2eb186454677c",
+    "mitdb/200.dat": "a9e203b3807b9fcd3647cde03444437cb8eec7f5128a8eb413edafb394272e0f",
+    "mitdb/200.hea": "9e0c2ff5b790cf624deab0ccb8a9f211a9e29a748d8197da3c1ee7c5b596b40c",
+    "mitdb/200.atr": "f9624a11696760427d75314a78c31f89ca3c446af855890c8f8b66cddd8b3a3f",
+    "mitdb/202.dat": "0c990e4142de6be898de4b21bd6e6705cd567e5d97cb731a994dc5aee9c7142d",
+    "mitdb/202.hea": "6822216d1bc51f7014637c53e543cdc3863fea4ee3fec3aa99fb0762aece0cba",
+    "mitdb/202.atr": "16d59e44564844c39a648164580a69e71f1657e951e6ad121b64eb1a11db037d",
+    "mitdb/203.dat": "5ba7d2237fc838438efd8bb0a3baeffc5de2e70c76e3ab7e401e811ad82f43e0",
+    "mitdb/203.hea": "25b3a3107dd00221b245ef5c23ffdfbd07caaf58e2cf377734f3a947361b26a5",
+    "mitdb/203.atr": "2573f948e54a538983a44bf946e3e61cdda60e898b4c65ca8559b57c4877c706",
+    "mitdb/205.dat": "8a513c39e6d9a1d732de0b3909a87aa1fcfd4bd55ab5f59a5b810967d252af36",
+    "mitdb/205.hea": "739f76bbcbbfdad1f260a043a5f7106f6e912894065b15ea75bee42af0380a2a",
+    "mitdb/205.atr": "0ae55e31175b9ba36e09c3b556b15e3e70f254936a2634d5ff341dfb86a74ea9",
+    "mitdb/208.dat": "22873623623c44ee413a5b60cacb15d4af2723734836fb3ae45d9ff96bdb36e7",
+    "mitdb/208.hea": "5a27efda1bea972440a0b5f40a1c322898693e9602d5ce4722fe750b7dea46e9",
+    "mitdb/208.atr": "33878519ee34d00cb233fdb15b11c2b8da0b0aea2e643d31b07105cc3392edf4",
+    "mitdb/209.dat": "e2516dd126ea85529d9a0e8442fef5d880a492d41f0692a76e648c8437f15c5f",
+    "mitdb/209.hea": "9ac1abedc17f898bf6a1db9c64c38ccf4f065ebc3989ee7740f4c0796655e590",
+    "mitdb/209.atr": "c0697b176e7caf49e34f93e28eaeeff7167e2de380a8698f6cb3fb3a5fcb1c84",
+    "mitdb/210.dat": "76e971fba03c0ae2ab261c7446240987ecde82f45dad1d4f36e290b950eb464b",
+    "mitdb/210.hea": "9d6a422834435fb8d267256f4fd01bfd8158b511f662c4b5dd8c60059944a322",
+    "mitdb/210.atr": "5a46bef3d185c903b1ce099a988898fc829cea7e6c5bc1984532efd694fa8db6",
+    "mitdb/212.dat": "6b63d3e20c40073be852e8121196d5de2ede502168fcb6c10ca5af841418cc5c",
+    "mitdb/212.hea": "f67d7c99a8ba055941e8aa98fd1f31dfd7dd1d957c85f40b488237eecba61aad",
+    "mitdb/212.atr": "dc4d0bec7e3ced82f67ef9d5264bcdb3d167c2214125eb04891040fbbb340816",
+    "mitdb/213.dat": "0cb13cd9299b0ab68f8f3064b2ab72f853d155abb277b68daef0a26cbc173b0d",
+    "mitdb/213.hea": "6b64b05c7a28630acf3ffb5e541d635e3fc854ea3602b1b355762f94c6058f17",
+    "mitdb/213.atr": "44349e22176aad3f688ca9a62f283a993927a0b9ef6d97f473cde3b16cfabc9a",
+    "mitdb/214.dat": "a886b1ceb56e950858dedf5b56d3fdb5f26aef3667f8effcb880c1c000ee0cd3",
+    "mitdb/214.hea": "beb6b379e93cbe94eb9f1461cccaa0131940e14322df4abbc07665b722ed9206",
+    "mitdb/214.atr": "09c588b0623f6dc6138928ce2006f294c4ef3da143eec2cdba6eddb9b1597214",
+    "mitdb/215.dat": "9e28799b5733a2d60470653e6f6ca26610143303233a1b7559cff54e2ad26ef9",
+    "mitdb/215.hea": "a326c25698a0773a6be986f2cae499981224d3c61d8fdcddfbb3beaf3ff0bcbd",
+    "mitdb/215.atr": "94968307b89eb0be766cbb88617f08571ed41b3b25b294d19a72b7ffd2525aee",
+    "mitdb/219.dat": "7fc27b77e313aaa40da9f39783f8fb29a6a910be148e67463e5093793644751a",
+    "mitdb/219.hea": "d14f0ffbf19f9842dbaa15f82bcedbc7b9b96f00f422b7e4da31112a1d1b2b67",
+    "mitdb/219.atr": "271928544ce78772669c50b26cf4de163a53f5b90187b5d8080928def79f0e6a",
+    "mitdb/220.dat": "c01ca1a76fb3a89e96134a08f2e5aa6e760eda59ea9086ba8aaa13ba0cca9cff",
+    "mitdb/220.hea": "af40adc6deb9c0e942432e69a7153e41ac252eb6c15a24a715ef258469cda2e5",
+    "mitdb/220.atr": "9cf9f330823e2a9850d51a7fce1f8ecfe5bb84e80e89412bd9f4de6a67f9ccc7",
+    "mitdb/221.dat": "274d17c6a35f7adcbb10a59ea34350e5ad299c2d69e4fa579d8863213e1fe9ae",
+    "mitdb/221.hea": "09afd18974ee6e0cfa8b5b6ce80112c4df0cfbb8c8d01d3d085ecdf7790ada7b",
+    "mitdb/221.atr": "92549b966cc17bcf2edf00a97237d1e350a761d9ffe20065b5ed303848aad7ae",
+    "mitdb/222.dat": "0510bf39ed2925a83debd249492bdfe77c575148376aaabeba4c7b7a2451ac5d",
+    "mitdb/222.hea": "a395bf5e58492e6724616532aae1cca7c50626fd66fe61f843a92adadc27293d",
+    "mitdb/222.atr": "a0206b778a9f073d451023e802e52059754648e83fe1dc669395b4884ccad356",
+    "mitdb/223.dat": "1d42aa9e13f7349287ae5f0f00b40078c01aadd39e2cad1001ab42d3b7484594",
+    "mitdb/223.hea": "bbd414e57b6eafa53204fb7eeb1212c9d47f598f36e8838b103bfb68a316ca85",
+    "mitdb/223.atr": "beaa5cb3eb5fb64a5f9e1dfcac9297f9564b379c9c354cbf8f9f927d9b81ccf1",
+    "mitdb/228.dat": "b2421f15447772bb7a38f5073e4e07d5d9be50d875441a4a0821c9e22b78fdac",
+    "mitdb/228.hea": "b4a2796ca39816b32d5b24c2c1d0a2aa355d159aafd7ecbfb1cdf11a695a14d8",
+    "mitdb/228.atr": "7e08ee90f668800fb3e1a66193fb8f8b4b91c3ec2f52f384756bab826e019d1d",
+    "mitdb/230.dat": "fba09ea54d9caa342c54c46e0df247335345b02444f7d15162906adfef55d057",
+    "mitdb/230.hea": "5738bb479316dcc324b27807bbbffd8878da6156707c6cfbc08dcd0fa4771671",
+    "mitdb/230.atr": "403d0d4842ba7135b1e14b9e5c50cba214753a0e17bf979090b2c6a8018f7eae",
+    "mitdb/231.dat": "7d4f56d6c4b1d50322154381c1d8761457c2f2696973e915a3c19d8a5b789595",
+    "mitdb/231.hea": "733195a792e806a897531475eabcdec71e96f7b6cd7bcf57f9f1b2538cb13503",
+    "mitdb/231.atr": "b82cc005618eab81b3a246ca5c5a61903f3c0f40c191d7fb953adf054ea691de",
+    "mitdb/232.dat": "3d74a21f848766c9607bc5eead7e4b2655f09586adb5561f02fd8fcb0e9da6d0",
+    "mitdb/232.hea": "5ff480450238ffc957abde76687b7e3d728c4b7b19063c8a0b1d08469a2228ea",
+    "mitdb/232.atr": "be0e236cb883c669128da01beae0ec0efc39fdfaa5c1e878a3cef5443db8c934",
+    "mitdb/233.dat": "6ccd6b1fa0cafc052369e7ec0a99cc6c3b56b3c12afff26db800c55a826211b4",
+    "mitdb/233.hea": "d5ef73b3b4a98bec6e3d853db08ff18b0a1a9173c95327bcb15b2cfecee99b85",
+    "mitdb/233.atr": "c9ce42ecefa9a92e2ec69f9d237d8a53c67c60b31a25d579356ea8910bcc368a",
+    "mitdb/234.dat": "89f826307bfc91a554021da87c17b88b843ed3d26aa9ea237fc6f7c8af00da6d",
+    "mitdb/234.hea": "91c94c803d05f637cc29a3f353d88e1c25b20a25957c8cc25f7cbbf9fe2627c9",
+    "mitdb/234.atr": "e829a3e4131fbe9420c1740bfb5000b3f4f64a2b40aa5f739ed6420f75be6785"
+  },
+  "expected_array_sha256": {
+    "development": {
+      "x": "81d4b05e10659c4f1573fb0c8c06056f80e573b7b76368db1e6aed9b32972db0",
+      "rr": "5f553537b1173dabf971c31a1f149c87e0ecd35103d643a7a62640c17b2b5afa",
+      "y": "ad4b1778f2b65ec19f49fa8dbe2dc8e5f411a48beb406dd13673c1d0bcfc0dca",
+      "record": "83465c4ba2fcf1cea77cb1a135686f2aac42801c5098c219bdec3f4016b96eed",
+      "subject": "2d7ae8ee0b001d3a6f0a41c5cffb37282219be89315db6702a0cb7466dae41ad",
+      "r_index": "73c689474f7e61f63f67eb5ccbff8b814f8971eb6e0309ee31adeb304b416959",
+      "code": "67c907fdfb06235ffa2a144d12c196204e3c8df6f200f566bb9394115c71a138",
+      "sampling_unit": "2d7ae8ee0b001d3a6f0a41c5cffb37282219be89315db6702a0cb7466dae41ad"
+    },
+    "auxiliary": {
+      "x": "9027f5be6ccce49816abf6e508c102bf584f3778c8981587eb555f4caa12793c",
+      "rr": "cee2351a513fa25c8ede5a1585e0093607a7d0d5183d98dad08746267cefb48d",
+      "y": "e1adf81301eec73de0a8023a191de4623bfb591ba31c7c81c989b1947d7afbf1",
+      "record": "b6ddbf6a57d45979f41753663ebc10ad69cd570311e091d76755af7eaa26974e",
+      "subject": "6493afef4a197da9ddbba4856cb01f27e667af7709ef0910e1af390dd891d788",
+      "r_index": "ef714538f3c11f328565ff53a81a760a01c23a7fc733cbaa04c9655eebfd952a",
+      "code": "171c37968ad5ab80e5252ef631f2a87e02890ba549d698a306f6a55fc82e8320",
+      "sampling_unit": "6493afef4a197da9ddbba4856cb01f27e667af7709ef0910e1af390dd891d788"
+    }
+  },
+  "reproduction": "Derived Git entry for one already-evaluated candidate, not a new model result or a new independent test. Immutable v8 retained. Download names and file hashes frozen here."
+}

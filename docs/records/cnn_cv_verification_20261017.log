@@ -1,0 +1,1 @@
+{"verified": true, "fold_fits": 12, "epochs": 336, "weights_replayed": true, "test_loaded": false, "decision_sha256": "c22a44a8c182c1c503a97b069442661581887e8c7059c46528c95253e9dde469", "verifier_sha256": "01c5d6bd142c8b32c6e52eb548fa90b221d06ce2435057a62dc767b125994467", "smoke_board_test": "NOT_TESTED"}

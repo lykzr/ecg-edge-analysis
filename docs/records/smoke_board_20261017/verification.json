@@ -1,0 +1,12 @@
+{
+  "source_archive": "ecg_smoke_kit_20261017_04(1).zip",
+  "source_archive_sha256": "d2af841f98201043c06d9d3e875507099fe35b21f3ddb788050b08cd7a42525e",
+  "original_manifest_files_verified": 15,
+  "uart_expected_lines_in_order": true,
+  "only_extra_nonempty_line": "Synthetic samples; no ADC; no clinical accuracy claim.",
+  "uart_sha256": "268d65ed0fcb2b7d7a0fed2464a6fe97dc98ccf977fd8f8d8c0f10f6e57b13ff",
+  "result": "PASS ECG_SMOKE failures=0",
+  "provenance": "user-supplied board report and UART; contents verified, not rerun locally",
+  "ads1292r_real_input_tested": false,
+  "qspi_programmed_in_this_run": false
+}

@@ -1,0 +1,42 @@
+{
+  "release": {
+    "passed": true,
+    "version": "20261017-ecg-smoke-jtag-v1",
+    "payload_files": 16,
+    "matched_board_evidence": true,
+    "new_capture_helper_hardware_retested": false,
+    "hardware_operated_by_checker": false
+  },
+  "latest_files": 18,
+  "latest_allowed": [
+    "releases/latest/LICENSE",
+    "releases/latest/README.md",
+    "releases/latest/artifacts.json",
+    "releases/latest/board/build_ecg_smoke.py",
+    "releases/latest/board/capture_uart.ps1",
+    "releases/latest/board/create_workspace.ps1",
+    "releases/latest/board/create_workspace.py",
+    "releases/latest/board/launch_template.json",
+    "releases/latest/board/run_smoke.ps1",
+    "releases/latest/board/run_smoke.tcl",
+    "releases/latest/expected_uart.txt",
+    "releases/latest/hardware/ecg_system_candidate.bit",
+    "releases/latest/hardware/ecg_system_candidate.xsa",
+    "releases/latest/hardware/ps7_init.tcl",
+    "releases/latest/manifest.json",
+    "releases/latest/prebuilt/ecg_smoke.elf",
+    "releases/latest/src/ps/ecg_smoke/main.c",
+    "releases/latest/third_party.md"
+  ],
+  "ignored_required_files": [],
+  "history_and_unlisted_outputs_ignored": [
+    "releases/history/20261013-hello-world-qspi-v1/BOOT.BIN",
+    "releases/latest/workspace/generated.txt",
+    "releases/latest/unexpected.bin",
+    "releases/latest/board/unexpected.ps1"
+  ],
+  "old_archive_8_files_identical": true,
+  "root_readme_and_materials_unchanged": true,
+  "git_index_mutations_performed": false,
+  "commit_or_push_performed": false
+}

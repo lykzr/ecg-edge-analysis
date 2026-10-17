@@ -1,0 +1,4 @@
+# 用户授权后安装到独立环境；CPU轮子，不安装CUDA/驱动。
+--index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+numpy==2.5.2

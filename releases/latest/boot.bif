@@ -1,6 +1,0 @@
-the_ROM_image:
-{
-  [bootloader] "fsbl.elf"
-  "ecg_system_candidate.bit"
-  "hello_world.elf"
-}

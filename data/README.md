@@ -1,32 +1,41 @@
-# 数据与离线结果
+# 数据与离线运行入口
 
-数据集为 [MIT-BIH Arrhythmia Database 1.0.0](https://physionet.org/content/mitdb/1.0.0/)。目前仅100号参与开发，不作为独立测试集；尚未冻结多记录划分。原始文件不提交到正式目录；来源与许可边界见[第三方说明](../third_party.md)。
+本目录保留当前QRS评估、患者隔离CNN开发验证、数据获取及公共依赖。模型接手者先读[训练交接](../docs/model_training_handoff.md)，不要按版本号逐个启动旧实验。
 
-## 从零获取和运行
+## 当前文件
 
-Python 3.14与matplotlib 3.10.9是本机已验证环境，matplotlib仅用于出图；读取、校准及检测实现使用标准库。依赖版本在requirements.txt，需要时在自己的环境执行`python -m pip install -r data/requirements.txt`；本次没有安装软件。其他Python版本尚未验证。Vivado/Vitis 2026.1仅用于硬件/PS构建，不用于本节离线回放。
+| 文件 | 用途 |
+| --- | --- |
+| download_mitdb_records.py / ecg_dataset.py | MIT获取、幅值读取和标注计分 |
+| benchmark_qrs_v4.py / qrs_v4_protocol.json | 当前QRS及XQRS/GQRS对照 |
+| plot_qrs_benchmark.py / profile_classification.py | 波形出图、分类数据盘点 |
+| download_external_ecg.py | 外部数据库官方文件下载与校验 |
+| prepare_cnn_expanded.py / extend_cnn_ltdb.py | 父缓存准备、公共切拍与历史RR函数 |
+| cnn_expanded_v6_protocol.json / cnn_expanded_v7_protocol.json | 父缓存、来源和身份映射冻结依据 |
+| prepare_cnn_cv.py / cnn_patient_cv_v8_protocol.json | 当前开发患者三折及缓存准备 |
+| train_cnn_cv.py | 当前训练入口，不读取独立测试 |
+| train_cnn_candidates.py / train_cnn_refined.py | 当前入口依赖的计分、损失、构建和增强；保留原文件名以维持冻结哈希，不是接手默认入口 |
+| prepare_cnn_git.py / cnn_git_v1_protocol.json | Git克隆后直接下载/重建当前残差候选开发数据，无父缓存依赖 |
+| requirements*.txt / results/ | 独立环境依赖及精选QRS摘要 |
 
-在项目根目录运行（已有原始文件时仅校验，不覆盖；网络受限时先完成下载）：
+src/reference/ecg_mf_cnn.py保留公共分类指标，ecg_trainable_cnn.py和ecg_temporal_cnn.py提供当前候选网络。旧文件名不表示无用；当前正式流程不导入tmp/history。
+
+## QRS运行
+
+从项目根目录执行，替换本机解释器路径，输出目录必须不存在：
 
 ```powershell
-python -B data/download_mitdb_100.py
-python -B sim/test_mitdb_100.py
-python -B sim/test_ecg_peak_reference.py
-python -B data/evaluate_mitdb_100.py --raw-dir tmp/mitdb_100/raw --output-dir tmp/mitdb_100/peak --profile peak
+python -m venv tmp/qrs_env
+& './tmp/qrs_env/Scripts/python.exe' -m pip install -r data/requirements_qrs.txt
+& './tmp/qrs_env/Scripts/python.exe' -B data/download_mitdb_records.py --output-dir tmp/qrs_current/raw
+& './tmp/qrs_env/Scripts/python.exe' -B data/benchmark_qrs_v4.py --raw-dir tmp/qrs_current/raw --stage development --output-dir tmp/qrs_current/development
+& './tmp/qrs_env/Scripts/python.exe' -B data/benchmark_qrs_v4.py --raw-dir tmp/qrs_current/raw --stage evaluation --output-dir tmp/qrs_current/evaluation
 ```
 
-输出目录必须尚不存在。`baseline`、`calibrated`、`peak`分别为原始整数默认配置、固定幅值及2秒初始化、候选峰原型；默认仍为baseline，避免把不同算法混为一次结果。
+MIT原始文件校验官方SHA256及212首值/长度/校验和，按MLII选导联。QRS采用360Hz、4096单位/mV和int16饱和，分类采用物理mV及独立切拍协议，两种幅值口径不可混用。
 
-## 当前证据
+## CNN运行和归档
 
-`results/`保存精选summary和生成信息，不复制完整缓存或数据集。2026-10-15结果：
+克隆后的数据下载、重建、训练与复核见[训练交接](../docs/model_training_handoff.md)，原始文件重建见[患者CV说明](../docs/cnn_patient_cv.md)。不要重新freeze覆盖已评估协议，不把已查看开发数据当新测试。
 
-| 配置 | TP | FN | FP | 灵敏度 |
-| --- | ---: | ---: | ---: | ---: |
-| baseline | 0 | 2273 | 0 | 0% |
-| calibrated | 44 | 2229 | 62 | 1.94% |
-| peak | 2272 | 1 | 1 | 99.956% |
-
-完整650000点、约30分钟，不删除末尾漏检；固定±150ms有序一对一匹配。peak的位置MAE1.490ms、连续匹配RR MAE1.520ms；校准缓存最初2秒，新算法未移植RTL，smoke尚未上板测试。100号上本阶段暂定检查通过不代表临床、独立数据或板上验收。
-
-精选JSON保留当时的源文件路径与哈希。目录迁移不改写历史哈希；请按[生成说明](results/README.md)区分旧路径历史结果与迁移后复核结果。后续数据划分、跨记录/噪声实验、最终数据再分发许可核查均见[计划](../report/project_plan.md)。
+独立旧脚本/协议/测试保存在tmp/history/training_handoff_20261017/，原路径、新路径与逐文件SHA256见其中manifest.json；恢复规则见交接文档。原始数据、环境和全部旧训练结果仍在原tmp位置，文字记录仍留[docs/records](../docs/README.md)。

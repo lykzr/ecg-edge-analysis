@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "purpose": "Navigator V2 Zynq-7020 ECG smoke JTAG handoff",
+  "tool_version": "Vivado/Vitis 2026.1",
+  "board_execution": "NOT_TESTED",
+  "flash_programming": "NOT_PERFORMED",
+  "files": {
+    "src/ps/ecg_smoke/main.c": {
+      "source": "src/ps/ecg_smoke/main.c",
+      "bytes": 5892,
+      "sha256": "149fcf44ffff8f42f9d917a85f4b063803f2c87091b23e444fad284589e2216a"
+    },
+    "prebuilt/ecg_smoke.elf": {
+      "source": "tmp/ecg_smoke/vitis_workspace/ecg_smoke/build/ecg_smoke.elf",
+      "bytes": 169936,
+      "sha256": "2e573ba9a9244cd4a9ef0f5ce80eca8957e1b512594b9b9389fc616353285bf7"
+    },
+    "hardware/ecg_system_candidate.bit": {
+      "source": "releases/latest/ecg_system_candidate.bit",
+      "bytes": 4045773,
+      "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
+    },
+    "hardware/ecg_system_candidate.xsa": {
+      "source": "releases/latest/ecg_system_candidate.xsa",
+      "bytes": 321430,
+      "sha256": "fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248"
+    },
+    "hardware/ps7_init.tcl": {
+      "source": "tmp/ecg_smoke/vitis_workspace/ecg_smoke/_ide/psinit/ps7_init.tcl",
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    },
+    "board/build_ecg_smoke.py": {
+      "source": "board/build_ecg_smoke.py",
+      "bytes": 1719,
+      "sha256": "9e6dc167a84606a93ca341946938c471818a3f0cf2cf7ec344febd82b4d20948"
+    },
+    "board/launch_template.json": {
+      "source": "tmp/ecg_smoke/vitis_workspace/ecg_smoke/_ide/launch.json",
+      "bytes": 1910,
+      "sha256": "4f06c2f211486bba3a3477346bdb7ce867fecba5d1f3b649011f3bb307b6ed03"
+    },
+    "LICENSE": {
+      "source": "LICENSE",
+      "bytes": 1078,
+      "sha256": "090ed38ab0c202a9b99db28d5640d14ffb2e5e407012357c18fb35aa6a90ba80"
+    },
+    "board/create_workspace.py": {
+      "source": "board/smoke_handoff/create_workspace.py",
+      "bytes": 1370,
+      "sha256": "3a8077c198decc48273cf84204fc9d404bc4f9ab27597ac0f3733b5fc71fdb8e"
+    },
+    "board/create_workspace.ps1": {
+      "source": "board/smoke_handoff/create_workspace.ps1",
+      "bytes": 1021,
+      "sha256": "3f910643e756e62157fe8cfd5d82d79d8c2521f64d59bbab57cd26e82f874f24"
+    },
+    "board/run_smoke.ps1": {
+      "source": "board/smoke_handoff/run_smoke.ps1",
+      "bytes": 1260,
+      "sha256": "673284bc31a18f461bcc8e85f462be910616b7711d5c1a4f66f0bc5b596edbf7"
+    },
+    "board/run_smoke.tcl": {
+      "source": "board/smoke_handoff/run_smoke.tcl",
+      "bytes": 1143,
+      "sha256": "622384e87481b7e4edf415e89b2047520feed7b950d35a6e869b924bd7462c3c"
+    },
+    "README.md": {
+      "source": "board/smoke_handoff/README.md.in",
+      "bytes": 4654,
+      "sha256": "bbab7eb2c102dc3c77efb53849896deedfdceae1ecc38a87e794625f5ec8c1dd"
+    },
+    "third_party.md": {
+      "source": "generated license boundary",
+      "bytes": 420,
+      "sha256": "b5d04508f8cfbdce60657100b2b0243b319ea9c103ca75f8d0528b29bc22eeac"
+    },
+    "expected_uart.txt": {
+      "source": "expected key lines; not measured output",
+      "bytes": 368,
+      "sha256": "088ef94b577928038b7436625879070421730ff16f4d1dc90a4cb8622eb2188b"
+    }
+  }
+}

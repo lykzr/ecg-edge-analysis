@@ -70,7 +70,16 @@ logs/
 .env.*
 !.env.example
 myself.md
-lykzr.md
+/lykzr.md
+
+# 正式过程记录与精选验收日志随仓库；其他原始日志保留本地，默认忽略。
+!/docs/records/lykzr.md
+!/docs/records/smoke_board_20261017/uart_smoke_pass.log
+!/docs/records/smoke_board_20261017/jtag_smoke_pass.log
+!/docs/records/smoke_release_checks_20261017.log
+!/docs/records/qrs_recheck_development_20261016.log
+!/docs/records/qrs_recheck_evaluation_20261016.log
+!/docs/records/cnn_cv_verification_20261017.log
 
 # 发布目录仅保留 latest 的明确交付文件；历史版本留在本地，不删除
 /releases/*
@@ -78,11 +87,32 @@ lykzr.md
 !/releases/latest/
 /releases/latest/*
 !/releases/latest/README.md
-!/releases/latest/validation.md
 !/releases/latest/artifacts.json
-!/releases/latest/boot.bif
-!/releases/latest/BOOT.BIN
-!/releases/latest/fsbl.elf
-!/releases/latest/ecg_system_candidate.bit
-!/releases/latest/ecg_system_candidate.xsa
-!/releases/latest/hello_world.elf
+!/releases/latest/manifest.json
+!/releases/latest/expected_uart.txt
+!/releases/latest/LICENSE
+!/releases/latest/third_party.md
+!/releases/latest/hardware/
+/releases/latest/hardware/*
+!/releases/latest/hardware/ecg_system_candidate.bit
+!/releases/latest/hardware/ecg_system_candidate.xsa
+!/releases/latest/hardware/ps7_init.tcl
+!/releases/latest/prebuilt/
+/releases/latest/prebuilt/*
+!/releases/latest/prebuilt/ecg_smoke.elf
+!/releases/latest/board/
+/releases/latest/board/*
+!/releases/latest/board/build_ecg_smoke.py
+!/releases/latest/board/capture_uart.ps1
+!/releases/latest/board/create_workspace.py
+!/releases/latest/board/create_workspace.ps1
+!/releases/latest/board/run_smoke.ps1
+!/releases/latest/board/run_smoke.tcl
+!/releases/latest/board/launch_template.json
+!/releases/latest/src/
+/releases/latest/src/*
+!/releases/latest/src/ps/
+/releases/latest/src/ps/*
+!/releases/latest/src/ps/ecg_smoke/
+/releases/latest/src/ps/ecg_smoke/*
+!/releases/latest/src/ps/ecg_smoke/main.c

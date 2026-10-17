@@ -1,0 +1,2710 @@
+{
+  "stage": "development",
+  "protocol": {
+    "version": "20261016_v4",
+    "development_records": [
+      "100",
+      "101",
+      "103",
+      "105",
+      "106",
+      "108",
+      "109",
+      "111",
+      "114",
+      "118",
+      "119",
+      "200",
+      "202",
+      "203",
+      "208",
+      "213",
+      "219",
+      "221",
+      "228"
+    ],
+    "evaluation_records": [
+      "112",
+      "113",
+      "115",
+      "116",
+      "117",
+      "121",
+      "122",
+      "123",
+      "124",
+      "205",
+      "209",
+      "210",
+      "212",
+      "214",
+      "215",
+      "220",
+      "222",
+      "223",
+      "230",
+      "231",
+      "232",
+      "233",
+      "234"
+    ],
+    "lead": "MLII",
+    "sampling_hz": 360,
+    "units_per_mv": 4096,
+    "matching_tolerance_samples": 54,
+    "gate": {
+      "sensitivity": 0.99,
+      "positive_predictivity": 0.99,
+      "position_mae_ms": 10,
+      "rr_mae_ms": 15,
+      "v_recall": 0.99
+    },
+    "wfdb_version": "4.3.1",
+    "offline_milestone": {
+      "scope": "pooled untouched-record software milestone; per-record failures remain failures",
+      "sensitivity": 0.99,
+      "positive_predictivity": 0.99,
+      "v_recall": 0.99,
+      "position_mae_ms": 10,
+      "rr_mae_ms": 15
+    },
+    "excluded_records": {
+      "102,104,107,217": "paced-record scope not implemented",
+      "201": "same subject as development record 202, not an independent test subject",
+      "207": "ventricular-flutter interval scoring contract not defined; not part of this QRS-beat evaluation"
+    },
+    "policy": "All nineteen inspected records are now development. Remaining twenty-three IDs selected before v4 changes; freeze sources/config before reading new signals/labels/scores. Never tune on final new-record evaluation. No whole-record future access, no EOF padding, no annotation-based time shifts. This is not a CNN split or a complete 48-record result."
+  },
+  "protocol_sha256": "3a3d0fa5846963a817a48dc19cf33b7a387d69ef067d822d90fc3352d72a5d20",
+  "rows": [
+    {
+      "record": "100",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "100.hea": "60ebc904c7bf3e04d142638d3fd5c903e8dc9f10f1ea3264e07926aa089ee75e",
+        "100.dat": "b2ea3c250e56e48f4b7b90697832b8ecd1afa1e0bb31f2dcfea4ed6e1075a639",
+        "100.atr": "8d8a5349fb16638ebbf649f1779d12e96d91b736b2aafe59db43719ae583d471"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2271,
+      "FN": 2,
+      "FP": 0,
+      "sensitivity": 0.9991201055873296,
+      "positive_predictivity": 1.0,
+      "F1": 0.9995598591549296,
+      "position_mae_ms": 1.4910220656587896,
+      "rr_mae_ms": 1.5222711698482623,
+      "matched_rr_intervals": 2270,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 167
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 2239,
+          "matched": 2237
+        },
+        "8": {
+          "reference": 33,
+          "matched": 33
+        },
+        "5": {
+          "reference": 1,
+          "matched": 1
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 436.9550858652576,
+        "minimum": 411.1111111111111,
+        "maximum": 463.8888888888889
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 370,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 389,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 381,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 373,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 369,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 382,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "101",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "101.hea": "d5f02fbe8673fa05465442191b98ca0d28a1670e7ef0e83fb9ef8723113a311c",
+        "101.dat": "698d1ea6f472d23ca50317c72c96cda2698badd8578220ed0380cdf241e39006",
+        "101.atr": "441cdd6486cfdf4c53e344d1048ab81296773e7058d53069022adc68543a0663"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 1864,
+      "FN": 1,
+      "FP": 4,
+      "sensitivity": 0.9994638069705094,
+      "positive_predictivity": 0.9978586723768736,
+      "F1": 0.998660594695955,
+      "position_mae_ms": 1.8583094897472578,
+      "rr_mae_ms": 1.423237753882915,
+      "matched_rr_intervals": 1860,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 180
+      },
+      "v_recall": null,
+      "beat_types": {
+        "1": {
+          "reference": 1860,
+          "matched": 1859
+        },
+        "13": {
+          "reference": 2,
+          "matched": 2
+        },
+        "8": {
+          "reference": 3,
+          "matched": 3
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 440.6138472519629,
+        "minimum": 380.55555555555554,
+        "maximum": 500.0
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 341,
+          "FN": 1,
+          "FP": 2
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 304,
+          "FN": 0,
+          "FP": 2
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 298,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 306,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 309,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 301,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 5,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "103",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "103.hea": "3da9706fc27cc5d627a31b04b74b908ac0b6e061843a87cbd57801e5ea0fed7b",
+        "103.dat": "f7994f0bd196730779998b4bddf26cb47f396599fb370a08b5cb29a3ac4d555d",
+        "103.atr": "392ce37fbc7e89b3f14998e197a844f23cce6a3db6edaa71b4b49bf3ca5b6596"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2083,
+      "FN": 1,
+      "FP": 0,
+      "sensitivity": 0.9995201535508638,
+      "positive_predictivity": 1.0,
+      "F1": 0.9997600191984641,
+      "position_mae_ms": 1.9229743425614765,
+      "rr_mae_ms": 1.1407300672430356,
+      "matched_rr_intervals": 2082,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 166
+      },
+      "v_recall": null,
+      "beat_types": {
+        "1": {
+          "reference": 2082,
+          "matched": 2081
+        },
+        "8": {
+          "reference": 2,
+          "matched": 2
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 437.51266869365764,
+        "minimum": 411.1111111111111,
+        "maximum": 461.1111111111111
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 355,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 348,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 345,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 348,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 344,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 338,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 5,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "105",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "105.hea": "9a024eebf8e9baf630308815e689d7e3eab471ab0069db6aded127c396418d48",
+        "105.dat": "fcd0153dfea69c749194bb73de7db124588857cfa2f6aecb72754894c8afde02",
+        "105.atr": "278d534c1ad952a6d41db963b6b2b00be070d8dd5fa66545caa5c18edcc36497"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2560,
+      "FN": 12,
+      "FP": 59,
+      "sensitivity": 0.995334370139969,
+      "positive_predictivity": 0.9774723176785033,
+      "F1": 0.9863224812174918,
+      "position_mae_ms": 2.062717013888889,
+      "rr_mae_ms": 2.785549338307132,
+      "matched_rr_intervals": 2502,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 11,
+        "quality_rejections": 29,
+        "nearby_rejections": 1,
+        "max_event_age_samples": 413
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 2526,
+          "matched": 2516
+        },
+        "5": {
+          "reference": 41,
+          "matched": 41
+        },
+        "13": {
+          "reference": 5,
+          "matched": 3
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": false,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "FAIL",
+      "sample_confirmation_delay_ms": {
+        "mean": 438.7997963599338,
+        "minimum": 319.44444444444446,
+        "maximum": 1147.2222222222222
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 417,
+          "FN": 0,
+          "FP": 1
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 416,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 415,
+          "FN": 2,
+          "FP": 3
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 421,
+          "FN": 2,
+          "FP": 6
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 447,
+          "FN": 7,
+          "FP": 35
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 437,
+          "FN": 1,
+          "FP": 14
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "106",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "106.hea": "ad5ed3ee5603926a07a09f0d0c9e2a7ff10a705dbafcde3d185317730a8839ab",
+        "106.dat": "c017bc18b95b1f970bca143a044ee5d54168648b541e47aa656f2737a59c1202",
+        "106.atr": "585347e6d1bd3ad89cdb52cb80945878a5e51026d81f871a376bb6e13936f7fa"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2027,
+      "FN": 0,
+      "FP": 4,
+      "sensitivity": 1.0,
+      "positive_predictivity": 0.9980305268340719,
+      "F1": 0.9990142927550517,
+      "position_mae_ms": 2.4735514992051746,
+      "rr_mae_ms": 4.209253764149906,
+      "matched_rr_intervals": 2022,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 2,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 639
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 1507,
+          "matched": 1507
+        },
+        "5": {
+          "reference": 520,
+          "matched": 520
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 438.1735871765414,
+        "minimum": 347.22222222222223,
+        "maximum": 1775.0
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 331,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 315,
+          "FN": 0,
+          "FP": 2
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 372,
+          "FN": 0,
+          "FP": 2
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 351,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 311,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 341,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 6,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "108",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "108.hea": "1c461d963db1883589a975daa80b4104eee6cabb2f5cfec3e0d63b78e7a6a405",
+        "108.dat": "229a4ef62679dc5c6ea781bfbaec2bd784151fc9f9517f4cdecd533a9431eb20",
+        "108.atr": "ea227008ac3bc4ada87807117909e77ae0643d5a8bc09f32b9096a35f140cbf3"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 1751,
+      "FN": 12,
+      "FP": 5,
+      "sensitivity": 0.9931934203062961,
+      "positive_predictivity": 0.9971526195899773,
+      "F1": 0.9951690821256038,
+      "position_mae_ms": 8.338092518560822,
+      "rr_mae_ms": 9.716637947539729,
+      "matched_rr_intervals": 1741,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 1,
+        "quality_rejections": 3,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 616
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 1739,
+          "matched": 1727
+        },
+        "5": {
+          "reference": 17,
+          "matched": 17
+        },
+        "6": {
+          "reference": 2,
+          "matched": 2
+        },
+        "8": {
+          "reference": 4,
+          "matched": 4
+        },
+        "11": {
+          "reference": 1,
+          "matched": 1
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 450.83523158694004,
+        "minimum": 330.55555555555554,
+        "maximum": 1711.111111111111
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 283,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 279,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 280,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 289,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 308,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 306,
+          "FN": 10,
+          "FP": 5
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 6,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "109",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "109.hea": "3b21402a9a096acb6a2199b25681e40b0dd201494cb023ded514cd9726bb7fad",
+        "109.dat": "267afd6ced7a1fd5a8bcd21fcc2b83287e37e3ef57f32e8a0fe39a6e021951cd",
+        "109.atr": "2eef456587bab17263a126063321c040affa29bc4ccfdf2a2bc7fe50709fa1b8"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2531,
+      "FN": 1,
+      "FP": 0,
+      "sensitivity": 0.9996050552922591,
+      "positive_predictivity": 1.0,
+      "F1": 0.999802488643097,
+      "position_mae_ms": 3.0225207427894114,
+      "rr_mae_ms": 2.9238032498902062,
+      "matched_rr_intervals": 2530,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 494
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "2": {
+          "reference": 2492,
+          "matched": 2491
+        },
+        "6": {
+          "reference": 2,
+          "matched": 2
+        },
+        "5": {
+          "reference": 38,
+          "matched": 38
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 442.5128407743975,
+        "minimum": 366.6666666666667,
+        "maximum": 1372.2222222222222
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 433,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 424,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 415,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 417,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 423,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 412,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "111",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "111.hea": "9e635a715d6cc44a716a7a73c6dd365bd94099f94e63accb2a65c5b25b4b69b5",
+        "111.dat": "8372d98ae59fbfd023502a9d0fc03fb5383083da92584b964484e18593e08485",
+        "111.atr": "372ed78bb0bbe7d5d9dc7e676c03d72530729775b5cfa94501485329fc47b8cb"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2120,
+      "FN": 4,
+      "FP": 0,
+      "sensitivity": 0.9981167608286252,
+      "positive_predictivity": 1.0,
+      "F1": 0.9990574929311969,
+      "position_mae_ms": 2.950733752620545,
+      "rr_mae_ms": 2.2182821118991334,
+      "matched_rr_intervals": 2115,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 443
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "2": {
+          "reference": 2123,
+          "matched": 2119
+        },
+        "5": {
+          "reference": 1,
+          "matched": 1
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 444.5309224318658,
+        "minimum": 413.8888888888889,
+        "maximum": 1230.5555555555557
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 348,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 350,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 349,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 344,
+          "FN": 2,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 360,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 363,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 6,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "114",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "114.hea": "830ba89cebf60945db0c78332e3cc6c64acbe218f6f16594660d4f17423ee889",
+        "114.dat": "2ae83463edcfec256b79ce93716dcb40f289bacbe9e5e7a66cd00d0a31099d4b",
+        "114.atr": "5280acb082b654d64944137987a00fbc2105b3a3fcdda75d0bf11d4644e40d9f"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 1879,
+      "FN": 0,
+      "FP": 0,
+      "sensitivity": 1.0,
+      "positive_predictivity": 1.0,
+      "F1": 1.0,
+      "position_mae_ms": 3.9471350008869965,
+      "rr_mae_ms": 1.443616140101763,
+      "matched_rr_intervals": 1878,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 167
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 1820,
+          "matched": 1820
+        },
+        "5": {
+          "reference": 43,
+          "matched": 43
+        },
+        "7": {
+          "reference": 2,
+          "matched": 2
+        },
+        "6": {
+          "reference": 4,
+          "matched": 4
+        },
+        "8": {
+          "reference": 10,
+          "matched": 10
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 434.97871208089407,
+        "minimum": 408.3333333333333,
+        "maximum": 463.8888888888889
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 275,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 281,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 306,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 317,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 339,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 354,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "118",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "118.hea": "48a3d0c4e7742ca0e39a2cbb3ea5142a4d41261adbd0bb25651e0fcd9c6aef2b",
+        "118.dat": "66ea4b70b7d64abd0f49089ae1b8f0f577664c46e5b29ac23b291934e063df15",
+        "118.atr": "77afd5400648d128223d5029a49c442f5abd65ba997f732489cb8eed39d71551"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2277,
+      "FN": 1,
+      "FP": 6,
+      "sensitivity": 0.9995610184372257,
+      "positive_predictivity": 0.9973718791064389,
+      "F1": 0.9984652488489366,
+      "position_mae_ms": 4.721124286341677,
+      "rr_mae_ms": 1.71071953010279,
+      "matched_rr_intervals": 2270,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 4,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 183
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "3": {
+          "reference": 2166,
+          "matched": 2165
+        },
+        "5": {
+          "reference": 16,
+          "matched": 16
+        },
+        "8": {
+          "reference": 96,
+          "matched": 96
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 434.9126393147418,
+        "minimum": 347.22222222222223,
+        "maximum": 508.3333333333333
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 361,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 406,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 378,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 371,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 355,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 399,
+          "FN": 0,
+          "FP": 6
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "119",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "119.hea": "658f01382d7280a06e2f4c06363569d477394a6898c69ee788bb383f6092df63",
+        "119.dat": "02a286a28e69b441568add915f16a2856b22bab893bf8729ee9654411ed3a5aa",
+        "119.atr": "fd919c8ea20eed4a22fb37984977f30ce48d382eefd2d90934bf947a88e0fd7b"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 1987,
+      "FN": 0,
+      "FP": 1,
+      "sensitivity": 1.0,
+      "positive_predictivity": 0.9994969818913481,
+      "F1": 0.999748427672956,
+      "position_mae_ms": 7.806296482693061,
+      "rr_mae_ms": 13.811922753988245,
+      "matched_rr_intervals": 1985,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 1,
+        "quality_rejections": 3,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 192
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 1543,
+          "matched": 1543
+        },
+        "5": {
+          "reference": 444,
+          "matched": 444
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 447.1747149564051,
+        "minimum": 369.44444444444446,
+        "maximum": 533.3333333333334
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 326,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 333,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 329,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 335,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 329,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 329,
+          "FN": 0,
+          "FP": 1
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 6,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "200",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "200.hea": "9e0c2ff5b790cf624deab0ccb8a9f211a9e29a748d8197da3c1ee7c5b596b40c",
+        "200.dat": "a9e203b3807b9fcd3647cde03444437cb8eec7f5128a8eb413edafb394272e0f",
+        "200.atr": "f9624a11696760427d75314a78c31f89ca3c446af855890c8f8b66cddd8b3a3f"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2598,
+      "FN": 3,
+      "FP": 9,
+      "sensitivity": 0.9988465974625144,
+      "positive_predictivity": 0.996547756041427,
+      "F1": 0.9976958525345622,
+      "position_mae_ms": 3.1872808143015994,
+      "rr_mae_ms": 4.21392970696915,
+      "matched_rr_intervals": 2586,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 1,
+        "quality_rejections": 2,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 186
+      },
+      "v_recall": 0.9987893462469734,
+      "beat_types": {
+        "5": {
+          "reference": 826,
+          "matched": 825
+        },
+        "1": {
+          "reference": 1743,
+          "matched": 1742
+        },
+        "8": {
+          "reference": 30,
+          "matched": 30
+        },
+        "6": {
+          "reference": 2,
+          "matched": 1
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 436.43822188125984,
+        "minimum": 327.77777777777777,
+        "maximum": 516.6666666666666
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 433,
+          "FN": 0,
+          "FP": 1
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 437,
+          "FN": 0,
+          "FP": 5
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 458,
+          "FN": 0,
+          "FP": 3
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 428,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 435,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 400,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "202",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "202.hea": "6822216d1bc51f7014637c53e543cdc3863fea4ee3fec3aa99fb0762aece0cba",
+        "202.dat": "0c990e4142de6be898de4b21bd6e6705cd567e5d97cb731a994dc5aee9c7142d",
+        "202.atr": "16d59e44564844c39a648164580a69e71f1657e951e6ad121b64eb1a11db037d"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2131,
+      "FN": 5,
+      "FP": 0,
+      "sensitivity": 0.9976591760299626,
+      "positive_predictivity": 1.0,
+      "F1": 0.9988282165455824,
+      "position_mae_ms": 2.0882214922571563,
+      "rr_mae_ms": 1.1563185951708999,
+      "matched_rr_intervals": 2126,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 388
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 2061,
+          "matched": 2060
+        },
+        "5": {
+          "reference": 19,
+          "matched": 19
+        },
+        "8": {
+          "reference": 36,
+          "matched": 35
+        },
+        "4": {
+          "reference": 19,
+          "matched": 16
+        },
+        "6": {
+          "reference": 1,
+          "matched": 1
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 437.5853798425361,
+        "minimum": 405.55555555555554,
+        "maximum": 1077.7777777777778
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 265,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 270,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 298,
+          "FN": 2,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 318,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 497,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 476,
+          "FN": 1,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "203",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "203.hea": "25b3a3107dd00221b245ef5c23ffdfbd07caaf58e2cf377734f3a947361b26a5",
+        "203.dat": "5ba7d2237fc838438efd8bb0a3baeffc5de2e70c76e3ab7e401e811ad82f43e0",
+        "203.atr": "2573f948e54a538983a44bf946e3e61cdda60e898b4c65ca8559b57c4877c706"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2965,
+      "FN": 15,
+      "FP": 26,
+      "sensitivity": 0.9949664429530202,
+      "positive_predictivity": 0.9913072550986293,
+      "F1": 0.9931334784793167,
+      "position_mae_ms": 2.4667416151395916,
+      "rr_mae_ms": 3.7522706630336056,
+      "matched_rr_intervals": 2936,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 6,
+        "quality_rejections": 21,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 435
+      },
+      "v_recall": 0.9932432432432432,
+      "beat_types": {
+        "1": {
+          "reference": 2529,
+          "matched": 2520
+        },
+        "5": {
+          "reference": 444,
+          "matched": 441
+        },
+        "4": {
+          "reference": 2,
+          "matched": 2
+        },
+        "13": {
+          "reference": 4,
+          "matched": 1
+        },
+        "6": {
+          "reference": 1,
+          "matched": 1
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 436.5002414651361,
+        "minimum": 352.77777777777777,
+        "maximum": 1208.3333333333333
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 495,
+          "FN": 4,
+          "FP": 3
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 495,
+          "FN": 3,
+          "FP": 1
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 543,
+          "FN": 2,
+          "FP": 4
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 483,
+          "FN": 2,
+          "FP": 12
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 466,
+          "FN": 4,
+          "FP": 6
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 476,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "208",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "208.hea": "5a27efda1bea972440a0b5f40a1c322898693e9602d5ce4722fe750b7dea46e9",
+        "208.dat": "22873623623c44ee413a5b60cacb15d4af2723734836fb3ae45d9ff96bdb36e7",
+        "208.atr": "33878519ee34d00cb233fdb15b11c2b8da0b0aea2e643d31b07105cc3392edf4"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2939,
+      "FN": 16,
+      "FP": 12,
+      "sensitivity": 0.994585448392555,
+      "positive_predictivity": 0.9959335818366656,
+      "F1": 0.9952590585844904,
+      "position_mae_ms": 12.357755850440437,
+      "rr_mae_ms": 17.922035960010643,
+      "matched_rr_intervals": 2923,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 3,
+        "quality_rejections": 13,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 1006
+      },
+      "v_recall": 0.9979838709677419,
+      "beat_types": {
+        "6": {
+          "reference": 373,
+          "matched": 370
+        },
+        "5": {
+          "reference": 992,
+          "matched": 990
+        },
+        "1": {
+          "reference": 1586,
+          "matched": 1575
+        },
+        "9": {
+          "reference": 2,
+          "matched": 2
+        },
+        "13": {
+          "reference": 2,
+          "matched": 2
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": false,
+        "rr_mae": false,
+        "v_recall": true
+      },
+      "provisional_gate": "FAIL",
+      "sample_confirmation_delay_ms": {
+        "mean": 448.4468541737264,
+        "minimum": 355.55555555555554,
+        "maximum": 2794.4444444444443
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 514,
+          "FN": 4,
+          "FP": 1
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 494,
+          "FN": 1,
+          "FP": 2
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 490,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 477,
+          "FN": 0,
+          "FP": 2
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 491,
+          "FN": 10,
+          "FP": 5
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 465,
+          "FN": 0,
+          "FP": 2
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 8,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "213",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "213.hea": "6b64b05c7a28630acf3ffb5e541d635e3fc854ea3602b1b355762f94c6058f17",
+        "213.dat": "0cb13cd9299b0ab68f8f3064b2ab72f853d155abb277b68daef0a26cbc173b0d",
+        "213.atr": "44349e22176aad3f688ca9a62f283a993927a0b9ef6d97f473cde3b16cfabc9a"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 3250,
+      "FN": 1,
+      "FP": 0,
+      "sensitivity": 0.9996924023377423,
+      "positive_predictivity": 1.0,
+      "F1": 0.9998461775111521,
+      "position_mae_ms": 1.281196581196581,
+      "rr_mae_ms": 2.3853493382579254,
+      "matched_rr_intervals": 3249,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 2,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 190
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 2641,
+          "matched": 2640
+        },
+        "6": {
+          "reference": 362,
+          "matched": 362
+        },
+        "8": {
+          "reference": 25,
+          "matched": 25
+        },
+        "5": {
+          "reference": 220,
+          "matched": 220
+        },
+        "4": {
+          "reference": 3,
+          "matched": 3
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 438.1059829059829,
+        "minimum": 363.8888888888889,
+        "maximum": 527.7777777777778
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 551,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 548,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 543,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 539,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 531,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 529,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 9,
+          "FN": 1,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "219",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "219.hea": "d14f0ffbf19f9842dbaa15f82bcedbc7b9b96f00f422b7e4da31112a1d1b2b67",
+        "219.dat": "7fc27b77e313aaa40da9f39783f8fb29a6a910be148e67463e5093793644751a",
+        "219.atr": "271928544ce78772669c50b26cf4de163a53f5b90187b5d8080928def79f0e6a"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2153,
+      "FN": 1,
+      "FP": 3,
+      "sensitivity": 0.999535747446611,
+      "positive_predictivity": 0.99860853432282,
+      "F1": 0.9990719257540603,
+      "position_mae_ms": 1.0386024668421323,
+      "rr_mae_ms": 1.3953548520587626,
+      "matched_rr_intervals": 2148,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 51,
+        "nearby_rejections": 281,
+        "max_event_age_samples": 1150
+      },
+      "v_recall": 0.984375,
+      "beat_types": {
+        "1": {
+          "reference": 2082,
+          "matched": 2082
+        },
+        "5": {
+          "reference": 64,
+          "matched": 63
+        },
+        "6": {
+          "reference": 1,
+          "matched": 1
+        },
+        "8": {
+          "reference": 7,
+          "matched": 7
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": false
+      },
+      "provisional_gate": "FAIL",
+      "sample_confirmation_delay_ms": {
+        "mean": 436.64579468150896,
+        "minimum": 394.44444444444446,
+        "maximum": 1161.111111111111
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 381,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 376,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 376,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 291,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 352,
+          "FN": 0,
+          "FP": 1
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 370,
+          "FN": 1,
+          "FP": 2
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "221",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "221.hea": "09afd18974ee6e0cfa8b5b6ce80112c4df0cfbb8c8d01d3d085ecdf7790ada7b",
+        "221.dat": "274d17c6a35f7adcbb10a59ea34350e5ad299c2d69e4fa579d8863213e1fe9ae",
+        "221.atr": "92549b966cc17bcf2edf00a97237d1e350a761d9ffe20065b5ed303848aad7ae"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2427,
+      "FN": 0,
+      "FP": 0,
+      "sensitivity": 1.0,
+      "positive_predictivity": 1.0,
+      "F1": 1.0,
+      "position_mae_ms": 2.346289429107723,
+      "rr_mae_ms": 2.2006961619492533,
+      "matched_rr_intervals": 2426,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 0,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 539
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 2031,
+          "matched": 2031
+        },
+        "5": {
+          "reference": 396,
+          "matched": 396
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "PASS",
+      "sample_confirmation_delay_ms": {
+        "mean": 438.42077553449616,
+        "minimum": 375.0,
+        "maximum": 1497.2222222222222
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 407,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 420,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 420,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 411,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 378,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 384,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 7,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    },
+    {
+      "record": "228",
+      "model": "v4",
+      "role": "development",
+      "source_sha256": {
+        "228.hea": "b4a2796ca39816b32d5b24c2c1d0a2aa355d159aafd7ecbfb1cdf11a695a14d8",
+        "228.dat": "b2421f15447772bb7a38f5073e4e07d5d9be50d875441a4a0821c9e22b78fdac",
+        "228.atr": "7e08ee90f668800fb3e1a66193fb8f8b4b91c3ec2f52f384756bab826e019d1d"
+      },
+      "input_clipped": 0,
+      "baseline": 1024,
+      "adc_per_mv": 200,
+      "samples": 650000,
+      "TP": 2050,
+      "FN": 3,
+      "FP": 30,
+      "sensitivity": 0.9985387238188017,
+      "positive_predictivity": 0.9855769230769231,
+      "F1": 0.9920154851197677,
+      "position_mae_ms": 2.2289972899728996,
+      "rr_mae_ms": 3.6514225964448848,
+      "matched_rr_intervals": 2019,
+      "details": {
+        "config": {
+          "sampling_hz": 360,
+          "units_per_mv": 4096,
+          "core_units_per_mv": 4096,
+          "refractory_ms": 240,
+          "probe_ms": 50,
+          "localization_radius_ms": 100,
+          "localization_amplitude_fraction": 0.8,
+          "baseline_radius_ms": 150,
+          "input_capacity": 4096,
+          "filter_capacity": 1024,
+          "threshold": 1.5,
+          "minimum_central_ratio": 1.0,
+          "central_ms": 80,
+          "context_ms": 240,
+          "inspect_ms": 400,
+          "slope_fraction": 0.5,
+          "biphasic_fraction": 0.25,
+          "amplitude_rescue_fraction": 0.75
+        },
+        "causality": "BOUNDED_STREAM_NO_FUTURE_READ_NO_EOF_PADDING",
+        "initialization": "fixed physical thresholds; no complete-record learning",
+        "input_buffer_samples": 4096,
+        "filter_buffer_samples": 1024,
+        "peak_slots": 64,
+        "stale_events": 0,
+        "duplicate_events": 0,
+        "quality_rejections": 16,
+        "nearby_rejections": 0,
+        "max_event_age_samples": 799
+      },
+      "v_recall": 1.0,
+      "beat_types": {
+        "1": {
+          "reference": 1688,
+          "matched": 1685
+        },
+        "5": {
+          "reference": 362,
+          "matched": 362
+        },
+        "8": {
+          "reference": 3,
+          "matched": 3
+        }
+      },
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": false,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "provisional_gate": "FAIL",
+      "sample_confirmation_delay_ms": {
+        "mean": 440.94284188034186,
+        "minimum": 372.22222222222223,
+        "maximum": 2219.4444444444443
+      },
+      "time_blocks": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 300.0,
+          "TP": 349,
+          "FN": 1,
+          "FP": 5
+        },
+        {
+          "start_seconds": 300.0,
+          "end_seconds": 600.0,
+          "TP": 347,
+          "FN": 0,
+          "FP": 3
+        },
+        {
+          "start_seconds": 600.0,
+          "end_seconds": 900.0,
+          "TP": 342,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 900.0,
+          "end_seconds": 1200.0,
+          "TP": 326,
+          "FN": 0,
+          "FP": 0
+        },
+        {
+          "start_seconds": 1200.0,
+          "end_seconds": 1500.0,
+          "TP": 333,
+          "FN": 2,
+          "FP": 14
+        },
+        {
+          "start_seconds": 1500.0,
+          "end_seconds": 1800.0,
+          "TP": 347,
+          "FN": 0,
+          "FP": 8
+        },
+        {
+          "start_seconds": 1800.0,
+          "end_seconds": 1805.5555555555557,
+          "TP": 6,
+          "FN": 0,
+          "FP": 0
+        }
+      ]
+    }
+  ],
+  "implementation_sha256": {
+    "data/benchmark_qrs_v4.py": "75e071c4924bcba3795727e3528310ceab4a94de55cfad91124b95201bc0c31c",
+    "src/reference/ecg_qrs_v4.py": "7c54e05d08918c798cb3b5027942e95ddbf6f804f1552635e2abfb26cf1b52c8",
+    "data/qrs_v3_protocol.json": "5b2d590df45998c10168ef246d23d62b0b6ed0774853b537588575c4fc0ab22e",
+    "data/benchmark_qrs.py": "ed40d71e5b2c42b861e48a3f56d6a6d44b0e8b75fdfae592dba152c7869e3643",
+    "data/evaluate_mitdb_records.py": "f5a8aec53ae02da77c020a675a9d1729409c6f4efbe28dbd8755f882f3615303",
+    "data/evaluate_mitdb_100.py": "917ffcc505c5c140f9587ce9a29f3c228d2608fa3694fcbd6df5c70ad51cda92",
+    "data/evaluate_qrs_v2.py": "48f6b3a5e8a5c054e3c78dfd690ee0652e866f39613a00db388a768a15463832",
+    "src/reference/ecg_peak_reference.py": "3ca5ee2fd3adcf11e7964c9a2416d62acf4b4b2c66ad912838e68de90267c4e7",
+    "src/reference/ecg_qrs_v2.py": "a56cd4dbd0f3fec6cf0bdf13f23a246e6577e4e52c3a5d86b5926f11d1e62c63",
+    "src/reference/ecg_qrs_v3.py": "c759b625d164dac007ba5cab9680be9b4e9a2d318d48d6fdb6be5c0c0c073f74",
+    "src/reference/ecg_input.py": "53e4b0f0287255de0be648e5c8b72976f7f882da6980bb9c15fac7643ccf877d",
+    "src/reference/ecg_reference.py": "12ecbb37a41a3b3735dc6595f0b6c18eb8c6f833471f9792df4c94914d911266",
+    "src/reference/ecg_filter_reference.py": "eb908688c02880b509ad05ec650bd715d46c0f6d264eeac590ea3746ceb5fd1f",
+    "src/third_party/gqrs_core.py": "de6e6dee4a09920e95a983544f364fb60379e87a611627783864c743677f6223",
+    "src/third_party/gqrs_provenance.json": "203e7c9f8e206dd88fafc9d1f9901bc83accf1d836bca01b978933ced0b2c337",
+    "src/third_party/wfdb_license.txt": "c27b739eb917ab068aa99c7b3a217b13419137ca46b3db20670f7363713f25c4",
+    "build/extract_gqrs_core.py": "ad4ac386e5da0468d5facf641ee97fa8dd5d85fb30abed71cd668bfdf1198283",
+    "data/requirements_qrs.txt": "dbec760ffea6545d39ce2eabd7400352cdd21a1a214523f7c8e41ea1e43eeaa6"
+  },
+  "wfdb_source_sha256": "ea01fb189275a636a39d139d3c3dbe6e21a36d606f84987b7a2f5c5fd035284a",
+  "smoke_board_test": "NOT_TESTED",
+  "scope": "offline software scoring; XQRS is not real-time",
+  "environment": {
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "scipy": "1.18.1",
+    "wfdb": "4.3.1",
+    "matplotlib": "3.10.9"
+  },
+  "aggregate": {
+    "v4": {
+      "TP": 43863,
+      "FN": 78,
+      "FP": 159,
+      "sensitivity": 0.9982248924694477,
+      "positive_predictivity": 0.9963881695515878,
+      "F1": 0.9973056853449745,
+      "position_mae_ms": 3.564760985594034,
+      "rr_mae_ms": 4.286701169429941,
+      "records": 19,
+      "records_passing": 15,
+      "v_reference": 4444,
+      "v_matched": 4437,
+      "v_recall": 0.9984248424842485
+    }
+  }
+}
