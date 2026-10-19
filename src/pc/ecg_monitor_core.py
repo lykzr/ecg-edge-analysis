@@ -92,6 +92,7 @@ class Monitor:
         self.hr = None
         self.rr_ms = None
         self.cls = '?'
+        self.input_info = {'kind': 'unknown'}
 
     @staticmethod
     def forward_gap(seq, expected):
@@ -162,7 +163,8 @@ class Monitor:
         return {'reason': reason, 'counts': dict(self.counts), 'protocol_counts': dict(self.decoder.counts),
                 'last_error': self.decoder.last_error,
                 'last_header': None if self.header is None else asdict(self.header),
-                'scope': 'PC offline parser/demo/replay only; no serial, detector or CNN executed'}
+                'input': dict(self.input_info),
+                'scope': 'PC reception/parser/display only; no detector or CNN executed; source declarations are not hardware evidence'}
 
     def visible_events(self):
         # 只按实际保留的样本序号匹配，不把串口到达时刻或猜测的回绕时间当事件位置。
@@ -203,11 +205,12 @@ def demo_frames(seconds=10, fs=360, scale=None, session='demo'):
             yield at, f'T,{hr},{rr},?,NA,{fs},-1,0,-1,{round(at * 1000)}\n'.encode()
 
 
-def plot_geometry(monitor, width=1000, height=360):
+def plot_geometry(monitor, width=1000, height=360, margins=(64, 20, 30, 42)):
+    """margins=(左, 右, 上, 下)像素；界面按实际Canvas尺寸和DPI传入，SVG沿用默认值。"""
     samples = list(monitor.samples)
     if not samples:
         return {'raw': [], 'filt': [], 'events': [], 'unit': '未提供', 'time_unit': '样本序号'}
-    h = monitor.header; left, right, top, bottom = 64, width - 20, 30, height - 42
+    h = monitor.header; left, right, top, bottom = margins[0], width - margins[1], margins[2], height - margins[3]
     first, last = samples[0][1], samples[-1][1]; span = max(last - first, 1)
     values = [v / h.scale if h.scale else v for p in samples for v in (p[2], p[3]) if v is not None]
     low, high = min(values), max(values)

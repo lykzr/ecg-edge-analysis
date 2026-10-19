@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 // 真实 AXI 写样本驱动默认检测器，不 force 事件；对应 PS 自检的合成输入。
-module tb_ecg_smoke;
+module tb_ecg_smoke #(parameter integer RATE=360);
+    localparam integer FIRST_POS=100-(RATE*120/1000)/2;
     reg clk=0; always #5 clk=~clk;
     reg resetn=0;
     reg [15:0] awaddr=0, araddr=0;
@@ -9,7 +10,7 @@ module tb_ecg_smoke;
     wire awready, wready, bvalid, arready, rvalid;
     wire [1:0] bresp, rresp;
     wire [31:0] rdata;
-    ecg_qrs_axi_lite dut(
+    ecg_qrs_axi_lite #(.SAMPLE_RATE_HZ(RATE)) dut(
         .s_axi_aclk(clk), .s_axi_aresetn(resetn),
         .s_axi_awaddr(awaddr), .s_axi_awprot(3'b0),
         .s_axi_awvalid(awvalid), .s_axi_awready(awready),
@@ -64,14 +65,14 @@ module tb_ecg_smoke;
         begin
             write_reg(0,(ordinal%2) ? 32'h0000b1e0 : 32'd20000);
             check_reg('h10,20000);
-            zeros(359); check_reg('h10,0);
+            zeros(RATE-1); check_reg('h10,0);
         end
     endtask
 
     integer i;
     initial begin
         repeat(4) @(posedge clk); @(negedge clk); resetn=1;
-        check_reg('h24,360); check_reg('h28,120); check_reg('h2c,200);
+        check_reg('h24,RATE); check_reg('h28,120); check_reg('h2c,200);
         check_reg('h04,0); check_reg('h1c,0); check_reg('h20,0);
         check_reg('h30,0); check_reg('h10,0); check_reg('h14,7168);
         zeros(100); check_reg('h30,0); check_reg('h10,0);
@@ -79,7 +80,7 @@ module tb_ecg_smoke;
             pulse_period(i);
             check_reg('h04,1); check_reg('h1c,1);
             check_reg('h30,i+1); check_reg('h20,0);
-            head(79+360*i,i==0 ? 0 : 360,i+1);
+            head(FIRST_POS+RATE*i,i==0 ? 0 : RATE,i+1);
             write_reg(4,1); check_reg('h1c,0);
         end
         for(i=0;i<12;i=i+1) begin
@@ -87,16 +88,21 @@ module tb_ecg_smoke;
             check_reg('h1c,i<8 ? i+1 : 8);
             check_reg('h30,i+5); check_reg('h20,i<8 ? 0 : i-7);
             check_reg('h04,i<8 ? 1 : 3);
-            head(1519,360,5);
+            head(FIRST_POS+RATE*4,RATE,5);
         end
         write_reg(4,2); check_reg('h04,1); check_reg('h1c,8); check_reg('h20,4);
         for(i=0;i<8;i=i+1) begin
-            head(1519+360*i,360,5+i);
+            head(FIRST_POS+RATE*(4+i),RATE,5+i);
             write_reg(4,1); check_reg('h1c,7-i);
         end
         check_reg('h04,0); head(0,0,0); check_reg('h30,16); check_reg('h20,4);
-        $display("PASS ECG_SMOKE real samples, signed energy, indices/RR/sequence, FIFO retain/drop/pop/clear");
+        $display("PASS ECG_SMOKE real samples, signed energy, indices/RR/sequence, FIFO retain/drop/pop/clear rate=%0d",RATE);
         $finish;
     end
     initial begin #2000000; $fatal(1,"ECG smoke timeout"); end
+endmodule
+
+// 独立顶层避免Windows批处理将参数赋值中的等号拆开。
+module tb_ecg_smoke_500;
+    tb_ecg_smoke #(.RATE(500)) test();
 endmodule

@@ -17,3 +17,11 @@
 ## 直接打开的共享工程
 
 [正式Vivado工程](../vivado/ecg_edge/ecg_edge.xpr)与必要BD/wrapper随仓库交接，使用方法见[vivado说明](../vivado/README.md)。从空目录重新生成使用share.tcl，可另传新输出目录；它调用既有领航者构建配置，不综合、不下载。extract_gqrs_core.py是正式算法生成器，按固定WFDB版本复现GQRS派生核心到新目录，不覆盖已有源文件/许可。
+
+## 独立500Hz流式候选
+
+```powershell
+& '<Vivado安装目录>/bin/vivado.bat' -mode batch -source build/stream_500.tcl
+```
+
+该入口复用领航者构建脚本并显式设SAMPLE_RATE_HZ=500，在新的tmp/ecg_stream_500生成工程、综合/实现报告、bit/XSA及匹配ps7_init。可另传一个新的输出根目录；自定义目录后Vitis构建须显式指定三项匹配文件路径。它不更改正式360Hz共享工程或smoke交付，不下载或烧录。操作和构建边界见[PS说明](../docs/ps_stream.md)。

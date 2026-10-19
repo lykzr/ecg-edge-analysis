@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$VivadoBin,
-    [string]$OutputDir
+    [string]$OutputDir,
+    [ValidateSet(360,500)][int]$SampleRate=360
 )
 $ErrorActionPreference='Stop'
 $projectRoot=Split-Path $PSScriptRoot -Parent
@@ -11,7 +12,8 @@ Push-Location -LiteralPath $OutputDir
 try {
     & (Join-Path $VivadoBin 'xvlog.bat') -sv (Join-Path $projectRoot 'src/rtl/ecg_qrs_detector.sv') (Join-Path $projectRoot 'src/rtl/ecg_qrs_axi_lite.sv') (Join-Path $projectRoot 'sim/tb_ecg_smoke.sv') *> compile.log
     if($LASTEXITCODE -ne 0){throw 'HDL 编译失败'}
-    & (Join-Path $VivadoBin 'xelab.bat') tb_ecg_smoke -s ecg_smoke_snapshot -mt off *> elaborate.log
+    $simulationTop = if($SampleRate -eq 500){'tb_ecg_smoke_500'}else{'tb_ecg_smoke'}
+    & (Join-Path $VivadoBin 'xelab.bat') $simulationTop -s ecg_smoke_snapshot -mt off *> elaborate.log
     if($LASTEXITCODE -ne 0){throw '仿真 elaboration 失败'}
     & (Join-Path $VivadoBin 'xsim.bat') ecg_smoke_snapshot -runall *> simulation.log
     if($LASTEXITCODE -ne 0){throw '仿真进程失败'}
