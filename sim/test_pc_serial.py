@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT/'src'))
 sys.path.insert(0, str(ROOT / 'src/pc'))
 from ecg_serial import WindowsSerial, SerialCapture, DCB, Timeouts, ComStat
 from ecg_monitor_core import Monitor, Recorder, RecordingLimitError, demo_frames
@@ -209,7 +210,7 @@ class CaptureTests(unittest.TestCase):
             import tkinter as tk
         except ImportError:
             self.skipTest('没有Tkinter')
-        import ecg_monitor
+        import ui.monitor as ecg_monitor
         root = tk.Tk(); root.withdraw()
         readers = []
         def receiver(monitor, port):
@@ -217,7 +218,9 @@ class CaptureTests(unittest.TestCase):
             readers.append(reader)
             return SerialCapture(monitor, port, factory=lambda *args: reader)
         try:
-            with patch.object(ecg_monitor, 'new_directory', side_effect=[self.path/'ui1', self.path/'ui2']), patch.object(ecg_monitor, 'SerialCapture', side_effect=receiver):
+            with patch.object(ecg_monitor, 'new_directory', side_effect=[self.path/'ui1', self.path/'ui2']), \
+                 patch.object(ecg_monitor, 'SerialCapture', side_effect=receiver), \
+                 patch.object(ecg_monitor, 'enumerate_ports', return_value=([dict(port='COM14', label='fake', device_id='', candidate=True)], [])):
                 app = ecg_monitor.Application(root)
                 self.assertEqual(app.state, 'idle'); self.assertTrue(app.canvas.find_withtag('guide'))
                 app.port_text.set('COM14')
@@ -244,12 +247,13 @@ class CaptureTests(unittest.TestCase):
             import tkinter as tk
         except ImportError:
             self.skipTest('没有Tkinter')
-        import ecg_monitor
+        import ui.monitor as ecg_monitor
         root = tk.Tk(); root.withdraw()
         reader = FakeReader(chunks=[b'Hello World\n', OSError('unplugged')])
         try:
             with patch.object(ecg_monitor, 'new_directory', side_effect=[self.path/'ui_err']), \
-                 patch.object(ecg_monitor, 'SerialCapture', side_effect=lambda m, p: SerialCapture(m, p, factory=lambda *a: reader)):
+                 patch.object(ecg_monitor, 'SerialCapture', side_effect=lambda m, p: SerialCapture(m, p, factory=lambda *a: reader)), \
+                 patch.object(ecg_monitor, 'enumerate_ports', return_value=([dict(port='COM14', label='fake', device_id='', candidate=True)], [])):
                 app = ecg_monitor.Application(root); app.port_text.set('COM14')
                 app.open_serial(); app.tick()
                 # 收到非协议文本：说明已保存原文但仍在等H，不显示猜测波形。
@@ -266,7 +270,7 @@ class CaptureTests(unittest.TestCase):
             import tkinter as tk
         except ImportError:
             self.skipTest('没有Tkinter')
-        import ecg_monitor
+        import ui.monitor as ecg_monitor
         root = tk.Tk(); root.withdraw()
         log = self.path/'replay.log'
         log.write_bytes(b''.join(frame for _, frame in demo_frames(2.01)))

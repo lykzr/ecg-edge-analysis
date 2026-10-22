@@ -28,3 +28,6 @@
 自有实现未因参考资料而取得第三方资产的版权。当前仍是开发仓库，完整第三方组件和最终发布包许可审查列入计划，尚未声称已全部完成。
 
 `src/reference/ecg_temporal_cnn.py`为项目自有两层Conv1D与分段池化/RR分支实现，使用PyTorch通用算子，无新增第三方源码或预训练权重，不声称是某个官方预训练模型。既有残差对照的结构来源保持上表；比较设计见[患者CV说明](docs/cnn_patient_cv.md)，开发验证成绩不能继承论文成绩。
+
+
+src/reference/qrs_research是未合格研究快照：GQRS派生核心保留MIT来源，许可仍见src/third_party/wfdb_license.txt；gradient独立实现参考[NeuroKit固定版本](https://github.com/neuropsychology/NeuroKit/blob/ff419d983568ef492eb8d229af643c0ef0100b32/neurokit2/ecg/ecg_findpeaks.py)原默认梯度思路，改为历史宽度中位数，并非原函数等价复现。未复制其GPL上游Hamilton等子函数。文件映射/哈希见该目录provenance.json；不把研究成绩称为上游或板上验证。

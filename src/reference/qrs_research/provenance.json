@@ -1,0 +1,34 @@
+{
+  "qualified": false,
+  "scope": "known-data offline research snapshot26, not board/complete bounded online runtime",
+  "files": {
+    "recovery_core.py": {
+      "original": "tmp/qrs_refine_20261021/recovery_core.py",
+      "original_sha256": "9da889df0e2d99c8752ad3e94e2c13faacc41d607b87c6969c9757ddaae3d89f",
+      "snapshot_sha256": "236bd3b18a0fa34781cf03ee5c0ce8f7487a9b38c02a561978fcf0463e980067",
+      "changes": "relative package imports and provenance comment only"
+    },
+    "recovery.py": {
+      "original": "tmp/qrs_refine_20261021/recovery.py",
+      "original_sha256": "8ccba8542fbf0525c9701645f52145987151dee62acba075e5a63d416525fcce",
+      "snapshot_sha256": "061d1f40060258e67dae36c9ba80e1ec72605f83406c3ee387994f1a51b474f5",
+      "changes": "relative package imports and provenance comment only"
+    },
+    "candidate.py": {
+      "original": "tmp/qrs_refine_20261021/template_width_rescue.py",
+      "original_sha256": "483e27a603053ee5f5b2ab22107497581da9da9e5fb18f600051aed31ed4b1c8",
+      "snapshot_sha256": "ff2876bf81faae48df3429662d17046f673b75ab08af9ef0d214882d6fdef958",
+      "changes": "relative package imports and provenance comment only"
+    },
+    "gradient.py": {
+      "original": "tmp/qrs_refine_20261021/gradient.py",
+      "original_sha256": "31bccc6dc3e4a8ba0449b4c80683089f03c11030deeb170b79563de19951a217",
+      "snapshot_sha256": "3016b1462381548107a80c85ef5b0352c134409df6e6427dfb4970d73759fe01",
+      "changes": "relative package imports and provenance comment only"
+    }
+  },
+  "wfdb_source": "https://github.com/MIT-LCP/wfdb-python/blob/v4.3.1/wfdb/processing/qrs.py",
+  "wfdb_license": "src/third_party/wfdb_license.txt",
+  "gradient_reference": "https://github.com/neuropsychology/NeuroKit/blob/ff419d983568ef492eb8d229af643c0ef0100b32/neurokit2/ecg/ecg_findpeaks.py",
+  "gradient_note": "Independently implemented bounded causal gradient; changed whole-record width mean to rolling historical width median; not upstream numeric equivalent; no GPL Hamilton copied."
+}

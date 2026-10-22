@@ -78,8 +78,9 @@ class BridgeClient:
             return
         frame = parse_line(line.decode('ascii').rstrip('\r\n'), self.monitor.header)
         if isinstance(frame, Header):
-            if (frame.session, frame.source, frame.fs, frame.scale, frame.caps, frame.detector) != (
-                self.session, self.source, 500, None, 0xD, 'QRS-ORIG-60'):
+            if ((frame.session, frame.source, frame.fs, frame.scale, frame.caps) != (
+                self.session, self.source, 500, None, 0xD)
+                or frame.detector not in ('QRS-ORIG-60', 'QRS-AUTOPEAK-60')):
                 raise ValueError('Zynq结果会话/来源/采样率/能力不匹配')
             if self.monitor.header is not None and frame != self.monitor.header:
                 raise ValueError('会话中途变更元数据')

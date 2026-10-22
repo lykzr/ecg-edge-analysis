@@ -1,5 +1,6 @@
-/* 领航者V2现有smoke硬件上的独立接收中转；不含AFE驱动或CNN；未上板验证。 */
+/* 领航者V2现有smoke硬件上的独立接收中转；不含AFE驱动或CNN。 */
 #include "bridge.h"
+#include "bridge_time.h"
 #include "xil_io.h"
 #include "xparameters.h"
 #include "xiltimer.h"
@@ -65,13 +66,14 @@ int main(void)
     Xil_Out32(ECG_GLOBAL_TIMER_BASE + ECG_GLOBAL_TIMER_CONTROL, timer_control | 1U);
     XTime now; XTime_GetTime(&now);
     XTime start = now;
+    /* BSP的COUNTS_PER_SECOND可能展开为无括号的CPU_FREQ/2，先求值为完整常量。 */
+    const uint64_t timer_frequency = (uint64_t)(COUNTS_PER_SECOND);
     BridgeIo io = {NULL, reg_read, reg_write, ready, send_byte};
     ecg_bridge_init(&bridge, io);
     for (;;) {
         XTime_GetTime(&now);
         uint64_t elapsed = now-start;
-        uint64_t us = (elapsed/COUNTS_PER_SECOND)*1000000ULL
-                    + (elapsed%COUNTS_PER_SECOND)*1000000ULL/COUNTS_PER_SECOND;
+        uint64_t us = ecg_bridge_time_us(elapsed, timer_frequency);
         /* RX/TX各有界推进；只在收到合法输入后才送PL，不生成任何样本。 */
         u32 errors = XUartPs_ReadReg(config->BaseAddress, XUARTPS_ISR_OFFSET);
         if (errors & (XUARTPS_IXR_OVER | XUARTPS_IXR_FRAMING | XUARTPS_IXR_PARITY)) {
@@ -91,7 +93,7 @@ int main(void)
     XTime end = now;
     while (!XUartPs_IsTransmitEmpty(&uart) || XUartPs_IsSending(&uart)) {
         XTime_GetTime(&now);
-        if (now - end > 2ULL * COUNTS_PER_SECOND) { ecg_bridge_result = -4; return 1; }
+        if (now - end > 2ULL * timer_frequency) { ecg_bridge_result = -4; return 1; }
     }
     ecg_bridge_result = bridge.failed ? -5 : 1;
     return bridge.failed ? 1 : 0;

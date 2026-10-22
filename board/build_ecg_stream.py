@@ -12,7 +12,7 @@ component = os.environ.get('ECG_STREAM_APP', 'ecg_stream')
 if component not in ('ecg_stream', 'ecg_bridge'):
     raise ValueError('只支持ecg_stream或ecg_bridge')
 workspace = Path(os.environ.get('ECG_STREAM_WORKSPACE', str(ROOT/'tmp/ecg_stream_500/vitis_workspace'))).resolve()
-hardware = ROOT/'tmp/ecg_stream_500/hardware'
+hardware = ROOT/'releases/latest/bridge/hardware'
 xsa = Path(os.environ.get('ECG_STREAM_XSA', str(hardware/'ecg_system_candidate.xsa'))).resolve()
 bit = Path(os.environ.get('ECG_STREAM_BIT', str(hardware/'ecg_system_candidate.bit'))).resolve()
 psinit = Path(os.environ.get('ECG_STREAM_PSINIT', str(hardware/'ps7_init.tcl'))).resolve()
@@ -25,7 +25,7 @@ if workspace.exists():
     raise FileExistsError('工作区已存在；用ECG_STREAM_WORKSPACE选择新的英文目录')
 if any(ord(c) < 33 or ord(c) > 126 for c in str(workspace)):
     raise ValueError('Vitis工作区使用无空格英文路径')
-names = ('main.c', 'stream.c', 'stream.h') if component == 'ecg_stream' else ('main.c', 'bridge.c', 'bridge.h')
+names = ('main.c', 'stream.c', 'stream.h') if component == 'ecg_stream' else ('main.c', 'bridge.c', 'bridge.h', 'bridge_time.h')
 sources = [ROOT/'src/ps'/component/n for n in names]
 for p in [xsa, bit, psinit, *sources]:
     if not p.is_file(): raise FileNotFoundError(p)
@@ -54,7 +54,9 @@ try:
         destination = workspace/component/target
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination)
-    launch = json.loads((ROOT/'releases/latest/board/launch_template.json').read_text(encoding='utf-8'))
+    launch_path = Path(os.environ.get('ECG_STREAM_LAUNCH_TEMPLATE',
+                                     str(ROOT/'releases/latest/smoke/board/launch_template.json')))
+    launch = json.loads(launch_path.read_text(encoding='utf-8'))
     # 仅修改本次新组件的启动副本，不改已验收smoke启动配置。
     launch = json.loads(json.dumps(launch).replace('ecg_smoke', component))
     (workspace/component/'_ide/launch.json').write_text(json.dumps(launch, indent=2)+'\n', encoding='utf-8')

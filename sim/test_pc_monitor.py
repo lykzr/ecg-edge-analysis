@@ -10,9 +10,11 @@ import unittest
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT/'src'))
 sys.path.insert(0, str(ROOT / 'src/pc'))
 from ecg_uart import Decoder, Header, MASK
-from ecg_monitor_core import Monitor, Recorder, RecordingLimitError, demo_frames, plot_geometry, save_svg
+from ecg_monitor_core import Monitor, Recorder, RecordingLimitError, demo_frames
+from ui.plot import plot_geometry, save_svg
 
 
 def header(session='s1', fs=360, scale=-1, caps='0xD'):

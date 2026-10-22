@@ -6,7 +6,7 @@ import vitis
 
 root = Path(__file__).resolve().parents[1]
 workspace = Path(os.environ.get("ECG_SMOKE_WORKSPACE", str(root / "tmp/ecg_smoke/vitis_workspace"))).resolve()
-xsa = Path(os.environ.get("ECG_SMOKE_XSA", str(root / "releases/latest/hardware/ecg_system_candidate.xsa"))).resolve()
+xsa = Path(os.environ.get("ECG_SMOKE_XSA", str(root / "releases/latest/smoke/hardware/ecg_system_candidate.xsa"))).resolve()
 source = root / "src/ps/ecg_smoke/main.c"
 if workspace.exists():
     raise RuntimeError("工作区已存在；请使用 ECG_SMOKE_WORKSPACE 指定新的空目录，避免覆盖")

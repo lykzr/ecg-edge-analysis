@@ -3,18 +3,31 @@ import argparse
 import ast
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def manifest_path(base, name):
+    """兼容历史Windows清单；路径仍须是基目录内的相对文件。"""
+    if not isinstance(name, str) or not name or '\x00' in name:
+        raise ValueError('清单路径必须是非空相对路径')
+    portable = PurePosixPath(name.replace('\\', '/'))
+    if portable.is_absolute() or PureWindowsPath(name).drive or not portable.parts:
+        raise ValueError('清单不接受绝对路径或盘符：'+name)
+    base = Path(base).resolve()
+    result = base.joinpath(*portable.parts).resolve()
+    result.relative_to(base)
+    return result
+
+
 def check(root=ROOT):
     root = Path(root).resolve()
     required = json.loads((root / 'sim/checkout_files.json').read_text(encoding='utf-8'))['required']
     for name in required:
-        path = (root / name).resolve(); path.relative_to(root)
+        path = manifest_path(root, name)
         if not path.is_file():
             raise FileNotFoundError('交接缺文件：' + name)
     modules = {Path(n).stem for n in required if n.endswith('.py')}
@@ -40,13 +53,13 @@ def check(root=ROOT):
     for entry in project.findall('./FileSets/FileSet/File'):
         text = entry.attrib['Path'].replace('$PPRDIR', str(xpr.parent)).replace('$PSRCDIR', str(source_dir))
         assert '$' not in text, text
-        path = Path(text).resolve(); path.relative_to(root)
+        path = Path(text.replace('\\', '/')).resolve(); path.relative_to(root)
         assert path.is_file(), str(path)
         files.append(str(path.relative_to(root)))
     assert len(files) == 4, files
     baseline = json.loads((root / 'data/baseline/files.json').read_text(encoding='utf-8'))
     for name, row in baseline['files'].items():
-        path = (root / 'data/baseline' / name).resolve(); path.relative_to(root / 'data/baseline')
+        path = manifest_path(root / 'data/baseline', name)
         assert path.stat().st_size == row['bytes'] and hashlib.sha256(path.read_bytes()).hexdigest() == row['sha256'], name
     return {'passed': True, 'required_files': len(required), 'python_parsed': parsed,
             'xpr_source_files': files, 'baseline_files': len(baseline['files']),

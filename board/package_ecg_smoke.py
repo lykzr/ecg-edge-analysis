@@ -9,10 +9,10 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 PINNED = {
     'src/ps/ecg_smoke/main.c': '149fcf44ffff8f42f9d917a85f4b063803f2c87091b23e444fad284589e2216a',
-    'releases/latest/prebuilt/ecg_smoke.elf': '2e573ba9a9244cd4a9ef0f5ce80eca8957e1b512594b9b9389fc616353285bf7',
-    'releases/latest/hardware/ecg_system_candidate.bit': 'd6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb',
-    'releases/latest/hardware/ecg_system_candidate.xsa': 'fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248',
-    'releases/latest/hardware/ps7_init.tcl': '02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9',
+    'releases/latest/smoke/prebuilt/ecg_smoke.elf': '2e573ba9a9244cd4a9ef0f5ce80eca8957e1b512594b9b9389fc616353285bf7',
+    'releases/latest/smoke/hardware/ecg_system_candidate.bit': 'd6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb',
+    'releases/latest/smoke/hardware/ecg_system_candidate.xsa': 'fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248',
+    'releases/latest/smoke/hardware/ps7_init.tcl': '02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9',
 }
 
 
@@ -30,12 +30,12 @@ def main():
             raise RuntimeError('冻结 smoke 组合发生变化，重新验证后才能打包: ' + source)
     mapping = {
         'src/ps/ecg_smoke/main.c': 'src/ps/ecg_smoke/main.c',
-        'prebuilt/ecg_smoke.elf': 'releases/latest/prebuilt/ecg_smoke.elf',
-        'hardware/ecg_system_candidate.bit': 'releases/latest/hardware/ecg_system_candidate.bit',
-        'hardware/ecg_system_candidate.xsa': 'releases/latest/hardware/ecg_system_candidate.xsa',
-        'hardware/ps7_init.tcl': 'releases/latest/hardware/ps7_init.tcl',
+        'prebuilt/ecg_smoke.elf': 'releases/latest/smoke/prebuilt/ecg_smoke.elf',
+        'hardware/ecg_system_candidate.bit': 'releases/latest/smoke/hardware/ecg_system_candidate.bit',
+        'hardware/ecg_system_candidate.xsa': 'releases/latest/smoke/hardware/ecg_system_candidate.xsa',
+        'hardware/ps7_init.tcl': 'releases/latest/smoke/hardware/ps7_init.tcl',
         'board/build_ecg_smoke.py': 'board/build_ecg_smoke.py',
-        'board/launch_template.json': 'releases/latest/board/launch_template.json',
+        'board/launch_template.json': 'releases/latest/smoke/board/launch_template.json',
         'LICENSE': 'LICENSE',
     }
     for name in ['create_workspace.py', 'create_workspace.ps1', 'run_smoke.ps1', 'run_smoke.tcl', 'capture_uart.ps1']:

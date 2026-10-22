@@ -4,7 +4,7 @@ smoke用于检查PS→AXI→原QRS检测器→事件FIFO基础链路。修改RTL
 
 ## 使用哪个工程
 
-优先使用[当前smoke交付](../releases/latest/README.md)中的匹配bit/XSA/初始化文件与ELF，按该入口运行；不要混入旧Hello World镜像。已有本机Vitis工作区、完整预期输出、复位/拨码和串口步骤统一见[下载教程第20节](download_guide.md#20-ps-读取配置与受控样本fifo-自检)，不在这里再复制一套步骤。
+优先使用[当前smoke交付](../releases/latest/smoke/README.md)中的匹配bit/XSA/初始化文件与ELF，按该入口运行；不要混入旧Hello World镜像。已有本机Vitis工作区、完整预期输出、复位/拨码和串口步骤统一见[下载教程第20节](download_guide.md#20-ps-读取配置与受控样本fifo-自检)，不在这里再复制一套步骤。
 
 ## 换电脑与打包
 
@@ -31,3 +31,5 @@ python -B sim/check_smoke_handoff.py tmp/ecg_smoke_kit_new.zip
 - [交接与发布合并记录](records/smoke_release_20261017.md)：离线重建、失败修正、旧版归档、发布检查及各阶段边界。
 
 使用方法在本文/下载教程/latest说明维护，实验输出只记docs/records/；不在多个使用说明里重复更新验收流水。
+
+当前系统交付的smoke独立组件位于releases/latest/smoke/，进入该目录再执行其board/脚本。500Hz bridge是另一组件，不能混用bit/XSA；旧smoke版本完整保留于history，不覆盖其验收记录。

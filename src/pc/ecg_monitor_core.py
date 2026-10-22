@@ -2,7 +2,6 @@
 from collections import Counter, deque
 from dataclasses import asdict
 import csv
-from html import escape
 import io
 import json
 import math
@@ -205,50 +204,5 @@ def demo_frames(seconds=10, fs=360, scale=None, session='demo'):
             yield at, f'T,{hr},{rr},?,NA,{fs},-1,0,-1,{round(at * 1000)}\n'.encode()
 
 
-def plot_geometry(monitor, width=1000, height=360, margins=(64, 20, 30, 42)):
-    """margins=(左, 右, 上, 下)像素；界面按实际Canvas尺寸和DPI传入，SVG沿用默认值。"""
-    samples = list(monitor.samples)
-    if not samples:
-        return {'raw': [], 'filt': [], 'events': [], 'unit': '未提供', 'time_unit': '样本序号'}
-    h = monitor.header; left, right, top, bottom = margins[0], width - margins[1], margins[2], height - margins[3]
-    first, last = samples[0][1], samples[-1][1]; span = max(last - first, 1)
-    values = [v / h.scale if h.scale else v for p in samples for v in (p[2], p[3]) if v is not None]
-    low, high = min(values), max(values)
-    margin = max((high - low) * .1, .01 if h.scale else 1)
-    low -= margin; high += margin
-    x = lambda index: left + (index - first) / span * (right - left)
-    y = lambda value: bottom - ((value / h.scale if h.scale else value) - low) / (high - low) * (bottom - top)
-    paths = {'raw': [], 'filt': []}
-    for key, field in [('raw', 2), ('filt', 3)]:
-        segment = []; previous = None
-        for p in samples:
-            if p[field] is None or (previous is not None and p[1] != previous + 1):
-                if len(segment) > 1: paths[key].append(segment)
-                segment = []
-            if p[field] is not None: segment.append((x(p[1]), y(p[field])))
-            previous = p[1]
-        if len(segment) > 1: paths[key].append(segment)
-    return {**paths, 'events': [(x(index), event.seq) for event, index in monitor.visible_events()],
-            'unit': 'mV（声明换算）' if h.scale else '码值（未标定）',
-            'time_unit': '逻辑采样秒' if h.fs else '样本序号',
-            'first': first / h.fs if h.fs else first, 'last': last / h.fs if h.fs else last,
-            'low': low, 'high': high}
 
 
-def save_svg(monitor, path):
-    path = Path(path)
-    geometry = plot_geometry(monitor); h = monitor.header
-    title = '无数据' if h is None else f'{h.source} / {h.detector} / session={h.session}'
-    parts = ['<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="400" viewBox="0 0 1000 400">',
-             '<rect width="1000" height="400" fill="#101820"/>',
-             f'<text x="20" y="20" fill="#eeeeee">{escape(title)}</text>']
-    for key, color in [('raw', '#58d6a6'), ('filt', '#70baff')]:
-        for segment in geometry[key]:
-            points = ' '.join(f'{x:.2f},{y:.2f}' for x, y in segment)
-            parts.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="1.3"/>')
-    for x, seq in geometry['events']:
-        parts.append(f'<line x1="{x:.2f}" x2="{x:.2f}" y1="30" y2="318" stroke="#ffcd70" stroke-dasharray="4 4"/>')
-    footer = f"{geometry['unit']} | {geometry['time_unit']} | QRS候选/演示标记，不是疾病判断；滤波与分类未提供时不绘制"
-    parts.append(f'<text x="20" y="385" fill="#eeeeee">{escape(footer)}</text></svg>')
-    with path.open('x', encoding='utf-8') as stream:
-        stream.write('\n'.join(parts))

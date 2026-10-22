@@ -10,6 +10,22 @@ from ecg_filter_reference import Biquad, Filter, coefficients
 
 
 class FilterChecks(unittest.TestCase):
+    def test_500hz_independent_equations_and_notch50(self):
+        values = coefficients('notch',50,500,30)
+        model = Biquad(values)
+        b0,b1,b2,a1,a2 = values
+        x1=x2=y1=y2=0.
+        ys = []
+        for i in range(10000):
+            x = 4096*math.sin(2*math.pi*50*i/500)
+            expected = b0*x+b1*x1+b2*x2-a1*y1-a2*y2
+            actual = model.tick(x)
+            self.assertAlmostEqual(actual,expected,places=7)
+            ys.append(actual)
+            x2,x1,y2,y1 = x1,x,y1,expected
+        self.assertLess(max(map(abs,ys[5000:])),1e-7)
+        self.assertLess(abs(model.response(50,500)),1e-10)
+
     def test_independent_direct_form(self):
         for kind,f,q in [('highpass',.5,math.sqrt(.5)),('lowpass',40,math.sqrt(.5)),('notch',60,30)]:
             values = coefficients(kind,f,q=q)

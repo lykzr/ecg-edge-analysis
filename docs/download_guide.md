@@ -240,7 +240,7 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 
 迁移前的旧bitstream不能当新版产物，历史来源见[本机说明](../myself.md)。JTAG候选bit/XSA与ELF位置见第11节；QSPI烧录另选当前发布组合。
 
-上述位置对应历史JTAG候选版本；当前[latest](../releases/latest/README.md)已换成smoke/JTAG，不含QSPI镜像；本机旧Hello World/QSPI组合在releases/history/20261013-hello-world-qspi-v1，按其原说明使用，不能混合FSBL/bit/应用。
+上述位置对应历史JTAG候选版本；当前[latest](../releases/latest/README.md)为系统JTAG交付，smoke与500Hz bridge分目录，不含QSPI镜像；本机旧Hello World/QSPI组合在releases/history/20261013-hello-world-qspi-v1，按其原说明使用，不能混合FSBL/bit/应用。
 
 ## 14. ECG 接口的下一阶段验收
 
@@ -271,7 +271,7 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 
 ## 16. QSPI镜像选择
 
-当前[发布目录](../releases/latest/README.md)为smoke/JTAG，直接用run_smoke.ps1运行，不写Flash。QSPI镜像/FSBL须来自另行核对的完整组合，本机旧Hello World组合仅保留历史，不代表smoke已固化。构建目录中的待验证镜像不能自动当作当前发布。早期镜像准备及构建成绩见[历史记录](records/bringup_history.md#16-2026-10-13本次-qspi-镜像已准备)。
+当前[发布目录](../releases/latest/README.md)包含smoke/JTAG及500Hz bridge，进入smoke/用board/run_smoke.ps1运行自检，不写Flash。QSPI镜像/FSBL须来自另行核对的完整组合，本机旧Hello World组合仅保留历史，不代表smoke已固化。构建目录中的待验证镜像不能自动当作当前发布。早期镜像准备及构建成绩见[历史记录](records/bringup_history.md#16-2026-10-13本次-qspi-镜像已准备)。
 
 ## 17. 启动验收记录入口
 
@@ -279,7 +279,7 @@ Flash编程校验、复位后UART输出和完整断电启动分别验收。实�
 
 ## 18. 当前发布入口与历史保留
 
-当前latest为smoke/JTAG，目录含hardware、prebuilt、board和src，以及manifest/artifacts清单；不含BOOT.BIN、FSBL或BIF。旧Hello World/QSPI已原字节归档至releases/history/20261013-hello-world-qspi-v1。当前操作见[发布说明](../releases/latest/README.md)，不能把本节历史QSPI步骤用于smoke ELF。
+当前latest为系统JTAG交付，smoke/和bridge/各有匹配hardware/prebuilt，src/pc与src/ui为客户端，manifest/artifacts列明整体交付；不含BOOT.BIN、FSBL或BIF。旧Hello World/QSPI已原字节归档至releases/history/20261013-hello-world-qspi-v1。当前操作见[发布说明](../releases/latest/README.md)，不能把本节历史QSPI步骤用于smoke ELF。
 
 只放行 latest 的明确交付文件；历史版本、本次及其他构建留在本地忽略目录，不删除。版本号及验证范围记录在清单中，后续替换 latest 前先归档旧版本。当前smoke验收范围为用户返回的JTAG合成输入自检通过；掉电需重新下载，未制作或验证smoke QSPI启动镜像。
 
@@ -293,7 +293,7 @@ Flash编程校验、复位后UART输出和完整断电启动分别验收。实�
 
 换电脑运行时先使用[跨电脑smoke交接说明](smoke_handoff.md)制作并完整解压工程包；接收方从包内文件创建本机工作区，不能直接套用下文原电脑的路径或 COM14。包内也提供不需重建的预编译 JTAG 运行入口。
 
-正式应用源码在 `src/ps/ecg_smoke/main.c`，可复现构建脚本 `board/build_ecg_smoke.py`。当前已在独立工作区 `tmp/ecg_smoke/vitis_workspace` 构建平台及 `ecg_smoke` 应用，ELF 在该目录 `ecg_smoke/build/ecg_smoke.elf`。构建时使用的匹配XSA和bitstream现保留于latest/hardware/，smoke ELF在latest/prebuilt/；没有更改RTL或PS参数，旧Hello World发布已另行归档。此阶段先做 JTAG 运行，不写 Flash。
+正式应用源码在 `src/ps/ecg_smoke/main.c`，可复现构建脚本 `board/build_ecg_smoke.py`。当前已在独立工作区 `tmp/ecg_smoke/vitis_workspace` 构建平台及 `ecg_smoke` 应用，ELF 在该目录 `ecg_smoke/build/ecg_smoke.elf`。构建时使用的匹配XSA和bitstream现保留于latest/smoke/hardware/，smoke ELF在latest/smoke/prebuilt/；没有更改RTL或PS参数，旧Hello World发布已另行归档。此阶段先做 JTAG 运行，不写 Flash。
 
 目录迁移后，上述Vitis工作区未移动，可继续使用已有产物Run，无需因源码目录调整而重建。运行配置为 `ecg_smoke/_ide/launch.json` 中的 `ecg_smoke_app_hw_1`，已启用系统复位与Program Device，核0运行且不停止入口。当前教程位置为 `docs/download_guide.md`；旧的 `docs/如何下载.md` 和 `board/download_guide.md` 已停用。2026-10-15核对：正式main.c与工作区副本一致，ELF/bit哈希匹配，初始化文件均存在；这属于当时文件/配置核查；2026-10-17用户返回板上合成自检通过日志，见[上板记录](records/smoke_board_validation_20261017.md)。
 
@@ -342,7 +342,7 @@ PASS ECG_SMOKE failures=0
 ./sim/run_ecg_smoke_test.ps1 -VivadoBin '<Vivado安装目录>/bin'
 ```
 
-构建脚本默认读取 `releases/latest/hardware/ecg_system_candidate.xsa`；已有工作区时停止，避免覆盖。重建时用环境变量 ECG_SMOKE_WORKSPACE 指定新的空工作区，ECG_SMOKE_XSA 可显式选择匹配 XSA；仿真已有输出时用 OutputDir 参数选新的输出目录。正式源码修改后需要重新导入并构建，不能把 tmp 里的旧副本当最新版。
+构建脚本默认读取 `releases/latest/smoke/hardware/ecg_system_candidate.xsa`；已有工作区时停止，避免覆盖。重建时用环境变量 ECG_SMOKE_WORKSPACE 指定新的空工作区，ECG_SMOKE_XSA 可显式选择匹配 XSA；仿真已有输出时用 OutputDir 参数选新的输出目录。正式源码修改后需要重新导入并构建，不能把 tmp 里的旧副本当最新版。
 
 本轮证据：`tmp/ecg_smoke_build.log`、`tmp/ecg_smoke/rtl_check/simulation.log`、`tmp/ecg_smoke/artifacts.json`。构建/仿真通过后按本节运行；通过实测后再决定是否制作新的启动镜像与更新 latest。
 
@@ -414,3 +414,7 @@ python -B sim/check_ecg_reference.py --vivado-bin '<Vivado安装目录>/bin' --o
 ## 25. 当前离线入口与历史保留
 
 当前QRS v4运行方法见[data/README.md](../data/README.md)，算法结果见[离线评估](records/offline_qrs_evaluation.md)，文件拆分复现见[准确性复核](records/qrs_recheck_20261016.md)。历史实现保留在`tmp/history/qrs_20261016/`，不作为当前默认入口，不因文档整理删除。
+
+## 21. 当前500Hz双向中转交付
+
+系统包入口为releases/latest/README.md。bridge/的500Hz bit/XSA/ELF只供电脑送样中转；smoke/仍是360Hz自检，不混用硬件。先运行bridge/board/run_bridge.ps1 -CheckOnly校验，再指定实际AMD工具目录和下载器序列号临时JTAG启动；客户端入口src/ui/main.py。每次新会话重新配置PL，END/DONE后不直接重发初始化。接收方重建GUI工作区可用包内board/create_bridge_workspace.py，准确命令见包内说明。原始来源记录与本轮便携/归档检查见[系统发布记录](records/system_release_20261021.md)。

@@ -140,6 +140,18 @@ class UsbBridgeTests(unittest.TestCase):
         cls.lib.ecg_bridge_field.restype = ct.c_uint32
         cls.lib.ecg_bridge_error.argtypes = [ct.c_void_p]
         cls.lib.ecg_bridge_error.restype = ct.c_char_p
+        cls.lib.ecg_bridge_test_time.argtypes = [ct.c_uint64]
+        cls.lib.ecg_bridge_test_time.restype = ct.c_uint64
+
+    def test_real_bsp_frequency_macro_and_two_second_boundary(self):
+        freq = 666666687 // 2
+        # 原表达式在CPU_FREQ边界余数归零；修复版须仍单调并给出正确微秒。
+        ticks = [0, 1, freq-1, freq, 2*freq-1, 2*freq, 666666687,
+                 2*freq+2, 4*freq, 60*freq, 3600*freq, 86400*freq]
+        actual = [self.lib.ecg_bridge_test_time(t) for t in ticks]
+        self.assertEqual(actual, [t*1000000//freq for t in ticks])
+        self.assertEqual(actual, sorted(actual))
+        self.assertEqual(self.lib.ecg_bridge_test_time(2*freq), 2000000)
 
     def run_values(self, values, name='case'):
         node = Node(self.lib); monitor = Monitor()
