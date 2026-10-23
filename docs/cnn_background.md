@@ -32,24 +32,24 @@
 在项目根目录执行，已有协议直接prepare，不覆盖历史：
 
 ```powershell
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/prepare_cnn_background.py prepare --parent-cache tmp/cnn_cv_cache_20261017_01 --protocol data/cnn_causal_background_v10_protocol.json --raw-dir tmp/ecg_expansion_20261017/raw --mit-raw-dir tmp/multi_record_20261016_01/raw --output-dir tmp/cnn_background_cache_new
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/prepare_cnn_background.py prepare --parent-cache tmp/cnn_cv_cache_20261017_01 --protocol model/protocols/cnn_causal_background_v10_protocol.json --raw-dir tmp/ecg_expansion_20261017/raw --mit-raw-dir tmp/multi_record_20261016_01/raw --output-dir tmp/cnn_background_cache_new
 & './tmp/qrs_benchmark_env/Scripts/python.exe' -B sim/verify_cnn_background_data.py --cache-dir tmp/cnn_background_cache_new --raw-dir tmp/ecg_expansion_20261017/raw --mit-raw-dir tmp/multi_record_20261016_01/raw --output tmp/cnn_background_data_check_new.json
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_background.py --cache-dir tmp/cnn_background_cache_new --parent-run tmp/cnn_patient_cv_v8_20261017_02 --protocol data/cnn_causal_background_v10_protocol.json --output-dir tmp/cnn_background_train_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_background.py --cache-dir tmp/cnn_background_cache_new --parent-run tmp/cnn_patient_cv_v8_20261017_02 --protocol model/protocols/cnn_causal_background_v10_protocol.json --output-dir tmp/cnn_background_train_new
 & './tmp/cnn_torch_env/Scripts/python.exe' -B sim/verify_cnn_background.py --cache-dir tmp/cnn_background_cache_new --parent-run tmp/cnn_patient_cv_v8_20261017_02 --run-dir tmp/cnn_background_train_new --output tmp/cnn_background_model_check_new.json
 ```
 
 路径和解释器为本机示例。`prepare_cnn_background.py freeze --parent-cache ... --parent-run ... --protocol <新文件>`仅用于新协议，不覆盖已有v10。新机器需要匹配父缓存/权重和已有依赖，不自动安装。
 
-准备器核对官方原始文件、导联首值/模和以及原当前波形逐字节一致；背景检查器独立按窗口末端检索重建全部背景。模型检查器复算采样/患者隔离、逐类/逐患者指标和门槛，重放保存权重。相关源码在src/reference/ecg_causal_background.py与ecg_context_cnn.py，都是自有扩展，来源边界沿用[第三方说明](../third_party.md)。训练/数据/源码/权重哈希与原始logits均保留，实际结果见[记录](records/cnn_background_20261017.md)。**smoke未上板测试。**
+准备器核对官方原始文件、导联首值/模和以及原当前波形逐字节一致；背景检查器独立按窗口末端检索重建全部背景。模型检查器复算采样/患者隔离、逐类/逐患者指标和门槛，重放保存权重。相关源码在src/reference/ecg_causal_background.py与ecg_context_cnn.py，都是自有扩展，来源边界沿用[第三方说明](../third_party.md)。训练/数据/源码/权重哈希与原始logits均保留，实际结果见记录。**smoke未上板测试。**
 
 ## 后续只训练支路的对照
 
-[v11协议](../tmp/history/training_handoff_20261017/data/cnn_causal_adapter_v11_protocol.json)复用同一已核对的v10背景缓存，明确绑定其数据协议和清单哈希；保留v10全部结果。`data/train_cnn_background_adapter.py`只让context_stem和context_rr的232个参数训练，原主干、RR和分类头全部冻结；保存的每个原参数必须与本折父权重逐字节一致。
+[v11协议](../tmp/history/training_handoff_20261017/data/cnn_causal_adapter_v11_protocol.json)复用同一已核对的v10背景缓存，明确绑定其数据协议和清单哈希；保留v10全部结果。`model/train/train_cnn_background_adapter.py`只让context_stem和context_rr的232个参数训练，原主干、RR和分类头全部冻结；保存的每个原参数必须与本折父权重逐字节一致。
 
 v11使用独立种子2026101711、支路学习率0.001、12—25轮/耐心6，保留epoch0。它是后续完整方案比较，冻结、学习率与种子均变化，不能单独归因冻结这一个因素。部署仍有12684个总参数，冻结不等于FPGA可以省去主干；预算门槛继续检查总参数。
 
 ```powershell
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_background_adapter.py train --cache-dir tmp/cnn_background_cache_new --parent-run tmp/cnn_patient_cv_v8_20261017_02 --protocol data/cnn_causal_adapter_v11_protocol.json --output-dir tmp/cnn_background_adapter_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_background_adapter.py train --cache-dir tmp/cnn_background_cache_new --parent-run tmp/cnn_patient_cv_v8_20261017_02 --protocol model/protocols/cnn_causal_adapter_v11_protocol.json --output-dir tmp/cnn_background_adapter_new
 & './tmp/cnn_torch_env/Scripts/python.exe' -B sim/verify_cnn_background.py --cache-dir tmp/cnn_background_cache_new --parent-run tmp/cnn_patient_cv_v8_20261017_02 --run-dir tmp/cnn_background_adapter_new --output tmp/cnn_background_adapter_check_new.json
 ```
 

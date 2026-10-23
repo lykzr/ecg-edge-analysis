@@ -1,0 +1,114 @@
+{
+  "version": "20261023_nst_research26_v3",
+  "evaluation_semantics": "KNOWN_PATIENT_DEVELOPMENT_STRESS_NOT_INDEPENDENT",
+  "source_protocol_sha256": "6fda4f7bd33e5cc3b34bb49545b62e42cf0d75d76bb933852cf7e0c12f0f716a",
+  "runner_sha256": {
+    "data/evaluate_qrs_noise.py": "b634ad65f77e58f2c85c4a5aa3a4101558dbd6f071d1cfb9e4c800e49eefe15d",
+    "sim/test_qrs_noise.py": "c9c2fd68c20dee942b0b1baf35169a8ad38ff5a55b924e5bef92dfce01a34cbd"
+  },
+  "sampling_hz": 360,
+  "lead": "MLII",
+  "units_per_mv": 4096,
+  "tolerance_samples": 54,
+  "gate": {
+    "sensitivity": 0.99,
+    "positive_predictivity": 0.99,
+    "position_mae_ms": 10,
+    "rr_mae_ms": 15,
+    "v_recall": 0.99
+  },
+  "records": [
+    {
+      "record": "118",
+      "base_record": "118",
+      "snr_db": null
+    },
+    {
+      "record": "119",
+      "base_record": "119",
+      "snr_db": null
+    },
+    {
+      "record": "118e24",
+      "base_record": "118",
+      "snr_db": 24
+    },
+    {
+      "record": "118e18",
+      "base_record": "118",
+      "snr_db": 18
+    },
+    {
+      "record": "118e12",
+      "base_record": "118",
+      "snr_db": 12
+    },
+    {
+      "record": "118e06",
+      "base_record": "118",
+      "snr_db": 6
+    },
+    {
+      "record": "118e00",
+      "base_record": "118",
+      "snr_db": 0
+    },
+    {
+      "record": "118e_6",
+      "base_record": "118",
+      "snr_db": -6
+    },
+    {
+      "record": "119e24",
+      "base_record": "119",
+      "snr_db": 24
+    },
+    {
+      "record": "119e18",
+      "base_record": "119",
+      "snr_db": 18
+    },
+    {
+      "record": "119e12",
+      "base_record": "119",
+      "snr_db": 12
+    },
+    {
+      "record": "119e06",
+      "base_record": "119",
+      "snr_db": 6
+    },
+    {
+      "record": "119e00",
+      "base_record": "119",
+      "snr_db": 0
+    },
+    {
+      "record": "119e_6",
+      "base_record": "119",
+      "snr_db": -6
+    }
+  ],
+  "input_mappings": {
+    "header": "正式共享解码器，使用头信息gain(baseline)/mV。原文件不改。",
+    "adc_zero": "独立输入表示诊断臂：只将映射baseline参数替换为同一头信息ADC zero字段；不拟合偏移/增益/标签。不是已确认设备采集合同。须先核对未加噪前5分钟与干净原记录逐点相等。"
+  },
+  "pairing": "两库119有35个V位置不同，最大相差31样本；总标注数量/类型顺序一致。同一参考版本分别配对比较，不平移检出、改标注或拼表。118无差异。",
+  "startup_tail": "0到649999全部计分；算法原启动与尾部逻辑不变；pending_tail导致漏检仍计FN。",
+  "noise_regions": "首300s无添加噪声，其后120s noise_on/noise_off交替；按全局匹配结果分段归属，不丢过渡或低质量段。",
+  "claims": "压力曲线用于定位，不承诺-6dB也99%；原42条门槛保持。两种输入映射均公开。",
+  "source_urls": [
+    "https://physionet.org/content/nstdb/1.0.0/",
+    "https://physionet.org/physiotools/wag/nst-1.htm"
+  ],
+  "preflight": [
+    "118",
+    "118e24"
+  ],
+  "full_run": "两种映射各14项，全部样本；只有基础ADCzero/头信息相同的干净参考可能数值等价，仍单独记录。",
+  "network_data": "原始数据与官方下载/校验凭据仅tmp，正式入口不自动联网。",
+  "encoding": "NST官方包含212和16两种存储编码；自实现逐样本数字解码须与WFDB完整数组相等。解码适配不改算法/数据。",
+  "pre_run_revision": "v1未启动任何真实检测，头文件发现0/-6dB数据为16编码，v2补齐读取支持与2项测试；v1及源码保存tmp/backup/nst_format_20261023_v1。",
+  "reference_policy": "主压力表：干净/加噪统一使用同一基础记录的官方NST标注（核验6个副本完全一致）；副表：所有记录另用官方MIT当前标注计分。两者原文件都保留，逐项双报，不择优。",
+  "revision_note_v3": "v2完整运行到119e24时因标注不一致主动停止，已完成118结果及失败日志原样留full_header/full_adc_zero。v3冻结双参考口径，重新全长运行两臂；不修改算法或原42条MIT评估。"
+}

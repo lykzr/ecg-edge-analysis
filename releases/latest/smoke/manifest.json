@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "version": "20261017-ecg-smoke-jtag-v1",
+  "purpose": "Navigator V2 Zynq-7020 ECG smoke JTAG programming artifacts",
+  "tool_version": "Vivado/Vitis 2026.1",
+  "board_execution": "USER_REPORTED_PASS",
+  "board_execution_scope": "evidence kept in repository docs/records/smoke_board_20261017; this package only carries JTAG programming artifacts",
+  "flash_programming": "NOT_PERFORMED",
+  "source_sha256": {
+    "src/ps/ecg_smoke/main.c": "149fcf44ffff8f42f9d917a85f4b063803f2c87091b23e444fad284589e2216a"
+  },
+  "files": {
+    "hardware/ecg_system_candidate.bit": {
+      "bytes": 4045773,
+      "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
+    },
+    "hardware/ecg_system_candidate.xsa": {
+      "bytes": 321430,
+      "sha256": "fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248"
+    },
+    "hardware/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    },
+    "prebuilt/ecg_smoke.elf": {
+      "bytes": 169936,
+      "sha256": "2e573ba9a9244cd4a9ef0f5ce80eca8957e1b512594b9b9389fc616353285bf7"
+    },
+    "run_smoke.tcl": {
+      "bytes": 1157,
+      "sha256": "cc09364d3df7e3d44b4691954fe459e841c4ba0f5b01698024ddfb619654ee89"
+    }
+  }
+}

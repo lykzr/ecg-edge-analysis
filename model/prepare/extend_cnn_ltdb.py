@@ -11,8 +11,9 @@ import sys
 import numpy as np
 import wfdb
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'data'))
+sys.path.insert(0,str(ROOT/'model/prepare'))
 from download_external_ecg import retrieve, retrieve_waveform, checksum_map
 from prepare_cnn_expanded import LABELS, BEATS, validate_splits, common_window, causal_rr, save, digest
 
@@ -29,7 +30,7 @@ def metadata(raw):
 
 
 def freeze(raw,protocol):
-    base=ROOT/'data/cnn_expanded_v6_protocol.json'
+    base=ROOT/'model/protocols/cnn_expanded_v6_protocol.json'
     p=json.loads(base.read_text(encoding='utf-8'))
     p['version']='cnn_expanded_ltdb_v7_20261017'
     p['parent_protocol_sha256']=digest(base)
@@ -156,7 +157,7 @@ def prepare(raw,parent,protocol,out):
     # 不将未知身份组算入“可确认患者数”。父缓存的24名F患者等数量保持不变。
     info['class_verified_subject_counts']=old['data']['train']['class_verified_subject_counts']
     info['before_train_cap']=[old['data']['train']['before_train_cap'][i]+sum(r['before_cap'][i] for r in record_info.values()) for i in range(4)]
-    manifest['source_sha256']['data/extend_cnn_ltdb.py']=digest(Path(__file__))
+    manifest['source_sha256']['model/prepare/extend_cnn_ltdb.py']=digest(Path(__file__))
     for f in manifest['source_sha256']:
         dst=out/'source_snapshot'/f;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/f,dst)
     manifest['auxiliary_units_caveat']=p['ltdb']['units']

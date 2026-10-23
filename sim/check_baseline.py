@@ -4,9 +4,10 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+from check_checkout import manifest_path
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = ROOT / 'data/baseline'
+BASE = ROOT / 'model/baseline'
 
 
 def digest(path):
@@ -17,21 +18,39 @@ def read(path):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
+def source_path(name):
+    """把冻结基线里记录的旧 data/ 路径映射到 2026-10-23 迁入 model/ 的位置。"""
+    manifest_path(ROOT, name)  # 先拒绝绝对路径、盘符及目录逃逸。
+    name = name.replace('\\', '/')
+    if name.startswith('data/cnn_'):
+        return ROOT / 'model/protocols' / Path(name).name
+    if name.startswith('data/prepare_cnn') or name.startswith('data/extend_cnn') \
+            or name.startswith('data/download_external') or name.startswith('data/profile_classification'):
+        return ROOT / 'model/prepare' / Path(name).name
+    if name.startswith('data/train_cnn'):
+        # 基线冻结时记录的是迁移前脚本哈希，验旧快照；当前训练入口由 check_training_checkout 核验。
+        return ROOT / 'model/baseline/legacy_sources' / Path(name).name
+    if name.startswith('data/baseline/'):
+        return ROOT / 'model/baseline' / Path(name).relative_to('data/baseline')
+    if name.startswith('data/requirements_cnn'):
+        return ROOT / 'model' / Path(name).name
+    return ROOT / name
+
+
 def check(base=BASE, cache=None, replay_weights=False, metrics_only=False):
     base = Path(base).resolve()
     manifest = read(base / 'files.json')
     assert manifest['candidate'] == 'residual_verified' and not manifest['test_loaded']
     for name, row in manifest['files'].items():
-        path = (base / name).resolve()
-        path.relative_to(base)
+        path = manifest_path(base, name)
         assert path.stat().st_size == row['bytes'] and digest(path) == row['sha256'], name
     protocol = read(base / 'protocol.json')
     origin = read(base / 'manifest_start.json')
     assert digest(base / 'protocol.json') == origin['protocol_sha256']
     assert origin['test_access'] == 'NO_TEST_READER_IN_THIS_SCRIPT'
     for name, expected in origin['source_sha256'].items():
-        assert digest(ROOT / name) == expected, name
-    git_protocol_path = ROOT / manifest['source_protocol']
+        assert digest(source_path(name)) == expected, name
+    git_protocol_path = source_path(manifest['source_protocol'])
     assert digest(git_protocol_path) == manifest['source_protocol_sha256']
     git_protocol = read(git_protocol_path)
     assert git_protocol['folds'] == protocol['folds']
@@ -50,6 +69,7 @@ def check(base=BASE, cache=None, replay_weights=False, metrics_only=False):
     from verify_cnn_cv import metrics, compare, accepted, replay
     dev = None
     if cache is not None:
+        sys.path.insert(0, str(ROOT / 'model/prepare'))
         sys.path.insert(0, str(ROOT / 'data'))
         from prepare_cnn_git import array_digest
         dev = dict(np.load(Path(cache) / 'development.npz', allow_pickle=False))

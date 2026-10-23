@@ -89,3 +89,11 @@ ls C:\Users\23006\Desktop\ecg_edge\tmp\docs_logs_20261022\
 ---
 
 **文件结构规范全部完成，项目目录现在清晰简洁。**
+
+## 2026-10-23 恢复被引用记录
+
+结构整理后，`sim/checkout_files.json`、`releases/latest/manifest.json` 与 `artifacts.json` 仍引用部分带日期记录。2026-10-23 已从 `tmp/research_handoff_20261022/portable_final/docs/records/` 恢复下列 12 个文件（哈希一致）：
+
+`ads1292_20261019.md`、`bridge_board_20261020.md`、`evaluation_handoff_20261022.md`、`qrs_auto_20261021.md`、`qrs_continue_20261021.md`、`qrs_peak_20261021.md`、`stream_500_20261019.md`、`stream_board_20261020.md`、`usb_bridge_20261019.md`、`uart_bridge_csv_20261020_pass.log`、`uart_bridge_synth_20261020_pass.log`、`uart_stream_20261020_pass.log`；并恢复 `smoke_board_20261017/jtag_smoke_pass.log`、`uart_smoke_pass.log`。
+
+其余带日期记录仍按 2026-10-22 的整理保存在 `tmp/docs_dated_records_20261022/` 与 `tmp/docs_logs_20261022/`，未批量回填。

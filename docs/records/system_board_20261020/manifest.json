@@ -1,0 +1,45 @@
+{
+  "origin": "20261021-system-jtag-v1 original evidence; relocated without new board execution",
+  "files": {
+    "paced_01/summary.json": {
+      "bytes": 3672,
+      "sha256": "3d751f4d130e1eac16bcec234f2614d1c4fbe7e1d42fcfd0666fe764092cb896"
+    },
+    "paced_01/usb_rx.log": {
+      "bytes": 513947,
+      "sha256": "4c18538875511d583654f1ef3db1af69908fec4ccffa624eb7e2865df7ae7f15"
+    },
+    "paced_03/summary.json": {
+      "bytes": 2347,
+      "sha256": "300ac9c2b4835de8583edb498db12d1e9a0c8d63f2024f6e179804e6f1791eca"
+    },
+    "paced_03/usb_rx.log": {
+      "bytes": 42319,
+      "sha256": "ae48a1a7d032df48a45583a79f873744728f0180cc30b92597e17c5e58a630a5"
+    },
+    "bad-crc_02/summary.json": {
+      "bytes": 1006,
+      "sha256": "180dc5fdb4838eae2cbfce1ec49fd9678d416d34414dd3feff1f61ff0964c7ae"
+    },
+    "bad-crc_02/usb_rx.log": {
+      "bytes": 220,
+      "sha256": "67fd63ec1fe86606f8ec5191b1f46ceab3e87487bbda6580e34fae3a77621ca8"
+    },
+    "partial_03/summary.json": {
+      "bytes": 1012,
+      "sha256": "761b40bcee85d672d6ae8d52c77b391531c46efd57861b44ac76f3af54f67a79"
+    },
+    "partial_03/usb_rx.log": {
+      "bytes": 286,
+      "sha256": "72d8485114d92490dc2e1a4c65c86293a3e2c34ab83b51e968aeab1e71238634"
+    },
+    "idle_03/summary.json": {
+      "bytes": 1005,
+      "sha256": "6d55f7deb61c82f3f34e424a15e936c864b025513b7eedb924eda90b15477844"
+    },
+    "idle_03/usb_rx.log": {
+      "bytes": 371,
+      "sha256": "58b9400c93f535e35c4a3ec7252c548ff63052d725a276655d51307c0ed0d5b2"
+    }
+  }
+}

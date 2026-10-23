@@ -15,8 +15,9 @@ from scipy.signal import resample_poly, firwin
 import scipy
 import wfdb
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'data'))
+sys.path.insert(0,str(ROOT/'model/prepare'))
 from download_external_ecg import checksum_map
 
 LABELS = {'N': list('NLRje'), 'S': list('aJAS'), 'V': list('VE'), 'F': ['F']}
@@ -126,13 +127,13 @@ def freeze(raw, output):
     for r in rows:
         role = assignment[r['subject']] if r['database'] == 'incartdb' else 'train'
         splits[role].append(r)
-    old = json.loads((ROOT / 'data/cnn_mf_v1_protocol.json').read_text(encoding='utf-8'))
+    old = json.loads((ROOT / 'model/protocols/cnn_mf_v1_protocol.json').read_text(encoding='utf-8'))
     for record in sorted(sum(old['records'].values(), [])):
         splits['train'].append({'database': 'mitdb', 'record': record,
                                 'subject': 'mit:' + old['subject_alias'].get(record, record),
                                 'lead': 'MLII', 'fs': 360})
     validate_splits(splits)
-    prior = json.loads((ROOT / 'data/cnn_context_v4_protocol.json').read_text())
+    prior = json.loads((ROOT / 'model/protocols/cnn_context_v4_protocol.json').read_text())
     p = {'version': 'cnn_expanded_v6_20261017', 'classes': list(LABELS), 'label_symbols': LABELS,
          'splits': splits, 'split_design': design, 'metadata_sha256': hashes,
          'metadata_only_selection': True,
@@ -278,7 +279,7 @@ def prepare(raw, mit_raw, protocol, output):
                                   'excluded': dict(excluded), 'per_record_symbols_before_cap': per_record,
                                   'file_sha256': digest(output/(role+'.npz'))}
     manifest['source_sha256']={}
-    for source in ('data/prepare_cnn_expanded.py','data/download_external_ecg.py'):
+    for source in ('model/prepare/prepare_cnn_expanded.py','model/prepare/download_external_ecg.py'):
         manifest['source_sha256'][source]=digest(ROOT/source)
         dst=output/'source_snapshot'/source;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/source,dst)
     save(output/'manifest.json', manifest)

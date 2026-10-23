@@ -2,7 +2,7 @@
 
 ## 用途与输入
 
-ecg_stream是独立裸机候选应用，用于把受控数字输入、现有PL检测事件和PC协议接收连接起来。它独立于smoke回归；当前系统release同时包含smoke及500Hz bridge，ecg_stream工作区仍保留原位；构建/主机检查/上板分别以[当前500Hz记录](records/stream_500_20261019.md)（[旧360Hz记录](records/ps_stream_20261018.md)保留历史）为准。
+ecg_stream是独立裸机候选应用，用于把受控数字输入、现有PL检测事件和PC协议接收连接起来。它独立于smoke回归；当前系统release同时包含smoke及500Hz bridge，ecg_stream工作区仍保留原位；构建/主机检查/上板分别以[当前500Hz记录](records/stream_500_20261019.md)（旧360Hz记录保留历史）为准。
 
 输入明确声明SYNTH：先100个零，再每500点一个正负交替的±20000单点脉冲，其余为0。默认5003点，约10.006秒名义输入时长，末批3点不补齐。原始码值未标定，scale=-1；filt=NA、类别?、分数-1。这不是生理ECG波形、真实AFE采集、CNN或准确率测试。事件来自实际PL FIFO，检测器版本QRS-ORIG-60，位置不是精确R峰。
 

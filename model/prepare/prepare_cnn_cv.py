@@ -10,8 +10,9 @@ import sys
 import numpy as np
 import wfdb
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'data'))
+sys.path.insert(0,str(ROOT/'model/prepare'))
 from prepare_cnn_expanded import LABELS,BEATS,common_window,causal_rr,save,digest
 from download_external_ecg import checksum_map
 
@@ -103,14 +104,14 @@ def prepare(raw,parent,protocol,out):
               'development_examples':len(arrays['y']),'development_counts':np.bincount(arrays['y'],minlength=4).tolist(),
               'source_data_sha256':sources,'excluded':dict(excluded),'test_access':'NOT_LOADED','smoke_board_test':'NOT_TESTED'}
     manifest['source_sha256']={}
-    for file in ('data/prepare_cnn_cv.py','data/prepare_cnn_expanded.py','data/download_external_ecg.py'):
+    for file in ('model/prepare/prepare_cnn_cv.py','model/prepare/prepare_cnn_expanded.py','model/prepare/download_external_ecg.py'):
         dst=out/'source_snapshot'/file;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/file,dst);manifest['source_sha256'][file]=digest(ROOT/file)
     save(out/'manifest.json',manifest);print(json.dumps({k:v for k,v in manifest.items() if k not in ('source_data_sha256','source_sha256')}),flush=True)
 
 
 if __name__=='__main__':
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('stage',choices=['freeze','prepare']);ap.add_argument('--protocol',type=Path,required=True)
-    ap.add_argument('--parent-protocol',type=Path,default=ROOT/'data/cnn_expanded_v7_protocol.json');ap.add_argument('--parent-cache',type=Path,required=True)
+    ap.add_argument('--parent-protocol',type=Path,default=ROOT/'model/protocols/cnn_expanded_v7_protocol.json');ap.add_argument('--parent-cache',type=Path,required=True)
     ap.add_argument('--raw-dir',type=Path);ap.add_argument('--output-dir',type=Path);a=ap.parse_args()
     if a.stage=='freeze':freeze(a.parent_protocol,a.parent_cache,a.protocol)
     else:

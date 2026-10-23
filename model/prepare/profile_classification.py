@@ -4,9 +4,12 @@ from collections import Counter
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'data'))
 from ecg_dataset import annotations, BEAT_CODES
 
-ROOT=Path(__file__).resolve().parents[1]
 # 候选研究分组；N包含束支阻滞和逸搏，不能把整个N组叫作健康/正常人。
 GROUPS={'N':{1,2,3,11,34},'S':{4,7,8,9},'V':{5,10},'F':{6}}
 

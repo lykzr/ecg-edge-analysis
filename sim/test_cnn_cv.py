@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from verify_cnn_cv import metrics
 
-ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'data'));sys.path.insert(0,str(ROOT/'src/reference'))
+ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'data'));sys.path.insert(0,str(ROOT/'model/prepare'));sys.path.insert(0,str(ROOT/'model/train'));sys.path.insert(0,str(ROOT/'src/reference'))
 DATA=importlib.util.find_spec('wfdb') is not None
 TORCH=importlib.util.find_spec('torch') is not None
 if DATA:from prepare_cnn_cv import validate_folds

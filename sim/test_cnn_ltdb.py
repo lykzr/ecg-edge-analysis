@@ -5,7 +5,7 @@ import sys
 from types import SimpleNamespace
 import unittest
 
-ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'data'))
+ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'data'));sys.path.insert(0,str(ROOT/'model/prepare'))
 HAS_DATA=importlib.util.find_spec('wfdb') is not None
 if HAS_DATA:
     import numpy as np

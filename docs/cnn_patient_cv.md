@@ -4,7 +4,7 @@
 
 ## 冻结数据角色
 
-[v8协议](../data/cnn_patient_cv_v8_protocol.json)只使用INCART中26名已知开发患者，按患者分成9/9/8人三折。三折验证是轮流用其中一组患者验证、其余两组训练，同人的全部记录始终跟随同一组。原先6名独立测试患者完全排除，脚本没有读取其测试NPZ的入口。
+[v8协议](../model/protocols/cnn_patient_cv_v8_protocol.json)只使用INCART中26名已知开发患者，按患者分成9/9/8人三折。三折验证是轮流用其中一组患者验证、其余两组训练，同人的全部记录始终跟随同一组。原先6名独立测试患者完全排除，脚本没有读取其测试NPZ的入口。
 
 分组按固定种子、标注类别数量及S/F患者覆盖形成，不能按模型分数调整患者名单。验证保留自然构成、不按类别截断；训练上限在每一折内部应用。201/202等同人映射沿用父协议。原验证患者现已进入开发交叉验证，不能再称原验证成绩为未触碰评估。
 
@@ -32,8 +32,8 @@ TemporalCnn为本项目自有小网络：原波形与一阶差分两通道，Con
 已有协议时直接prepare，不重新freeze；父缓存必须与协议钉住的清单及train.npz哈希相同，拒绝覆盖输出目录：
 
 ```powershell
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/prepare_cnn_cv.py prepare --raw-dir tmp/ecg_expansion_20261017/raw --parent-cache tmp/cnn_expanded_cache_v7_20261017_01 --protocol data/cnn_patient_cv_v8_protocol.json --output-dir tmp/cnn_cv_cache_new
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_cv.py --cache-dir tmp/cnn_cv_cache_new --protocol data/cnn_patient_cv_v8_protocol.json --output-dir tmp/cnn_patient_cv_new
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/prepare_cnn_cv.py prepare --raw-dir tmp/ecg_expansion_20261017/raw --parent-cache tmp/cnn_expanded_cache_v7_20261017_01 --protocol model/protocols/cnn_patient_cv_v8_protocol.json --output-dir tmp/cnn_cv_cache_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_cv.py --cache-dir tmp/cnn_cv_cache_new --protocol model/protocols/cnn_patient_cv_v8_protocol.json --output-dir tmp/cnn_patient_cv_new
 & './tmp/cnn_torch_env/Scripts/python.exe' -B sim/verify_cnn_cv.py --cache-dir tmp/cnn_cv_cache_new --run-dir tmp/cnn_patient_cv_new --output tmp/cnn_cv_verify_new.json --replay-weights
 ```
 
@@ -41,7 +41,7 @@ TemporalCnn为本项目自有小网络：原波形与一阶差分两通道，Con
 
 每折保存权重、训练/验证数量、患者身份、RR统计、epoch日志及预测；每方案保存OOF混淆矩阵和逐患者指标；最终decision只选择开发方案，不自动训练全量最终模型、开封独立测试、量化或发布。运行源码快照、数据和权重哈希必须与结果同时保留。
 
-检查器独立复算混淆矩阵、逐类/逐患者指标、采样和标准化、方案选择及门槛，`--replay-weights`重放全部验证拍核对预测。输出仍属派生产物，文字分析与失败过程见[本轮记录](records/cnn_patient_cv_20261017.md)。**smoke仍未上板测试。**
+检查器独立复算混淆矩阵、逐类/逐患者指标、采样和标准化、方案选择及门槛，`--replay-weights`重放全部验证拍核对预测。输出仍属派生产物，文字分析与失败过程见本轮记录。**smoke仍未上板测试。**
 
 后续同折权重微调及仅训练数据的类别比例校正另见[v9工程入口](cnn_target_adapt.md)，原v8协议及结果保持原样。
 

@@ -46,7 +46,7 @@ check_qrs_auto.py的--csv-input可替换用户输入位置，未传时沿用本�
 
 新工作区组件为ecg_platform与ecg_auto，运行配置ecg_auto_app_hw_1默认启用系统复位和重配PL。不要在旧bridge工作区只替换ELF：必须整套匹配候选bit/XSA/ps7_init/ELF。现有已验发布不含新候选，最新构建与时序状态以修复记录为准。
 
-Windows工作区路径需足够短，BSP内部层级很深；脚本会预检已知最长依赖路径并拒绝超过安全长度的输入。本机最终候选工作区为tmp/ecg_auto/w；较深的tmp/qrs_auto_20261021/firmware_v4/vitis_workspace构建失败，仍保留原目录作为证据。不要搬动正在构建的工作区。
+Windows工作区路径需足够短，BSP内部层级很深；脚本会预检已知最长依赖路径并拒绝超过安全长度的输入。本机最终候选工作区为tmp/ecg_auto/w；较深的tmp/history/qrs_20261023/qrs_auto_20261021/firmware_v4/vitis_workspace构建失败，仍保留原目录作为证据。不要搬动正在构建的工作区。
 
 
 后续原波形定位/质量确认另见[说明](qrs_peak.md)。它是独立软件研究候选，未进入本页ecg_auto工作区或匹配RTL/ELF，不把其定位成绩套给当前镜像。

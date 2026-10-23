@@ -5,7 +5,7 @@ import unittest
 import json
 
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'data'))
+sys.path.insert(0,str(ROOT/'data'));sys.path.insert(0,str(ROOT/'model/prepare'))
 
 try:
     import numpy as np
@@ -30,7 +30,7 @@ class ExpandedTests(unittest.TestCase):
             validate_splits({'train':[],'validation':[r],'test':[]})
 
     def test_frozen_protocol_subject_support(self):
-        p=json.loads((ROOT/'data/cnn_expanded_v6_protocol.json').read_text(encoding='utf-8'))
+        p=json.loads((ROOT/'model/protocols/cnn_expanded_v6_protocol.json').read_text(encoding='utf-8'))
         validate_splits(p['splits'])
         for role in ('validation','test'):
             rows=p['splits'][role]

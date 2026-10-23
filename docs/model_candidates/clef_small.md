@@ -4,7 +4,7 @@
 
 ## 用途与来源
 
-CLEF-Small是单导联ECG预训练表征候选，拟通过增加分类头并微调适配本项目心拍分类。它不是已经适配N/S/V/F的即用分类器。来源核查、日期与其他方案比较见[模型调查](../records/cnn_model_survey_20261016.md)。
+CLEF-Small是单导联ECG预训练表征候选，拟通过增加分类头并微调适配本项目心拍分类。它不是已经适配N/S/V/F的即用分类器。来源核查、日期与其他方案比较见模型调查。
 
 - 作者仓库：[Nokia Bell Labs ECG foundation model](https://github.com/Nokia-Bell-Labs/ecg-foundation-model)。
 - 作者权重入口：[Zenodo记录](https://zenodo.org/records/17572734)。

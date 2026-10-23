@@ -2,9 +2,9 @@
 
 后续开发验证入口见[患者CV与来源对比](cnn_patient_cv.md)。该版本将原训练/验证26名INCART患者统一视为已知开发数据，保留原6名独立测试；本文v6/v7协议和原结果保持不变。
 
-本入口使用[冻结协议](../data/cnn_expanded_v6_protocol.json)，承接[原候选训练入口](cnn_trainable.md)。CNN是电脑端训练的心拍分类器：输入标注位置附近的波形和历史RR特征，学习N/S/V/F分类；不替代QRS检测，也不表示已实现FPGA推理。
+本入口使用[冻结协议](../model/protocols/cnn_expanded_v6_protocol.json)，承接[原候选训练入口](cnn_trainable.md)。CNN是电脑端训练的心拍分类器：输入标注位置附近的波形和历史RR特征，学习N/S/V/F分类；不替代QRS检测，也不表示已实现FPGA推理。
 
-本任务只覆盖约定四类心拍；N分组含束支传导阻滞等类型，不等于心脏健康，S不等于房颤，V不等于室速/室颤。Q/起搏及范围外输入不属于当前训练输出，未知/质量不足出口仍待设计与验证。心拍、连续节律和疾病判断的区别见[范围记录](records/ecg_scope_20261017.md)。
+本任务只覆盖约定四类心拍；N分组含束支传导阻滞等类型，不等于心脏健康，S不等于房颤，V不等于室速/室颤。Q/起搏及范围外输入不属于当前训练输出，未知/质量不足出口仍待设计与验证。心拍、连续节律和疾病判断的区别见范围记录。
 
 ## 数据与身份边界
 
@@ -33,12 +33,12 @@
 
 ```powershell
 # 已有冻结协议时不重做freeze；只恢复数据下载。
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/download_external_ecg.py --stage metadata --output-dir tmp/ecg_expansion_new/raw
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/download_external_ecg.py --stage waveforms --output-dir tmp/ecg_expansion_new/raw --protocol data/cnn_expanded_v6_protocol.json
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/prepare_cnn_expanded.py prepare --raw-dir tmp/ecg_expansion_new/raw --mit-raw-dir tmp/multi_record_20261016_01/raw --protocol data/cnn_expanded_v6_protocol.json --output-dir tmp/cnn_expanded_cache_new
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_expanded.py train --cache-dir tmp/cnn_expanded_cache_new --output-dir tmp/cnn_expanded_train_new
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/download_external_ecg.py --stage metadata --output-dir tmp/ecg_expansion_new/raw
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/download_external_ecg.py --stage waveforms --output-dir tmp/ecg_expansion_new/raw --protocol model/protocols/cnn_expanded_v6_protocol.json
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/prepare_cnn_expanded.py prepare --raw-dir tmp/ecg_expansion_new/raw --mit-raw-dir tmp/multi_record_20261016_01/raw --protocol model/protocols/cnn_expanded_v6_protocol.json --output-dir tmp/cnn_expanded_cache_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_expanded.py train --cache-dir tmp/cnn_expanded_cache_new --output-dir tmp/cnn_expanded_train_new
 # 先检查selection_before_test.json中selected.validation.gate.passed；只有true才执行下一行。
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_expanded.py evaluate --cache-dir tmp/cnn_expanded_cache_new --output-dir tmp/cnn_expanded_train_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_expanded.py evaluate --cache-dir tmp/cnn_expanded_cache_new --output-dir tmp/cnn_expanded_train_new
 ```
 
 `freeze --raw-dir <元数据目录> --protocol <新协议文件>`只用于新版本设计，不覆盖已经跑过的协议。不同机器替换环境路径；脚本按自身位置定位项目，不依赖用户名。MIT原始数据可用已有下载脚本获取，不能省略所需官方SHA256清单。
@@ -49,17 +49,17 @@
 
 ## 长程辅助版本
 
-[v7协议](../data/cnn_expanded_v7_protocol.json)在v6之上增加MIT-BIH Long-Term ECG 1.0.0，仅扩展训练。v6旧结果保留，验证和测试NPZ逐字节复制；验证已经用于开发，独立测试仍须保持未用于选型。不能把这些7条长记录称为7名已确认的新患者，整库按未知身份训练组隔离。
+[v7协议](../model/protocols/cnn_expanded_v7_protocol.json)在v6之上增加MIT-BIH Long-Term ECG 1.0.0，仅扩展训练。v6旧结果保留，验证和测试NPZ逐字节复制；验证已经用于开发，独立测试仍须保持未用于选型。不能把这些7条长记录称为7名已确认的新患者，整库按未知身份训练组隔离。
 
 该库ECG1的解剖导联位置未知，原始增益字段为0。WFDB读取头文件时会代填200，这不是实际标定证据。此版本明确读取数字ADC值，按每拍形态归一化，标准差下限1个ADC计数；不把它转换成人体mV，也不用于幅值、噪声电压或真实AFE结论。其它源保持v6物理mV流程。这是输入归一化后的辅助训练研究，不能声称输入导联与幅值条件完全一致。
 
 `extend_cnn_ltdb.py`先校验父协议/数据哈希，再只对预选辅助训练拍提取波形；选择依固定哈希和每记录/每类上限，全部原标注心拍仍更新历史RR。RR历史只需最多401个间隔，避免长记录反复复制全历史；与完整历史的特征等价性有检查。所用导联核对首值/校验和，完整文件仍核对官方SHA256。
 
 ```powershell
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/extend_cnn_ltdb.py metadata --raw-dir tmp/ecg_expansion_20261017/raw/ltdb --protocol data/cnn_expanded_v7_protocol.json
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/extend_cnn_ltdb.py download --raw-dir tmp/ecg_expansion_20261017/raw/ltdb --protocol data/cnn_expanded_v7_protocol.json
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/extend_cnn_ltdb.py prepare --raw-dir tmp/ecg_expansion_20261017/raw/ltdb --parent-cache tmp/cnn_expanded_cache_20261017_01 --protocol data/cnn_expanded_v7_protocol.json --output-dir tmp/cnn_expanded_cache_v7_new
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_expanded.py train --protocol data/cnn_expanded_v7_protocol.json --cache-dir tmp/cnn_expanded_cache_v7_new --output-dir tmp/cnn_expanded_v7_new
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/extend_cnn_ltdb.py metadata --raw-dir tmp/ecg_expansion_20261017/raw/ltdb --protocol model/protocols/cnn_expanded_v7_protocol.json
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/extend_cnn_ltdb.py download --raw-dir tmp/ecg_expansion_20261017/raw/ltdb --protocol model/protocols/cnn_expanded_v7_protocol.json
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B model/prepare/extend_cnn_ltdb.py prepare --raw-dir tmp/ecg_expansion_20261017/raw/ltdb --parent-cache tmp/cnn_expanded_cache_20261017_01 --protocol model/protocols/cnn_expanded_v7_protocol.json --output-dir tmp/cnn_expanded_cache_v7_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_expanded.py train --protocol model/protocols/cnn_expanded_v7_protocol.json --cache-dir tmp/cnn_expanded_cache_v7_new --output-dir tmp/cnn_expanded_v7_new
 # 仍先检查验证门槛；未通过时保留测试，不执行evaluate。
 ```
 

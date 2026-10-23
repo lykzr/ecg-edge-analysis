@@ -5,9 +5,9 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-REQUIRED = ['data/prepare_cnn_git.py', 'data/cnn_git_v1_protocol.json', 'data/train_cnn_cv.py',
-            'data/train_cnn_candidates.py', 'data/train_cnn_refined.py', 'data/prepare_cnn_expanded.py',
-            'data/download_external_ecg.py', 'data/requirements_cnn_data.txt', 'data/requirements_cnn.txt',
+REQUIRED = ['model/prepare/prepare_cnn_git.py', 'model/protocols/cnn_git_v1_protocol.json', 'model/train/train_cnn_cv.py',
+            'model/train/train_cnn_candidates.py', 'model/train/train_cnn_refined.py', 'model/prepare/prepare_cnn_expanded.py',
+            'model/prepare/download_external_ecg.py', 'model/requirements_cnn_data.txt', 'model/requirements_cnn.txt',
             'src/reference/ecg_trainable_cnn.py', 'src/reference/ecg_temporal_cnn.py',
             'src/reference/ecg_mf_cnn.py', 'sim/verify_cnn_cv.py', 'sim/test_cnn_git.py',
             'docs/model_training_handoff.md', 'third_party.md', 'LICENSE']
@@ -20,14 +20,14 @@ def check(root=ROOT):
     for file in REQUIRED:
         if file.endswith('.py'):
             ast.parse((root / file).read_text(encoding='utf-8-sig'))
-    p = json.loads((root / 'data/cnn_git_v1_protocol.json').read_text(encoding='utf-8'))
+    p = json.loads((root / 'model/protocols/cnn_git_v1_protocol.json').read_text(encoding='utf-8'))
     rows = p['development_records'] + p['auxiliary_records']
     assert not set(p['excluded_independent_test_subjects']) & {r['subject'] for r in rows}
     assert len(p['raw_sha256']) == 3 * len(rows)
     assert p['candidates'] == [{'id': 'residual_verified', 'family': 'residual', 'sources': 'verified'}]
     # 不导入Torch也可证明全部直接本地训练依赖已在清单中。
     stems = {Path(f).stem for f in REQUIRED}
-    for file in ('data/train_cnn_cv.py', 'data/train_cnn_candidates.py', 'data/train_cnn_refined.py'):
+    for file in ('model/train/train_cnn_cv.py', 'model/train/train_cnn_candidates.py', 'model/train/train_cnn_refined.py'):
         tree = ast.parse((root / file).read_text(encoding='utf-8-sig'))
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.module and (node.module.startswith('ecg_') or node.module.startswith('train_cnn_')):

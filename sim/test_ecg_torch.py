@@ -9,7 +9,7 @@ HAS_TORCH=importlib.util.find_spec('torch') is not None
 if HAS_TORCH:
     import torch
     ROOT=Path(__file__).resolve().parents[1]
-    sys.path.insert(0,str(ROOT/'src/reference'));sys.path.insert(0,str(ROOT/'data'))
+    sys.path.insert(0,str(ROOT/'src/reference'));sys.path.insert(0,str(ROOT/'data'));sys.path.insert(0,str(ROOT/'model/train'))
     from ecg_trainable_cnn import create_model,waveform_channels,budget
     from train_cnn_candidates import gate
     from train_cnn_refined import augment,construct

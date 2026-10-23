@@ -1,0 +1,31 @@
+{
+  "reason": "expected_fault",
+  "error": null,
+  "plan": {
+    "mode": "bad-crc",
+    "samples": 5003,
+    "source": "SYNTH",
+    "sample_rate_hz": 500,
+    "paced_source_hz": null,
+    "positive_gate": "all confirmed/echoed/value/sequence/END/DONE; zero known drops; exact event index/RR",
+    "fault_gate": "CRC-protected ERROR with expected reason, next=0; no W/E; no auto recovery",
+    "duration_limit_s": 10,
+    "maximum_record_bytes": 67108864,
+    "identity": {
+      "port": "COM23",
+      "label": "USB-SERIAL CH340 (COM23)",
+      "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+      "candidate": true
+    },
+    "warnings": [],
+    "scope": "USB_UART digital verification; no physical ADC timing, wireless, GUI or accuracy claim"
+  },
+  "passed": true,
+  "error_reason": "BAD_CRC",
+  "response_s": 0.009750800032634288,
+  "accepted_samples": 0,
+  "wall_seconds": 0.23490459995809942,
+  "hardware_operated": true,
+  "data_bytes": 911,
+  "close_errors": []
+}

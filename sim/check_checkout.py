@@ -57,9 +57,9 @@ def check(root=ROOT):
         assert path.is_file(), str(path)
         files.append(str(path.relative_to(root)))
     assert len(files) == 4, files
-    baseline = json.loads((root / 'data/baseline/files.json').read_text(encoding='utf-8'))
+    baseline = json.loads((root / 'model/baseline/files.json').read_text(encoding='utf-8'))
     for name, row in baseline['files'].items():
-        path = manifest_path(root / 'data/baseline', name)
+        path = manifest_path(root / 'model/baseline', name)
         assert path.stat().st_size == row['bytes'] and hashlib.sha256(path.read_bytes()).hexdigest() == row['sha256'], name
     return {'passed': True, 'required_files': len(required), 'python_parsed': parsed,
             'xpr_source_files': files, 'baseline_files': len(baseline['files']),

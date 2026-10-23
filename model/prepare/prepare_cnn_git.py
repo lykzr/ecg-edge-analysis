@@ -7,8 +7,9 @@ from pathlib import Path
 import shutil
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'data'))
+sys.path.insert(0,str(ROOT/'model/prepare'))
 from download_external_ecg import retrieve, retrieve_waveform
 
 
@@ -137,7 +138,7 @@ def prepare(p, protocol, raw, output):
         manifest[role + '_examples'] = len(arrays['y'])
         manifest[role + '_counts'] = np.bincount(arrays['y'], minlength=4).tolist()
     manifest['source_sha256'] = {}
-    for file in ('data/prepare_cnn_git.py', 'data/prepare_cnn_expanded.py', 'data/download_external_ecg.py'):
+    for file in ('model/prepare/prepare_cnn_git.py', 'model/prepare/prepare_cnn_expanded.py', 'model/prepare/download_external_ecg.py'):
         dest = output / 'source_snapshot' / file; dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / file, dest); manifest['source_sha256'][file] = digest(ROOT / file)
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
@@ -147,7 +148,7 @@ def prepare(p, protocol, raw, output):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('stage', choices=('download', 'prepare'))
-    ap.add_argument('--protocol', type=Path, default=ROOT / 'data/cnn_git_v1_protocol.json')
+    ap.add_argument('--protocol', type=Path, default=ROOT / 'model/protocols/cnn_git_v1_protocol.json')
     ap.add_argument('--raw-dir', type=Path, required=True)
     ap.add_argument('--output-dir', type=Path)
     args = ap.parse_args(); p = json.loads(args.protocol.read_text(encoding='utf-8'))

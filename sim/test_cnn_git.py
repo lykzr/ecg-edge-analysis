@@ -8,13 +8,13 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'data'))
+sys.path.insert(0, str(ROOT / 'data'));sys.path.insert(0, str(ROOT / 'model/prepare'))
 from prepare_cnn_git import validate_protocol, array_digest
 
 
 class GitInputTests(unittest.TestCase):
     def setUp(self):
-        self.p = json.loads((ROOT / 'data/cnn_git_v1_protocol.json').read_text(encoding='utf-8'))
+        self.p = json.loads((ROOT / 'model/protocols/cnn_git_v1_protocol.json').read_text(encoding='utf-8'))
 
     def test_roles_and_download_set_exclude_independent_patients(self):
         validate_protocol(self.p)

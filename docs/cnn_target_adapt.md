@@ -40,13 +40,13 @@ effective_train_prior是由训练计数/损失权重推导的名义比例。父�
 
 ```powershell
 # 只有设计新协议时freeze；已有v9协议不能重新生成覆盖。
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/freeze_cnn_adapt.py --cache-dir tmp/cnn_cv_cache_20261017_01 --parent-run tmp/cnn_patient_cv_v8_20261017_02 --output data/cnn_target_adapt_new_protocol.json
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_adapt.py --cache-dir tmp/cnn_cv_cache_20261017_01 --parent-run tmp/cnn_patient_cv_v8_20261017_02 --protocol data/cnn_target_adapt_v9_protocol.json --output-dir tmp/cnn_target_adapt_new
+& './tmp/qrs_benchmark_env/Scripts/python.exe' -B data/freeze_cnn_adapt.py --cache-dir tmp/cnn_cv_cache_20261017_01 --parent-run tmp/cnn_patient_cv_v8_20261017_02 --output model/protocols/cnn_target_adapt_new_protocol.json
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_adapt.py --cache-dir tmp/cnn_cv_cache_20261017_01 --parent-run tmp/cnn_patient_cv_v8_20261017_02 --protocol model/protocols/cnn_target_adapt_v9_protocol.json --output-dir tmp/cnn_target_adapt_new
 & './tmp/cnn_torch_env/Scripts/python.exe' -B sim/verify_cnn_adapt.py --cache-dir tmp/cnn_cv_cache_20261017_01 --parent-run tmp/cnn_patient_cv_v8_20261017_02 --run-dir tmp/cnn_target_adapt_new --output tmp/cnn_target_adapt_verify_new.json
 ```
 
 路径为本机示例，其他机器替换解释器和对应父运行目录；不能随便选择不匹配的权重。新模型在tmp保留源码快照、环境、哈希、epoch、权重、原始logits、各alpha预测、采样索引和损失权重。没有test读取入口，不自动开封、量化、部署或发布。
 
-[独立检查器](../tmp/history/training_handoff_20261017/sim/verify_cnn_adapt.py)重新构造采样/权重/比例与模型，重放全部开发验证，独立复算逐类和逐患者指标、门槛与方案选择。来源沿用[第三方说明](../third_party.md)中的既有残差自有改编及PyTorch，不下载新预训练权重。实际实验与局限见[记录](records/cnn_target_adapt_20261017.md)。**smoke尚未上板测试。**
+[独立检查器](../tmp/history/training_handoff_20261017/sim/verify_cnn_adapt.py)重新构造采样/权重/比例与模型，重放全部开发验证，独立复算逐类和逐患者指标、门槛与方案选择。来源沿用[第三方说明](../third_party.md)中的既有残差自有改编及PyTorch，不下载新预训练权重。实际实验与局限见记录。**smoke尚未上板测试。**
 
 后续新增的标签无关历史形态背景另见[v10入口](cnn_background.md)，不改本轮协议和取舍结果。

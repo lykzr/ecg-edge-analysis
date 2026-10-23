@@ -1,0 +1,94 @@
+{
+  "reason": "completed",
+  "error": null,
+  "plan": {
+    "mode": "paced",
+    "samples": 5003,
+    "source": "SYNTH",
+    "sample_rate_hz": 500,
+    "paced_source_hz": 500,
+    "positive_gate": "all confirmed/echoed/value/sequence/END/DONE; zero known drops; exact event index/RR",
+    "fault_gate": "CRC-protected ERROR with expected reason, next=0; no W/E; no auto recovery",
+    "duration_limit_s": 25.006,
+    "maximum_record_bytes": 67108864,
+    "identity": {
+      "port": "COM23",
+      "label": "USB-SERIAL CH340 (COM23)",
+      "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+      "candidate": true
+    },
+    "warnings": [],
+    "scope": "USB_UART digital verification; no physical ADC timing, wireless, GUI or accuracy claim"
+  },
+  "passed": true,
+  "source_samples": 5003,
+  "confirmed": 5003,
+  "echoed": 5003,
+  "queue_peak": 32,
+  "done": true,
+  "pending_bytes": 0,
+  "incomplete_rx_bytes": 0,
+  "upstream_source_drop": null,
+  "expected_event_positions": [
+    70,
+    570,
+    1070,
+    1570,
+    2070,
+    2570,
+    3070,
+    3570,
+    4070,
+    4570
+  ],
+  "expected_events": 10,
+  "produced": 5003,
+  "wall_seconds": 10.072534999984782,
+  "hardware_operated": true,
+  "data_bytes": 515122,
+  "close_errors": [],
+  "monitor": {
+    "reason": "completed",
+    "counts": {
+      "sessions": 1,
+      "samples": 5003,
+      "wave_gap": 0,
+      "event_gap": 0,
+      "events": 10
+    },
+    "protocol_counts": {
+      "bytes": 31233,
+      "H": 1,
+      "W": 626,
+      "E": 10,
+      "T": 11,
+      "L": 1
+    },
+    "last_error": "",
+    "last_header": {
+      "firmware": "ps-bridge-1",
+      "session": "6c6a727b7bf34756b2c9eae856332981",
+      "source": "SYNTH",
+      "detector": "QRS-ORIG-60",
+      "fs": 500,
+      "scale": null,
+      "caps": 13
+    },
+    "input": {
+      "kind": "unknown"
+    },
+    "scope": "PC reception/parser/display only; no detector or CNN executed; source declarations are not hardware evidence",
+    "data_bytes_written": 414634,
+    "data_limit_bytes": 67108864,
+    "close_errors": []
+  },
+  "gates": {
+    "counts_equal": true,
+    "values_equal": true,
+    "events_equal": true,
+    "no_known_gaps": true,
+    "no_parse_errors": true,
+    "drained": true
+  },
+  "events_recorded": 10
+}

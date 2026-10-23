@@ -215,7 +215,7 @@ python -B sim/check_system_release.py --repository .核对latest文件、两套X
 python -B -m unittest discover -s sim -p test_qrs_auto.py -v检查预热、幅值/极性、静默、复位/暂停、因果、定点界限和显式检测器身份。check_qrs_auto.py用现有XSim逐周期核对候选RTL/整数参考，并复跑已知开发记录；需要已有Vivado及本机输入，参数见脚本帮助。原检测器与smoke独立保留；离线/构建通过不等于上板或准确性通过，详见[候选说明](../docs/qrs_auto.md)。
 
 
-候选开发期间，已验latest的PC源码仍是冻结旧版；check_system_release.py不传--repository时检查其自身完整性与旧验收证据，传--repository才另外要求正式源码也完全一致。QRS-AUTOPEAK兼容改动尚未发布时，后者及test_system_release的对应严格源检查会报告差异，不能改旧清单或放宽断言伪装通过。当前预期差异和边界见[修复记录](../docs/records/qrs_auto_20261021.md)。check_auto_bridge.py独立核对候选实际PS C的允许改动与离线双向闭环，不取代该发布检查。
+精简发布由`check_system_release.py`校验当前latest的镜像、仓库来源及`docs/records/system_board_20261020/`原始实板证据。默认仓库根由脚本定位，`--repository`可替换为另一检出的源码根；不会到tmp选择历史候选。`test_system_release.py`只测发布物复制/损坏拒绝/入口路径与精确ignore，PC/UI测试仍从正式源码入口独立运行，不要求发布包重复携带源码。
 
 
 ## 原波形确认候选
@@ -226,3 +226,12 @@ python -B -m unittest discover -s sim -p test_qrs_peak.py -v检查360/500Hz、�
 ## 成熟QRS独立候选
 
 在data/requirements_qrs.txt指定环境运行python -B -m unittest discover -s sim -p test_qrs_v5.py -v，检查原码平台、40Hz候选支路、正负/快速/弱尖/宽波/双相、暂停/复位、未来/过期读取和前缀/尾部。完整已知记录回归另由data/benchmark_qrs_v5.py执行；软件检查不代表500Hz、整数RTL或上板通过，见[说明](../docs/qrs_v5.md)。
+
+
+## QRS噪声计分检查
+
+python -B -m unittest discover -s sim -p test_qrs_noise.py -v检查212/16解码、全段起尾、一次匹配分段归属和V召回。这里只校验计分；实际全长入口与依赖见[说明](../docs/qrs_noise.md)，不连接板卡。
+
+## 逐样本运行时与自动切拍
+
+在已有QRS依赖环境运行`python -B -m unittest discover -s sim -p test_qrs_runtime.py`和`test_beat_window.py`，覆盖确认时刻、前缀不变、重置/序号缺口、有界缓冲、幅值饱和、500Hz映射和训练端窗口逐值对照。`check_qrs_runtime.py`只核冻结来源/门槛；完整42条与500Hz转换另跑`data/benchmark_qrs_runtime.py`。说明见[运行时](../docs/qrs_runtime.md)。模型迁移路径由`test_model_paths.py`核验，不改变冻结模型文件。

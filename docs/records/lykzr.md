@@ -22,7 +22,7 @@
 
 
 
-当前尚无独立AFE/ADC实采成功记录。采集参数、电平/限幅、接口与采样验收见计划A01—A05；芯片候选讨论见[范围记录](ecg_scope_20261017.md)，它不等于实物联调完成。后续实际采集修改/验证追加本类。
+当前尚无独立AFE/ADC实采成功记录。采集参数、电平/限幅、接口与采样验收见计划A01—A05；芯片候选讨论见范围记录，它不等于实物联调完成。后续实际采集修改/验证追加本类。
 
 
 
@@ -1527,7 +1527,7 @@ v2使用360Hz、4096单位/mV输入；检测特征分支5–20Hz浮点IIR→相�
 
 
 
-开发尝试保存在tmp/qrs_v2_20261016_01/：trial_01阈值1/4，7记录TP15041/FN104/FP332，108误检2146→276、119 19→1，但108不合格；trial_02只抬高阈值至1/2，TP14360/FN785/FP33，其中119漏349拍，说明不能只追求少报，放弃。trial_03改为1/3并加入连续停检阈值释放，TP15042/FN103/FP204，F1较高，但新增合成幅值突降检查发现长期隔拍检出，不能作为最终版。
+开发尝试保存在tmp/history/qrs_20261023/qrs_v2_20261016_01/：trial_01阈值1/4，7记录TP15041/FN104/FP332，108误检2146→276、119 19→1，但108不合格；trial_02只抬高阈值至1/2，TP14360/FN785/FP33，其中119漏349拍，说明不能只追求少报，放弃。trial_03改为1/3并加入连续停检阈值释放，TP15042/FN103/FP204，F1较高，但新增合成幅值突降检查发现长期隔拍检出，不能作为最终版。
 
 
 
@@ -1587,7 +1587,7 @@ v2使用360Hz、4096单位/mV输入；检测特征分支5–20Hz浮点IIR→相�
 
 
 
-隔离环境：全局Python3.14没有WFDB/SciPy。项目tmp/qrs_benchmark_env使用system-site-packages隔离环境；ensurepip子进程首次失败，改用without-pip并使用继承的pip完成本地环境安装，没有修改全局Python。通过工具网络权限安装WFDB4.3.1及依赖，实测NumPy2.4.4、SciPy1.18.1、matplotlib3.10.9。日志tmp/qrs_v3_20261016_01/pip_install.log；data/requirements_qrs.txt固定WFDB版本，不冒充完整依赖锁。用户中断前已启动的公开数据下载保留，后续检查均在冻结后进行。
+隔离环境：全局Python3.14没有WFDB/SciPy。项目tmp/qrs_benchmark_env使用system-site-packages隔离环境；ensurepip子进程首次失败，改用without-pip并使用继承的pip完成本地环境安装，没有修改全局Python。通过工具网络权限安装WFDB4.3.1及依赖，实测NumPy2.4.4、SciPy1.18.1、matplotlib3.10.9。日志tmp/history/qrs_20261023/qrs_v3_20261016_01/pip_install.log；data/requirements_qrs.txt固定WFDB版本，不冒充完整依赖锁。用户中断前已启动的公开数据下载保留，后续检查均在冻结后进行。
 
 
 
@@ -1611,7 +1611,7 @@ src/reference/ecg_qrs_v3.py提供push接口，只在GQRS滤波所需样本全部
 
 
 
-开发迭代都在tmp/qrs_v3_20261016_01：stream_01为200ms（FP620），stream_02为280ms（FP146但203 V召回97.748%），stream_03为240ms/较宽定位（V99.786%、FP225）。stream_04尝试核心换算为200单位/mV以改善每拍±1的阈值适配，FP降至76但V仅98.756%；stream_05抬阈值1.25仍V98.714%，放弃内部200单位。离线quality_analysis只用开发数据比较中心/背景斜率，选中心平均斜率必须不低于背景的比例1.0，避免更高比例伤害V。stream_06恢复4096核心单位、240ms、质量检查，V99.914%、FP161；stream_07阈值1.5，最终开发TP24757/FN51/FP109，Se99.794%、PPV99.562%、V2328/2332=99.828%，10/11条达逐记录门槛，105强噪声仍FP60未通过。
+开发迭代都在tmp/history/qrs_20261023/qrs_v3_20261016_01：stream_01为200ms（FP620），stream_02为280ms（FP146但203 V召回97.748%），stream_03为240ms/较宽定位（V99.786%、FP225）。stream_04尝试核心换算为200单位/mV以改善每拍±1的阈值适配，FP降至76但V仅98.756%；stream_05抬阈值1.25仍V98.714%，放弃内部200单位。离线quality_analysis只用开发数据比较中心/背景斜率，选中心平均斜率必须不低于背景的比例1.0，避免更高比例伤害V。stream_06恢复4096核心单位、240ms、质量检查，V99.914%、FP161；stream_07阈值1.5，最终开发TP24757/FN51/FP109，Se99.794%、PPV99.562%、V2328/2332=99.828%，10/11条达逐记录门槛，105强噪声仍FP60未通过。
 
 
 
@@ -1623,7 +1623,7 @@ src/reference/ecg_qrs_v3.py提供push接口，只在GQRS滤波所需样本全部
 
 
 
-v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/294/20，GQRS 19111/22/73，v3 19106/27/332。v3 Se99.859%、PPV98.292%、V2109/2112=99.858%、位置MAE3.957ms、RR MAE4.506ms，只5/8逐记录通过；汇总PPV也没过预先99%里程碑，不能宣称成功。219单条FP284，图tmp/qrs_v3_20261016_01/219_errors.png显示真主峰后宽负波额外输出。208位置MAE12.358ms和228精度也保留失败。
+v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/294/20，GQRS 19111/22/73，v3 19106/27/332。v3 Se99.859%、PPV98.292%、V2109/2112=99.858%、位置MAE3.957ms、RR MAE4.506ms，只5/8逐记录通过；汇总PPV也没过预先99%里程碑，不能宣称成功。219单条FP284，图tmp/history/qrs_20261023/qrs_v3_20261016_01/219_errors.png显示真主峰后宽负波额外输出。208位置MAE12.358ms和228精度也保留失败。
 
 
 
@@ -1647,7 +1647,7 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 
 
 
-新增src/reference/ecg_qrs_v4.py，继承冻结v3，输出侧在400ms近邻比较候选形态。先用中心区域中位数估基线，development_01结果TP43853/FN88/FP417，219仍FP264。诊断tmp/qrs_v4_20261016_01/shape_diagnostic.json表明宽负波把中位数拉低，正/负偏差比例看起来像双相波而触发救援。改用外侧80–150ms估基线后，development_02将219 FP降至1，但203低幅度真V也被拒绝，V召回仅96.847%；这是不能接受的取舍，不只看总FP。
+新增src/reference/ecg_qrs_v4.py，继承冻结v3，输出侧在400ms近邻比较候选形态。先用中心区域中位数估基线，development_01结果TP43853/FN88/FP417，219仍FP264。诊断tmp/history/qrs_20261023/qrs_v4_20261016_01/shape_diagnostic.json表明宽负波把中位数拉低，正/负偏差比例看起来像双相波而触发救援。改用外侧80–150ms估基线后，development_02将219 FP降至1，但203低幅度真V也被拒绝，V召回仅96.847%；这是不能接受的取舍，不只看总FP。
 
 
 
@@ -1683,13 +1683,13 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 
 
 
-证据保存：tmp/qrs_v3_20261016_01/final_development/、evaluation/，tmp/qrs_v4_20261016_01/development_01/02/03/、evaluation/及各日志。新增data/plot_qrs_benchmark.py只读保存的CSV出固定前10秒/首个内部错误图，219_development.png、117_evaluation.png、210_evaluation.png均已打开核查。四份精选summary原字节复制到data/results/qrs_v3_development_20261016.json、qrs_v3_evaluation_20261016.json、qrs_v4_development_20261016.json、qrs_v4_evaluation_20261016.json；正式报告写report/offline_qrs_evaluation.md，更新report/project_plan.md、data/README.md、data/results/README.md、third_party.md，root README和materials_review.md未改。
+证据保存：tmp/history/qrs_20261023/qrs_v3_20261016_01/final_development/、evaluation/，tmp/history/qrs_20261023/qrs_v4_20261016_01/development_01/02/03/、evaluation/及各日志。新增data/plot_qrs_benchmark.py只读保存的CSV出固定前10秒/首个内部错误图，219_development.png、117_evaluation.png、210_evaluation.png均已打开核查。四份精选summary原字节复制到data/results/qrs_v3_development_20261016.json、qrs_v3_evaluation_20261016.json、qrs_v4_development_20261016.json、qrs_v4_evaluation_20261016.json；正式报告写report/offline_qrs_evaluation.md，更新report/project_plan.md、data/README.md、data/results/README.md、third_party.md，root README和materials_review.md未改。
 
 
 
 
 
-独立复核脚本tmp/qrs_v4_20261016_01/audit.py和audit.json检查：v2/v3/v4冻结8/15/18项哈希；55/40/19/92行结果的CSV数量、匹配±54点范围、逐类/时间块合计、RR与事件/不应期、汇总重算；全部通过，流式stale_events均0。smoke main.c和releases/latest/BOOT.BIN与原哈希一致。修改前文档快照在tmp/backup/qrs_v34_20261016_01/，保留前几轮失败与原始资料，无删除/Flash写入/Git操作。**smoke仍未上板（NOT_TESTED），未改RTL/PS/bitstream或发布镜像，未训练CNN，也未验证真实AFE/ADC输入。**
+独立复核脚本tmp/history/qrs_20261023/qrs_v4_20261016_01/audit.py和audit.json检查：v2/v3/v4冻结8/15/18项哈希；55/40/19/92行结果的CSV数量、匹配±54点范围、逐类/时间块合计、RR与事件/不应期、汇总重算；全部通过，流式stale_events均0。smoke main.c和releases/latest/BOOT.BIN与原哈希一致。修改前文档快照在tmp/backup/qrs_v34_20261016_01/，保留前几轮失败与原始资料，无删除/Flash写入/Git操作。**smoke仍未上板（NOT_TESTED），未改RTL/PS/bitstream或发布镜像，未训练CNN，也未验证真实AFE/ADC输入。**
 
 
 
@@ -1755,7 +1755,7 @@ v3新8条共19133心搏：v1 TP19085/FN48/FP487，v2 17845/1288/16，XQRS 18839/
 
 
 
-验证脚本tmp/qrs_recheck_20261016/verify.py确认：42条全部row字段和两组aggregate一致；每条events/positions/matches/missed/extra CSV及summary.json，共252份文件与整理前逐字节一致。当前23项软件检查通过，11项当前冻结实现哈希不变，活动文档链接及发布清单校验通过。117定位、205/210的V召回失败仍保留，不因文件整理或汇总通过抹去。详细结论和复现命令在docs/records/qrs_recheck_20261016.md；软件测试、开发和评估三份本次原始文本日志也位于docs/records/，CSV/JSON派生输出留tmp/qrs_recheck_20261016，未覆盖旧精选结果。
+验证脚本tmp/history/qrs_20261023/qrs_recheck_20261016/verify.py确认：42条全部row字段和两组aggregate一致；每条events/positions/matches/missed/extra CSV及summary.json，共252份文件与整理前逐字节一致。当前23项软件检查通过，11项当前冻结实现哈希不变，活动文档链接及发布清单校验通过。117定位、205/210的V召回失败仍保留，不因文件整理或汇总通过抹去。详细结论和复现命令在docs/records/qrs_recheck_20261016.md；软件测试、开发和评估三份本次原始文本日志也位于docs/records/，CSV/JSON派生输出留tmp/history/qrs_20261023/qrs_recheck_20261016，未覆盖旧精选结果。
 
 
 
@@ -1839,7 +1839,7 @@ AGENTS.md重整为：1上下文/授权/沟通，2项目目标/竞赛/优先级�
 
 
 
-用户明确指出要通过Git交接，上一轮ZIP交接误解需求。本轮改为克隆仓库后从官方固定原始文件直接生成开发缓存，无本机tmp/父缓存/ZIP/预训练权重依赖。新增data/prepare_cnn_git.py、cnn_git_v1_protocol.json、requirements_cnn_data.txt以及sim/check_training_checkout.py、test_cnn_git.py；ZIP打包器移至本地tmp历史，不再作为正式入口，已有ZIP不删除。更新训练交接说明、data说明、docs导航和计划；根README和资料索引仍受保护，未改写。
+用户明确指出要通过Git交接，上一轮ZIP交接误解需求。本轮改为克隆仓库后从官方固定原始文件直接生成开发缓存，无本机tmp/父缓存/ZIP/预训练权重依赖。新增model/prepare/prepare_cnn_git.py、cnn_git_v1_protocol.json、requirements_cnn_data.txt以及sim/check_training_checkout.py、test_cnn_git.py；ZIP打包器移至本地tmp历史，不再作为正式入口，已有ZIP不删除。更新训练交接说明、data说明、docs导航和计划；根README和资料索引仍受保护，未改写。
 
 
 
@@ -2136,7 +2136,7 @@ docs/README.md按信息采集/项目主体/模型训练分组，原先段落中�
 
 
 
-已选residual_verified三折29原始文件1,229,443字节复制data/baseline，附来源清单与说明；新增check_baseline核验来源/身份/指标及可选权重重放，check_checkout与清单覆盖124项当前交接文件。首个干净副本软件测试因test_mitdb_records假定tmp存在失败，只补测试目录创建，在新02副本通过。数据环境61项51通过/10跳过，Torch环境51项39通过/12跳过；同机已有解释器，不假称接收电脑已安装。GQRS生成3文件逐字节复现；Vivado新路径无原缓存打开、引用及BD验证通过，IP恢复/解析警告保留；不综合/实现/bit/上板。
+已选residual_verified三折29原始文件1,229,443字节复制model/baseline，附来源清单与说明；新增check_baseline核验来源/身份/指标及可选权重重放，check_checkout与清单覆盖124项当前交接文件。首个干净副本软件测试因test_mitdb_records假定tmp存在失败，只补测试目录创建，在新02副本通过。数据环境61项51通过/10跳过，Torch环境51项39通过/12跳过；同机已有解释器，不假称接收电脑已安装。GQRS生成3文件逐字节复现；Vivado新路径无原缓存打开、引用及BD验证通过，IP恢复/解析警告保留；不综合/实现/bit/上板。
 
 
 
@@ -2226,7 +2226,7 @@ docs/README.md按信息采集/项目主体/模型训练分组，原先段落中�
 
 
 
-同步report/system.md及总览当前授权/状态，B09整项仍未勾选；仅勾选软件适配子项，后续B10独立PS流式程序/节拍/发送队列仍待实现。维护src/pc和sim说明、PC教程、UART状态、文档导航与交接必需清单。完整结果/限制见[PC串口记录](pc_serial_20261018.md)；慢磁盘/事件循环积压、实际驱动拔插/吞吐和人工使用待验，不承诺满负载无丢字节。
+同步report/system.md及总览当前授权/状态，B09整项仍未勾选；仅勾选软件适配子项，后续B10独立PS流式程序/节拍/发送队列仍待实现。维护src/pc和sim说明、PC教程、UART状态、文档导航与交接必需清单。完整结果/限制见PC串口记录；慢磁盘/事件循环积压、实际驱动拔插/吞吐和人工使用待验，不承诺满负载无丢字节。
 
 
 
@@ -2262,7 +2262,7 @@ Vitis本机服务回环连接受沙箱拒绝，客户端等端口未返回；获
 
 
 
-证据采集遇GCC系统TEMP权限错误，获准重试仍失败；只改子进程TMP/TEMP到项目独立目录，不改ACL。TemporaryDirectory自动清理另有拒绝访问，测试改为保留UUID输出目录/原日志，不强行清理。最终场景证据tmp/ps_stream_validation_20261018_03/results.json，8项unittest最终通过；失败目录保留。全过程与边界详见[PS流式记录](ps_stream_20261018.md)，操作见[使用说明](../ps_stream.md)。
+证据采集遇GCC系统TEMP权限错误，获准重试仍失败；只改子进程TMP/TEMP到项目独立目录，不改ACL。TemporaryDirectory自动清理另有拒绝访问，测试改为保留UUID输出目录/原日志，不强行清理。最终场景证据tmp/ps_stream_validation_20261018_03/results.json，8项unittest最终通过；失败目录保留。全过程与边界详见PS流式记录，操作见[使用说明](../ps_stream.md)。
 
 
 
@@ -2298,7 +2298,7 @@ Vitis本机服务回环连接受沙箱拒绝，客户端等端口未返回；获
 
 
 
-检查：本VM的Python3.10没有Tkinter，无法安装（apt无权限、pip代理403），未安装任何依赖。项目映射目录内TemporaryDirectory清理报IsADirectoryError（改前原代码同样28项中12项报错），因此把src/sim复制到VM本地/tmp执行。改前原代码28项通过（1跳过）；改后30项（新增2个隐藏窗口用例：串口非协议文本→等待→读错误态；演示/回放状态及300×180、760×260、1600×700下图元不越界）在无Tk环境27通过/3跳过；另用自写最小Tk替身执行界面逻辑30项全过、--ui-self-test通过（ui_scale1.5，1084样本，canvas_bbox在1000×360内）。替身只模拟控件/图元坐标，文字宽度为近似，不等于真实Tk渲染。10.01s演示3604样本/13事件/30993字节，回放后raw/samples/events/status/sessions/waveform.svg六文件逐字节一致。check_checkout.py在Linux因data/baseline/files.json反斜杠路径失败，与本轮无关，未修改。
+检查：本VM的Python3.10没有Tkinter，无法安装（apt无权限、pip代理403），未安装任何依赖。项目映射目录内TemporaryDirectory清理报IsADirectoryError（改前原代码同样28项中12项报错），因此把src/sim复制到VM本地/tmp执行。改前原代码28项通过（1跳过）；改后30项（新增2个隐藏窗口用例：串口非协议文本→等待→读错误态；演示/回放状态及300×180、760×260、1600×700下图元不越界）在无Tk环境27通过/3跳过；另用自写最小Tk替身执行界面逻辑30项全过、--ui-self-test通过（ui_scale1.5，1084样本，canvas_bbox在1000×360内）。替身只模拟控件/图元坐标，文字宽度为近似，不等于真实Tk渲染。10.01s演示3604样本/13事件/30993字节，回放后raw/samples/events/status/sessions/waveform.svg六文件逐字节一致。check_checkout.py在Linux因model/baseline/files.json反斜杠路径失败，与本轮无关，未修改。
 
 
 
@@ -2538,7 +2538,7 @@ ecg_ports.py补USB实例选择、连接前身份/冲突校验及本机身份记�
 
 
 
-data/baseline/files.json有29项，其中26项包含反斜杠；sim/check_checkout.py此前直接Path拼接，POSIX会把反斜杠当文件名。新增manifest_path只在解析时换算分隔符，保留相对目录边界校验；不改基线清单、训练协议、权重或哈希。新增test_checkout.py四项覆盖单/双反斜杠、POSIX拆分、绝对路径/盘符/目录逃逸拒绝与全29文件哈希。主体计划保留历史并指向当前500Hz合成ELF，补充PC/PS已有基础和演示/板端采样率区别，统一列表空行。未在Linux/macOS或VM原生环境运行，Windows路径语义测试不冒称跨系统验收。
+model/baseline/files.json有29项，其中26项包含反斜杠；sim/check_checkout.py此前直接Path拼接，POSIX会把反斜杠当文件名。新增manifest_path只在解析时换算分隔符，保留相对目录边界校验；不改基线清单、训练协议、权重或哈希。新增test_checkout.py四项覆盖单/双反斜杠、POSIX拆分、绝对路径/盘符/目录逃逸拒绝与全29文件哈希。主体计划保留历史并指向当前500Hz合成ELF，补充PC/PS已有基础和演示/板端采样率区别，统一列表空行。未在Linux/macOS或VM原生环境运行，Windows路径语义测试不冒称跨系统验收。
 
 
 
@@ -2628,7 +2628,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-用户确认连续两轮和合格发布更新；读取当前规则/计划/源码，Git继续暂停。固定10412点CSV，CH2 signed24右移8位范围2072..2459，原检测器最大能量589，首事件前阈值下限4096，明确幅值/初始化死区；带通与50Hz陷波后最大539，不能仅靠滤波解开。未修改硬件、降阈值或声称准确率。新增data/analyze_capture.py与5项检查，滤波500Hz新增1项，共10项通过；详细记录[系统两轮](system_rounds_20261020.md)。派生产物tmp/system_rounds_20261020。
+用户确认连续两轮和合格发布更新；读取当前规则/计划/源码，Git继续暂停。固定10412点CSV，CH2 signed24右移8位范围2072..2459，原检测器最大能量589，首事件前阈值下限4096，明确幅值/初始化死区；带通与50Hz陷波后最大539，不能仅靠滤波解开。未修改硬件、降阈值或声称准确率。新增data/analyze_capture.py与5项检查，滤波500Hz新增1项，共10项通过；详细记录系统两轮。派生产物tmp/system_rounds_20261020。
 
 
 
@@ -2646,7 +2646,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-60003点/120.076秒/120事件实板逐值、事件位置/RR与END/DONE核验通过，队列峰值40，无已知丢弃/缺口；软件125项全过无跳过，静态180文件/78Python/29基线及既有smoke发布检查通过。证据tmp/system_rounds_20261020/paced_01/summary.json和tests.json，详细[本轮记录](system_rounds_20261020.md)。坏CRC/半帧/空闲及恢复批次已启动，未完成前不宣告通过。release/history/ignore尚待续做，不把已安排定时当发布完成。保留无线/人工GUI/准确率边界。
+60003点/120.076秒/120事件实板逐值、事件位置/RR与END/DONE核验通过，队列峰值40，无已知丢弃/缺口；软件125项全过无跳过，静态180文件/78Python/29基线及既有smoke发布检查通过。证据tmp/system_rounds_20261020/paced_01/summary.json和tests.json，详细本轮记录。坏CRC/半帧/空闲及恢复批次已启动，未完成前不宣告通过。release/history/ignore尚待续做，不把已安排定时当发布完成。保留无线/人工GUI/准确率边界。
 
 
 
@@ -2658,7 +2658,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-坏CRC/半帧/停流分别返回BAD_CRC/PARTIAL_TIMEOUT/INPUT_TIMEOUT、next0、0样本/事件；显式重新JTAG后5003点/10事件恢复通过，详情[系统两轮](system_rounds_20261020.md)，逐文件SHA和汇总tmp/system_rounds_20261020/board_verification.json。首次第二例在配置前目标发现未就绪失败，保留jtag_partial.log；等待发现就绪后仍严格唯一目标才配置，未自动重传。板卡末次正常会话已完成、COM已关闭，新的会话须重新配置。无线/人工GUI/准确率未验，release/history待凌晨2点续做；没有更新latest或提交推送。
+坏CRC/半帧/停流分别返回BAD_CRC/PARTIAL_TIMEOUT/INPUT_TIMEOUT、next0、0样本/事件；显式重新JTAG后5003点/10事件恢复通过，详情系统两轮，逐文件SHA和汇总tmp/system_rounds_20261020/board_verification.json。首次第二例在配置前目标发现未就绪失败，保留jtag_partial.log；等待发现就绪后仍严格唯一目标才配置，未自动重传。板卡末次正常会话已完成、COM已关闭，新的会话须重新配置。无线/人工GUI/准确率未验，release/history待凌晨2点续做；没有更新latest或提交推送。
 
 
 
@@ -2676,7 +2676,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-五项新增发布测试通过：边界/损坏拒绝、来源及证据、复制后运行、六文件回放一致、隐藏窗口及包内参数；三种CheckOnly通过，不连接硬件。smoke新路径重打包及ZIP核验通过，当前静态交接186文件/82Python/29基线通过。首遍隐藏自检写入包tmp导致额外文件检查失败，保留现场，改测试显式包外输出后通过；不是放宽清单。旧smoke三份工具历史SHA漂移明确披露，验收核心/原始历史不改。发布验收详见[系统发布记录](system_release_20261021.md)，证据tmp/system_release_20261021。
+五项新增发布测试通过：边界/损坏拒绝、来源及证据、复制后运行、六文件回放一致、隐藏窗口及包内参数；三种CheckOnly通过，不连接硬件。smoke新路径重打包及ZIP核验通过，当前静态交接186文件/82Python/29基线通过。首遍隐藏自检写入包tmp导致额外文件检查失败，保留现场，改测试显式包外输出后通过；不是放宽清单。旧smoke三份工具历史SHA漂移明确披露，验收核心/原始历史不改。发布验收详见系统发布记录，证据tmp/system_release_20261021。
 
 
 
@@ -2700,7 +2700,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-5项新增软件边界/身份检查和19项原中转回归通过。Vivado声明顺序错误已修；沙箱xelab生成C编译失败，正式权限执行后通过，不改权限/安装。第一版自有失败构建进程停止、文件保留；第二版硬件冻结快照构建中，19条既有开发全量回归运行中，不提前记为bit或新实板通过。Git/训练/Flash仍未做。正式说明docs/qrs_auto.md，输出tmp/qrs_auto_20261021。
+5项新增软件边界/身份检查和19项原中转回归通过。Vivado声明顺序错误已修；沙箱xelab生成C编译失败，正式权限执行后通过，不改权限/安装。第一版自有失败构建进程停止、文件保留；第二版硬件冻结快照构建中，19条既有开发全量回归运行中，不提前记为bit或新实板通过。Git/训练/Flash仍未做。正式说明docs/qrs_auto.md，输出tmp/history/qrs_20261023/qrs_auto_20261021。
 
 
 
@@ -2722,23 +2722,23 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-源码、构建、测试入口、说明/导航与主体计划同步；已验latest和history保持原样，冻结发布自检通过，正式PC核心有一处新候选身份兼容差异，另留release_source_drift.json，不伪称发布与当前源码相同。tmp/旧发布历史继续忽略，无需放行待验镜像。原检测器、共享Vivado和smoke保留；根README、资料索引、模型基线未改。全部详细证据在tmp/qrs_auto_20261021及[修复记录](qrs_auto_20261021.md)。
+源码、构建、测试入口、说明/导航与主体计划同步；已验latest和history保持原样，冻结发布自检通过，正式PC核心有一处新候选身份兼容差异，另留release_source_drift.json，不伪称发布与当前源码相同。tmp/旧发布历史继续忽略，无需放行待验镜像。原检测器、共享Vivado和smoke保留；根README、资料索引、模型基线未改。全部详细证据在tmp/history/qrs_20261023/qrs_auto_20261021及[修复记录](qrs_auto_20261021.md)。
 
 
 
 #### 本轮离线构建收尾
 
-首次深工作区BSP依赖路径262字符而失败，保留firmware_v4目录；改项目内短路径tmp/ecg_auto/w后平台/FSBL/应用全部构建成功，未改系统设置。正式脚本补路径预检及平台导出检查。应用ELF292588字节、SHA256 2aed08b6dfd83dcc05e19634cad0b4148e68f24f14d8118707c2a007414a6554；同一XSA/bit/psinit与FSBL、实际主机受检C和启动配置均核验匹配。配置ecg_auto_app_hw_1系统复位+重配PL开启，仍未上板。最终验收见qrs_auto_20261021.md及tmp/qrs_auto_20261021/firmware_verification.json；总计划、主体计划、协议身份与教程入口同步。旧latest/history及其文件原样保留，没有提交推送。
+首次深工作区BSP依赖路径262字符而失败，保留firmware_v4目录；改项目内短路径tmp/ecg_auto/w后平台/FSBL/应用全部构建成功，未改系统设置。正式脚本补路径预检及平台导出检查。应用ELF292588字节、SHA256 2aed08b6dfd83dcc05e19634cad0b4148e68f24f14d8118707c2a007414a6554；同一XSA/bit/psinit与FSBL、实际主机受检C和启动配置均核验匹配。配置ecg_auto_app_hw_1系统复位+重配PL开启，仍未上板。最终验收见qrs_auto_20261021.md及tmp/history/qrs_20261023/qrs_auto_20261021/firmware_verification.json；总计划、主体计划、协议身份与教程入口同步。旧latest/history及其文件原样保留，没有提交推送。
 
 ### 2026-10-21：原波形定位/质量确认三方案与门槛保留
 
 用户明确继续改QRS，不训练CNN，仍无板卡。本轮读取原auto、成熟GQRS/v4、滤波和19条失败结果，在独立ecg_peak.py加原波形极值定位、中心/背景变化量检查与宽波救援；沿用既有v4思路及固定参数，原输入/core/镜像不覆盖。先冻结方案/源码，再跑相同19条完整已知开发记录，启动/尾部计分、固定54点容差，无标签偏移或新独立测试。
 
-三方案均未合格：01使FP7240→1602、位置MAE35.81→3.60ms、PPV85.81→96.46%，但FN160→291；Se99.34%、V召回99.59%，只9/19逐记录通过。02固定5—20Hz候选带通提高部分漏检（FN844），用户低幅CSV甚至0事件；03平方能量FP744但V召回97.82%退步，不能以总体F1掩盖室性漏检。因此正式仅留01供研究，两个退步分支/源码及原始失败结果可恢复保存在tmp/qrs_peak_20261021，未删历史。成熟GQRS/v4既有更强软件对照仍保留，不把本改进当最终核心或新独立成绩。
+三方案均未合格：01使FP7240→1602、位置MAE35.81→3.60ms、PPV85.81→96.46%，但FN160→291；Se99.34%、V召回99.59%，只9/19逐记录通过。02固定5—20Hz候选带通提高部分漏检（FN844），用户低幅CSV甚至0事件；03平方能量FP744但V召回97.82%退步，不能以总体F1掩盖室性漏检。因此正式仅留01供研究，两个退步分支/源码及原始失败结果可恢复保存在tmp/history/qrs_20261023/qrs_peak_20261021，未删历史。成熟GQRS/v4既有更强软件对照仍保留，不把本改进当最终核心或新独立成绩。
 
 7项新测试覆盖360/500Hz、正负/定位/RR、宽波/双相救援、快速真心拍、因果/复位/暂停及尾部；原auto7项回归也通过。第一次尾部断言刺激太晚、核心尚未确认，失败保留，调整为核心已确认/质量窗口未完整的刺激后通过，未改算法迁就测试。正式版本再次完整重放19条，指标/全部事件/RR/错漏/时间块/类型与01一致，依赖SHA匹配。用户10412点500Hz同一CSV当前软件确认25候选，无标注不报准确率。静态交接201文件、91份Python与29基线文件通过。
 
-实现仍是浮点质量参考，尚未接入PS/PC或对应RTL，额外候选上下文约340ms、理论确认上界约440ms，不冒充计算/整机延迟。软件门槛没过，因此没有把失败方案再做bit/ELF或替换已验release，不继承上轮RTL/时序/实板成绩。主体验收总项不勾，下一步先解决复杂噪声/宽波及V漏检，再冻结最终核心、整数化和PS/PL分工。说明docs/qrs_peak.md、详录docs/records/qrs_peak_20261021.md、输出tmp/qrs_peak_20261021；计划/导航/说明/交接清单同步，根README/资料索引/模型基线、原软件/硬件/PS/PC不改，Git/安装/Flash/训练/Computer Use未做。tmp已被现有ignore覆盖，不改ignore或上传。
+实现仍是浮点质量参考，尚未接入PS/PC或对应RTL，额外候选上下文约340ms、理论确认上界约440ms，不冒充计算/整机延迟。软件门槛没过，因此没有把失败方案再做bit/ELF或替换已验release，不继承上轮RTL/时序/实板成绩。主体验收总项不勾，下一步先解决复杂噪声/宽波及V漏检，再冻结最终核心、整数化和PS/PL分工。说明docs/qrs_peak.md、详录docs/records/qrs_peak_20261021.md、输出tmp/history/qrs_20261023/qrs_peak_20261021；计划/导航/说明/交接清单同步，根README/资料索引/模型基线、原软件/硬件/PS/PC不改，Git/安装/Flash/训练/Computer Use未做。tmp已被现有ignore覆盖，不改ignore或上传。
 
 ### 2026-10-21：成熟QRS接续、九方案失败保留与42条回归
 
@@ -2746,21 +2746,33 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 单纯最强峰、无稳定保护回搜、质量提高、短RR低幅联合门、背景突增门及第二候选一致性均有误检/漏检/V代价，失败不删除。保留较简单的40Hz候选支路和同极性连续平台定位v5作为研究参考，完整19条正式输出与06逐项复核；新边界5项及原算法共31项通过。开发17/19、TP43861/FN80/FP149，Se99.818%/PPV99.661%/V99.842%，位置2.982ms/RR3.177ms；原23条已知评估20/23，TP52889/FN80/FP48，V99.397%。对v4总计少13误检、多5漏检，不能称全面优于或新独立测试。
 
-105/228误检、117定位及205/210的V召回仍失败，B03整体不勾。当前仅360Hz/4096单位每mV的软件；无对应PS/RTL/bit/ELF，不把旧500Hz或auto上板成绩算给本候选，不替换latest。用户接板授权与执行前身份/来源核对条件已同步计划和定时断点；本轮未枚举/下载/Flash，不改PS/MIO/供电，未Git/安装/Computer Use/训练。详录docs/records/qrs_continue_20261021.md，代码src/reference/ecg_qrs_v5.py、入口data/benchmark_qrs_v5.py，证据tmp/qrs_continue_20261021；失败候选受现有tmp忽略规则覆盖，无需额外放行。
+105/228误检、117定位及205/210的V召回仍失败，B03整体不勾。当前仅360Hz/4096单位每mV的软件；无对应PS/RTL/bit/ELF，不把旧500Hz或auto上板成绩算给本候选，不替换latest。用户接板授权与执行前身份/来源核对条件已同步计划和定时断点；本轮未枚举/下载/Flash，不改PS/MIO/供电，未Git/安装/Computer Use/训练。详录docs/records/qrs_continue_20261021.md，代码src/reference/ecg_qrs_v5.py、入口data/benchmark_qrs_v5.py，证据tmp/history/qrs_20261023/qrs_continue_20261021；失败候选受现有tmp忽略规则覆盖，无需额外放行。
 
 本轮后续边界核查主动注入过期候选，发现派生定位先于原过期拒绝逻辑读环形历史而异常；原失败与正式快照保留，r2加前置保护及回归断言。重新完整19+23后，252份逐记录事件/计分文件与首轮逐字节一致，31项软件检查通过无跳过；14项冻结来源、旧v4的11项来源及207文件/94Python/29基线检查通过。旧release自身92文件保持有效，未新上板或替换。最终verification.json和失败/恢复过程见同轮详录，不把边界修复或静态检查当算法整体合格。
 
 ### 2026-10-21：QRS第二轮修复与额度接续
 
-继续成熟QRS研究，追踪弱V/T标记、113不对称T和117近邻反极值；修复模板拒绝后的宽度状态回滚。26在21形态救援基础上做固定200ms等待的双流实际极值源事件重放，已知42条41条通过，105误检仍不合格，未作为完整运行时/PS/RTL或实板成绩。梯度一致、插入候选排除和去漂移等失败均保留；25差分形态实验已收齐42条，因203等退步否决；全部任务完成，接续读final_checkpoint.json，不重启重复实验。31项既有软件回归及旧release自身92文件检查通过，发布未更换。详见[本轮记录](qrs_refine_20261021.md)，断点tmp/qrs_scheduled/checkpoint.md；Git未暂存提交，板卡未操作，CNN未训练。
+继续成熟QRS研究，追踪弱V/T标记、113不对称T和117近邻反极值；修复模板拒绝后的宽度状态回滚。26在21形态救援基础上做固定200ms等待的双流实际极值源事件重放，已知42条41条通过，105误检仍不合格，未作为完整运行时/PS/RTL或实板成绩。梯度一致、插入候选排除和去漂移等失败均保留；25差分形态实验已收齐42条，因203等退步否决；全部任务完成，接续读final_checkpoint.json，不重启重复实验。31项既有软件回归及旧release自身92文件检查通过，发布未更换。详见本轮记录，断点tmp/history/qrs_20261023/qrs_scheduled/checkpoint.md；Git未暂存提交，板卡未操作，CNN未训练。
 
 ### 2026-10-22：一次定时QRS接续
 
-27扩大形态上下文、28增加样板宽度一致性均完成原42条，但105误检仍未过；27另损伤202 V，均未正式采用。原版离线XQRS完整对照也未合格。26源事件重放42条截止/前缀检查通过，仍不代表完整Detector/PS/RTL；研究原型诊断audit未限长的问题已明确记为运行时待办。31软件回归、旧发布自身92文件及冻结来源复核通过；未改正式算法/发布或操作板卡，未训练/Git/安装。详见[一次接续记录](qrs_oneshot_20261022.md)，新断点tmp/qrs_oneshot_20261022/final_checkpoint.json。原最好41/42不变，未勾整体合格；按要求本次定时不重复。
+27扩大形态上下文、28增加样板宽度一致性均完成原42条，但105误检仍未过；27另损伤202 V，均未正式采用。原版离线XQRS完整对照也未合格。26源事件重放42条截止/前缀检查通过，仍不代表完整Detector/PS/RTL；研究原型诊断audit未限长的问题已明确记为运行时待办。31软件回归、旧发布自身92文件及冻结来源复核通过；未改正式算法/发布或操作板卡，未训练/Git/安装。详见一次接续记录，新断点tmp/history/qrs_20261023/qrs_oneshot_20261022/final_checkpoint.json。原最好41/42不变，未勾整体合格；按要求本次定时不重复。
 
 ### 2026-10-22：评估修正计划、隔离交接与文件整理
 
 检索结论及三天顺序/停止条件合入总计划末尾，主体2.15与模型3.7同步；CNN未恢复，原42条全部已知。研究26原先仅tmp依赖，现保留未合格研究包和独立原码重建入口；完整42条210CSV与原版逐字节一致，类型/时间块/确认延迟一致，仍41/42未合格。新目录四条全长运行与静态/训练交接检查通过，不冒称第二电脑。DS只在tmp/ds_noise_20261022准备清单/协议草案/合成自检，补齐官方SHA清单后39输入SHA及118/119完整解码通过，负例能检测变更；实际DS未执行，输入保护非OS隔离。8份无正式引用的旧Vivado备份日志按SHA归档tmp/history/root_vivado_logs_20261022；当前工具工程/日志不搬。现有ignore已覆盖，未额外放行缓存或删除历史。专用接口已设10月23日03:00原对话一次接续；详见[evaluation_handoff_20261022.md](evaluation_handoff_20261022.md)。未动根README/资料索引/模型基线/旧发布，未Git、安装、Computer Use或板卡。
+
+### 2026-10-23：审查DSH并取消定时
+
+用户要求取消03:00任务，专用接口删除qrs已确认。审核DSH清单/草案/脚本及日志，39输入与4控制SHA不变，1000组固定种子小数组匹配对照0差异；DSH自报12/12仅核读、未重跑。结束校验日志与DONE实际缺失，自检固定_exists清理、参数忽略/非法值、真实长度和V计分尚有缺项，不合并、不称交付合格或抗噪改善。总计划和主体同步，41/42未合格状态保持；本轮目录发布整理尚未写入、已暂停。详见[evaluation_handoff_20261022.md](evaluation_handoff_20261022.md#2026-10-23dsh审核与定时取消)。未改DSH原件/正式算法/发布/根README/资料索引/基线，无Git、安装或板卡。
+
+### 2026-10-23：DSH修复与即时噪声测试启动
+
+按新授权修复DSH自检固定目录删除、参数未生效、非法值与长度/V计分缺项，17项自检及已有目录保留/拒绝覆盖检查通过；输入39与控制4SHA不变，DONE由Codex明确署名。正式新增噪声入口/协议/说明，8项计分检查通过；原QRS研究26算法、参数和原门槛哈希未变。发现官方NST还含16位编码，开跑前补齐支持，v1留备份后冻结v2；另记录NST/MIT零点差异并预定两臂各14项，不拼最佳结果。用户中途询问时立即停止下载；明确继续后恢复。当前下载/全长配对预检中，没有真实压力曲线结论；不设定时、Git/训练/板卡/发布不动。详见[qrs_noise_20261023.md](qrs_noise_20261023.md)。
+
+### 2026-10-23：官方噪声全长测试收齐
+
+研究26算法/参数未改。官方42文件SHA及WFDB完整数字解码通过；v2在119标注冲突处主动失败并保留。119两库35个V位置不同，冻结v3后对两映射各14项重新全长运行，主表统一NST参考、每项另报MIT副表；两臂仅干净2项和24dB2项通过压力对照门槛。18dB合并PPV约93.1%，噪声增强后漏检/V漏检加重；零点调整不等于修好算法。28项从位置CSV重新计分完全一致，原干净MIT分数与旧结果一致，QRS冻结哈希及DSH39输入/4控制未变。8项计分测试、17项DSH自检/安全检查和5项v5回归通过。曲线/逐记录/类型/时间块/FN/FP/RR/削顶及失败见[qrs_noise_20261023.md](qrs_noise_20261023.md)，完整证据tmp/noise_test_20261023；计划实际完成项勾选，算法整体仍未合格。无定时、Git、安装、CNN、板卡或发布更新；原发布目录精简仍暂停，未冒称完成。
 
 ## 三、模型训练
 
@@ -2774,7 +2786,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-用户明确开始分类训练准备，随后要求多找现成且质量高的ECG模型。本次先检查现有环境和42条标签，新增data/profile_classification.py用于官方SHA校验、类别盘点和候选切拍边界统计，不安装PyTorch或启动训练。当前Python3.14.7环境没有torch/torchvision/sklearn；CIM硬件查询未成功，PATH没有nvidia-smi，GPU仍未知，不推断为一定无GPU。
+用户明确开始分类训练准备，随后要求多找现成且质量高的ECG模型。本次先检查现有环境和42条标签，新增model/prepare/profile_classification.py用于官方SHA校验、类别盘点和候选切拍边界统计，不安装PyTorch或启动训练。当前Python3.14.7环境没有torch/torchvision/sklearn；CIM硬件查询未成功，PATH没有nvidia-smi，GPU仍未知，不推断为一定无GPU。
 
 
 
@@ -2819,7 +2831,7 @@ ignore核查：tmp、Python字节码、Vivado/Vitis缓存以及原始工具日�
 
 
 
-CLEF备选保存docs/model_candidates/clef_small.md。本机已有两套Python均无torch/TensorFlow，未安装依赖；为了先建立可复现基线，按Farag 2023固定模板MF-CNN思路独立实现NumPy版本，明确四个超类模板、三个因果RR、固定训练特征标准化等改编，非官方模型或完整可训练卷积。代码src/reference/ecg_mf_cnn.py、data/train_ecg_cnn.py，协议data/cnn_mf_v1_protocol.json，说明docs/cnn_baseline.md。参数844可训练/128固定卷积/8标准化，浮点MAC初算10320/拍，不代表硬件资源/延迟或INT8通过。
+CLEF备选保存docs/model_candidates/clef_small.md。本机已有两套Python均无torch/TensorFlow，未安装依赖；为了先建立可复现基线，按Farag 2023固定模板MF-CNN思路独立实现NumPy版本，明确四个超类模板、三个因果RR、固定训练特征标准化等改编，非官方模型或完整可训练卷积。代码src/reference/ecg_mf_cnn.py、data/train_ecg_cnn.py，协议model/protocols/cnn_mf_v1_protocol.json，说明docs/cnn_baseline.md。参数844可训练/128固定卷积/8标准化，浮点MAC初算10320/拍，不代表硬件资源/延迟或INT8通过。
 
 
 
@@ -2948,7 +2960,7 @@ v7训练99554拍，N/S/V/F为47897/13564/34478/3615；未知身份数据不计�
 
 
 
-用户要求继续模型训练。接续当前v8进程，完成4方案×3折共12次训练、336个epoch；原中断31轮保留，不并入完整轮数。新源码为data/prepare_cnn_cv.py、data/train_cnn_cv.py、src/reference/ecg_temporal_cnn.py及冻结data/cnn_patient_cv_v8_protocol.json；本轮补独立sim/verify_cnn_cv.py，更新sim/test_cnn_cv.py、工程说明/数据说明/来源和计划。训练期间未改运行中的模型/训练源码，也未改变冻结协议。
+用户要求继续模型训练。接续当前v8进程，完成4方案×3折共12次训练、336个epoch；原中断31轮保留，不并入完整轮数。新源码为model/prepare/prepare_cnn_cv.py、model/train/train_cnn_cv.py、src/reference/ecg_temporal_cnn.py及冻结model/protocols/cnn_patient_cv_v8_protocol.json；本轮补独立sim/verify_cnn_cv.py，更新sim/test_cnn_cv.py、工程说明/数据说明/来源和计划。训练期间未改运行中的模型/训练源码，也未改变冻结协议。
 
 
 
@@ -2990,7 +3002,7 @@ v7训练99554拍，N/S/V/F为47897/13564/34478/3615；未知身份数据不计�
 
 
 
-用户在v8后要求继续。先读当前规则、代码和完整结果，冻结data/cnn_target_adapt_v9_protocol.json，SHA3b831db2fcdc82cb5601034e67338cd2e87d4ee7def1e8b09318ee701063e4e2。新增data/freeze_cnn_adapt.py、data/train_cnn_adapt.py与sim/test_cnn_adapt.py、sim/verify_cnn_adapt.py；保留全部v8文件和失败结果。仍用26名开发患者原三折，独立6人测试完全排除，每折只能加载自己v8 residual_verified权重与训练RR统计。
+用户在v8后要求继续。先读当前规则、代码和完整结果，冻结model/protocols/cnn_target_adapt_v9_protocol.json，SHA3b831db2fcdc82cb5601034e67338cd2e87d4ee7def1e8b09318ee701063e4e2。新增data/freeze_cnn_adapt.py、model/train/train_cnn_adapt.py与sim/test_cnn_adapt.py、sim/verify_cnn_adapt.py；保留全部v8文件和失败结果。仍用26名开发患者原三折，独立6人测试完全排除，每折只能加载自己v8 residual_verified权重与训练RR统计。
 
 
 
@@ -3032,7 +3044,7 @@ v7训练99554拍，N/S/V/F为47897/13564/34478/3615；未知身份数据不计�
 
 
 
-用户要求按前轮方向继续改。新增src/reference/ecg_causal_background.py与ecg_context_cnn.py、data/prepare_cnn_background.py与train_cnn_background.py，冻结v10协议2fb7c2c9d0983cee604025e49a3b2567536426e3d156704b8451e5a4929575bd。背景取此前最多8个完整窗口逐点中位数，必须满足原生窗口结束R+ceil(fs*后窗)<=当前R；每记录重置，使用全部心拍而不按N/S/V/F选择模板，无历史给零/count0不删除评分拍。仍依赖专家心拍位置，当前拍等待原约533ms后窗，不能称自动QRS或端到端通过。
+用户要求按前轮方向继续改。新增src/reference/ecg_causal_background.py与ecg_context_cnn.py、model/prepare/prepare_cnn_background.py与train_cnn_background.py，冻结v10协议2fb7c2c9d0983cee604025e49a3b2567536426e3d156704b8451e5a4929575bd。背景取此前最多8个完整窗口逐点中位数，必须满足原生窗口结束R+ceil(fs*后窗)<=当前R；每记录重置，使用全部心拍而不按N/S/V/F选择模板，无历史给零/count0不删除评分拍。仍依赖专家心拍位置，当前拍等待原约533ms后窗，不能称自动QRS或端到端通过。
 
 
 
@@ -3140,3 +3152,54 @@ v10同样本/初始父权重/损失/种子比较当前拍与新增历史支路�
 
 
 
+
+## 2026-10-23：结构引用修复与 QRS 中点低能量门控诊断
+
+用户要求先恢复工作区被杀软/清理打乱的引用，并继续 QRS 105 误检问题。只读核对后，按 AGENTS 第 6 节修复：把 data/protocols/ 的 11 个协议 JSON 逐字节移回 data/（保留当前较新的两个 CNN 协议）；从 tmp/research_handoff_20261022/portable_final/docs/records/ 恢复 checkout/release 引用的 12 个记录及 smoke_board_20261017/ 两个日志（哈希一致）；把精简后的 releases/latest 归档到 tmp/backup/releases_slim_latest_20261023，并从 tmp/releases_backup_20261022/latest 恢复完整发布包（91/91 manifest 文件）。验证：sim/check_checkout.py（221 项）、sim/check_system_release.py（92 文件、5 证据用例）、sim/check_smoke_release.py 全部通过。未执行 Git 操作。
+
+QRS 只做 tmp 诊断/试验，未改正式算法或协议。105 基线复现 TP2562/FN10/FP67。相似度门控诊断（tmp/history/qrs_20261023/qrs_gate_20261023/）显示 FP 与真拍高度重叠：中点候选 FP 相似度中位 0.902，真拍 0.959、V 0.959；阈值 0.94 仅去掉 31 FP 且误删 9 真拍，无法单独达标。改用“中点 0.25–0.75 RR + 能量 <0.5×中位 + inside/outside<3”门控后，105 达到 TP2566/FN6/FP21、Se99.767%、PPV99.188%、V41/41；但 42 条开发回归仅 36/42，通过，106/202/203/213/221/210 因 V 召回不足失败（如 203 V365/444、221 V383/396）。对 42 条 96,288 个事件的离线特征（能量/幅值/宽/io/相似度/前 RR）做单规则、双规则与延迟两拍确认搜索，未找到“105 去 ≥42 FP 且各记录 V/FN 不超预算”的可行规则；V 与噪声假峰在上述特征上重叠是结构性原因。保留所有 tmp 输出与 42 条逐记录结果 tmp/history/qrs_20261023/qrs_gate_20261023/run42_gate.json、features42.json、phase0_105.json；未降低门槛、未按记录特例、未读独立测试、未改 release/板卡/Git。下一步需用户决定：接受 41/42 现状，或另立更复杂的 V 模板分类/延迟确认主改动，或调整目标。
+
+## 2026-10-23：releases/latest 精简为烧录产物
+
+用户要求 latest 只保留 Vivado/Vitis JTAG 烧录所需内容。已把完整包归档到 tmp/backup/releases_full_replaced_20261023，重建 releases/latest：仅 smoke/ 与 bridge/ 的 hardware（bit/xsa/ps7_init）、prebuilt ELF、run_smoke.tcl/run_bridge.tcl、各自 manifest.json，加根 README/LICENSE/third_party/manifest/artifacts，共 17 个文件。源码、docs、evidence、board 副本不再放入 latest；artifacts.json 改为引用仓库源码哈希与 docs/records 证据哈希。重写 sim/check_system_release.py 与 sim/check_smoke_release.py 以校验精简包+仓库来源/证据；更新 releases/README.md 与 .gitignore 只放行精简 latest。history/ 未动（2 个旧版本，26 文件）。验证：两个检查脚本均 passed（17 文件、smoke/bridge 各 5、6 证据、4 来源）；未连接板卡、未写 Flash、未改算法。
+
+## 2026-10-23：研究26完整42条复测
+
+按用户要求用同一 raw、原协议、原门槛从原码重跑研究26（新输出 tmp/qrs_research26_rerun_20261023，未覆盖旧结果）。开发18/19、原评估23/23，合计41/42；105 仍唯一失败。总体 TP96777/FN133/FP154、Se99.8628%、PPV99.8411%、F1 0.998519、位置MAE2.825ms、RR MAE2.565ms；105 为 TP2562/FN10/FP67、Se99.6112%、PPV97.4515%、V41/41。与第26轮记录值一致；数据126个 hea/dat/atr 与旧42条运行 source_sha256 全匹配，未使用新数据。未修改算法/协议/门槛，未连接板卡。
+
+## 2026-10-23：采用研究26复测结果与旧QRS试验归档
+
+用户确认采用研究26复测结果（已知42条开发回归41/42；105 PPV97.45未过；非独立测试）。固化 data/results/qrs_research26_20261023.json，新增正式记录 docs/records/qrs_research26_20261023.md，并更新 docs/qrs_research.md、docs/README.md、report/system.md 2.13/2.14、report/project_plan.md：当前QRS结果采用26，停止为105调阈值/加特例。文件结构：将旧QRS试验目录（qrs_105_20261022、qrs_auto_20261021、qrs_continue_20261021、qrs_gate_20261023、qrs_oneshot_20261022、qrs_peak_20261021、qrs_recheck_20261016、qrs_refine_20261021、qrs_scheduled、qrs_v2/v3/v4_20261016_01）原字节移动到 tmp/history/qrs_20261023/，保留当前复测 tmp/qrs_research26_rerun_20261023、运行环境、官方噪声测试和DS准备材料；docs/report 中旧路径已改为归档路径，归档说明见 tmp/history/qrs_20261023/README.md。未改算法/协议/门槛、未替换v5、未操作板卡、未提交Git。
+
+## 2026-10-23：CNN资产从 data/ 迁入 model/
+
+按用户要求完成结构拆分：8个 cnn_*_protocol.json 移入 model/protocols/，prepare_cnn_*、extend_cnn_ltdb、download_external_ecg、profile_classification 移入 model/prepare/，train_cnn_* 移入 model/train/，data/baseline 移入 model/baseline/，requirements_cnn*.txt 移入 model/。data/ 只保留 QRS 资产和共用 ecg_dataset.py、download_mitdb_records.py、requirements_qrs.txt、analyze_capture.py。旧协议字节未改；迁移脚本 ROOT 改 parents[2]、补 model 子目录 sys.path，source_snapshot/默认协议/基线路径改 model/；checkout清单、check_baseline、check_checkout、check_training_checkout、sim测试和 docs/report 引用同步；data/README 重写，新增 model/README 和 docs/records/model_structure_20261023.md。基线冻结哈希用 model/baseline/legacy_sources 原字节核对，当前训练入口另行核验。验证：check_checkout 227项、check_baseline 29文件/--metrics、check_training_checkout、test_checkout 4项、test_cnn_git 3项、test_cnn_expanded 6项、test_cnn_ltdb 3项通过；py_compile 0失败；本地链接0缺失。未恢复训练、未读独立测试、未改QRS算法/门槛、未动release/板卡/Git。
+
+
+## 2026-10-23：主体发布收尾、研究26冻结及逐样本/切拍候选
+
+用户要求三项一起推进。本轮恢复历史bridge板上记录原字节，使其与既有发布证据SHA匹配；latest 17个烧录文件不动，ignore改为逐文件放行，history未改。修复仍指向tmp完整包的发布测试，恢复5个必要原实板用例的原字节接收日志/摘要到docs/records/system_board_20261020，重核60003点/120事件、5003点/10事件恢复及CRC/半帧/停流拒绝；未重新上板。模型入口按QRS数据依赖/Torch训练依赖分别核查，修复基线旧Windows清单路径解析，冻结29文件不改；Torch环境缺WFDB/SciPy的失败保留，未安装/训练/重放权重。交接清单补齐冻结来源和证据的实际依赖，不建立新的交接包。
+
+新增ecg_qrs_runtime、ecg_beat_window、ecg_signal_pipeline及正式回归/冻结协议，不动研究26原源码或原门槛。360Hz完整42条的96931个事件确认时刻/位置/RR与原重放一致，TP96777/FN133/FP154、41/42，105仍未过；待确认队列观察最多2项、尾部待确认8项照原规则不输出，切拍启动不足7项明确跳过。确认等待平均643.77ms、最大2505.56ms，不当作计算/硬件延迟。500Hz的61抽头90Hz FIR及重采样候选全42条为TP96778/FN132/FP158、40/42：105 PPV97.5266%及221 V392/396=98.9899%未过；保留失败，不接入板端、不替换latest，不为记录调阈值。42条重采样额外削顶审计为0。
+
+37项选定回归通过；按清单复制的无历史tmp依赖测试目录，6项静态检查和5项管线测试通过。两种采样率共516个自动切拍窗口与完整源波形训练裁剪逐值一致；没有专家标注补峰，没有CNN分类成绩。84组全长输出事件重新计分/源SHA核对一致。精选结果data/results/qrs_runtime_20261023.json，详细过程/失败/环境见docs/records/runtime_20261023.md，原始运行/断点在tmp/runtime_20261023。两套Tcl仅执行XSDB --check-only，连接前退出。
+
+环境Python3.14.7/Windows11、NumPy2.4.4/SciPy1.18.1/WFDB4.3.1。已同步主体/总计划、教程/导航及模型迁移更正。仍未通过105噪声、原生500Hz、整数PS/PL、新匹配镜像/实板、自动切拍后分类、INT8与FPGA推理；不能因接口和运行时完成勾选B03/B05整体。根README、资料索引、模型冻结文件、三段传输协议和原实物配置均未改；Git暂停，未提交推送、未操作板卡或Flash。
+
+
+## 2026-10-23：纠正文档修改位置并清理工作树
+
+先前误在工作树修改文档，用户明确要求直接修改桌面原工程并删除.codex/worktrees内全部工作树。本次将导航清理和两份必要历史记录同步至原工程，保留原工程并发增加的运行时结果及日志：恢复checkout/ecg_scope的历史记录链接，删除12条占位行和4条无目标描述，归档原件保留。3份文档本地链接核验通过，根README与资料索引哈希未变。
+
+清理前两个工作树及对应Git工作树元数据均已备份并逐文件核验到tmp/backup/worktree_cleanup_20261023_01；后续仅清理用户明确指定目录内的工作树及其登记，不提交/推送或覆盖原工程其他改动。最终删除结果见同目录cleanup_result.json。
+
+清理进展：2f44目录已删除，两个Git工作树登记均已移除；2e73全部文件已清空，但ecg_edge空目录被进程占用，Windows拒绝删除。已启动仅删除该空目录的隐藏清理进程，最长等待30分钟，遇到新内容即停止；最终状态见tmp/backup/worktree_cleanup_20261023_01/cleanup_result.json。未结束应用或修改权限。
+
+
+## 2026-10-23：QRS暂停调优与后续系统顺序
+
+用户明确保留当前阶段结果、QRS先不调，并要求标记未来可能出现的问题。本轮更新总计划/主体计划的当前状态，覆盖旧噪声研究和500Hz算法改进的自动接续安排；研究26/360Hz阶段基线保留41/42，105 PPV约97.45%仍未过，500Hz候选40/42且221 V392/396仍失败、不采用不发布。原99%等门槛不改，不称独立测试或整体合格。
+
+主体计划新增R-QRS-01至05风险：噪声误检与错误切拍、500Hz漏V/实采衔接、已查看开发数据的泛化限制、平均644ms/最大2.51s确认等待、整数PS/PL/新实板待验。后续出现异常先留完整输入/配置/序号/事件证据，报告后再确认是否恢复算法修改，不自动调参或按记录特例。暂停不取消采集、滤波、模型、INT8或FPGA目标；下一步优先分类接口和PS/PL分工，再做固定公开数据端到端软件参考，模型训练仍由原负责人按单独授权处理。
+
+同步docs/qrs_research.md、docs/qrs_runtime.md和runtime_20261023记录的状态/恢复条件，教程复现命令保留但不自动执行。本轮只有文档修改及链接/冻结文件检查，未训练、未跑QRS实验、未改源码/数据/发布镜像，未操作Git或板卡。修改前文档快照在tmp/backup/qrs_pause_20261023_*。

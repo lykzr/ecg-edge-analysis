@@ -413,8 +413,8 @@ python -B sim/check_ecg_reference.py --vivado-bin '<Vivado安装目录>/bin' --o
 
 ## 25. 当前离线入口与历史保留
 
-当前QRS v4运行方法见[data/README.md](../data/README.md)，算法结果见[离线评估](records/offline_qrs_evaluation.md)，文件拆分复现见[准确性复核](records/qrs_recheck_20261016.md)。历史实现保留在`tmp/history/qrs_20261016/`，不作为当前默认入口，不因文档整理删除。
+当前QRS v4运行方法见[data/README.md](../data/README.md)，算法结果见[离线评估](records/offline_qrs_evaluation.md)，文件拆分复现见准确性复核。历史实现保留在`tmp/history/qrs_20261016/`，不作为当前默认入口，不因文档整理删除。
 
 ## 21. 当前500Hz双向中转交付
 
-系统包入口为releases/latest/README.md。bridge/的500Hz bit/XSA/ELF只供电脑送样中转；smoke/仍是360Hz自检，不混用硬件。先运行bridge/board/run_bridge.ps1 -CheckOnly校验，再指定实际AMD工具目录和下载器序列号临时JTAG启动；客户端入口src/ui/main.py。每次新会话重新配置PL，END/DONE后不直接重发初始化。接收方重建GUI工作区可用包内board/create_bridge_workspace.py，准确命令见包内说明。原始来源记录与本轮便携/归档检查见[系统发布记录](records/system_release_20261021.md)。
+系统包入口为releases/latest/README.md。bridge/的500Hz bit/XSA/ELF只供电脑送样中转；smoke/仍是360Hz自检，不混用硬件。先运行bridge/board/run_bridge.ps1 -CheckOnly校验，再指定实际AMD工具目录和下载器序列号临时JTAG启动；客户端入口src/ui/main.py。每次新会话重新配置PL，END/DONE后不直接重发初始化。接收方重建GUI工作区可用包内board/create_bridge_workspace.py，准确命令见包内说明。原始来源记录与本轮便携/归档检查见系统发布记录。

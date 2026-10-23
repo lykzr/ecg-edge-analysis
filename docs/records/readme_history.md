@@ -68,8 +68,8 @@ python -m venv tmp/qrs_env
 
 | 文件 | 来源 |
 | --- | --- |
-| qrs_v4_development_20261016.json | 19条开发记录；来自tmp/qrs_v4_20261016_01/development_03/summary.json |
-| qrs_v4_evaluation_20261016.json | 原冻结后23条记录×v3/v4/XQRS/GQRS，92行；来自tmp/qrs_v4_20261016_01/evaluation/summary.json |
+| qrs_v4_development_20261016.json | 19条开发记录；来自tmp/history/qrs_20261023/qrs_v4_20261016_01/development_03/summary.json |
+| qrs_v4_evaluation_20261016.json | 原冻结后23条记录×v3/v4/XQRS/GQRS，92行；来自tmp/history/qrs_20261023/qrs_v4_20261016_01/evaluation/summary.json |
 
 两份摘要保持原字节，包含当时的历史对照和源码路径/哈希，不因文件整理重新生成结果。evaluation中v4汇总门槛通过、逐记录20/23通过，117定位和205/210的V召回仍失败；不代表CNN或板上验收。smoke仍为NOT_TESTED。
 

@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "version": "20261020-bridge-clock-jtag-v1",
+  "sample_rate_hz": 500,
+  "build_id": "ba79ab9e76e5418f",
+  "elf_sha256": "e5b18e40c927d4663d33af68b4ccdfa391044e315ed69c81354971a2d5b61c24",
+  "flash_programming": "NOT_PERFORMED",
+  "source_sha256": {
+    "src/ps/ecg_bridge/main.c": "56fb79b295b82abb9af40247f885481b4763c97845167b7e0b3fb5613cdeefd7",
+    "src/ps/ecg_bridge/bridge.c": "b8fad3489c5db9af396343a0d320c57fad288f3c466ad1750721613a88c5fb1a",
+    "src/ps/ecg_bridge/bridge.h": "fe30fc8d57ff89105e91baeb498e2b5ae8f55d711da883202fd925c9a372c7d8",
+    "src/ps/ecg_bridge/bridge_time.h": "2eeea32f7462eb79db89fa1ecb47d65b98cf3363d8a42c14c5190b35fed73606"
+  },
+  "files": {
+    "hardware/ecg_system_candidate.bit": {
+      "bytes": 4045773,
+      "sha256": "4e6caf2592b31e05d1d20a71068e0002f38a0be643ccdc9b926035ae489eef47"
+    },
+    "hardware/ecg_system_candidate.xsa": {
+      "bytes": 331158,
+      "sha256": "0f0e6e4345a887a23c21e01dba3ba55287aec1c276d166fd1749d68eabd43a71"
+    },
+    "hardware/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    },
+    "prebuilt/ecg_bridge.elf": {
+      "bytes": 294364,
+      "sha256": "e5b18e40c927d4663d33af68b4ccdfa391044e315ed69c81354971a2d5b61c24"
+    },
+    "run_bridge.tcl": {
+      "bytes": 1652,
+      "sha256": "f0280962176a0729894ac0cc05f4d78fb686b245180728f0109270450fb64951"
+    }
+  }
+}

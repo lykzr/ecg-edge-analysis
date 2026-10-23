@@ -28,6 +28,8 @@
 
 ## 项目主体
 
+[QRS逐样本运行时与切拍](qrs_runtime.md)：独立软件参考、输入幅值/序号、500Hz适配与模型窗口接口；实际检查见[运行时记录](records/runtime_20261023.md)。
+
 
 
 | 文档 | 用途 |
@@ -42,9 +44,8 @@
 
 | [项目主体计划](../report/system.md) | 检测/切拍、FPGA部署、电脑通信显示与整机交付 |
 
-| [Git交接完整性审查](records/checkout_20261017.md) | 工程/算法/模型验证依赖、遗漏修复及共享边界 |
+| [历史交接完整性审查](records/checkout_20261017.md) | 2026-10-17依赖与复核记录；当前操作以现有说明和检查脚本为准 |
 
-| [HDMI显示方案](HDMI.md) | 预留入口；文件当前缺失，待补，不据此认定显示方案已实现 |
 
 | [Zynq到电脑的结果协议](uart_protocol.md) | ECG-UART-1输出字段/能力/缺失值；电脑输入另见ECG-IN-1 |
 
@@ -66,29 +67,25 @@
 
 | [工程实验记录](records/lykzr.md) | 按相同三类记录问题、失败、取舍和验证证据 |
 
-| [拆分后准确性复核](records/qrs_recheck_20261016.md) | 文件整理后的全记录复现结果 |
 
 | [QRS离线评估](records/offline_qrs_evaluation.md) | 检测方法、记录划分和准确性评估 |
 
 | [Hello World验证](records/hello_world_validation.md) | 发布镜像验证证据 |
 
-| [工程状态快照](records/project_status_snapshot.md) | 既有实验阶段与证据摘要 |
 
 | [历史说明](records/readme_history.md) | 从各README迁出的原始说明/记录 |
 
 | [启动与早期离线历史](records/bringup_history.md) | 从下载教程迁出的启动排错和实验结果 |
 
-| [本轮文档维护](records/doc_maintenance_20261016.md) | 整理范围、修改、验证和后续维护入口 |
-
-| [结构整理记录](records/structure_handoff_20261017.md) | 历史归档、依赖保留与工程复核入口 |
 
 
 
-[系统两轮：输入幅值与持续数字验收](records/system_rounds_20261020.md)集中记录零事件原因、冻结门槛、持续用例及剩余边界。
+
+系统两轮：输入幅值与持续数字验收集中记录零事件原因、冻结门槛、持续用例及剩余边界。
 
 
 
-[系统JTAG发布与归档记录](records/system_release_20261021.md)说明当前latest、旧版history、精确忽略规则及便携检查。
+系统JTAG发布与归档记录说明当前latest、旧版history、精确忽略规则及便携检查。
 
 
 
@@ -96,11 +93,13 @@
 
 [原波形定位与质量确认](qrs_peak.md)是独立QRS软件候选；失败分支和未通过门槛见[记录](records/qrs_peak_20261021.md)，不属于当前板端镜像。
 
-[QRS一次定时接续](records/qrs_oneshot_20261022.md)保留后续噪声假设、成熟对照与运行时边界。
+QRS一次定时接续保留后续噪声假设、成熟对照与运行时边界。
 
-[QRS第二轮修复记录](records/qrs_refine_20261021.md)保留形态/宽度/双流定位取舍和未验边界。
+QRS第二轮修复记录保留形态/宽度/双流定位取舍和未验边界。
 
 [成熟QRS接续候选](qrs_v5.md)提供独立v5的输入约定与完整回归入口；试验取舍和未验边界见[接续记录](records/qrs_continue_20261021.md)。
+
+[研究26复测与采用结果](records/qrs_research26_20261023.md)：2026-10-23 完整42条已知开发回归 41/42，105 噪声误检未过；数据SHA未变，不称独立测试。
 
 [评估修正与三天计划](../report/project_plan.md#评估修正与三天工作安排)列明检索依据、停止规则与噪声实验优先级；[研究快照复现](qrs_research.md)和[DS隔离任务](ds_task.md)用于安全交接。
 
@@ -116,7 +115,9 @@
 
 | [模型训练计划](../report/model.md) | 数据/基线对照、训练验证、独立测试、量化和模型交付 |
 
-| [心拍、节律与疾病范围记录](records/ecg_scope_20261017.md) | 四分类覆盖、ADS1292R能力及异常提示的解释边界 |
+| [CNN资产迁移记录](records/model_structure_20261023.md) | 2026-10-23 CNN协议/准备/训练/基线迁入 model/，路径与检查同步 |
+
+| [心拍分类与疾病范围记录](records/ecg_scope_20261017.md) | 保存任务范围与解释边界；历史状态不代表当前验收 |
 
 | [轻量CNN首版说明](cnn_baseline.md) | 固定模板基线的冻结协议和实现边界 |
 
@@ -132,19 +133,12 @@
 
 | [CLEF-Small备选](model_candidates/clef_small.md) | 暂缓的预训练迁移路线及恢复条件 |
 
-| [CNN模型选型与准备](records/cnn_model_survey_20261016.md) | 现成模型、权重、许可及数据盘点 |
 
-| [固定模板CNN首轮记录](records/cnn_mf_v1_20261017.md) | 训练结果、逐类失败及后续验证边界 |
 
-| [可训练CNN尝试记录](records/cnn_trainable_20261017.md) | 多结构、增强、上下文实验及验收结果 |
 
-| [扩库与新患者验证记录](records/cnn_expansion_20261017.md) | S/F来源盘点、患者划分、重训与测试保留状态 |
 
-| [患者CV与来源对比记录](records/cnn_patient_cv_20261017.md) | 12次训练、逐类/逐患者结果、权重重放与失败结论 |
 
-| [目标微调与比例校正记录](records/cnn_target_adapt_20261017.md) | 六次微调、九方案取舍、完整权重重放及未达标结论 |
 
-| [历史形态背景记录](records/cnn_background_20261017.md) | 完整背景重建、九次训练、冻结支路对照与无收益结论 |
 
 | [模型训练交接](model_training_handoff.md) | 克隆后获取数据、重建输入与复现训练 |
 
@@ -156,3 +150,6 @@ README只放工程说明和文档入口；实验、失败、实际输出和性�
 
 Git记录范围：docs/records/保留报告和过程说明；原始下载、安装、逐轮训练及重复检查.log保留本地，默认不跟踪。仅.gitignore逐文件列出的精选日志随仓库；其他历史日志链接可能仅作者本机可用，不批量放行。教程内容和发布文件不随导航分类修改。
 
+
+
+QRS受控噪声入口：[使用说明](qrs_noise.md)，[实验记录](records/qrs_noise_20261023.md)。

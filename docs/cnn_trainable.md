@@ -25,18 +25,18 @@
 
 ## 环境与运行
 
-用户已明确允许安装CPU PyTorch及必要依赖到项目独立环境。当前可用解释器为`tmp/cnn_torch_env/Scripts/python.exe`；其它机器使用自己的独立环境。安装位置、临时文件、下载缓存均放tmp，不改系统Python或驱动。依赖见[data/requirements_cnn.txt](../data/requirements_cnn.txt)，实际完整环境清单留实验输出旁；本入口不自行执行安装。
+用户已明确允许安装CPU PyTorch及必要依赖到项目独立环境。当前可用解释器为`tmp/cnn_torch_env/Scripts/python.exe`；其它机器使用自己的独立环境。安装位置、临时文件、下载缓存均放tmp，不改系统Python或驱动。依赖见[model/requirements_cnn.txt](../model/requirements_cnn.txt)，实际完整环境清单留实验输出旁；本入口不自行执行安装。
 
 从项目根目录，分别使用新的输出目录：
 
 ```powershell
 & './tmp/cnn_torch_env/Scripts/python.exe' -B -m unittest discover -s sim -p 'test_ecg_torch.py'
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_candidates.py --cache-dir tmp/cnn_mf_v1_20261017_01 --output-dir tmp/cnn_trainable_v2_new
-& './tmp/cnn_torch_env/Scripts/python.exe' -B data/train_cnn_refined.py --cache-dir tmp/cnn_mf_v1_20261017_01 --output-dir tmp/cnn_refined_v3_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_candidates.py --cache-dir tmp/cnn_mf_v1_20261017_01 --output-dir tmp/cnn_trainable_v2_new
+& './tmp/cnn_torch_env/Scripts/python.exe' -B model/train/train_cnn_refined.py --cache-dir tmp/cnn_mf_v1_20261017_01 --output-dir tmp/cnn_refined_v3_new
 ```
 
-长上下文先在已有WFDB/SciPy环境运行`data/prepare_cnn_context.py --original-cache <旧缓存> --raw-dir <原始记录> --output-dir <新缓存>`，再给`train_cnn_refined.py`传入`--protocol data/cnn_context_v4_protocol.json`和新缓存。v3冻结协议继承的`training.augmentation`说明仍提到initial suite；实际是否增强以每个候选的`augment`及冻结源码为准，本轮记录保留此元数据瑕疵，不事后改写已跑协议。
+长上下文先在已有WFDB/SciPy环境运行`model/prepare/prepare_cnn_context.py --original-cache <旧缓存> --raw-dir <原始记录> --output-dir <新缓存>`，再给`train_cnn_refined.py`传入`--protocol model/protocols/cnn_context_v4_protocol.json`和新缓存。v3冻结协议继承的`training.augmentation`说明仍提到initial suite；实际是否增强以每个候选的`augment`及冻结源码为准，本轮记录保留此元数据瑕疵，不事后改写已跑协议。
 
 输出有协议/源码快照及哈希、逐候选权重/逐轮记录、选择依据、所选模型的逐类/逐记录结果与预测。v3/v4/v5的RR归一化参数另存normalization.json，推理必须匹配；v2不使用该参数。模型权重仅加载本机本轮产生的state_dict，采用weights_only方式，不加载不明pickle。
 
-CPU固定线程数与随机种子，调用确定性算法；跨PyTorch版本/平台不承诺字节级相同。Conv/Linear MAC只作为算术预算，不含预处理/激活/传输等，不是板上延迟、功耗或综合资源。实际结果和失败分析见[本轮训练记录](records/cnn_trainable_20261017.md)。**smoke未上板测试。**
+CPU固定线程数与随机种子，调用确定性算法；跨PyTorch版本/平台不承诺字节级相同。Conv/Linear MAC只作为算术预算，不含预处理/激活/传输等，不是板上延迟、功耗或综合资源。实际结果和失败分析见本轮训练记录。**smoke未上板测试。**

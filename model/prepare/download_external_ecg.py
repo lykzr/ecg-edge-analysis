@@ -8,7 +8,7 @@ import time
 from urllib.request import urlopen, Request
 import re
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 DATABASES=('incartdb','svdb')
 
 

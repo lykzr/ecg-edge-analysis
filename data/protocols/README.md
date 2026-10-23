@@ -1,24 +1,15 @@
-# 数据协议文件
+# 协议文件位置说明
 
-本目录存放各个算法版本和 CNN 模型的数据协议文件。
+本目录不再存放协议，仅保留迁移说明。
 
-## QRS 检测协议
+2026-10-23 结构：
 
-- `qrs_v4_protocol.json` - QRS v4 算法数据协议
-- `qrs_v5_protocol.json` - QRS v5 算法数据协议
-- `qrs_research_protocol.json` - QRS 研究版本数据协议
+- QRS 协议在 `data/` 根目录：
+  - `data/qrs_research_protocol.json`
+  - `data/qrs_v4_protocol.json`
+  - `data/qrs_v5_protocol.json`
+  - `data/qrs_noise_protocol.json`
+- CNN/模型协议在 `model/protocols/`：
+  - `model/protocols/cnn_*_protocol.json`（8 个）
 
-## CNN 模型协议
-
-- `cnn_context_v4_protocol.json` - CNN 上下文 v4 模型协议
-- `cnn_expanded_v6_protocol.json` - CNN 扩展 v6 模型协议
-- `cnn_expanded_v7_protocol.json` - CNN 扩展 v7 模型协议
-- `cnn_git_v1_protocol.json` - CNN Git v1 模型协议
-- `cnn_mf_v1_protocol.json` - CNN MF v1 模型协议
-- `cnn_patient_cv_v8_protocol.json` - CNN 患者交叉验证 v8 模型协议
-- `cnn_refined_v3_protocol.json` - CNN 精细化 v3 模型协议
-- `cnn_trainable_v2_protocol.json` - CNN 可训练 v2 模型协议
-
-## 说明
-
-这些协议文件记录了数据处理流程、模型训练配置和验证结果。用于确保实验的可复现性。
+历史：2026-10-22 曾把协议集中到本目录，但没有同步脚本/清单默认路径；2026-10-23 按 AGENTS.md 第 6 节修复引用后恢复原布局，随后又把 CNN 协议从 `data/` 迁入 `model/protocols/`。旧协议字节保持不变，历史内部路径字样不改写。

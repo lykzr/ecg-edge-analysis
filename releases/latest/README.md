@@ -1,57 +1,30 @@
-# ECG 系统预编译硬件文件
+# ECG 系统 JTAG 烧录产物
 
-本目录仅保存预编译的硬件文件和运行脚本，不重复存放源代码。
-
-## 目录结构
+本目录只放 **Vivado/Vitis JTAG 烧录所需文件**，不重复存放源码、文档或证据。
 
 ```
 releases/latest/
-├── README.md                    # 本说明文件
-├── artifacts.json               # 构建产物清单
-├── manifest.json                # 发布包清单
-├── smoke/                       # Smoke 测试预编译文件
-│   ├── hardware/               # 360Hz 自检硬件
-│   │   ├── ecg_system_candidate.bit
-│   │   ├── ecg_system_candidate.xsa
-│   │   └── ps7_init.tcl
-│   ├── prebuilt/               # 预编译 ELF
-│   │   └── ecg_smoke.elf
-│   └── run_smoke.tcl           # JTAG 启动脚本
-└── bridge/                      # Bridge 中转预编译文件
-    ├── hardware/               # 500Hz 中转硬件
-    │   ├── ecg_system_candidate.bit
-    │   ├── ecg_system_candidate.xsa
-    │   └── ps7_init.tcl
-    ├── prebuilt/               # 预编译 ELF
-    │   └── ecg_bridge.elf
-    └── run_bridge.tcl          # JTAG 启动脚本
+├── README.md
+├── LICENSE
+├── third_party.md
+├── manifest.json
+├── artifacts.json
+├── smoke/
+│   ├── hardware/{ecg_system_candidate.bit, .xsa, ps7_init.tcl}
+│   ├── prebuilt/ecg_smoke.elf
+│   ├── run_smoke.tcl
+│   └── manifest.json
+└── bridge/
+    ├── hardware/{ecg_system_candidate.bit, .xsa, ps7_init.tcl}
+    ├── prebuilt/ecg_bridge.elf
+    ├── run_bridge.tcl
+    └── manifest.json
 ```
 
-## 使用方法
+## 使用
 
-### Smoke 测试
-```powershell
-cd smoke
-# 使用 board/run_smoke.ps1 脚本（需从项目根目录 board/ 获取）
-```
-
-### Bridge 中转
-```powershell
-cd bridge
-# 使用 board/run_bridge.ps1 脚本（需从项目根目录 board/ 获取）
-```
-
-## 说明
-
-- **源代码位置**：所有源码在项目根目录的 `src/`, `board/`, `build/` 等目录中
-- **构建脚本**：使用 `board/` 目录下的构建脚本重新生成这些文件
-- **验证记录**：详见项目根目录 `docs/records/` 中的验证文档
-- **完整文档**：参见项目根目录 `docs/download_guide.md`
-
-## 文件来源
-
-这些文件由以下构建生成：
-- 硬件：通过 `build/build_navigator_ecg_system.tcl` 生成
-- 软件：通过 `board/build_ecg_smoke.py` 和 `board/build_ecg_bridge.py` 生成
-
-详细构建记录见 `artifacts.json` 和 `manifest.json`。
+- JTAG 临时运行：Vivado Hardware Manager 连接开发板，按 `smoke/run_smoke.tcl` 或 `bridge/run_bridge.tcl` 的步骤加载 `ps7_init.tcl`、bitstream 和 ELF。
+- 本包 **没有写 Flash**；掉电保存需另行打包 BOOT.BIN 并确认启动方式。
+- 证据在仓库 `docs/records/`：smoke 实板记录、bridge 有限数字回放记录；`artifacts.json` 的 `evidence` 字段给出对应路径和 SHA256。
+- 源码、构建脚本和完整说明在仓库 `src/`、`board/`、`build/`、`docs/`，不在本目录重复。
+- 两个硬件镜像不同；不要混用 smoke 与 bridge 的 bit/xsa/ELF。
