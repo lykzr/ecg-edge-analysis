@@ -1,5 +1,5 @@
 {
-  "version": "20261021-system-jtag-v1",
+  "version": "20261025-runtime500-qspi-v1",
   "purpose": "JTAG programming artifacts for Navigator V2 smoke and bridge; evidence and sources stay in repository",
   "smoke_core_unchanged": {
     "hardware/ecg_system_candidate.bit": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb",
@@ -37,6 +37,31 @@
       "source": "third_party.md",
       "bytes": 7655,
       "sha256": "4124f9945d0373f5c50a824693f9f14c1f4952a6b4c8e25e0fb25a1401a0036e"
+    },
+    "runtime500/run_runtime500.ps1": {
+      "source": "board/runtime_handoff/run_runtime500.ps1",
+      "bytes": 3800,
+      "sha256": "909acc6b5eb875faffb6e5af27c55dc12fdb80a1f9f40e7330e5c9fc6e93b614"
+    },
+    "runtime500/download.cmd": {
+      "source": "board/runtime_handoff/download.cmd",
+      "bytes": 167,
+      "sha256": "1b522c18548e7995a10f1c5f8a8ad4a12cf0c0c2f2426a42165fb4bc3daa84f2"
+    },
+    "qspi/program_qspi.ps1": {
+      "source": "board/runtime_handoff/program_qspi.ps1",
+      "bytes": 4781,
+      "sha256": "4411f86b98f231c2ae80dd920a0b0db755d10b3236cb50388532be9e791a76dc"
+    },
+    "qspi/probe_qspi.tcl": {
+      "source": "board/runtime_handoff/probe_qspi.tcl",
+      "bytes": 1239,
+      "sha256": "a947c24c2243ee0e7d3190a901c854788dc4d97470b48716f566e17b07462786"
+    },
+    "qspi/reset_qspi.tcl": {
+      "source": "board/runtime_handoff/reset_qspi.tcl",
+      "bytes": 465,
+      "sha256": "64752e492acab180caf3019e269aba9bb504024f405c67ad65dcc4667826362c"
     }
   },
   "evidence": {
@@ -45,7 +70,36 @@
     "docs/records/smoke_board_validation_20261017.md": "6d7781a8156433dec398313a586f8eabf60485e0e13a277ae19e628619eebf6e",
     "docs/records/bridge_board_20261020.md": "4ea94d05b0e9dfb8349fcf0be2e6b23a57b4ed7c6e986817f6daa1c758a8355a",
     "docs/records/uart_bridge_csv_20261020_pass.log": "f131a14c955230454d6600c59a21462ff4b14a7dc2184f6d982f39b8d31bf2b2",
-    "docs/records/uart_bridge_synth_20261020_pass.log": "c8e1a8741a1a0643150a36a6a1f8c0fb1d12aabb071e4aca0d9d75f97132b702"
+    "docs/records/uart_bridge_synth_20261020_pass.log": "c8e1a8741a1a0643150a36a6a1f8c0fb1d12aabb071e4aca0d9d75f97132b702",
+    "data/results/runtime500_board_20261024.json": "eaa5ecb96e1517ed8f199539c44ef4affa6a1932a565da3ef470830ce2ea1489",
+    "docs/records/runtime500_board_20261024/record100_debug_uart.log": "ec1a243b226709a8ac7a4076c9c1905476b4134587550680047e27bb9965e7ee",
+    "docs/records/runtime500_board_20261024/record100_debug_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/record105_debug_uart.log": "c19b183348987d5a90a7b017f9828912a83338e9cda62f0033610cd4589a1711",
+    "docs/records/runtime500_board_20261024/record105_debug_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/synth240_uart.log": "ea7d1d346825b93aa306dc38b8874c1cdfb260bf8cc5891e196859be79fc327e",
+    "docs/records/runtime500_board_20261024/synth240_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/recovery_uart.log": "d9dd82645c7eac468fb0efefe3a8b9f215f63c3158540ab1b392c587f3d57732",
+    "docs/records/runtime500_board_20261024/recovery_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/crc_uart.log": "9605d1981a19e70bd94c31129a62083428d3588d56eac185b2a1971b6c08c334",
+    "docs/records/runtime500_board_20261024/crc_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/partial_uart.log": "bff64e6c8077dadf2801fbcafe686a7b8e45c4964870fb9857d556e894d23626",
+    "docs/records/runtime500_board_20261024/partial_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/idle_uart.log": "f88f3105759d5a1e33c7fa134ddf8590d36740c49e7f993adb887c5dfc2edc1e",
+    "docs/records/runtime500_board_20261024/idle_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "data/results/runtime500_release_20261025.json": "30e0d6ba53c6b9f2fee3e7f25ea07b001645c06113c6880eec5a429221b2478f",
+    "docs/records/vendor500_board_20261025/board_csv_uart.log": "c8c8d3d89bc55284de62e5182ceb37f7ec273ee5a472017442dbaa71995796f5",
+    "docs/records/vendor500_board_20261025/board_csv_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/vendor500_board_20261025/board_simulated_adc_uart.log": "2a70d4b219e82eeeb886b5517d9af4be71ff25dba4f3a58a781abc8457964c22",
+    "docs/records/vendor500_board_20261025/board_simulated_adc_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "data/results/runtime500_components_20261025.json": "3738586b31f3759fe0a403b3a99e33213af815729dad6becff3cb1fdcd0c337a",
+    "data/results/qspi_20261025.json": "15e61d4e48dfcaaed14879a778e08269e41d398d9817c455a6816d600246ead5",
+    "docs/records/qspi_20261025/boot_headers.log": "14829a576bc4b83baefb4e8087f479035d0585399aa12894efadab7e3b95f9fd",
+    "docs/records/qspi_20261025/boot_mode.log": "1d7b10182b6de75131ddabf233e30733f0ee8a493552fe1163f178558eda528c",
+    "docs/records/qspi_20261025/cold_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1",
+    "docs/records/qspi_20261025/program_flash.log": "6f100896db8a382bf3c750954ef51f6745bee4084e1a45959621f31a1c90908e",
+    "docs/records/qspi_20261025/replay_uart.log": "b31fe704801aa16a1deaee59ed0919b2137f4e02ad6881e1016f005d97b141f8",
+    "docs/records/qspi_20261025/reset.log": "7eaf90ea206b32ad3ffa83a13e9ca98d2442e2d927ab60e459174a73aa95a3db",
+    "docs/records/qspi_20261025/reset_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1"
   },
   "scope": {
     "smoke": "USER_REPORTED_PASS",
@@ -54,6 +108,83 @@
     "manual_gui": false,
     "ecg_accuracy": false,
     "cnn_int8_pl": false,
-    "flash": false
+    "flash": true,
+    "runtime500": "FINITE_DIGITAL_BOARD_PASS"
+  },
+  "runtime500_build": {
+    "build_id": "a570b308ef7b46fe",
+    "sampling_hz": 500,
+    "window_trace": false,
+    "elf_sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9",
+    "bit_sha256": "38987b8d96237f6c202ab235ee66a985d0faf6b643d19af26772d3cd380be452",
+    "xsa_sha256": "024ce170f05a28683e9593a2c69638b3c3aab47fa63156d3ee00d2150544394d",
+    "source_sha256": {
+      "src/ps/ecg_runtime/main.c": "68146a6409afd16a8f4a0b810bbef9cdb3f6053498fd44636c9459f3bd6b35a5",
+      "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "src/ps/ecg_runtime/link.h": "6675e679c2d2f827ae08b2785d2ff470fb932ad20828f7a61ba66d4e9c1942eb",
+      "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "src/ps/ecg_bridge/bridge_time.h": "2eeea32f7462eb79db89fa1ecb47d65b98cf3363d8a42c14c5190b35fed73606",
+      "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "src/ps/ecg_runtime/runtime.c": "87e5aef743b963418a0e36e928a9c89b7450a08d22e0daf6f767d37b47d5c1c0",
+      "build/generate_rate500_runtime.py": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5",
+      "board/build_runtime.py": "227927de2aab80ede31cb05a7ca1fbdcee8477d12101b793284bdbc5443d128b",
+      "src/pc/ecg_bridge.py": "65a500a6b158187d97ec6b7b5ec6beade7a2c5d9a63dbe19acdc441eb92c2f36",
+      "src/pc/ecg_bridge_capture.py": "734a8e52aacb9848d64b95d25b1b5f4d3b2676d9c24c26e9a3dc971a8db200be",
+      "src/pc/ecg_bridge_core.py": "a3c0e73776e7a0af388d9f1b33e4bc7182843429e43025cf5bd0edf0871affc5",
+      "src/pc/ecg_bridge_protocol.py": "20917e8e9d8209854e32c4c16ce52d6cb2b2cc0c588077ed175394829abaae89",
+      "src/pc/ecg_bridge_records.py": "c2e655904b1d547b4488347c5d4a30cb8da3b293e638af1f25e785173054bc0a",
+      "src/pc/ecg_bridge_serial.py": "4330e4f4448f17e5017cc125e25040c8e9634cca305c0ec890f83b9055c76891",
+      "src/pc/ecg_bridge_worker.py": "a6f8c92b857c2a98b25577cf5225ac4bc14e8c62fe3081a734325ae532783fbc",
+      "src/pc/ecg_capture_core.py": "a181a586f880d04a4f12745a021466d1c9c01476630f16e746ffba2505922bcf",
+      "src/pc/ecg_metrics.py": "463753d24c1ac50c9c79a4be4ec0d72c5ebbb2b573af6ed575b1a91e1c359724",
+      "src/pc/ecg_monitor.py": "eed2c73983f3aa0298cd714adeed721ee43140eeba04268fa48f6ece8614080e",
+      "src/pc/ecg_monitor_core.py": "fb7cf073d4a4424af8ca932788c2d64afc8aebd70a08fa2b9429ef6a98b2f9c3",
+      "src/pc/ecg_paths.py": "62a6eaaacc15e093f60685b916938035a37c842b27fb96f73a64107b7daf8ae6",
+      "src/pc/ecg_ports.py": "be81cfb2d3db5d6377758a15aa10e069aee1d6d157a47f57ce6d36bb15fda126",
+      "src/pc/ecg_runtime_worker.py": "649f48cc98731c25cf42d4266dbf3094c696abc7832c20340f57405865e7d2f2",
+      "src/pc/ecg_serial.py": "d29d22e35ad0022bbacdff827a32ae49a7f5299d2ff3294d09be47b4ffa7cef9",
+      "src/pc/ecg_uart.py": "383537c2e5ce06d5d06469de335493dc654c1bf6a7f40b1258fe4e317aa1ef7b",
+      "src/ui/__init__.py": "894822726f0adf83e5842f94fd8ca4ede9f21cf4e5ec84a322c2867eb3fc08f2",
+      "src/ui/bridge.py": "e637c0248364caf2e36b3f2e4b283ad2ad3dad6ad6db40bcfb6464fcf1b054b9",
+      "src/ui/capture.py": "a8928c21b49d4a6260ef713a2066a6177f2ffd6c245f51417552bfecb051f741",
+      "src/ui/main.py": "a27d3e5c88e52136999c41d45dc0a450e46f4d959de3b99d70a24f454177c7c9",
+      "src/ui/monitor.py": "80f67b08b79c1fab5a3c9724e080d0158330e422edb2b0dccc63ab57aca70dab",
+      "src/ui/plot.py": "ae984a2f10b430ac060c1856b5eb3ca503526ae3adca7e3448c79e54234a16e2",
+      "src/ui/status.py": "a0dd2fd793dd7f5f764ed3d961b54a596089986892700ef50793f8406b10d7b0"
+    },
+    "adc_source_supported": true
+  },
+  "runtime500_receipt": "data/results/runtime500_release_20261025.json",
+  "qspi_receipt": "data/results/qspi_20261025.json",
+  "qspi_build": {
+    "build_id": "a570b308ef7b46fe",
+    "boot_sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc",
+    "components": {
+      "fsbl": {
+        "path": "qspi/fsbl.elf",
+        "bytes": 357592,
+        "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+      },
+      "bit": {
+        "path": "runtime500/hardware/ecg_system_candidate.bit",
+        "bytes": 4045773,
+        "sha256": "38987b8d96237f6c202ab235ee66a985d0faf6b643d19af26772d3cd380be452"
+      },
+      "app": {
+        "path": "runtime500/prebuilt/ecg_runtime500.elf",
+        "bytes": 454088,
+        "sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9"
+      }
+    },
+    "programming_verified": true,
+    "cold_boot_verified": true,
+    "actual_input": "saved CSV",
+    "real_wireless": false
   }
 }

@@ -1,0 +1,39 @@
+{
+  "sources": {
+    "gcc13_COPYING.RUNTIME": {
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-13.4.0/COPYING.RUNTIME",
+      "bytes": 3324,
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74"
+    },
+    "gcc13_COPYING3": {
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-13.4.0/COPYING3",
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    "newlib-4.4.0.20231231.tar.gz": {
+      "url": "https://sourceware.org/pub/newlib/newlib-4.4.0.20231231.tar.gz",
+      "bytes": 9022406,
+      "sha256": "0c166a39e1bf0951dfafcd68949fe0e4b6d3658081d6282f39aeefc6310f2f13"
+    },
+    "newlib44_COPYING.NEWLIB": {
+      "member": "newlib-4.4.0.20231231/COPYING.NEWLIB",
+      "sha256": "9a59b4ee3af067045fe0ea78786201c42d54756fe48cbccf44f3dfc398474717",
+      "bytes": 76870
+    }
+  },
+  "notice_files": {
+    "gcc_runtime_exception.txt": {
+      "bytes": 3324,
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74"
+    },
+    "gcc_gpl3.txt": {
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    "newlib_4_4_notices.txt": {
+      "bytes": 76870,
+      "sha256": "9a59b4ee3af067045fe0ea78786201c42d54756fe48cbccf44f3dfc398474717"
+    }
+  },
+  "scope": "unmodified upstream release notices; not proof vendor binary is unpatched"
+}

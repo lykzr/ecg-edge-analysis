@@ -1,0 +1,35 @@
+{
+  "version": "20261025-runtime500-jtag-v2",
+  "build_id": "a570b308ef7b46fe",
+  "release_files": 25,
+  "passed": true,
+  "strict_source_match": true,
+  "repack_byte_identical": true,
+  "clean_groups": 20,
+  "software_tests": 153,
+  "release_tests": 10,
+  "old_archive": "releases/history/20261024-runtime500-jtag-v1",
+  "old_files": 23,
+  "old_bytes_preserved": true,
+  "download_entry": {
+    "passed": true,
+    "entry": "releases/latest/runtime500/download.cmd",
+    "working_directory": "tmp/release_20261025",
+    "build_id": "a570b308ef7b46fe",
+    "port": "COM14",
+    "usb_device": "VID_1A86&PID_7523\\6&1ef5fd6f&0&3",
+    "ready": true,
+    "input_sent": false,
+    "port_closed": true,
+    "flash": false
+  },
+  "logs": {
+    "docs/records/runtime500_release_20261025/download_jtag.log": "6064dfc15123beeac3eb181eb4ea977bf30a7d3475cba23b0de74604233e1233",
+    "docs/records/runtime500_release_20261025/ready_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1"
+  },
+  "flash": false,
+  "git_operations": false,
+  "root_readme_unchanged": true,
+  "model_baseline_unchanged": true,
+  "real_wireless": false
+}

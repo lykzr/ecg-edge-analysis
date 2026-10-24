@@ -11,7 +11,7 @@ from pathlib import Path
 import threading
 import time
 
-from ecg_bridge_capture import VendorFrames, InputConverter
+from ecg_bridge_capture import VendorFrames, InputConverter, NominalConverter
 from ecg_monitor_core import RecordingLimitError
 from ecg_serial import WindowsSerial
 
@@ -151,11 +151,12 @@ class CaptureRecorder:
         self.maximum, self.used = maximum, 0
         self.files = {}
         try:
-            for n in ('source.csv', 'capture.bin', 'samples.csv', 'normalized.csv'):
+            for n in ('source.csv', 'capture.bin', 'samples.csv', 'normalized.csv', 'nominal.csv'):
                 self.files[n] = (self.directory / n).open('xb')
             self.row('samples.csv', ['index', 'time_s', 'resp_raw', 'ecg_raw', 'resp_code24',
                                     'ecg_code24', 'resp_filtered', 'ecg_filtered'])
             self.row('normalized.csv', ['index', 'sample'])
+            self.row('nominal.csv', ['index', 'ecg_code24', 'ecg_nominal_mv', 'conditioned_mv', 'sample_int16', 'clipped'])
         except BaseException:
             for stream in self.files.values():
                 stream.close()
@@ -198,12 +199,16 @@ class CaptureWorker(threading.Thread):
     """后台独占一个来源，完整写盘；GUI仅取有界快照，不参与串口读取。"""
     def __init__(self, kind, source, directory, *, shift=8, maximum=64*1024*1024,
                  serial_factory=WindowsSerial, realtime=True, clock=time.monotonic, device_info=None,
-                 on_sample=None, sample_limit=None):
+                 on_sample=None, sample_limit=None, normalization='legacy_shift', idle_timeout=5.):
         super().__init__(name='ecg-capture', daemon=False)
         if kind not in ('csv', 'serial'):
             raise ValueError('采集来源须为csv或serial')
         self.kind, self.source, self.directory = kind, str(source), Path(directory)
-        self.converter = InputConverter(2, shift)
+        if normalization not in ('legacy_shift','nominal500'): raise ValueError('未知幅值合同')
+        if not 0 < idle_timeout <= 30: raise ValueError('采集停流超时须在0..30秒内')
+        self.idle_timeout = idle_timeout
+        self.normalization = normalization
+        self.converter = NominalConverter(dc_block=True) if normalization == 'nominal500' else InputConverter(2, shift)
         self.maximum, self.factory, self.realtime, self.clock = maximum, serial_factory, realtime, clock
         if sample_limit is not None and (type(sample_limit) is not int or not 1 <= sample_limit <= 1800000):
             raise ValueError('采集点数上限须为1..1800000或留空')
@@ -217,7 +222,9 @@ class CaptureWorker(threading.Thread):
                          alignment='csv_rows' if kind == 'csv' else 'not_locked', pending_bytes=0,
                          csv_complete=False, clipped=0, output_dir=str(directory),
                          device_info=dict(device_info or {}), source_read_to_eof=False)
-        self.info.update(profile='vendor_v2.1.2_document34', firmware_verified=False)
+        self.info.update(profile='vendor_v2.1.2_document34', firmware_verified=False,
+                         normalization=normalization, conversion=NominalConverter.metadata(dc_block=True) if normalization=='nominal500' else None)
+        if normalization=='nominal500': self.info.update(shift=None,unit='4096 units/mV; nominal, uncalibrated')
 
     def set_info(self, **values):
         with self.lock:
@@ -231,8 +238,13 @@ class CaptureWorker(threading.Thread):
         self.cancel.set()
 
     def accept(self, sample, recorder):
+        before_clipped = self.converter.clipped
         value = self.converter.convert(sample.pair)
         recorder.sample(sample, value)
+        if self.normalization == 'nominal500':
+            code = sample.pair[1]
+            recorder.row('nominal.csv', [sample.index, code, NominalConverter.millivolts(code), self.converter.output_mv, value,
+                                         self.converter.clipped - before_clipped])
         with self.lock:
             self.samples.append(sample)
             self.info.update(total=sample.index + 1, clipped=self.converter.clipped,
@@ -267,9 +279,11 @@ class CaptureWorker(threading.Thread):
             else:
                 reader = self.factory(self.source, 115200)
                 frames = InitialFrames(); index = 0; first_bytes = None; digest = hashlib.sha256()
+                opened_at = self.clock(); last_bytes_at = opened_at
                 while not self.cancel.is_set():
                     data = reader.read(4096)
                     if data:
+                        last_bytes_at = self.clock()
                         if first_bytes is None:
                             first_bytes = self.clock()
                         with self.lock:
@@ -289,6 +303,8 @@ class CaptureWorker(threading.Thread):
                         recorder.flush()
                     elif not frames.locked and first_bytes is not None and self.clock() - first_bytes > 5:
                         raise TimeoutError('五秒内未建立起始候选边界；停止，不丢字节重同步')
+                    elif self.clock() - last_bytes_at >= self.idle_timeout:
+                        raise TimeoutError('采集端无新字节超时；保留原文，重新连接需新会话')
                     else:
                         self.cancel.wait(.005)
         except Exception as exc:

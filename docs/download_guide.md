@@ -4,6 +4,32 @@
 
 第一次验证的目标是：电脑识别目标芯片，下载匹配的硬件设计，初始化 PS，运行一个串口输出程序。Hello World 仅验证这条基础链路；后续算法、外设或 AXI 接口需要单独测试。
 
+## 当前项目：直接下载新版
+
+当前正常流程使用[release下载入口](../releases/latest/runtime500/download.cmd)，无需先构建或寻找tmp里的ELF。此入口是JTAG临时下载；当前已固化板卡优先按末尾“当前500Hz QSPI固化入口”直接上电或PS复位。
+
+1. 连接板卡电源、JTAG和USB_UART，按已核实的JTAG启动设置上电；关闭占用串口的其他终端。
+2. 双击`releases/latest/runtime500/download.cmd`。如未从环境找到XSDB，填写自己的`<Vitis>/bin/xsdb.bat`路径，再填已核实的唯一JTAG下载器序列号。入口先核对所有包内SHA，再核对唯一Zynq-7020并配置/下载；失败会保留错误，不要求管理员权限。
+3. 下载完成后启动客户端`python -B src/ui/main.py`。主窗口串口保持未连接，打开“送样 / 双向中转…”，选实际Zynq端口。
+4. 厂商五列RawData选“厂商CSV → Zynq”；34字节蓝牙选另外一个采集USB接收器端口后开始。CH2去直流和标称单位换算内部完成，不手选右移。标准500Hz文件仍用“500Hz标准CSV → 新QRS”，不二次转换。详细步骤见[厂商输入](vendor_input.md)。
+5. 一轮完整成功需上传=确认=回传、完整结束且无错误；类别未提供不等于正常N。日志位于本次`tmp/pc_bridge_logs/`。真实无线/实际标定和最终模型按计划独立验收。
+
+本机已核实工具及下载器的命令示例（在项目根执行，其他电脑替换路径/序列号）：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./releases/latest/runtime500/run_runtime500.ps1 -Xsdb 'D:/AMDDesignTools/2026.1/Vitis/bin/xsdb.bat' -CableSerial '210512180081'
+```
+
+只检查包内文件、不连接板卡：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./releases/latest/runtime500/run_runtime500.ps1 -CheckOnly
+```
+
+ExecutionPolicy参数只对本次PowerShell进程生效，不更改系统策略。用户手动使用Vitis GUI时，可打开本机已有`tmp/v5adc`工作区，选`ecg_runtime500`，核对运行配置中的同源bit、ps7_init和ELF并启用系统复位/重配PL；GUI操作不因脚本下载通过而自动算已验。新环境直接用release入口即可，不需要复制该工作区。
+
+以下从Hello World开始的通用流程用于学习和重建，不是当前应用每次都要重新做一遍的步骤。当前匹配清单见[release说明](../releases/latest/README.md)，新旧版本不混用。
+
 ## 1. 先分清文件与操作
 
 | 项目 | 用途 | 不能据此认定的结果 |
@@ -223,7 +249,7 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 
 依据：领航者配套指南第 7.5 节启动表及 [AMD UG1400 2026.1：Programming Flash](https://docs.amd.com/r/en-US/ug1400-vitis-embedded/Programming-Flash)。新版菜单是 Vitis，旧版教材中的 Xilinx 菜单不能照搬。
 
-本助手生成文件和检查构建，不执行板上拨码、Flash 写入或断电测试；最终自启动结果以用户实际操作和串口记录为准。
+此历史Hello World步骤中的拨码/断电由用户操作。当前500Hz已获用户授权完成命令行Flash写入，用户彻底断电后串口验证，见末尾当前入口。
 
 ## 13. 领航者 V2 接线与工程检查
 
@@ -240,7 +266,7 @@ Vitis 菜单 **Vitis → Create Boot Image**，器件选 Zynq，创建新 BIF。
 
 迁移前的旧bitstream不能当新版产物，历史来源见[本机说明](../myself.md)。JTAG候选bit/XSA与ELF位置见第11节；QSPI烧录另选当前发布组合。
 
-上述位置对应历史JTAG候选版本；当前[latest](../releases/latest/README.md)为系统JTAG交付，smoke与500Hz bridge分目录，不含QSPI镜像；本机旧Hello World/QSPI组合在releases/history/20261013-hello-world-qspi-v1，按其原说明使用，不能混合FSBL/bit/应用。
+上述位置对应历史JTAG候选版本；早期latest为系统JTAG交付；当前latest另含新500Hz QSPI镜像，见本页末尾；本机旧Hello World/QSPI组合在releases/history/20261013-hello-world-qspi-v1，按其原说明使用，不能混合FSBL/bit/应用。
 
 ## 14. ECG 接口的下一阶段验收
 
@@ -418,3 +444,27 @@ python -B sim/check_ecg_reference.py --vivado-bin '<Vivado安装目录>/bin' --o
 ## 21. 当前500Hz双向中转交付
 
 系统包入口为releases/latest/README.md。bridge/的500Hz bit/XSA/ELF只供电脑送样中转；smoke/仍是360Hz自检，不混用硬件。先运行bridge/board/run_bridge.ps1 -CheckOnly校验，再指定实际AMD工具目录和下载器序列号临时JTAG启动；客户端入口src/ui/main.py。每次新会话重新配置PL，END/DONE后不直接重发初始化。接收方重建GUI工作区可用包内board/create_bridge_workspace.py，准确命令见包内说明。原始来源记录与本轮便携/归档检查见系统发布记录。
+
+## 当前500Hz QSPI固化入口
+
+当前latest提供qspi/BOOT.BIN和匹配FSBL；旧Hello World仅作历史。已经写入本版的板卡，BOOT_CFG为1=ON、2=OFF后彻底断电上电即可启动。程序每轮会话有限运行；完成或停止后按PS复位键重新开始，不是PS_KEY1。临时JTAG仍用runtime500/download.cmd，掉电后回到Flash中的版本。
+
+给另一块已核对型号/修订的板卡写入时，先关闭其他下载会话，切JTAG（1=ON、2=ON），彻底断电上电。首先只检查文件：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/program_qspi.ps1 -CheckOnly
+```
+
+确认覆盖偏移0的旧启动内容后，显式执行：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/program_qspi.ps1 -Program -Xsdb '<Vitis>/bin/xsdb.bat' -ProgramFlash '<Vitis>/bin/program_flash.bat' -CableSerial '<唯一JTAG序列号>'
+```
+
+默认不连接板卡；-Program才编程。脚本先核对文件和组成、唯一Zynq及BOOT_MODE=0，从可写目录运行并保留日志，不执行整片擦除。镜像顺序为FSBL→bit→ELF。完成后切QSPI（1=ON、2=OFF），拔除全部USB和供电，等5秒接回上电。JTAG/USB可能保持供电，只关开关不保证真正掉电。打开正确USB_UART，115200/8N1/无流控，应收到500Hz会话头及INPUT_READY；仅编程校验不能替代冷启动。
+
+不重新下载镜像的脚本复位：xsdb.bat releases/latest/qspi/reset_qspi.tcl <唯一JTAG序列号>。它先要求BOOT_MODE=1，再仅执行系统复位，不配置PL或下载应用。也可按板上PS复位键。
+
+无历史tmp重打包：python -B board/prepare_qspi.py --release releases/latest --bootgen <Vitis>/bin/bootgen.bat --output tmp/boot_new。输出目录必须尚不存在；此命令只生成文件。首次从新完整构建打包可另传--manifest；更换任一FSBL/硬件/应用必须重验，不能沿用本版证据。
+
+本次实板写入使用AMD命令行，正式PowerShell包装入口的默认检查和拒绝篡改另作软件测试；未冒充GUI重新烧录通过。当前镜像4265108字节，32MiB Flash，擦除0x420000字节，保留后续区域；没有整片读回备份，旧Hello World镜像也不是原厂Flash备份。详细验证和限制见[QSPI记录](records/qspi_20261025.md)与[交接](../report/交接.md)。

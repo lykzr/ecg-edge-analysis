@@ -1,20 +1,12 @@
 {
   "schema": 1,
-  "version": "20261021-system-jtag-v1",
-  "purpose": "JTAG programming artifacts only; sources and evidence remain in repository",
-  "flash_programming": "NOT_PERFORMED",
+  "version": "20261025-runtime500-qspi-v1",
+  "purpose": "matched JTAG/QSPI artifacts; formal sources and evidence stay in repository",
+  "flash_programming": "PROGRAM_VERIFY_AND_COLD_BOOT_PASS",
   "files": {
-    "LICENSE": {
-      "bytes": 1078,
-      "sha256": "090ed38ab0c202a9b99db28d5640d14ffb2e5e407012357c18fb35aa6a90ba80"
-    },
-    "README.md": {
-      "bytes": 1303,
-      "sha256": "e8834b35767beb7ec494cd7ba0010aa4b66e4a112222bde7ce927d0ffda35f04"
-    },
     "artifacts.json": {
-      "bytes": 3175,
-      "sha256": "e8437fb0546f67d4dadc4936d79640d34adbe8d06087a13742ee84f31f77b9b0"
+      "bytes": 13380,
+      "sha256": "b6a2d52fb825182f343b15cc9137d9c5f279a8dcb01432ddc5f7a730505efc1c"
     },
     "bridge/hardware/ecg_system_candidate.bit": {
       "bytes": 4045773,
@@ -39,6 +31,74 @@
     "bridge/run_bridge.tcl": {
       "bytes": 1652,
       "sha256": "f0280962176a0729894ac0cc05f4d78fb686b245180728f0109270450fb64951"
+    },
+    "LICENSE": {
+      "bytes": 1078,
+      "sha256": "090ed38ab0c202a9b99db28d5640d14ffb2e5e407012357c18fb35aa6a90ba80"
+    },
+    "qspi/boot.bif": {
+      "bytes": 143,
+      "sha256": "783fbe74868351dd360f4b56a9902e5bee8d8d8d47c656777ee436451086f222"
+    },
+    "qspi/BOOT.BIN": {
+      "bytes": 4265108,
+      "sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc"
+    },
+    "qspi/fsbl.elf": {
+      "bytes": 357592,
+      "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+    },
+    "qspi/manifest.json": {
+      "bytes": 1741,
+      "sha256": "f3e72bbf6da98b3b9a99a20c78b3317dc7bc899c845f446e344f0e2be8340f53"
+    },
+    "qspi/probe_qspi.tcl": {
+      "bytes": 1239,
+      "sha256": "a947c24c2243ee0e7d3190a901c854788dc4d97470b48716f566e17b07462786"
+    },
+    "qspi/program_qspi.ps1": {
+      "bytes": 4781,
+      "sha256": "4411f86b98f231c2ae80dd920a0b0db755d10b3236cb50388532be9e791a76dc"
+    },
+    "qspi/reset_qspi.tcl": {
+      "bytes": 465,
+      "sha256": "64752e492acab180caf3019e269aba9bb504024f405c67ad65dcc4667826362c"
+    },
+    "README.md": {
+      "bytes": 4043,
+      "sha256": "a86c78a1aeb7b7974d468c530fb57a72a410a199fbb0e58dff8762fdd3d9cd91"
+    },
+    "runtime500/download.cmd": {
+      "bytes": 167,
+      "sha256": "1b522c18548e7995a10f1c5f8a8ad4a12cf0c0c2f2426a42165fb4bc3daa84f2"
+    },
+    "runtime500/hardware/ecg_system_candidate.bit": {
+      "bytes": 4045773,
+      "sha256": "38987b8d96237f6c202ab235ee66a985d0faf6b643d19af26772d3cd380be452"
+    },
+    "runtime500/hardware/ecg_system_candidate.xsa": {
+      "bytes": 321427,
+      "sha256": "024ce170f05a28683e9593a2c69638b3c3aab47fa63156d3ee00d2150544394d"
+    },
+    "runtime500/hardware/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    },
+    "runtime500/manifest.json": {
+      "bytes": 5397,
+      "sha256": "95585f0cec8cd4e84e93c00348147d3b7493e7337cea1ab04cd5fefc72abbadd"
+    },
+    "runtime500/prebuilt/ecg_runtime500.elf": {
+      "bytes": 454088,
+      "sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9"
+    },
+    "runtime500/run_runtime500.ps1": {
+      "bytes": 3800,
+      "sha256": "909acc6b5eb875faffb6e5af27c55dc12fdb80a1f9f40e7330e5c9fc6e93b614"
+    },
+    "runtime500/run_runtime500.tcl": {
+      "bytes": 1359,
+      "sha256": "222ab4deefc0645b4d2b305f8ff2ad761ef33d853303fd99b6f5e5ece72ef29d"
     },
     "smoke/hardware/ecg_system_candidate.bit": {
       "bytes": 4045773,

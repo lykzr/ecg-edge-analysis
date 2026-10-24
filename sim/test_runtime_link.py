@@ -45,6 +45,7 @@ class LinkTests(unittest.TestCase):
   m=self.run_client(xs,1);py=ResearchRuntime();ev=[]
   for x in xs:ev.extend(py.push(x))
   self.assertEqual([(e.pos,e.rr) for e in m.events],[(e[1],e[2]) for e in ev]);self.assertTrue(all(e.cls=='?' for e in m.events));self.assertEqual(m.decoder.counts['invalid'],0)
+  self.assertIsNotNone(m.hr);self.assertAlmostEqual(m.hr,m.events[-1].hr,places=1);self.assertAlmostEqual(m.rr_ms,m.events[-1].rr*1000/360,delta=.051)
  def test_no_upload_before_boot_ready(self):
   class Quiet:
    def read(self,n):return b''

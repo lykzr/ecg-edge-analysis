@@ -257,7 +257,7 @@ class UsbBridgeTests(unittest.TestCase):
         original = self.output/'vendor34.bin'; original.write_bytes(raw)
         output = self.output/'cli_vendor'
         node = Node(self.lib)
-        args = ['ecg_bridge.py','--vendor-log',str(original),'--format','document_34',
+        args = ['ecg_bridge.py','--profile','legacy500','--vendor-log',str(original),'--format','document_34',
                 '--channel','1','--shift','8','--aligned','--samples','1003',
                 '--source','SYNTH','--rate','500','--zynq-port','COM14','--output-dir',str(output)]
         factory = lambda *a, **kw: BridgeClient(*a, clock=lambda: node.now/1e6, **kw)
@@ -302,7 +302,7 @@ class UsbBridgeTests(unittest.TestCase):
                 self.index=due;self.raw.extend(data);return data
             def close(self):self.closed=True
         capture=Capture();output=self.output/'live_burst'
-        args=['ecg_bridge.py','--vendor-port','COM20','--format','source_10','--channel','1',
+        args=['ecg_bridge.py','--profile','legacy500','--vendor-port','COM20','--format','source_10','--channel','1',
               '--shift','8','--aligned','--samples','5003','--source','ADC','--rate','500','--zynq-port','COM14',
               '--output-dir',str(output)]
         factory=lambda *a,**kw:BridgeClient(*a,clock=lambda:node.now/1e6,**kw)
@@ -350,7 +350,7 @@ class UsbBridgeTests(unittest.TestCase):
                                    ('limit','sample\n'+'12345\n'*500,1024)]:
             original=self.output/(name+'.csv');original.write_text(content,encoding='utf-8')
             output=self.output/name;node=Node(self.lib)
-            args=['ecg_bridge.py','--csv',str(original),'--rate','500','--source','REPLAY',
+            args=['ecg_bridge.py','--profile','legacy500','--csv',str(original),'--rate','500','--source','REPLAY',
                   '--zynq-port','COM14','--output-dir',str(output),'--max-bytes',str(limit)]
             with patch.object(sys,'argv',args),patch.object(ecg_bridge,'DuplexSerial',return_value=node), \
                  contextlib.redirect_stdout(io.StringIO()):

@@ -10,9 +10,11 @@ from ecg_bridge_core import BridgeClient
 from ecg_bridge_records import BridgeRecords
 from ecg_signal_pipeline import SignalPipeline
 from ecg_dataset import load_record,digest
+from runtime_artifacts import resolve_runtime_artifacts
 
 def run(manifest,xsdb,cable,port,identity,record,seconds,output,raw):
- m=json.loads(manifest.read_text());protocol=json.loads((ROOT/'data/qrs_runtime_protocol.json').read_text())
+ m,matched=resolve_runtime_artifacts(manifest,expected_rate=360);protocol=json.loads((ROOT/'data/qrs_runtime_protocol.json').read_text())
+ if not m.get('window_trace',True):raise ValueError('逐窗口数字验收须显式构建ECG_RUNTIME_TRACE=1')
  if record not in protocol['development_records']+protocol['evaluation_records']:raise ValueError('只允许已有已知开发数据')
  if not 1<=seconds<=1800:raise ValueError('时长1..1800')
  for n,v in m['files'].items():
@@ -32,8 +34,7 @@ def run(manifest,xsdb,cable,port,identity,record,seconds,output,raw):
  (output/'plan.json').write_text(json.dumps(report,indent=2)+'\n')
  try:
   serial=DuplexSerial(port)
-  hw=ROOT/'releases/latest/smoke/hardware'
-  args=[str(xsdb),str(ROOT/'board/classification_handoff/run.tcl'),cable,str(hw/'ecg_system_candidate.bit'),str(hw/'ps7_init.tcl'),str(ROOT/m['elf'])]
+  args=[str(xsdb),str(ROOT/'board/classification_handoff/run.tcl'),cable,str(matched['bit']),str(matched['init']),str(matched['elf'])]
   with (output/'jtag.log').open('xb') as log:
    process=subprocess.run(args,stdout=log,stderr=subprocess.STDOUT,timeout=90,cwd=ROOT,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
   if process.returncode or 'ECG_CLASS_JTAG_STARTED' not in (output/'jtag.log').read_text(errors='replace'):raise RuntimeError('JTAG未完成，不发送样本')

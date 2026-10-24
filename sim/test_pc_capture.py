@@ -190,7 +190,7 @@ class CaptureTests(unittest.TestCase):
         self.assertEqual(json.loads((worker.directory/'summary.json').read_text(encoding='utf-8'))['reason'],'stopped_by_user')
 
     def test_partial_initial_data_times_out_without_alignment_claim(self):
-        ticks = iter([0., 10.])
+        ticks = iter([0., 0., 0., 10.])
         class Fake:
             def __init__(self): self.chunks=iter([b'\xaa',b''])
             def read(self, _): return next(self.chunks,b'')

@@ -21,10 +21,17 @@ class ReleaseChecks(unittest.TestCase):
                 safe(ROOT,name)
 
     def test_current_candidate_sources_and_board_evidence(self):
-        result=check(CANDIDATE,ROOT)
+        result=check(CANDIDATE,ROOT,require_current_sources=False)
         self.assertTrue(result['passed'])
         self.assertEqual(result['cases']['paced']['samples'],60003)
         self.assertFalse(result['hardware_operated'])
+
+    def test_strict_mode_still_rejects_actual_source_drift(self):
+        report=check(CANDIDATE,ROOT,require_current_sources=False)
+        if report['source_drift']:
+            self.assertFalse(report['current_rebuild_qualified'])
+            with self.assertRaises(AssertionError):check(CANDIDATE,ROOT)
+        else:self.assertTrue(check(CANDIDATE,ROOT)['current_sources_match'])
 
     def test_tampered_image_rejected(self):
         root=ROOT/'tmp/system_release_tests';root.mkdir(parents=True,exist_ok=True)
@@ -32,24 +39,58 @@ class ReleaseChecks(unittest.TestCase):
         shutil.copytree(CANDIDATE,directory)
         path=directory/'bridge/prebuilt/ecg_bridge.elf'
         data=path.read_bytes();path.write_bytes(data[:-1]+bytes([data[-1]^1]))
-        with self.assertRaises((ValueError,AssertionError)):check(directory,ROOT)
+        with self.assertRaises((ValueError,AssertionError)):check(directory,ROOT,require_current_sources=False)
 
     def test_portable_artifacts_use_repository_sources(self):
         root=ROOT/'tmp/system_release_tests';root.mkdir(parents=True,exist_ok=True)
         base=Path(tempfile.mkdtemp(dir=root));directory=base/'portable'
         shutil.copytree(CANDIDATE,directory)
-        self.assertTrue(check(directory,ROOT)['passed'])
+        self.assertTrue(check(directory,ROOT,require_current_sources=False)['passed'])
         self.assertFalse((directory/'src').exists())
         self.assertFalse((directory/'docs').exists())
-        self.assertEqual(check(directory,ROOT)['files'],17)
+        self.assertEqual(check(directory,ROOT,require_current_sources=False)['files'],len(json.loads((directory/'manifest.json').read_text())['files'])+1)
 
     def test_scripts_resolve_package_local_hardware(self):
-        for name in ('smoke','bridge'):
+        for name in ('smoke','bridge')+ (('runtime500',) if (CANDIDATE/'runtime500').exists() else ()):
             script=(CANDIDATE/name/('run_'+name+'.tcl')).read_text()
-            self.assertIn('[file dirname [info script]]',script)
+            self.assertIn('[info script]',script)
             self.assertNotIn('[file dirname [file dirname [info script]]]',script)
-            for rel in ('hardware/ecg_system_candidate.bit','hardware/ps7_init.tcl','prebuilt/ecg_'+name+'.elf'):
+            for rel in ('hardware/ecg_system_candidate.bit','hardware/ps7_init.tcl','prebuilt/'+('ecg_runtime500' if name=='runtime500' else 'ecg_'+name)+'.elf'):
                 self.assertTrue((CANDIDATE/name/rel).is_file())
+
+    def test_current_release_is_strictly_matched(self):
+        report=check(CANDIDATE,ROOT)
+        self.assertEqual(report['version'],'20261025-runtime500-qspi-v1')
+        self.assertTrue(report['current_sources_match'])
+        receipt=json.loads((ROOT/'data/results/runtime500_release_20261025.json').read_text())
+        manifest=json.loads((CANDIDATE/'runtime500/manifest.json').read_text())
+        self.assertEqual(receipt['production_elf_sha256'],manifest['elf_sha256'])
+        self.assertTrue(manifest['adc_source_supported'])
+
+    def test_current_source_mutation_is_still_rejected(self):
+        from unittest.mock import patch
+        import check_system_release as module
+        original=module.digest
+        def altered(path):
+            return '0'*64 if Path(path)==ROOT/'build/generate_rate500_runtime.py' else original(path)
+        with patch.object(module,'digest',side_effect=altered):
+            with self.assertRaises(AssertionError):check(CANDIDATE,ROOT)
+            report=check(CANDIDATE,ROOT,require_current_sources=False)
+            self.assertFalse(report['current_rebuild_qualified']);self.assertTrue(report['source_drift'])
+
+    def test_portable_launcher_checkonly_with_spaces(self):
+        import os
+        if os.name!='nt':self.skipTest('Windows PowerShell入口仅Windows执行')
+        root=ROOT/'tmp/system_release_tests';root.mkdir(parents=True,exist_ok=True)
+        base=Path(tempfile.mkdtemp(dir=root));directory=base/'portable folder'
+        shutil.copytree(CANDIDATE,directory)
+        args=['powershell.exe','-NoProfile','-ExecutionPolicy','Bypass','-File',str(directory/'runtime500/run_runtime500.ps1'),'-CheckOnly']
+        p=subprocess.run(args,cwd=base,capture_output=True,timeout=30)
+        self.assertEqual(p.returncode,0,p.stdout+p.stderr)
+        target=directory/'runtime500/prebuilt/ecg_runtime500.elf';data=target.read_bytes();target.write_bytes(data[:-1]+bytes([data[-1]^1]))
+        p=subprocess.run(args,cwd=base,capture_output=True,timeout=30)
+        self.assertNotEqual(p.returncode,0)
+        self.assertIn(b'SHA256',p.stdout+p.stderr)
 
     def test_only_manifest_files_are_unignored(self):
         lines=(ROOT/'.gitignore').read_text().splitlines()

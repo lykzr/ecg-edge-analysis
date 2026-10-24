@@ -58,7 +58,9 @@ class RuntimeWorker(threading.Thread):
      with self.lock:
       self.info.update(client.summary(),state='draining' if client.eof else 'running',source_status=f'标准CSV {self.rate}Hz/4096单位/mV',result_status='软件运行时结果')
       self.result=(tuple(records.monitor.samples),tuple(records.monitor.events),records.monitor.header)
-     if client.done:reason='stopped_by_user' if self.cancel.is_set() else 'completed';break
+     if client.done:
+      if client.lines:raise ValueError('结束后还有USB残行，不能视为完整成功')
+      reason='stopped_by_user' if self.cancel.is_set() else 'completed';break
      time.sleep(.001)
     else:raise TimeoutError('会话超过有界时长')
   except Exception as exc:error=type(exc).__name__+': '+str(exc)

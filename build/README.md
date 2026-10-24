@@ -58,11 +58,13 @@
 
 build_ecg_auto.tcl接受一个不存在的项目tmp输出目录，复制并冻结ecg_qrs_auto.sv，生成只替换检测器实例的AXI包装，沿用领航者板级配置并综合/实现/导出匹配bit/XSA/ps7_init。原检测器、正式共享工程和smoke不覆盖。PS工作区由board/build_ecg_auto.py通过Vitis Python生成；环境变量和预热/身份约定见[候选说明](../docs/qrs_auto.md)。待验产物留tmp，不能直接替换已验latest。
 
-## 当前360Hz完整重建
+## 当前软硬件完整重建
 
 `python -B board/rebuild_system.py --output tmp/rebuild_new --vivado-bin "<Vivado>/bin" --vitis-bin "<Vitis>/bin"`从新目录执行BD、综合、实现、bit/XSA及匹配ARM ELF构建。脚本显式核对正式BD的全部PS7及ECG参数；不改变PS配置、不下载。输出必须是新的项目tmp英文目录，产物、日志、链接图和清单均保留。`--hardware-from`只用于显式接续同轮已生成硬件，摘要会标明来源，不能冒称该次从零构建。
 
-Windows建议使用靠近项目根的短输出路径，例如`tmp/rb01`，避免在多层实验目录下再创建Vitis工作区。若Vitis返回`Invalid project location`，保留失败目录和日志，在另一个短路径重试；不要修改安装目录权限。脚本要求实际ELF及链接图存在才写成功清单；Vitis启动器退出码本身不能证明构建成功。当前重建只覆盖原硬件配置与360Hz ARM运行时，不包含最终CNN或新QRS的PL实现。
+Windows完整流程优先使用`board/rebuild_system.ps1`原生单入口，并显式选择`-Rate 360`或`-Rate 500`；参数、输出与窗口跟踪说明见[系统构建与检查](../docs/system_checks.md)。Python入口增加`--rate`与`--trace`，不依赖终端残留变量。
+
+Windows建议使用靠近项目根的短输出路径，例如`tmp/rb01`，避免在多层实验目录下再创建Vitis工作区。若Vitis返回`Invalid project location`，保留失败目录和日志，在另一个短路径重试；不要修改安装目录权限。脚本要求实际应用/FSBL ELF及各自链接图存在才写成功清单；Vitis启动器退出码本身不能证明构建成功。重建沿用原硬件配置，ARM运行时可选360/500Hz，不包含最终CNN或新QRS的PL实现。
 
 ## 500Hz ARM构建
 

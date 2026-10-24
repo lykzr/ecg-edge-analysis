@@ -1,0 +1,114 @@
+{
+  "build_id": "a570b308ef7b46fe",
+  "compiler": "arm-xilinx-eabi-gcc.exe (GCC) 13.4.0",
+  "newlib_version": "4.4.0",
+  "reports": {
+    "app": {
+      "elf_sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9",
+      "map_sha256": "81364466437760183bb7b6c8e74b018bb9bb8779296890a90a41b888a5a81865",
+      "selected_archive_members": 104,
+      "libraries": [
+        {
+          "name": "libxil.a",
+          "sha256": "66d6474d50d9b59e62f23a8bf7cf4e7134a8a9b8915c8ff14546f7102c791d1f",
+          "selected_count": 6
+        },
+        {
+          "name": "libxilstandalone.a",
+          "sha256": "dfe80a5e7026f4a0063dfbd4cc9616d244dd449837ccbfe81ec1f56834a33b78",
+          "selected_count": 22
+        },
+        {
+          "name": "libxiltimer.a",
+          "sha256": "4dc487a020fa095c8ba9208dc4c645d1b3cb4191505e3c0e63eb49c053388bfa",
+          "selected_count": 2
+        },
+        {
+          "name": "libgcc.a",
+          "sha256": "ba632899f3e32acd56a223f58154d692bb5febd8b6c8f4f2bb63a1ccc1410952",
+          "selected_count": 9
+        },
+        {
+          "name": "libc.a",
+          "sha256": "f14aa098fac9e96f097dbb7cc5a2b1d4c7f05b4a1660a1da48b1990fefc37a8a",
+          "selected_count": 62
+        },
+        {
+          "name": "libg.a",
+          "sha256": "f14aa098fac9e96f097dbb7cc5a2b1d4c7f05b4a1660a1da48b1990fefc37a8a",
+          "selected_count": 0
+        },
+        {
+          "name": "libm.a",
+          "sha256": "9e599d0efdab8bc81c7f10df446cda89fe8e1df663f5e42bb8c2ee34fb15dbe3",
+          "selected_count": 3
+        }
+      ],
+      "md5_symbols": [],
+      "fatfs_symbols": []
+    },
+    "fsbl": {
+      "elf_sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179",
+      "map_sha256": "3ca30721f4c73b111ab592d5f39f4847ef9534b52bbd8fc624ed3c1b4e3a7106",
+      "selected_archive_members": 58,
+      "libraries": [
+        {
+          "name": "libxil.a",
+          "sha256": "d23f1b269cd0c8a8c160d2dc82d783b050890a22db2d644cff1fd11e44df9550",
+          "selected_count": 9
+        },
+        {
+          "name": "libxilffs.a",
+          "sha256": "105e394594515416196d3a6ba53e8fbfdc45ff66d77c4addca50331d277cedc4",
+          "selected_count": 0
+        },
+        {
+          "name": "libxilrsa.a",
+          "sha256": "995ca7be364ea47da5d26be5199b0ce1e1ec2b325da6f4388babf0d121231007",
+          "selected_count": 0
+        },
+        {
+          "name": "libxilstandalone.a",
+          "sha256": "88cf30c39e669ba0124dff05b4125c9b2006b60a45e01be320862fee4051c4e2",
+          "selected_count": 17
+        },
+        {
+          "name": "libxiltimer.a",
+          "sha256": "3fdbd12ea2f9ff783e991dca78ae97ae1d0e3615ab1ecb0116eb22968ee0472c",
+          "selected_count": 2
+        },
+        {
+          "name": "libgcc.a",
+          "sha256": "ba632899f3e32acd56a223f58154d692bb5febd8b6c8f4f2bb63a1ccc1410952",
+          "selected_count": 5
+        },
+        {
+          "name": "libc.a",
+          "sha256": "f14aa098fac9e96f097dbb7cc5a2b1d4c7f05b4a1660a1da48b1990fefc37a8a",
+          "selected_count": 25
+        },
+        {
+          "name": "libg.a",
+          "sha256": "f14aa098fac9e96f097dbb7cc5a2b1d4c7f05b4a1660a1da48b1990fefc37a8a",
+          "selected_count": 0
+        }
+      ],
+      "md5_symbols": [
+        "00003404 T md5",
+        "000032d0 T MD5Final",
+        "000030e0 T MD5Init",
+        "000022b8 T MD5Memcpy",
+        "0000225c T MD5Memset",
+        "00002388 T MD5Transform",
+        "00003158 T MD5Update"
+      ],
+      "fatfs_symbols": []
+    }
+  },
+  "final_redistribution_cleared": false,
+  "pending": [
+    "Vendor toolchain source/patch correspondence for selected Newlib/GCC archive members",
+    "Applicable AMD EULA/IP redistribution terms for actual bitstream",
+    "Generated BSP configuration template provenance"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "version": "vendor500-nominal-dc-v1",
+  "input_source_sha256": "5c978665cfa3a817eca85fc7dfcda6388494a78b94e21cadca3386fab12b7d5f",
+  "samples": 10412,
+  "events": 26,
+  "clipped": 0,
+  "normalized_range": [
+    -2745,
+    14024
+  ],
+  "build_id": "a570b308ef7b46fe",
+  "elf": "tmp/v5adc/ecg_runtime500/build/ecg_runtime500.elf",
+  "elf_sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9",
+  "conversion": {
+    "vref_mv": 2420,
+    "pga_gain": 6,
+    "denominator": 8388607,
+    "units_per_mv": 4096,
+    "pc_dc_hz": 0.5,
+    "initialization": "y0=0 at first raw input",
+    "calibrated": false
+  },
+  "physical_zynq_csv": true,
+  "physical_zynq_simulated_radio": true,
+  "real_wireless": false,
+  "source_drop_known": false,
+  "accuracy_evaluated": false,
+  "manual_ui_new_path": false,
+  "final_model": false,
+  "release_replaced": false,
+  "evidence_root": "tmp/vendor500_20261024",
+  "local_evidence": {
+    "actual_conversion.json": {
+      "sha256": "6a36dc42adcdac78b5be74c396b962de4ba08fc2df0bb95d84018f0f3043a06d",
+      "bytes": 1855
+    },
+    "actual_dc_result.json": {
+      "sha256": "2206534308bf9fe258e746955420766e06736dae1d2bfbf7fdd7f2e845b52150",
+      "bytes": 5609
+    },
+    "expected.json": {
+      "sha256": "12be930ec0e430aa1b3e83c395ac3efbd9529bbdac94761319093ec4a7144873",
+      "bytes": 1802
+    },
+    "board_csv/result.json": {
+      "sha256": "1299310427e4229ad35c933931f0a5219ce656fd73ad98ef1b41b6998e65c94f",
+      "bytes": 8029
+    },
+    "board_simulated_adc/result.json": {
+      "sha256": "ce3470301cdbbb167781064f2f152b3361be167f1a5671f9336919dd4d527356",
+      "bytes": 7910
+    }
+  },
+  "regression": {
+    "clean_source": true,
+    "groups": 20,
+    "software_tests": 153,
+    "release_gate_tests": 7,
+    "artifact_check": true,
+    "strict_current_source_release_qualified": false,
+    "source_drift": [
+      {
+        "path": "build/generate_rate500_runtime.py",
+        "expected": "0467b56bfe106591f74f888830b67093d6c89ab10e15524b697dbf37e872d7df",
+        "actual": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5"
+      }
+    ]
+  },
+  "current_release_unchanged": true
+}

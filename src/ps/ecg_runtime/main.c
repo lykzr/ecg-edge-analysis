@@ -9,6 +9,10 @@
 #include "xuartps_hw.h"
 #include <inttypes.h>
 #include <stdio.h>
+#ifndef ECG_RUNTIME_TRACE
+/* 完整窗口十六进制跟踪仅供数字验收；正常流式运行节省UART带宽。 */
+#define ECG_RUNTIME_TRACE 0
+#endif
 #ifndef XTIMER_IS_DEFAULT_TIMER
 #error "This candidate requires the Cortex-A9 default global timer BSP"
 #endif
@@ -65,7 +69,7 @@ int main(void)
     if(ecg_pipeline_size()>sizeof(pipeline_storage.bytes)){ecg_bridge_result=-8;return 1;}
     pipeline=(EcgPipeline*)pipeline_storage.bytes;
     RuntimeIo io = {NULL, ready, send_byte};
-    ecg_link_init(&bridge,io,pipeline,1);
+    ecg_link_init(&bridge,io,pipeline,ECG_RUNTIME_TRACE);
     /* 仅新应用启动清除已锁存的接收错误；进入循环后任何新错误仍停止。 */
     XUartPs_WriteReg(config->BaseAddress,XUARTPS_ISR_OFFSET,
                     XUARTPS_IXR_OVER|XUARTPS_IXR_FRAMING|XUARTPS_IXR_PARITY);

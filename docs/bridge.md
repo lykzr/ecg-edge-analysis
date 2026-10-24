@@ -1,5 +1,7 @@
 # 电脑双向中转使用说明
 
+当前默认厂商入口已接新500Hz，自动CH2去直流/标称换算，见[当前操作](vendor_input.md)。下文右移/旧ecg_bridge部分为legacy500历史回归，命令需显式`--profile legacy500`，不要用于新QRS。
+
 
 
 相关文件按同一功能命名：电脑入口`src/pc/ecg_bridge.py`，配套模块`ecg_bridge_core.py`、`ecg_bridge_protocol.py`、`ecg_bridge_capture.py`、`ecg_bridge_serial.py`；板端目录`src/ps/ecg_bridge/`，构建入口`board/build_ecg_bridge.py`，离线测试`sim/test_ecg_bridge.py`及其C适配`sim/ecg_bridge_host.c`。本文讲操作，[bridge_protocol.md](bridge_protocol.md)讲输入协议；结果协议仍单独见`uart_protocol.md`。
@@ -193,3 +195,9 @@ python -B src/pc/ecg_bridge.py --vendor-port COM20 --format document_34 --channe
 ## 启动学习候选与原版分开运行
 
 原版ecg_bridge/QRS-ORIG-60仍为已验数字通信交付；独立ecg_auto/QRS-AUTOPEAK-60用于启动学习/峰判决候选。两者共用相同输入/结果格式，但必须选择各自匹配bit/XSA/ps7_init/ELF和运行配置，不能只换ELF。电脑请用正式源码客户端，已验发布内旧客户端不接受候选身份。候选工作区、两秒预热及额外3拍内部计算见[候选说明](qrs_auto.md)，真实上板和准确性不能继承原版证据。
+
+当前厂商默认固件已纳入latest/runtime500，可双击[下载入口](../releases/latest/runtime500/download.cmd)，不再用tmp候选；旧bridge仅供legacy500回归。完整当前操作见[厂商输入](vendor_input.md)。
+
+## 当前交接与掉电运行
+
+当前500Hz应用已固化到本机板卡QSPI。已写同版镜像时直接QSPI上电，有限会话结束后PS复位；另一块板卡先核对匹配组合，按docs/download_guide.md的QSPI入口操作。JTAG仍是临时下载。完整未完成项统一见report/交接.md，验收见docs/records/qspi_20261025.md；不将数字CSV回放当真实无线、标定或CNN完成。路径均相对仓库根。

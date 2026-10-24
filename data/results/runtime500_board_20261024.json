@@ -1,0 +1,161 @@
+{
+  "passed": true,
+  "date": "2026-10-24",
+  "production_build_id": "ab3e1b7e7a4247c3",
+  "production_elf_sha256": "9408c28641812ad198f34752643a00c8ff86dc0b5e8d9b167ea5b28321dbe509",
+  "production_manifest_sha256": "d69f3af9ecc82d492d03bdf89b6af8ef821f2769bc7fb9c3bf1ec0469773cff3",
+  "cases": {
+    "record100_debug": {
+      "passed": true,
+      "reason": "completed",
+      "build_id": "d0f75d31a9a446d4",
+      "samples": 15000,
+      "confirmed": 15000,
+      "echoed": 15000,
+      "events": 36,
+      "windows_compared": 35,
+      "max_window_absolute_error": 0.0,
+      "queue_peak": 560,
+      "pending_bytes": 0,
+      "incomplete_rx_bytes": 0,
+      "window_trace": true,
+      "raw_sha256": "ec1a243b226709a8ac7a4076c9c1905476b4134587550680047e27bb9965e7ee",
+      "hardware_execution": true
+    },
+    "record105_debug": {
+      "passed": true,
+      "reason": "completed",
+      "build_id": "d0f75d31a9a446d4",
+      "samples": 60000,
+      "confirmed": 60000,
+      "echoed": 60000,
+      "events": 165,
+      "windows_compared": 165,
+      "max_window_absolute_error": 0.0,
+      "queue_peak": 1628,
+      "pending_bytes": 0,
+      "incomplete_rx_bytes": 0,
+      "window_trace": true,
+      "raw_sha256": "c19b183348987d5a90a7b017f9828912a83338e9cda62f0033610cd4589a1711",
+      "hardware_execution": true
+    },
+    "synth240": {
+      "passed": true,
+      "reason": "completed",
+      "build_id": "ab3e1b7e7a4247c3",
+      "samples": 60000,
+      "confirmed": 60000,
+      "echoed": 60000,
+      "events": 477,
+      "windows_compared": 0,
+      "max_window_absolute_error": 0.0,
+      "queue_peak": 33,
+      "pending_bytes": 0,
+      "incomplete_rx_bytes": 0,
+      "window_trace": false,
+      "raw_sha256": "ea7d1d346825b93aa306dc38b8874c1cdfb260bf8cc5891e196859be79fc327e",
+      "hardware_execution": true
+    },
+    "recovery": {
+      "passed": true,
+      "reason": "completed",
+      "build_id": "ab3e1b7e7a4247c3",
+      "samples": 1500,
+      "confirmed": 1500,
+      "echoed": 1500,
+      "events": 2,
+      "windows_compared": 0,
+      "max_window_absolute_error": 0.0,
+      "queue_peak": 32,
+      "pending_bytes": 0,
+      "incomplete_rx_bytes": 0,
+      "window_trace": false,
+      "raw_sha256": "d9dd82645c7eac468fb0efefe3a8b9f215f63c3158540ab1b392c587f3d57732",
+      "hardware_execution": true
+    }
+  },
+  "faults": {
+    "passed": true,
+    "rows": [
+      {
+        "mode": "crc",
+        "passed": true,
+        "uart": {
+          "port": "COM14",
+          "label": "USB-SERIAL CH340 (COM14)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&3",
+          "candidate": true
+        },
+        "error_reason": "BAD_CRC",
+        "response_s": 0.01027339999563992,
+        "accepted": 0
+      },
+      {
+        "mode": "partial",
+        "passed": true,
+        "uart": {
+          "port": "COM14",
+          "label": "USB-SERIAL CH340 (COM14)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&3",
+          "candidate": true
+        },
+        "error_reason": "PARTIAL_TIMEOUT",
+        "response_s": 2.0097287999960827,
+        "accepted": 0
+      },
+      {
+        "mode": "idle",
+        "passed": true,
+        "uart": {
+          "port": "COM14",
+          "label": "USB-SERIAL CH340 (COM14)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&3",
+          "candidate": true
+        },
+        "error_reason": "INPUT_TIMEOUT",
+        "response_s": 4.987818600005994,
+        "accepted": 0
+      }
+    ],
+    "scope": "physical USB_UART error exits; no wireless unplug test"
+  },
+  "source_sha256": {
+    "src/ps/ecg_runtime/main.c": "68146a6409afd16a8f4a0b810bbef9cdb3f6053498fd44636c9459f3bd6b35a5",
+    "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+    "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+    "src/ps/ecg_runtime/link.h": "6675e679c2d2f827ae08b2785d2ff470fb932ad20828f7a61ba66d4e9c1942eb",
+    "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+    "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+    "src/ps/ecg_bridge/bridge_time.h": "2eeea32f7462eb79db89fa1ecb47d65b98cf3363d8a42c14c5190b35fed73606",
+    "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+    "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+    "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+    "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+    "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+    "src/ps/ecg_runtime/runtime.c": "87e5aef743b963418a0e36e928a9c89b7450a08d22e0daf6f767d37b47d5c1c0",
+    "build/generate_rate500_runtime.py": "0467b56bfe106591f74f888830b67093d6c89ab10e15524b697dbf37e872d7df"
+  },
+  "evidence": {
+    "docs/records/runtime500_board_20261024/record100_debug_uart.log": "ec1a243b226709a8ac7a4076c9c1905476b4134587550680047e27bb9965e7ee",
+    "docs/records/runtime500_board_20261024/record100_debug_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/record105_debug_uart.log": "c19b183348987d5a90a7b017f9828912a83338e9cda62f0033610cd4589a1711",
+    "docs/records/runtime500_board_20261024/record105_debug_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/synth240_uart.log": "ea7d1d346825b93aa306dc38b8874c1cdfb260bf8cc5891e196859be79fc327e",
+    "docs/records/runtime500_board_20261024/synth240_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/recovery_uart.log": "d9dd82645c7eac468fb0efefe3a8b9f215f63c3158540ab1b392c587f3d57732",
+    "docs/records/runtime500_board_20261024/recovery_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/crc_uart.log": "9605d1981a19e70bd94c31129a62083428d3588d56eac185b2a1971b6c08c334",
+    "docs/records/runtime500_board_20261024/crc_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/partial_uart.log": "bff64e6c8077dadf2801fbcafe686a7b8e45c4964870fb9857d556e894d23626",
+    "docs/records/runtime500_board_20261024/partial_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/records/runtime500_board_20261024/idle_uart.log": "f88f3105759d5a1e33c7fa134ddf8590d36740c49e7f993adb887c5dfc2edc1e",
+    "docs/records/runtime500_board_20261024/idle_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c"
+  },
+  "flash_programming": "NOT_PERFORMED",
+  "real_acquisition": false,
+  "wireless": false,
+  "manual_gui": false,
+  "final_cnn": false,
+  "qrs_overall_qualified": false,
+  "scope": "real Zynq-7020 ARM source500 digital parity only; known resampled public prefixes plus synthetic; original105 noise risk retained"
+}

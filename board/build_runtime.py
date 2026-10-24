@@ -11,6 +11,8 @@ ROOT=Path(__file__).resolve().parents[1]
 rate=int(os.environ.get('ECG_RUNTIME_RATE','360'))
 if rate not in (360,500):raise ValueError('仅支持360/500Hz独立构建')
 app_name='ecg_runtime' if rate==360 else 'ecg_runtime500'
+trace=int(os.environ.get('ECG_RUNTIME_TRACE','0'))
+if trace not in (0,1):raise ValueError('窗口跟踪只允许0或1')
 workspace=Path(os.environ.get('ECG_RUNTIME_WORKSPACE',str(ROOT/'tmp/system_port_20261024/vitis_workspace'))).resolve()
 workspace.relative_to(ROOT/'tmp')
 if workspace.exists():raise FileExistsError('工作区已存在，请选新的tmp目录')
@@ -42,6 +44,13 @@ try:
  client.set_workspace(str(workspace))
  platform=client.create_platform_component(name='ecg_platform',hw_design=str(hardware/'ecg_system_candidate.xsa'),os='standalone',cpu='ps7_cortexa9_0',domain_name='standalone_ps7_cortexa9_0')
  platform.build()
+ # 单独生成FSBL的实际链接图，不能用应用链接图替代其组成证据。
+ fsbl_config=workspace/'ecg_platform/zynq_fsbl/UserConfig.cmake'
+ fsbl_text=fsbl_config.read_text(encoding='utf-8')
+ fsbl_text,nfsbl=re.subn(r'set\(USER_LINK_OTHER_FLAGS\s*.*?\)', 'set(USER_LINK_OTHER_FLAGS "-Wl,-Map=fsbl.map")',fsbl_text,count=1,flags=re.S)
+ if nfsbl!=1:raise ValueError('未识别FSBL链接配置')
+ fsbl_config.write_text(fsbl_text,encoding='utf-8')
+ platform.build()
  app=client.create_app_component(name=app_name,platform=client.find_platform_in_repos('ecg_platform'),domain='standalone_ps7_cortexa9_0',template='empty_application')
  for p in sources:app.import_files(from_loc=str(p.parent),files=[p.name])
  component=workspace/app_name
@@ -49,7 +58,7 @@ try:
  config=component/'src/UserConfig.cmake'
  text=config.read_text(encoding='utf-8')
  text=text.replace('set(USER_COMPILE_OPTIMIZATION_LEVEL -O0)','set(USER_COMPILE_OPTIMIZATION_LEVEL -O2)')
- text=text.replace('set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS )','set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS -ffp-contract=off)')
+ text=text.replace('set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS )',f'set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS "-ffp-contract=off -DECG_RUNTIME_TRACE={trace}")')
  text,count=re.subn(r'set\(USER_LINK_LIBRARIES\s*.*?\)', 'set(USER_LINK_LIBRARIES "m")',text,count=1,flags=re.S)
  if count!=1:raise ValueError('未识别Vitis链接配置')
  # 显式生成链接图，区分编译输入、实际链接对象和未参与的GPL工具输入。
@@ -66,8 +75,11 @@ try:
   if sha(component/p.name)!=hashes[p.relative_to(ROOT).as_posix()]:raise ValueError('构建副本变更')
  link_map=component/'build/ecg_runtime.map'
  if not link_map.is_file():raise FileNotFoundError('缺少实际链接图：'+str(link_map))
- paths=artifacts+[elf,link_map]
- output={'build_id':build_id,'sampling_hz':rate,'sources':hashes,'files':{p.relative_to(ROOT).as_posix():{'bytes':p.stat().st_size,'sha256':sha(p)} for p in paths},'scope':('ARM frozen360 QRS/window; no CNN/500Hz/Flash' if rate==360 else 'ARM source500 adapted QRS/window; no final CNN/real AFE/Flash; board pending'),'elf':elf.relative_to(ROOT).as_posix()}
+ fsbl=workspace/'ecg_platform/zynq_fsbl/build/fsbl.elf'
+ fsbl_map=fsbl.with_name('fsbl.map')
+ if not fsbl.is_file() or not fsbl_map.is_file():raise FileNotFoundError('缺少FSBL或其独立链接图')
+ paths=artifacts+[elf,link_map,fsbl,fsbl_map]
+ output={'build_id':build_id,'sampling_hz':rate,'window_trace':bool(trace),'sources':hashes,'files':{p.relative_to(ROOT).as_posix():{'bytes':p.stat().st_size,'sha256':sha(p)} for p in paths},'scope':('ARM frozen360 QRS/window; no CNN/500Hz/Flash' if rate==360 else 'ARM source500 adapted QRS/window; no final CNN/real AFE/Flash; board pending'),'elf':elf.relative_to(ROOT).as_posix()}
  (workspace/'build_manifest.json').write_text(json.dumps(output,indent=2)+'\n',encoding='utf-8')
  print('ECG_RUNTIME_BUILD_PASS '+str(elf),flush=True)
 finally:vitis.dispose()

@@ -1,6 +1,6 @@
 # 发布与历史归档
 
-当前本地交付入口为[系统JTAG包](latest/README.md)：只放独立 360Hz smoke 与 500Hz USB_UART 双向中转的 **JTAG 烧录产物**（bit/XSA/ps7_init/ELF/run 脚本），源码、文档和证据留在仓库。两套硬件各有匹配 bit/XSA/ELF，不能交叉使用；没有 BOOT.BIN 或 QSPI 固化。真实无线、人工界面和算法/CNN 仍按实际验收范围说明。
+当前本地交付入口为[系统JTAG包](latest/README.md)：只放独立smoke、旧500Hz中转和新500Hz ARM运行时的 **JTAG烧录产物**（bit/XSA/ps7_init/ELF/run 脚本），源码、文档和证据留在仓库。每个组件各有匹配bit/XSA/ELF，不能交叉使用；没有 BOOT.BIN 或 QSPI 固化。真实无线、人工界面和算法/CNN 仍按实际验收范围说明。
 
 ```text
 releases/
@@ -20,6 +20,7 @@ releases/
       prebuilt/ecg_bridge.elf
       run_bridge.tcl
       manifest.json
+    runtime500/              新ARM匹配硬件/ELF/清单及download.cmd、run_runtime500.ps1/tcl
   history/<版本>/            旧版原字节保留，本地忽略
 ```
 
@@ -36,3 +37,9 @@ releases/
 离线核验：`python -B sim/check_system_release.py --directory releases/latest --repository .`；smoke 单独运行 `python -B sim/check_smoke_release.py --directory releases/latest/smoke --repository .`。这两个脚本只校验发布产物，并在仓库中核对源码哈希与证据；不连接板卡。
 
 本地发布目录不代表 Git 提交、推送或远端上传。已跟踪旧文件不会因增加忽略规则自动取消跟踪；索引调整需本会话另行授权。历史、缓存和用户数据不自动清理。
+
+当前runtime500同时支持标准数字输入与客户端归一化后的厂商ADC输入，默认双击[download.cmd](latest/runtime500/download.cmd)，其PowerShell入口先核对包内SHA再临时下载。旧bridge仅供legacy500回归；完整操作见[下载教程](../docs/download_guide.md)。旧latest原字节归档到history中对应版本，不覆盖历史。当前验收边界和发布过程见[记录](../docs/records/runtime500_release_20261025.md)，真实无线/标定、最终CNN和Flash仍单独验收。
+
+## 当前交接与掉电运行
+
+当前500Hz应用已固化到本机板卡QSPI。已写同版镜像时直接QSPI上电，有限会话结束后PS复位；另一块板卡先核对匹配组合，按docs/download_guide.md的QSPI入口操作。JTAG仍是临时下载。完整未完成项统一见report/交接.md，验收见docs/records/qspi_20261025.md；不将数字CSV回放当真实无线、标定或CNN完成。路径均相对仓库根。

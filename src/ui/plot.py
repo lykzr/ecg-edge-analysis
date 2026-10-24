@@ -31,7 +31,7 @@ def trace_geometry(samples, channel, filtered, width, height):
     return points, (low, high, t0, t1, left, right, top, bottom)
 
 
-def draw_trace(canvas, samples, channel, active, *, filtered=False, title_override=None):
+def draw_trace(canvas, samples, channel, active, *, filtered=False, title_override=None, sampling_hz=500):
     canvas.delete('all')
     width, height = canvas.winfo_width(), canvas.winfo_height()
     if width < 100 or height < 80:
@@ -53,7 +53,7 @@ def draw_trace(canvas, samples, channel, active, *, filtered=False, title_overri
         canvas.create_line(*[v for p in points for v in p], fill='#58d6a6' if channel == 'ecg' else '#70baff')
     canvas.create_text(left-5, top, anchor='ne', text=f'{hi:.0f}', fill='#9fb0bf')
     canvas.create_text(left-5, bottom, anchor='se', text=f'{lo:.0f}', fill='#9fb0bf')
-    label = f'{t0:.3f} → {t1:.3f} 秒（500Hz软件时间，非实测到达时间）'
+    label = f'{t0:.3f} → {t1:.3f} 秒（{sampling_hz}Hz逻辑采样时间，非实测到达时间）'
     if not active:
         label += ' · 历史'
     canvas.create_text(left, height-6, anchor='sw', text=label, fill='#dfe6ec', width=max(width-left-10,1))

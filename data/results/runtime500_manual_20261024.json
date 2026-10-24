@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "scope": "user screenshot and log verification for one normal500 standardCSV completion/display/save path; other manual paths not inferred",
+  "manual_fixed_csv_display": true,
+  "all_ui_paths_validated": false,
+  "real_acquisition": false,
+  "wireless": false,
+  "source_samples": 15000,
+  "confirmed": 15000,
+  "echoed": 15000,
+  "events": 36,
+  "reason": "completed",
+  "wave_gap": 0,
+  "event_gap": 0,
+  "comparison": {
+    "events": 36,
+    "windows_compared": 0,
+    "max_window_absolute_error": 0.0,
+    "class_states": 36
+  },
+  "screenshot_sha256": "c9a3e4eb445c85d5e06a409550aca9619c691401c5bb75ee5d278d7c09ef956a",
+  "screenshot_local": "tmp/runtime500_board_20261024_01/manual_ui_231206/screenshot.png",
+  "log_directory": "tmp/pc_bridge_logs/20261024_231206_4df180cb",
+  "hashes": {
+    "tmp/pc_bridge_logs/20261024_231206_4df180cb/summary.json": "84ec1645a34372650e3901eebccf21b57aa0d2e1c002af3b04819b9872a01a61",
+    "tmp/pc_bridge_logs/20261024_231206_4df180cb/results/summary.json": "524b768091bb7795709a1150a6c1f1c61ef85e2bd3389a88b5812a3b47d2e210",
+    "tmp/pc_bridge_logs/20261024_231206_4df180cb/results/raw.log": "31ed1c23a4c5310c4948dea038589cba17a3173b79246f98bf1df5c06d344f17",
+    "tmp/pc_bridge_logs/20261024_231206_4df180cb/input.csv": "bf21fff5fbd11875d35832e4559dcf1fe20c013ce9ca5bf74ad804966a48a3b1"
+  }
+}

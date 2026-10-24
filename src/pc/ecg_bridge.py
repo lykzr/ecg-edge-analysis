@@ -7,7 +7,7 @@ import time
 import uuid
 
 from ecg_bridge_core import BridgeClient
-from ecg_bridge_capture import VendorFrames, InputConverter
+from ecg_bridge_capture import VendorFrames, InputConverter, NominalConverter
 from ecg_bridge_serial import DuplexSerial
 from ecg_serial import WindowsSerial
 from ecg_bridge_records import BridgeRecords
@@ -22,10 +22,12 @@ from ecg_bridge_records import BridgeRecords
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--vendor-csv', type=Path, help='五列厂商RawData；内部CH2标称换算，配合--profile runtime500')
     group.add_argument('--csv', type=Path, help='已转换int16 CSV，列名sample，可另有从0连续的index')
     group.add_argument('--vendor-log', type=Path, help='已确认从帧边界开始的厂商二进制原文')
     group.add_argument('--vendor-port', help='仅已确认串口透传的蓝牙虚拟COM；不代表支持任意BLE设备')
     parser.add_argument('--zynq-port', required=True)
+    parser.add_argument('--profile', choices=('legacy500','runtime500'), default='runtime500', help='默认新500Hz；仅旧回归明确选择legacy500')
     parser.add_argument('--format', choices=('source_10', 'document_34'))
     parser.add_argument('--channel', type=int, choices=(1, 2))
     parser.add_argument('--shift', type=int, choices=range(24))
@@ -36,6 +38,21 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--max-bytes', type=int, default=64*1024*1024)
     args = parser.parse_args()
+    if args.vendor_csv or (args.vendor_port and args.profile=='runtime500'):
+        from ecg_bridge_worker import BridgeWorker
+        if args.profile!='runtime500': parser.error('--vendor-csv必须选择--profile runtime500')
+        if args.channel is not None or args.shift is not None or args.format is not None or args.aligned:
+            parser.error('新厂商入口自动使用CH2/34字节及标称换算，不混入旧位移参数')
+        if args.source != ('REPLAY' if args.vendor_csv else 'ADC'): parser.error('CSV须REPLAY；采集串口须ADC')
+        if args.vendor_port and args.samples is None: parser.error('实时输入须指定--samples')
+        worker=BridgeWorker('csv' if args.vendor_csv else 'serial',args.vendor_csv or args.vendor_port,
+                            args.zynq_port,args.output_dir,profile='runtime500',sample_limit=args.samples,maximum=args.max_bytes)
+        worker.start()
+        try:
+            while worker.is_alive(): worker.join(.1)
+        except KeyboardInterrupt:
+            worker.stop();worker.join()
+        info=worker.snapshot()[0];print(json.dumps(info,ensure_ascii=False));return 0 if info['reason']=='completed' else 1
     vendor = bool(args.vendor_log or args.vendor_port)
     if vendor and (not args.format or args.channel is None or args.shift is None or not args.aligned):
         parser.error('厂商输入须显式提供--format/--channel/--shift/--aligned')
@@ -47,6 +64,16 @@ def main():
         parser.error('--samples须为1..1800000')
     if args.max_bytes < 1024:
         parser.error('--max-bytes至少1024')
+    if args.profile=='runtime500' and vendor: parser.error('新厂商输入请用--vendor-csv或--vendor-port，禁止旧右移/日志入口混用')
+    if args.profile=='runtime500' and args.csv:
+        from ecg_runtime_worker import RuntimeWorker
+        if args.source!='REPLAY' or args.samples is not None: parser.error('新标准CSV只允许REPLAY完整文件')
+        worker=RuntimeWorker(args.csv,args.zynq_port,args.output_dir,sampling_hz=500,maximum=args.max_bytes)
+        worker.start()
+        try:
+            while worker.is_alive():worker.join(.1)
+        except KeyboardInterrupt:worker.stop();worker.join()
+        info=worker.snapshot()[0];print(json.dumps(info,ensure_ascii=False));return 0 if info['reason']=='completed' else 1
     converter = InputConverter(args.channel, args.shift) if vendor else None
     framer = VendorFrames(args.format) if vendor else None
     records = BridgeRecords(args.output_dir, args.max_bytes)

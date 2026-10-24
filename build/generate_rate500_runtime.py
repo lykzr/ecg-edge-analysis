@@ -20,6 +20,10 @@ def run(out):
  out.mkdir(parents=True,exist_ok=False);(out/'runtime500_bridge.c').write_text(s,encoding='utf-8')
  meta=dict(rate='500 source; 1001-tap 18/25 FIR; 20-sample FIR delay and probe phase budget; primary waits extra30 to obtain independent gradient corroboration; +/-1 weak-context rescue only with corroboration and width above half preceding accepted beat; original thresholds',adapter_source='src/ps/ecg_rate500/rate500.c',runtime_source=(out/'runtime500_bridge.c').resolve().relative_to(ROOT).as_posix(),parent_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
  link=(ROOT/'src/ps/ecg_runtime/link.c').read_text(encoding='utf-8').replace('QRS26-ARM','QRS26-500-ARM').replace('ps-runtime-ready','ps-runtime500-ready').replace('ps-runtime-1','ps-runtime500-1').replace('360','500').replace('216000ULL','300000ULL')
+ # 仅500Hz新入口接受ADC标称归一化；冻结360Hz接收规则不变。
+ old_sources='(strcmp(f[4],"REPLAY")&&strcmp(f[4],"SYNTH"))'
+ assert link.count(old_sources)==1
+ link=link.replace(old_sources,'(strcmp(f[4],"REPLAY")&&strcmp(f[4],"SYNTH")&&strcmp(f[4],"ADC"))')
  (out/'link500.c').write_text(link,encoding='utf-8')
  (out/'candidate.json').write_text(json.dumps(meta,indent=2),encoding='utf-8')
 if __name__=='__main__':

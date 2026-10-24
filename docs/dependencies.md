@@ -22,3 +22,7 @@ python -B sim/check_system_offline.py --output tmp/checkout_new --clean-copy
 以上`python`须指向表中已有NumPy/SciPy/WFDB的解释器。系统Python即使能启动界面，也可能缺少参考算法测试依赖；请先核对解释器，不以缺包错误判断算法回归失败，不自动安装。
 
 完整最终B12/B15/B16仍需：最终模型和量化参数、匹配最终bit/XSA/ELF、实际板卡、公开仓库授权及赛事提交回执。当前许可检查只能确认声明/依赖入口和冻结文件存在，不能证明所有未来模型/工具生成资产均可再分发。
+
+当前完整软硬件重建入口为[系统构建与检查](system_checks.md)。除单元检查外，可在只复制正式清单、初始没有tmp的英文短路径目录执行原生PowerShell单命令重建；使用已有外部工具/Python环境，与复用历史工程或镜像分别说明。新清单包括应用与FSBL各自ELF/链接图。
+
+当前完整主体软件回归的固定依赖见[data/requirements_system.txt](../data/requirements_system.txt)，本机Python3.14.7。接手者另准备带Tk的Python及GCC，软件检查不自动安装。新500Hz QSPI与Git复现入口见[交接](../report/交接.md)。

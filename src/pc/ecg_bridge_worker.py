@@ -16,8 +16,10 @@ class BridgeWorker(threading.Thread):
     def __init__(self, kind, source, zynq_port, directory, *, shift=8, sample_limit=None,
                  zynq_device=None, source_device=None, maximum=64*1024*1024,
                  port_factory=DuplexSerial, source_factory=WindowsSerial,
-                 realtime=True, clock=time.monotonic, pause=.001):
+                 realtime=True, clock=time.monotonic, pause=.001, profile='runtime500'):
         super().__init__(name='ecg-bridge', daemon=False)
+        if profile not in ('legacy500','runtime500'): raise ValueError('厂商中转仅支持明确的500Hz合同')
+        self.profile = profile
         if kind not in ('csv', 'serial'):
             raise ValueError('来源须为厂商CSV或采集串口')
         if kind == 'serial' and str(source).upper() == zynq_port.upper():
@@ -33,7 +35,7 @@ class BridgeWorker(threading.Thread):
                          source_samples=0, confirmed=0, echoed=0, done=False,
                          zynq_port=zynq_port, zynq_device=dict(zynq_device or {}),
                          source_device=dict(source_device or {}), source='REPLAY' if kind == 'csv' else 'ADC',
-                         sample_rate_hz=500, shift=shift, sample_limit=sample_limit,
+                         sample_rate_hz=500, profile=profile, shift=shift if profile=='legacy500' else None, sample_limit=sample_limit,
                          upstream_source_drop=None, board_validated=False,
                          output_dir=str(directory), source_status='未连接', result_status='未连接',
                          source_queue_peak=0, index_mapping='source_index = upload_seq = result_index; CSV time = csv_first_time_s + index/500')
@@ -41,7 +43,8 @@ class BridgeWorker(threading.Thread):
         self.capture = CaptureWorker(kind, source, self.directory/'capture', shift=shift,
                                      maximum=maximum//2, serial_factory=source_factory,
                                      realtime=realtime, clock=clock, device_info=source_device,
-                                     on_sample=self.enqueue, sample_limit=sample_limit)
+                                     on_sample=self.enqueue, sample_limit=sample_limit,
+                                     normalization='nominal500' if profile=='runtime500' else 'legacy_shift')
 
     def enqueue(self, sample, value):
         try:
@@ -73,7 +76,8 @@ class BridgeWorker(threading.Thread):
             self.update(state='connecting', result_status='正在打开USB_UART')
             port = self.port_factory(self.port_name, 115200)
             client = BridgeClient(port, records.monitor, uuid.uuid4().hex, self.info['source'],
-                                  clock=self.clock, write_log=records.write)
+                                  clock=self.clock, write_log=records.write, profile=self.profile,
+                                  timeout=10 if self.profile=='runtime500' else 2)
             while not client.done:
                 # 等READY后再开源；每条连接只由一个后台持有，不由Tk抢读。
                 if not capture_started and client.started and client.waiting is None:
@@ -133,7 +137,7 @@ class BridgeWorker(threading.Thread):
                     reason, error = 'failed', (error or '')+'; 关闭USB_UART失败：'+str(exc)
             self.update(reason=reason, error=error, state='error' if error else 'stopped',
                         source_status='来源已关闭', result_status='USB_UART已关闭',
-                        clipped=capture_info['clipped'], source_record=capture_info,
+                        clipped=capture_info['clipped'], source_record=capture_info, conversion=capture_info.get('conversion'),
                         close_note='手动停止已保留部分会话；重新运行前需重新Run板端并配置PL' if reason == 'stopped_by_user' else '')
             if records is not None:
                 try:

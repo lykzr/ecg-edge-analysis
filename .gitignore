@@ -97,19 +97,27 @@ myself.md
 !/docs/records/uart_bridge_synth_20261020_pass.log
 !/docs/records/uart_bridge_paced_20261020_pass.log
 
-# 发布目录只精确放行当前精简交付；history/与运行产物保留本地忽略
+# 发布目录只精确放行当前交付；history保持忽略且不删除
 /releases/*
 !/releases/README.md
 !/releases/latest/
 /releases/latest/*
 !/releases/latest/bridge/
 /releases/latest/bridge/*
+!/releases/latest/qspi/
+/releases/latest/qspi/*
+!/releases/latest/runtime500/
+/releases/latest/runtime500/*
+!/releases/latest/smoke/
+/releases/latest/smoke/*
 !/releases/latest/bridge/hardware/
 /releases/latest/bridge/hardware/*
 !/releases/latest/bridge/prebuilt/
 /releases/latest/bridge/prebuilt/*
-!/releases/latest/smoke/
-/releases/latest/smoke/*
+!/releases/latest/runtime500/hardware/
+/releases/latest/runtime500/hardware/*
+!/releases/latest/runtime500/prebuilt/
+/releases/latest/runtime500/prebuilt/*
 !/releases/latest/smoke/hardware/
 /releases/latest/smoke/hardware/*
 !/releases/latest/smoke/prebuilt/
@@ -124,6 +132,21 @@ myself.md
 !/releases/latest/bridge/prebuilt/ecg_bridge.elf
 !/releases/latest/bridge/run_bridge.tcl
 !/releases/latest/manifest.json
+!/releases/latest/qspi/BOOT.BIN
+!/releases/latest/qspi/boot.bif
+!/releases/latest/qspi/fsbl.elf
+!/releases/latest/qspi/manifest.json
+!/releases/latest/qspi/probe_qspi.tcl
+!/releases/latest/qspi/program_qspi.ps1
+!/releases/latest/qspi/reset_qspi.tcl
+!/releases/latest/runtime500/download.cmd
+!/releases/latest/runtime500/hardware/ecg_system_candidate.bit
+!/releases/latest/runtime500/hardware/ecg_system_candidate.xsa
+!/releases/latest/runtime500/hardware/ps7_init.tcl
+!/releases/latest/runtime500/manifest.json
+!/releases/latest/runtime500/prebuilt/ecg_runtime500.elf
+!/releases/latest/runtime500/run_runtime500.ps1
+!/releases/latest/runtime500/run_runtime500.tcl
 !/releases/latest/smoke/hardware/ecg_system_candidate.bit
 !/releases/latest/smoke/hardware/ecg_system_candidate.xsa
 !/releases/latest/smoke/hardware/ps7_init.tcl
@@ -177,3 +200,38 @@ myself.md
 !/build/generate_rate500_runtime.py
 !/build/generate_window500.py
 !/build/generate_runtime500.py
+
+# 新500Hz数字实板精选证据；原始CSV及工具输出仍在tmp。
+!/docs/records/runtime500_board_20261024/crc_jtag.log
+!/docs/records/runtime500_board_20261024/crc_uart.log
+!/docs/records/runtime500_board_20261024/idle_jtag.log
+!/docs/records/runtime500_board_20261024/idle_uart.log
+!/docs/records/runtime500_board_20261024/partial_jtag.log
+!/docs/records/runtime500_board_20261024/partial_uart.log
+!/docs/records/runtime500_board_20261024/record100_debug_jtag.log
+!/docs/records/runtime500_board_20261024/record100_debug_uart.log
+!/docs/records/runtime500_board_20261024/record105_debug_jtag.log
+!/docs/records/runtime500_board_20261024/record105_debug_uart.log
+!/docs/records/runtime500_board_20261024/recovery_jtag.log
+!/docs/records/runtime500_board_20261024/recovery_uart.log
+!/docs/records/runtime500_board_20261024/synth240_jtag.log
+!/docs/records/runtime500_board_20261024/synth240_uart.log
+
+# 新500Hz厂商数字回放精选原始证据；原CSV和构建工作区仍在tmp。
+!/docs/records/vendor500_board_20261025/board_csv_jtag.log
+!/docs/records/vendor500_board_20261025/board_csv_uart.log
+!/docs/records/vendor500_board_20261025/board_simulated_adc_jtag.log
+!/docs/records/vendor500_board_20261025/board_simulated_adc_uart.log
+
+# 当前发布入口的实际JTAG/就绪证据。
+!/docs/records/runtime500_release_20261025/download_jtag.log
+!/docs/records/runtime500_release_20261025/ready_uart.log
+
+# 当前QSPI写入、冷启动与回放精选证据。
+!/docs/records/qspi_20261025/boot_headers.log
+!/docs/records/qspi_20261025/boot_mode.log
+!/docs/records/qspi_20261025/cold_uart.log
+!/docs/records/qspi_20261025/program_flash.log
+!/docs/records/qspi_20261025/replay_uart.log
+!/docs/records/qspi_20261025/reset.log
+!/docs/records/qspi_20261025/reset_uart.log

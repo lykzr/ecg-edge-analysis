@@ -74,7 +74,7 @@ class WorkerTests(unittest.TestCase):
         source = kwargs.pop('source', None) or self.source_csv()
         w = BridgeWorker(kind, source, 'COM23', self.directory/uuid.uuid4().hex,
                          port_factory=lambda *args: node, realtime=False,
-                         clock=lambda: node.now/1e6, pause=0, **kwargs)
+                         clock=lambda: node.now/1e6, pause=0, **kwargs, profile='legacy500')
         w.start(); w.join(20)
         if w.is_alive(): w.stop(); w.join(5)
         self.assertFalse(w.is_alive())
@@ -120,15 +120,15 @@ class WorkerTests(unittest.TestCase):
 
     def test_same_port_and_queue_overflow_fail_closed(self):
         with self.assertRaises(ValueError):
-            BridgeWorker('serial', 'COM23', 'com23', self.directory/'unused')
-        w = BridgeWorker('csv', 'unused', 'COM23', self.directory/'unused')
+            BridgeWorker('serial', 'COM23', 'com23', self.directory/'unused', profile='legacy500')
+        w = BridgeWorker('csv', 'unused', 'COM23', self.directory/'unused', profile='legacy500')
         for i in range(2048): w.enqueue(None, i)
         with self.assertRaises(BufferError): w.enqueue(None, 1)
         self.assertEqual(w.queue.qsize(), 2048)
 
     def test_stop_before_ready_closes_and_saves_partial(self):
         w = BridgeWorker('csv', 'unused', 'COM23', self.directory/uuid.uuid4().hex,
-                         port_factory=lambda *args: Node(self.lib), pause=0)
+                         port_factory=lambda *args: Node(self.lib), pause=0, profile='legacy500')
         w.stop(); w.start(); w.join(5)
         info = w.snapshot()[0]
         self.assertFalse(w.is_alive()); self.assertEqual(info['reason'], 'stopped_by_user')
@@ -143,7 +143,7 @@ class WorkerTests(unittest.TestCase):
         t = [0.0]; port = Silent()
         def clock(): t[0] += .05; return t[0]
         w = BridgeWorker('csv', 'unused', 'COM23', self.directory/uuid.uuid4().hex,
-                         port_factory=lambda *args: port, clock=clock, pause=0)
+                         port_factory=lambda *args: port, clock=clock, pause=0, profile='legacy500')
         w.start(); w.join(5)
         info = w.snapshot()[0]
         self.assertFalse(w.is_alive()); self.assertIn('TimeoutError', info['error'])
@@ -159,7 +159,7 @@ class WorkerTests(unittest.TestCase):
             def write(self, data): return node.write(data)
             def close(self): node.close()
         w = BridgeWorker('csv', self.source_csv(3000), 'COM23', self.directory/uuid.uuid4().hex,
-                         port_factory=lambda *a: FastPort(), realtime=True, pause=.001)
+                         port_factory=lambda *a: FastPort(), realtime=True, pause=.001, profile='legacy500')
         w.start()
         deadline = time.monotonic()+3
         while w.capture.snapshot()[0]['total'] < 20 and w.is_alive() and time.monotonic() < deadline:
@@ -199,7 +199,7 @@ class UiTests(unittest.TestCase):
         root = tk.Tk(); root.withdraw()
         try:
             with patch('ui.bridge.enumerate_ports', return_value=(devices(), [])), \
-                 patch('ui.bridge.remembered_identity', return_value='usb-board'):
+                 patch('ui.bridge.remembered_identity', side_effect=lambda role: 'usb-board' if role=='zynq' else ''):
                 p = BridgePanel(root)
                 root.update_idletasks()
                 self.assertEqual(p.zynq.get(), 'COM23'); self.assertEqual(p.source.get(), 'COM4')

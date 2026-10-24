@@ -253,3 +253,9 @@ QRS/NumPy环境分别运行`test_classifier.py`（窗口适配、状态、超时
 ## 500Hz源适配
 
 已有QRS解释器与GCC运行test_pipeline500.py，编译实际C并检查源500Hz窗口/RR、内存/因果、500Hz UART/PC闭环、错误拒绝、CSV后台及隐藏窗口；不训练、不替代实板。完整记录检测配对和模型窗口分别用data/benchmark_rate500.py与data/verify_pipeline500.py，说明见docs/rate500.md。test_rate500.py的ECG_RATE500_EXE指向sim/ecg_rate500_host.c配合生成器输出编译的FIR候选，不能误指向完整pipeline主机入口。
+
+test_system_consistency.py回归匹配文件、显式采样率、结束残行和坐标脚注；test_runtime_link.py/test_pipeline500.py同时检查事件后的周期T保留已知心率/RR。check_rate500_load.py使用实际C加有界虚拟UART检查负载和明确失败边界；check_binary_licenses.py核对应用/FSBL实际链接成员。用法及限制见[系统构建与检查](../docs/system_checks.md)。
+
+新500Hz验板入口为board/verify_runtime500.py；test_runtime500_board.py只检查事件/窗口/状态解析，不接板。发布测试支持当前runtime500组件，原smoke和旧bridge证据不变。真实数字结果见[记录](../docs/records/runtime500_board_20261024.md)。
+
+厂商500Hz回归：test_vendor500.py检查原码/单位/舍入/饱和、去直流常量偏置不变性与初态、CSV/分块34字节到实际C、手动停止/新会话及新UI路由。test_pc_bridge.py与test_ecg_bridge.py中的旧链路明确指定legacy500；不把它们当新ADC无线验收。board/verify_vendor500.py需显式实物参数，--simulate-radio仍是模拟来源。

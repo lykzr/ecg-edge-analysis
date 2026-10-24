@@ -20,7 +20,9 @@ $env:ECG_RUNTIME_WORKSPACE=(Join-Path $PWD 'tmp/runtime500_new')
 & '<Vitis>/bin/vitis.bat' -s (Join-Path $PWD 'board/build_runtime.py')
 ```
 
-输出目录必须不存在，建议短路径。默认复用已验smoke的匹配bit/XSA/ps7_init，不改PS7/MIO/DDR；ARM运行时不使用旧PL检测器。组件名为ecg_runtime500，build_manifest.json保留本轮源、硬件、ELF、链接图和SHA。设置500后不要拿该环境变量去构建预期360的工程；360构建前显式设回360。构建不是上板验收，JTAG/Flash授权与硬件身份另核。
+输出目录必须不存在，建议短路径。独立软件构建默认复用已验smoke的匹配bit/XSA/ps7_init，不改PS7/MIO/DDR；ARM运行时不使用旧PL检测器。组件名为ecg_runtime500，build_manifest.json保留本轮源、硬件、应用/FSBL ELF、各自链接图和SHA。独立软件入口仍读取ECG_RUNTIME_RATE；完整重建入口显式-Rate/--rate覆盖环境变量。构建不是上板验收，JTAG/Flash授权与硬件身份另核。
+
+完整单命令重建和负载检查见[系统构建与检查](system_checks.md)。正常流式应用默认ECG_RUNTIME_TRACE=0；仅逐窗口调试验收显式设1，不保证高心率下仍可持续实时送样。
 
 ## 电脑入口与分段协议
 
@@ -35,3 +37,10 @@ $env:ECG_RUNTIME_WORKSPACE=(Join-Path $PWD 'tmp/runtime500_new')
 运行已有QRS解释器的sim/test_pipeline500.py检查实际C窗口、RR、内存、前缀因果和UART/PC闭环；系数由build/generate_rate500.py与build/generate_window500.py用现有SciPy复核。正式表已保存，裸机构建无需SciPy。
 
 完整配对使用data/benchmark_rate500.py，显式给出raw、golden、exe、out；golden可用冻结data/benchmark_qrs_runtime.py以rate360从官方数据重建，不能要求协作者具有作者历史tmp。全部42条均为已知开发记录；500Hz输入由它们离线构造，不是未触碰患者、真实500Hz临床或实采测试。原门槛及最终逐记录结果见data/rate500_protocol.json、data/results/rate500_20261024.json和[实验记录](records/rate500_20261024.md)。
+
+
+## 当前数字实板入口
+
+当前正常JTAG组合在releases/latest/runtime500，原smoke与旧bridge保留各自用途。新500Hz公开数据前缀的事件/窗口、120秒合成负载及错误/新会话恢复已有独立数字实板证据，见[本轮记录](records/runtime500_board_20261024.md)；真实采集/标定、无线和人工新入口仍单独验收，105算法风险未关闭。
+
+当前厂商入口已按[厂商500Hz接入](vendor_input.md)完成CH2去直流/标称单位换算；新固件增加ADC来源，旧REPLAY/SYNTH标准CSV不改变。对原500Hz检测器的42条门槛/规则没有重新调参；无标注真实CSV事件数不作为准确率。

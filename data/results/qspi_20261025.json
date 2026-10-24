@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "passed": true,
+  "build_id": "a570b308ef7b46fe",
+  "flash_type": "qspi-x4-single",
+  "detected_flash": "w25q256",
+  "capacity_bytes": 33554432,
+  "offset": 0,
+  "image_bytes": 4265108,
+  "erase_bytes": 4325376,
+  "boot_sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc",
+  "inputs": {
+    "BOOT.BIN": {
+      "bytes": 4265108,
+      "sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc"
+    },
+    "fsbl.elf": {
+      "bytes": 357592,
+      "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+    },
+    "ecg_system_candidate.bit": {
+      "bytes": 4045773,
+      "sha256": "38987b8d96237f6c202ab235ee66a985d0faf6b643d19af26772d3cd380be452"
+    },
+    "ecg_runtime500.elf": {
+      "bytes": 454088,
+      "sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9"
+    },
+    "boot.bif": {
+      "bytes": 97,
+      "sha256": "9d2df38b454ce15bd1e8cdd929c1f299d6686c0c90ada11bf966e4c30597594c"
+    }
+  },
+  "programming_verified": true,
+  "cold_boot_user_confirmed": true,
+  "boot_mode": 1,
+  "ready_observed": true,
+  "cold_boot_jtag_download_used": false,
+  "replay": {
+    "passed": true,
+    "samples": 10412,
+    "events": 26,
+    "confirmed": 10412,
+    "echoed": 10412,
+    "clipped": 0,
+    "source": "REPLAY",
+    "boot_mode": 1,
+    "cold_boot_user_confirmed": true,
+    "jtag_download_used": false,
+    "error": null,
+    "normalized_sha256": "e2d58099606a708a35162b61d3ae96d8811b174f60bacdf5b7afdad9862302d9"
+  },
+  "qspi_reset_verified": true,
+  "formal_bootgen_rebuild_byte_identical": true,
+  "real_wireless": false,
+  "calibrated": false,
+  "final_model": false,
+  "evidence": {
+    "docs/records/qspi_20261025/boot_headers.log": "14829a576bc4b83baefb4e8087f479035d0585399aa12894efadab7e3b95f9fd",
+    "docs/records/qspi_20261025/boot_mode.log": "1d7b10182b6de75131ddabf233e30733f0ee8a493552fe1163f178558eda528c",
+    "docs/records/qspi_20261025/cold_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1",
+    "docs/records/qspi_20261025/program_flash.log": "6f100896db8a382bf3c750954ef51f6745bee4084e1a45959621f31a1c90908e",
+    "docs/records/qspi_20261025/replay_uart.log": "b31fe704801aa16a1deaee59ed0919b2137f4e02ad6881e1016f005d97b141f8",
+    "docs/records/qspi_20261025/reset.log": "7eaf90ea206b32ad3ffa83a13e9ca98d2442e2d927ab60e459174a73aa95a3db",
+    "docs/records/qspi_20261025/reset_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1"
+  },
+  "scope": "QSPI program/verify and user-confirmed full power cycle; source CSV digital processing; not real acquisition/model quality"
+}

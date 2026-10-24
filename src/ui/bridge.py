@@ -24,8 +24,8 @@ class BridgePanel:
         self.worker = None; self.inventory = []; self.remembered = False
         self.zynq = tk.StringVar(); self.source = tk.StringVar(); self.shift = tk.StringVar(value='8')
         self.limit = tk.StringVar(value='5000'); self.view = tk.StringVar(value='原始码')
-        self.state = tk.StringVar(value='未开始；厂商500Hz用ecg_bridge，标准360Hz用ecg_runtime')
-        self.details = tk.StringVar(value='源：未连接；Zynq：未连接。厂商CSV/蓝牙为旧500Hz；360Hz标准CSV须使用ecg_runtime应用。')
+        self.state = tk.StringVar(value='未开始；厂商CSV/蓝牙直接接新500Hz程序，内部完成CH2去直流/标称换算')
+        self.details = tk.StringVar(value='源：未连接；Zynq：未连接。厂商输入保持500Hz；CH2去直流后按2.42V/增益6标称换算，未实测标定。')
         self.location = tk.StringVar(value='来源完整记录在capture/，板端结果在results/；不向Flash写入。')
         title = ttk.Label(self.window, textvariable=self.state, wraplength=1000)
         title.grid(row=0, column=0, sticky='ew', padx=10, pady=6)
@@ -48,11 +48,11 @@ class BridgePanel:
         ttk.Label(controls, text='标准输入用ecg_runtime；不是厂商500Hz CSV', wraplength=300).grid(row=3, column=3, columnspan=2, sticky='w')
         self.rate500_button=ttk.Button(controls,text='500Hz标准CSV → 新QRS…',command=lambda:self.open_native(500))
         self.rate500_button.grid(row=4,column=0,columnspan=3,sticky='w',pady=(2,0))
-        ttk.Label(controls,text='新500Hz应用；要求4096单位/mV，非右移厂商原码',wraplength=300).grid(row=4,column=3,columnspan=2,sticky='w')
+        ttk.Label(controls,text='标准CSV已是4096单位/mV；厂商CSV请用上方专用按钮',wraplength=300).grid(row=4,column=3,columnspan=2,sticky='w')
         self.stop_button = ttk.Button(controls, text='停止并保存', command=self.stop)
         self.stop_button.grid(row=1, column=4)
-        ttk.Label(controls, text='CH2右移').grid(row=2, column=0)
-        self.shift_box = ttk.Spinbox(controls, from_=0, to=23, textvariable=self.shift, width=8)
+        ttk.Label(controls, text='CH2自动处理').grid(row=2, column=0)
+        self.shift_box = ttk.Label(controls, text='去直流 / PGA6')
         self.shift_box.grid(row=2, column=1)
         ttk.Label(controls, text='蓝牙本轮点数').grid(row=2, column=2)
         self.limit_box = ttk.Entry(controls, textvariable=self.limit, width=10); self.limit_box.grid(row=2, column=3)
@@ -92,7 +92,7 @@ class BridgePanel:
         ports = [p['port'] for p in self.inventory]
         self.zynq_box.configure(values=ports); self.source_box.configure(values=ports)
         self.zynq.set(select_port(self.inventory, previous['zynq'], identity=remembered_identity('zynq')))
-        self.source.set(select_port(self.inventory, previous['source'], excluded=self.zynq.get()))
+        self.source.set(select_port(self.inventory, previous['source'], identity=remembered_identity('capture'), excluded=self.zynq.get()))
         self.show_ports()
         if warnings: self.port_detail.set(self.port_detail.get()+'；'+'；'.join(warnings[:1]))
 
@@ -131,8 +131,8 @@ class BridgePanel:
                 self.worker=RuntimeWorker(source,self.zynq.get(),directory,zynq_device=zynq_device,sampling_hz=500 if kind=='native500' else 360)
             else:
                 self.worker = BridgeWorker(kind, source, self.zynq.get(), directory, shift=shift,
-                                           sample_limit=limit, zynq_device=zynq_device, source_device=source_device)
-            self.remembered = False
+                                           sample_limit=limit, zynq_device=zynq_device, source_device=source_device, profile='runtime500')
+            self.remembered = False; self.source_remembered = False
             self.worker.start(); self.location.set(str(directory))
         except (OSError, ValueError) as exc:
             messagebox.showerror('无法开始中转', str(exc), parent=self.window)
@@ -142,7 +142,7 @@ class BridgePanel:
 
     def tick(self):
         active = self.worker is not None and self.worker.is_alive()
-        for button in (self.csv_button, self.native_button, self.rate500_button, self.serial_button, self.refresh_button, self.shift_box, self.limit_box):
+        for button in (self.csv_button, self.native_button, self.rate500_button, self.serial_button, self.refresh_button, self.limit_box):
             button.configure(state='disabled' if active or self.closing else 'normal')
         for box in (self.zynq_box, self.source_box):
             box.configure(state='disabled' if active or self.closing else 'readonly')
@@ -156,6 +156,10 @@ class BridgePanel:
             self.state_label.configure(foreground='#b3261e' if is_error else '#222222')
             self.details.set(f"源 {info['source']}：{info['source_status']}，已记录 {capture['total']} 点；Zynq：{info['result_status']}；上传 {info['source_samples']} / 确认 {info['confirmed']} / 回传 {info['echoed']}；削顶 {capture['clipped']}；源丢样未知。")
             result_samples = tuple(CaptureSample(index, index/rate, 8388608, raw+8388608) for seq, index, raw, filt in result)
+            if info.get('source_device') and capture.get('alignment')=='candidate_3_frames_no_crc' and not getattr(self,'source_remembered',False):
+                self.source_remembered=True
+                try: remember_identity('capture', info['source_device'])
+                except OSError as exc: self.location.set(str(self.worker.directory)+'；采集身份保存失败：'+str(exc))
             if header and not self.remembered:
                 self.remembered = True
                 try: remember_identity('zynq', info['zynq_device'])
@@ -167,8 +171,8 @@ class BridgePanel:
         # 复用原码绘图几何；上下坐标单位分别标明，不把int16画成24位或mV。
         for name, values in (('source', samples), ('result', result_samples)):
             canvas = self.canvases[name]
-            draw_trace(canvas, values, 'ecg', active, title_override=(
-                ('标准CSV · int16 / 4096单位每mV' if name=='source' else f'Zynq返回 · {rate}Hz源时轴 / 4096单位每mV') if native else (
+            draw_trace(canvas, values, 'ecg', active, sampling_hz=rate, title_override=(
+                (('来源 CH2 · ADC原码；内部去直流/标称换算2.42V/PGA6' if info.get('conversion') or capture.get('conversion') else '标准CSV · int16 / 4096单位每mV') if name=='source' else f'Zynq返回 · {rate}Hz源时轴 / 4096单位每mV（标称）') if native else (
                 '来源 CH2 · 有符号24位原码（未标定）' if name == 'source' else
                 'Zynq返回 · 右移/饱和后的int16算法输入及事件（未标定）')))
             if name == 'result' and values:

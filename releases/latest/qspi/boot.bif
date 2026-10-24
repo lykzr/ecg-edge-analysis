@@ -1,0 +1,6 @@
+the_ROM_image:
+{
+  [bootloader] fsbl.elf
+  ../runtime500/hardware/ecg_system_candidate.bit
+  ../runtime500/prebuilt/ecg_runtime500.elf
+}

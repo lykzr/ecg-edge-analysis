@@ -10,3 +10,5 @@
 - link.c独立实现ECG-IN-1的360Hz/scale4096配置，返回ECG-UART-1 QRS26-ARM；旧500Hz应用源码和默认PC合同保留。接收新I前周期发送合法启动H，电脑收到就绪后才上传；此H不包含采样或检测结果。
 
 构建/运行/复现见[板端说明](../../../docs/runtime_board.md)，原数学和接口见[运行时](../../../docs/qrs_runtime.md)、[分类接口](../../../docs/classification_protocol.md)。C实现派生WFDB4.3.1 MIT许可GQRS及本项目冻结版本；完整MIT版权与许可见[原许可](../../third_party/wfdb_license.txt)，源码身份见provenance.json。实做成绩、失败和限制集中docs/records。
+
+UART周期T重复最近已知事件的心率/RR，尚未知时仍为-1；收到T不证明有新的采样。完整窗口L跟踪默认关闭，仅显式ECG_RUNTIME_TRACE=1用于逐窗口数字验收。匹配构建/许可入口见[系统检查](../../../docs/system_checks.md)。

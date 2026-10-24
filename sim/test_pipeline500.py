@@ -58,6 +58,7 @@ class PipelineTests(unittest.TestCase):
   self.assertTrue(c.done);self.assertEqual(c.confirmed,len(xs));self.assertEqual(c.echoed,len(xs));return m
  def test_c_uart_pc_full_duplex(self):
   xs=self.signal(3000);m=self.client(xs);expected=self.requests(xs);self.assertEqual([(e.pos,e.rr) for e in m.events],[(r.position,r.rr_samples) for r in expected]);self.assertEqual(m.header.fs,500);self.assertTrue(all(e.cls=='?' for e in m.events))
+  self.assertAlmostEqual(m.hr,m.events[-1].hr,places=1);self.assertAlmostEqual(m.rr_ms,m.events[-1].rr*2.,delta=.051)
  def test_worker500_csv_and_wrong_rate(self):
   import csv,json
   from ecg_runtime_worker import RuntimeWorker

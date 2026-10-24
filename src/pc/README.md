@@ -42,10 +42,14 @@ ecg_bridge.py为CLI入口；ui/bridge.py调用ecg_bridge_worker.py，后台从ec
 
 ## 冻结360Hz板端回放
 
-送样子窗口新增“360Hz标准CSV → Zynq…”；由ecg_runtime_worker后台驱动runtime360客户机，电脑只发送、显示、记录，不在此客户端执行QRS/CNN。CSV必须index,sample,fs,scale且360Hz/4096单位；旧厂商CSV/蓝牙入口仍走旧500Hz应用，不能相互替代。启动、停止/错误保存、重新Run的新会话和示例数据导出见[板端教程](../../docs/runtime_board.md)。
+送样子窗口新增“360Hz标准CSV → Zynq…”；由ecg_runtime_worker后台驱动runtime360客户机，电脑只发送、显示、记录，不在此客户端执行QRS/CNN。CSV必须index,sample,fs,scale且360Hz/4096单位；厂商CSV/蓝牙默认走新500Hz去直流/标称归一化，旧legacy500仅显式回归，不能相互替代。启动、停止/错误保存、重新Run的新会话和示例数据导出见[板端教程](../../docs/runtime_board.md)。
 
 中转摘要的timing为PC往返耗时，包含写入/通信/板端/读取；不当作推理时间。RuntimeWorker的maximum可配置记录总限额（默认64MiB、最少1024字节），到限额失败留前缀和摘要。见[测量说明](../../docs/performance.md)。
 
 中转摘要sample_age_s为PC最后一段合法回传W后的接收间隔，不是源采样时间或断连证明；供界面提示历史数值。
 
-500Hz标准输入使用RuntimeWorker(sampling_hz=500)和BridgeClient(profile='runtime500')；旧默认360Hz与厂商legacy500不变。500Hz单位必须明确为4096单位/mV，不能直接拿右移厂商码替代，详见[500Hz说明](../../docs/rate500.md)。
+500Hz标准输入使用RuntimeWorker(sampling_hz=500)和BridgeClient(profile='runtime500')；RuntimeWorker标准CSV默认360Hz不变；BridgeWorker与CLI厂商默认runtime500，legacy500须显式选择。500Hz单位必须明确为4096单位/mV，不能直接拿右移厂商码替代，详见[500Hz说明](../../docs/rate500.md)。
+
+标准CSV后台收到DONE后仍检查同次接收的残缺尾行，有残行必须失败保存，不当作完整成功。队列/发送/记录均有上限，不保证任意慢接收或无限时长。负载验证入口见[系统检查](../../docs/system_checks.md)。
+
+厂商接入的NominalConverter只用标准库实现固定去直流/标称转换，CaptureWorker(normalization="nominal500")保存前后mV和转换参数；standalone采集预览仍可保留legacy_shift。协议、启动和失败行为见[厂商接入](../../docs/vendor_input.md)。

@@ -28,6 +28,8 @@
 
 ## 项目主体
 
+[厂商500Hz接入](vendor_input.md)：当前厂商CSV/蓝牙默认入口、CH2去直流/标称换算、匹配固件及验证边界。
+
 [QRS逐样本运行时与切拍](qrs_runtime.md)：独立软件参考、输入幅值/序号、500Hz适配与模型窗口接口；实际检查见[运行时记录](records/runtime_20261023.md)。
 
 
@@ -171,3 +173,11 @@ QRS受控噪声入口：[使用说明](qrs_noise.md)，[实验记录](records/qr
 ## 500Hz源输入
 
 500Hz ARM适配、源切拍与独立标准CSV入口见[500Hz处理](rate500.md)；配对实验及失败见[500Hz记录](records/rate500_20261024.md)。
+
+完整重建、匹配文件选择、500Hz负载边界及二进制许可检查见[系统构建与检查](system_checks.md)。
+
+新500Hz ARM数字实板与当前release见[本轮记录](records/runtime500_board_20261024.md)和[当前交付](../releases/latest/README.md)。
+
+当前下载使用[release入口](../releases/latest/runtime500/download.cmd)，操作见[下载教程](download_guide.md#当前项目直接下载新版)；本地归档/新版验收见[发布记录](records/runtime500_release_20261025.md)。
+
+当前交接汇总：[工程交接](../report/交接.md)，[QSPI固化验证](records/qspi_20261025.md)；操作继续使用[下载教程](download_guide.md)。

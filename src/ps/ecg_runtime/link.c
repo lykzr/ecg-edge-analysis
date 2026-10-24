@@ -56,14 +56,21 @@ static int session_ok(const char *p)
     return 1;
 }
 
-static int status(RuntimeLink*s){char line[160];snprintf(line,sizeof(line),"T,-1,-1,?,NA,360,0,-1,0,%" PRIu32 "\n",(uint32_t)(s->now/1000));return put(s,line);}
+/* 周期状态重复最近事件的RR/心率，不用未知值覆盖已经计算出的值。 */
+static int status(RuntimeLink*s){char line[160],hr[32],rr_ms[32];
+ if(s->last_rr){uint64_t h=(216000ULL+s->last_rr/2)/s->last_rr;
+  uint64_t r=((uint64_t)s->last_rr*10000ULL+360U/2)/360U;
+  snprintf(hr,sizeof(hr),"%" PRIu64 ".%" PRIu64,h/10,h%10);
+  snprintf(rr_ms,sizeof(rr_ms),"%" PRIu64 ".%" PRIu64,r/10,r%10);
+ }else{strcpy(hr,"-1");strcpy(rr_ms,"-1");}
+ snprintf(line,sizeof(line),"T,%s,%s,?,NA,360,0,-1,0,%" PRIu32 "\n",hr,rr_ms,(uint32_t)(s->now/1000));return put(s,line);}
 static int outputs(RuntimeLink*s,EcgClassRequest*r,int n){
  if(n<0){fail(s,"RUNTIME_ERROR");return 0;}
  for(int i=0;i<n;++i){EcgClassRequest work;EcgClassResult result;char line[192],hr[32];
   if(ecg_class_submit(&s->classifier,&r[i],s->now/1000)||ecg_class_take(&s->classifier,&work,s->now/1000)!=1||ecg_class_complete(&s->classifier,1,work.beat_id,work.input_status?work.input_status:ECG_CLASS_NO_MODEL,-1,&result,s->now/1000)!=1){fail(s,"CLASS_INTERFACE");return 0;}
   if(work.rr_samples){uint64_t tenth=(216000ULL+work.rr_samples/2)/work.rr_samples;snprintf(hr,sizeof(hr),"%" PRIu64 ".%" PRIu64,tenth/10,tenth%10);}else strcpy(hr,"-1");
   snprintf(line,sizeof(line),"E,%" PRIu32 ",%" PRIu32 ",%" PRIu32 ",%s,?,-1\n",work.beat_id,work.position,work.rr_samples,hr);
-  if(!put(s,line)){fail(s,"TX_QUEUE_FULL");return 0;}++s->events;
+  if(!put(s,line)){fail(s,"TX_QUEUE_FULL");return 0;}++s->events;s->last_rr=work.rr_samples;
   snprintf(line,sizeof(line),"L,I,CLASS evt=%" PRIu32 " state=%" PRIu32 " ready=%" PRIu32 "\n",work.beat_id,result.status,work.ready_at);
   if(!put(s,line)){fail(s,"TX_QUEUE_FULL");return 0;}
   if(s->trace&&work.input_status!=ECG_CLASS_WINDOW_INCOMPLETE){for(unsigned j=0;j<128;j+=8){int size=snprintf(line,sizeof(line),"L,I,WIN evt=%" PRIu32 " offset=%u",work.beat_id,j);

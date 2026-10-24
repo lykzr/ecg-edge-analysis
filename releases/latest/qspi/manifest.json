@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "version": "20261025-runtime500-qspi-v1",
+  "build_id": "a570b308ef7b46fe",
+  "flash_type": "qspi-x4-single",
+  "offset": 0,
+  "capacity_bytes": 33554432,
+  "boot_sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc",
+  "components": {
+    "fsbl": {
+      "path": "qspi/fsbl.elf",
+      "bytes": 357592,
+      "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+    },
+    "bit": {
+      "path": "runtime500/hardware/ecg_system_candidate.bit",
+      "bytes": 4045773,
+      "sha256": "38987b8d96237f6c202ab235ee66a985d0faf6b643d19af26772d3cd380be452"
+    },
+    "app": {
+      "path": "runtime500/prebuilt/ecg_runtime500.elf",
+      "bytes": 454088,
+      "sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9"
+    }
+  },
+  "programming_verified": true,
+  "cold_boot_verified": true,
+  "files": {
+    "boot.bif": {
+      "bytes": 143,
+      "sha256": "783fbe74868351dd360f4b56a9902e5bee8d8d8d47c656777ee436451086f222"
+    },
+    "BOOT.BIN": {
+      "bytes": 4265108,
+      "sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc"
+    },
+    "fsbl.elf": {
+      "bytes": 357592,
+      "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+    },
+    "probe_qspi.tcl": {
+      "bytes": 1239,
+      "sha256": "a947c24c2243ee0e7d3190a901c854788dc4d97470b48716f566e17b07462786"
+    },
+    "program_qspi.ps1": {
+      "bytes": 4781,
+      "sha256": "4411f86b98f231c2ae80dd920a0b0db755d10b3236cb50388532be9e791a76dc"
+    },
+    "reset_qspi.tcl": {
+      "bytes": 465,
+      "sha256": "64752e492acab180caf3019e269aba9bb504024f405c67ad65dcc4667826362c"
+    }
+  }
+}
