@@ -1,0 +1,1156 @@
+{
+  "version": "rate500_20261024",
+  "paired_equivalent": true,
+  "overall_original_gate_qualified": false,
+  "reason": "same stage acceptance as360; 105 remains original failure",
+  "independent_test": false,
+  "native_500_capture": false,
+  "board_test": false,
+  "protocol": "data/rate500_protocol.json",
+  "protocol_sha256": "e128f35c20e55c5a41c2873023e7b94bd7716b72496a7d6d0fbdd09f451b034f",
+  "baseline_360": {
+    "TP": 96777,
+    "FN": 133,
+    "FP": 154,
+    "sensitivity": 0.9986275926117015,
+    "positive_predictivity": 0.9984112409858559,
+    "F1": 0.9985194050794207,
+    "position_mae_ms": 2.82476437812933,
+    "rr_mae_ms": 2.5645319063237237,
+    "records": 42,
+    "records_passing": 41
+  },
+  "candidate_500": {
+    "TP": 96787,
+    "FN": 123,
+    "FP": 150,
+    "sensitivity": 0.9987307811371375,
+    "positive_predictivity": 0.998452603237154,
+    "F1": 0.9985916728141266,
+    "position_mae_ms": 2.8096955169599225,
+    "rr_mae_ms": 2.874144341000176,
+    "records": 42,
+    "records_passing": 41
+  },
+  "per_record": [
+    {
+      "record": "100",
+      "TP": 2272,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 1,
+      "v_matched": 1,
+      "position_mae_ms": 1.5484154929577465,
+      "rr_mae_ms": 1.7454865697930426,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "101",
+      "TP": 1865,
+      "FN": 0,
+      "FP": 3,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 1.8831099195710452,
+      "rr_mae_ms": 1.852846401718582,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "103",
+      "TP": 2083,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 1.9865578492558809,
+      "rr_mae_ms": 1.6186359269932755,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "105",
+      "TP": 2562,
+      "FN": 10,
+      "FP": 66,
+      "v_reference": 41,
+      "v_matched": 41,
+      "position_mae_ms": 2.010928961748634,
+      "rr_mae_ms": 2.9115646258503403,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": false,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "106",
+      "TP": 2026,
+      "FN": 1,
+      "FP": 3,
+      "v_reference": 520,
+      "v_matched": 520,
+      "position_mae_ms": 2.786771964461994,
+      "rr_mae_ms": 4.810089020771513,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "108",
+      "TP": 1755,
+      "FN": 8,
+      "FP": 4,
+      "v_reference": 17,
+      "v_matched": 17,
+      "position_mae_ms": 9.65014245014245,
+      "rr_mae_ms": 10.810532341156268,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "109",
+      "TP": 2531,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 38,
+      "v_matched": 38,
+      "position_mae_ms": 3.3970762544448836,
+      "rr_mae_ms": 3.4426877470355732,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "111",
+      "TP": 2123,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 1,
+      "v_matched": 1,
+      "position_mae_ms": 3.0560527555346204,
+      "rr_mae_ms": 2.7157001414427158,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "114",
+      "TP": 1879,
+      "FN": 0,
+      "FP": 0,
+      "v_reference": 43,
+      "v_matched": 43,
+      "position_mae_ms": 4.008515167642362,
+      "rr_mae_ms": 1.8839190628328009,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "118",
+      "TP": 2278,
+      "FN": 0,
+      "FP": 2,
+      "v_reference": 16,
+      "v_matched": 16,
+      "position_mae_ms": 4.805092186128182,
+      "rr_mae_ms": 2.1230769230769226,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "119",
+      "TP": 1986,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 444,
+      "v_matched": 444,
+      "position_mae_ms": 2.0715005035246725,
+      "rr_mae_ms": 2.436272040302267,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "200",
+      "TP": 2597,
+      "FN": 4,
+      "FP": 6,
+      "v_reference": 826,
+      "v_matched": 824,
+      "position_mae_ms": 3.473238351944551,
+      "rr_mae_ms": 4.763045999226904,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "202",
+      "TP": 2133,
+      "FN": 3,
+      "FP": 0,
+      "v_reference": 19,
+      "v_matched": 19,
+      "position_mae_ms": 2.1847163619315517,
+      "rr_mae_ms": 1.672300469483568,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "203",
+      "TP": 2966,
+      "FN": 14,
+      "FP": 19,
+      "v_reference": 444,
+      "v_matched": 442,
+      "position_mae_ms": 2.9089683074848276,
+      "rr_mae_ms": 4.6677989130434785,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "208",
+      "TP": 2940,
+      "FN": 15,
+      "FP": 10,
+      "v_reference": 992,
+      "v_matched": 987,
+      "position_mae_ms": 5.001360544217687,
+      "rr_mae_ms": 6.5813953488372094,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "213",
+      "TP": 3249,
+      "FN": 2,
+      "FP": 0,
+      "v_reference": 220,
+      "v_matched": 220,
+      "position_mae_ms": 1.5327793167128345,
+      "rr_mae_ms": 2.911330049261084,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "219",
+      "TP": 2154,
+      "FN": 0,
+      "FP": 1,
+      "v_reference": 64,
+      "v_matched": 64,
+      "position_mae_ms": 1.1745589600742803,
+      "rr_mae_ms": 1.6979553903345723,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "221",
+      "TP": 2423,
+      "FN": 4,
+      "FP": 0,
+      "v_reference": 396,
+      "v_matched": 393,
+      "position_mae_ms": 2.492777548493603,
+      "rr_mae_ms": 2.753203803224473,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "228",
+      "TP": 2050,
+      "FN": 3,
+      "FP": 10,
+      "v_reference": 362,
+      "v_matched": 362,
+      "position_mae_ms": 2.3765853658536584,
+      "rr_mae_ms": 4.12180746561886,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "112",
+      "TP": 2538,
+      "FN": 1,
+      "FP": 1,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 0.8534278959810874,
+      "rr_mae_ms": 1.3178233438485802,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "113",
+      "TP": 1794,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 1.5785953177257526,
+      "rr_mae_ms": 1.69771332961517,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "115",
+      "TP": 1952,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 3.3206967213114753,
+      "rr_mae_ms": 1.5017939518195795,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "116",
+      "TP": 2395,
+      "FN": 17,
+      "FP": 2,
+      "v_reference": 109,
+      "v_matched": 108,
+      "position_mae_ms": 3.2751565762004176,
+      "rr_mae_ms": 1.7480117203850984,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "117",
+      "TP": 1534,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 8.693611473272489,
+      "rr_mae_ms": 8.664057403783431,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "121",
+      "TP": 1861,
+      "FN": 2,
+      "FP": 0,
+      "v_reference": 1,
+      "v_matched": 1,
+      "position_mae_ms": 2.1848468565287478,
+      "rr_mae_ms": 2.078536847767617,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "122",
+      "TP": 2475,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 1.2735353535353535,
+      "rr_mae_ms": 1.8075990299110751,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "123",
+      "TP": 1518,
+      "FN": 0,
+      "FP": 0,
+      "v_reference": 3,
+      "v_matched": 3,
+      "position_mae_ms": 3.181818181818182,
+      "rr_mae_ms": 1.4225444957152273,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "124",
+      "TP": 1618,
+      "FN": 1,
+      "FP": 1,
+      "v_reference": 47,
+      "v_matched": 47,
+      "position_mae_ms": 2.140914709517923,
+      "rr_mae_ms": 2.636138613861386,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "205",
+      "TP": 2654,
+      "FN": 2,
+      "FP": 0,
+      "v_reference": 71,
+      "v_matched": 71,
+      "position_mae_ms": 1.2976639035418236,
+      "rr_mae_ms": 1.5754147812971342,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "209",
+      "TP": 3004,
+      "FN": 1,
+      "FP": 1,
+      "v_reference": 1,
+      "v_matched": 1,
+      "position_mae_ms": 2.5486018641810917,
+      "rr_mae_ms": 1.4703530979347101,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "210",
+      "TP": 2644,
+      "FN": 6,
+      "FP": 3,
+      "v_reference": 194,
+      "v_matched": 194,
+      "position_mae_ms": 1.0325264750378214,
+      "rr_mae_ms": 1.8732928679817906,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "212",
+      "TP": 2747,
+      "FN": 1,
+      "FP": 1,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 2.14197306152166,
+      "rr_mae_ms": 1.5723132969034608,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "214",
+      "TP": 2258,
+      "FN": 4,
+      "FP": 4,
+      "v_reference": 256,
+      "v_matched": 255,
+      "position_mae_ms": 3.228520814880425,
+      "rr_mae_ms": 3.2539964476021312,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "215",
+      "TP": 3361,
+      "FN": 2,
+      "FP": 0,
+      "v_reference": 164,
+      "v_matched": 164,
+      "position_mae_ms": 2.8991371615590595,
+      "rr_mae_ms": 2.4769276570407857,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "220",
+      "TP": 2046,
+      "FN": 2,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 3.488758553274682,
+      "rr_mae_ms": 1.6156479217603912,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "222",
+      "TP": 2478,
+      "FN": 5,
+      "FP": 0,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 1.2784503631961257,
+      "rr_mae_ms": 1.8261221188839463,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "223",
+      "TP": 2604,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 473,
+      "v_matched": 473,
+      "position_mae_ms": 4.427035330261137,
+      "rr_mae_ms": 2.9427583557433725,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "230",
+      "TP": 2255,
+      "FN": 1,
+      "FP": 7,
+      "v_reference": 1,
+      "v_matched": 1,
+      "position_mae_ms": 5.145011086474501,
+      "rr_mae_ms": 3.387627948375612,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "231",
+      "TP": 1570,
+      "FN": 1,
+      "FP": 0,
+      "v_reference": 2,
+      "v_matched": 2,
+      "position_mae_ms": 0.5031847133757962,
+      "rr_mae_ms": 0.8693435309114085,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "232",
+      "TP": 1780,
+      "FN": 0,
+      "FP": 6,
+      "v_reference": 0,
+      "v_matched": 0,
+      "position_mae_ms": 3.387640449438202,
+      "rr_mae_ms": 1.7046223224351746,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "233",
+      "TP": 3076,
+      "FN": 3,
+      "FP": 0,
+      "v_reference": 831,
+      "v_matched": 829,
+      "position_mae_ms": 4.106631989596879,
+      "rr_mae_ms": 6.655823031880286,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    },
+    {
+      "record": "234",
+      "TP": 2753,
+      "FN": 0,
+      "FP": 0,
+      "v_reference": 3,
+      "v_matched": 3,
+      "position_mae_ms": 0.7700690156193243,
+      "rr_mae_ms": 1.1613372093023255,
+      "checks": {
+        "sensitivity": true,
+        "positive_predictivity": true,
+        "position_mae": true,
+        "rr_mae": true,
+        "v_recall": true
+      },
+      "equivalence": {
+        "no_new_gate_failure": true,
+        "fn_not_worse": true,
+        "fp_not_worse": true,
+        "v_not_worse": true,
+        "position_error": true,
+        "rr_error": true
+      },
+      "equivalent": true
+    }
+  ],
+  "windows": {
+    "records": 42,
+    "events": 96937,
+    "complete_windows": 96924,
+    "incomplete": 13,
+    "max_absolute_error": 5.820766091346741e-11,
+    "max_rr_error": 0.0
+  },
+  "evidence": {
+    "paired": "tmp/rate500_20261024/final_paired/summary.json",
+    "windows": "tmp/rate500_20261024/windows_full_07/summary.json",
+    "build_manifest": "tmp/rb500sw02/build_manifest.json"
+  },
+  "build": {
+    "build_id": "4060479af89a4cac",
+    "elf": "tmp/rb500sw02/ecg_runtime500/build/ecg_runtime500.elf",
+    "elf_info": {
+      "bytes": 454128,
+      "sha256": "fe24762410782030fce0d25fed8809b1594ec8e5cbb9add60430eee840d16ecf"
+    },
+    "scope": "source matched baremetal build; no board acceptance"
+  },
+  "clean_copy": {
+    "files": 373,
+    "checks": 16,
+    "passed": true
+  }
+}

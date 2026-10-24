@@ -4,8 +4,10 @@ from pathlib import Path
 import uuid
 
 from ecg_bridge_worker import BridgeWorker
+from ecg_runtime_worker import RuntimeWorker
 from ecg_capture_core import CaptureSample
 from .plot import draw_trace, trace_geometry
+from .status import bridge_status
 from ecg_ports import enumerate_ports, select_port, validate_port, remembered_identity, remember_identity
 
 from ecg_paths import ROOT
@@ -22,11 +24,12 @@ class BridgePanel:
         self.worker = None; self.inventory = []; self.remembered = False
         self.zynq = tk.StringVar(); self.source = tk.StringVar(); self.shift = tk.StringVar(value='8')
         self.limit = tk.StringVar(value='5000'); self.view = tk.StringVar(value='原始码')
-        self.state = tk.StringVar(value='未开始；先在Vitis运行ecg_bridge，不能运行ecg_stream')
-        self.details = tk.StringVar(value='源：未连接；Zynq：未连接。CSV用REPLAY，蓝牙用ADC；两端500Hz，未标定。')
+        self.state = tk.StringVar(value='未开始；厂商500Hz用ecg_bridge，标准360Hz用ecg_runtime')
+        self.details = tk.StringVar(value='源：未连接；Zynq：未连接。厂商CSV/蓝牙为旧500Hz；360Hz标准CSV须使用ecg_runtime应用。')
         self.location = tk.StringVar(value='来源完整记录在capture/，板端结果在results/；不向Flash写入。')
         title = ttk.Label(self.window, textvariable=self.state, wraplength=1000)
         title.grid(row=0, column=0, sticky='ew', padx=10, pady=6)
+        self.state_label = title
         controls = ttk.Frame(self.window, padding=8); controls.grid(row=1, column=0, sticky='ew')
         ttk.Label(controls, text='Zynq USB_UART').grid(row=0, column=0)
         self.zynq_box = ttk.Combobox(controls, textvariable=self.zynq, state='readonly', width=10)
@@ -40,6 +43,12 @@ class BridgePanel:
         self.csv_button.grid(row=1, column=0, columnspan=2, sticky='w', pady=8)
         self.serial_button = ttk.Button(controls, text='蓝牙采集 → Zynq', command=self.open_serial)
         self.serial_button.grid(row=1, column=2, columnspan=2, sticky='w')
+        self.native_button = ttk.Button(controls, text='360Hz标准CSV → Zynq…', command=self.open_native)
+        self.native_button.grid(row=3, column=0, columnspan=3, sticky='w', pady=(2, 0))
+        ttk.Label(controls, text='标准输入用ecg_runtime；不是厂商500Hz CSV', wraplength=300).grid(row=3, column=3, columnspan=2, sticky='w')
+        self.rate500_button=ttk.Button(controls,text='500Hz标准CSV → 新QRS…',command=lambda:self.open_native(500))
+        self.rate500_button.grid(row=4,column=0,columnspan=3,sticky='w',pady=(2,0))
+        ttk.Label(controls,text='新500Hz应用；要求4096单位/mV，非右移厂商原码',wraplength=300).grid(row=4,column=3,columnspan=2,sticky='w')
         self.stop_button = ttk.Button(controls, text='停止并保存', command=self.stop)
         self.stop_button.grid(row=1, column=4)
         ttk.Label(controls, text='CH2右移').grid(row=2, column=0)
@@ -99,6 +108,11 @@ class BridgePanel:
         path = filedialog.askopenfilename(parent=self.window, title='选择厂商五列RawData CSV', filetypes=[('CSV', '*.csv')])
         if path: self.start('csv', path)
 
+    def open_native(self, rate=360):
+        from tkinter import filedialog
+        path=filedialog.askopenfilename(parent=self.window,title=f'选择{rate}Hz/4096单位标准样本CSV',filetypes=[('CSV','*.csv')])
+        if path:self.start('native500' if rate==500 else 'native',path)
+
     def open_serial(self):
         self.start('serial', self.source.get())
 
@@ -113,8 +127,11 @@ class BridgePanel:
             source_device = validate_port(source, old(source), current, excluded=self.zynq.get()) if kind == 'serial' else {}
             limit = int(self.limit.get()) if kind == 'serial' else None
             directory = ROOT/'tmp/pc_bridge_logs'/(datetime.now().strftime('%Y%m%d_%H%M%S_')+uuid.uuid4().hex[:8])
-            self.worker = BridgeWorker(kind, source, self.zynq.get(), directory, shift=shift,
-                                       sample_limit=limit, zynq_device=zynq_device, source_device=source_device)
+            if kind in ('native','native500'):
+                self.worker=RuntimeWorker(source,self.zynq.get(),directory,zynq_device=zynq_device,sampling_hz=500 if kind=='native500' else 360)
+            else:
+                self.worker = BridgeWorker(kind, source, self.zynq.get(), directory, shift=shift,
+                                           sample_limit=limit, zynq_device=zynq_device, source_device=source_device)
             self.remembered = False
             self.worker.start(); self.location.set(str(directory))
         except (OSError, ValueError) as exc:
@@ -125,40 +142,41 @@ class BridgePanel:
 
     def tick(self):
         active = self.worker is not None and self.worker.is_alive()
-        for button in (self.csv_button, self.serial_button, self.refresh_button, self.shift_box, self.limit_box):
+        for button in (self.csv_button, self.native_button, self.rate500_button, self.serial_button, self.refresh_button, self.shift_box, self.limit_box):
             button.configure(state='disabled' if active or self.closing else 'normal')
         for box in (self.zynq_box, self.source_box):
             box.configure(state='disabled' if active or self.closing else 'readonly')
-        samples = (); result_samples = (); events = ()
+        samples = (); result_samples = (); events = (); rate=500; native=False
         if self.worker:
             info, capture, samples, (result, events, header) = self.worker.snapshot()
-            samples = tuple(CaptureSample(s.index, s.index/500, s.resp_raw, s.ecg_raw) for s in samples)
-            running_text = {'starting': '准备中', 'connecting': '等待板端确认', 'running': '送样并接收结果', 'draining': '停止来源，正在收尾'}
-            end_text = '完整运行结束' if info['reason'] == 'completed' else '已手动停止'
-            self.state.set(('出错：'+info['error']) if info['error'] else
-                           ('中转中 · '+running_text.get(info['state'], info['state']) if active else f'{end_text} · 显示历史数据'))
+            rate=info['sample_rate_hz'];native=info.get('profile') in ('runtime360','runtime500')
+            samples = tuple(CaptureSample(s.index, s.index/rate, s.resp_raw, s.ecg_raw) for s in samples)
+            state_text,is_error,historical = bridge_status(info,active)
+            self.state.set(state_text)
+            self.state_label.configure(foreground='#b3261e' if is_error else '#222222')
             self.details.set(f"源 {info['source']}：{info['source_status']}，已记录 {capture['total']} 点；Zynq：{info['result_status']}；上传 {info['source_samples']} / 确认 {info['confirmed']} / 回传 {info['echoed']}；削顶 {capture['clipped']}；源丢样未知。")
-            result_samples = tuple(CaptureSample(index, index/500, 8388608, raw+8388608) for seq, index, raw, filt in result)
+            result_samples = tuple(CaptureSample(index, index/rate, 8388608, raw+8388608) for seq, index, raw, filt in result)
             if header and not self.remembered:
                 self.remembered = True
                 try: remember_identity('zynq', info['zynq_device'])
                 except OSError as exc: self.location.set(str(self.worker.directory)+'；设备身份保存失败：'+str(exc))
             if events:
                 e = events[-1]
-                self.events_text.set(f"板端事件 {e.seq} · 位置 {e.pos}（样本号，0起点）· RR {e.rr}点 · 心率 {e.hr if e.hr is not None else '未知'} · 分类未提供。黄色竖线为返回事件，非电脑检测。")
+                self.events_text.set(f"板端事件 {e.seq} · 位置 {e.pos}（样本号，0起点）· RR {e.rr}点 · 心率 {e.hr if e.hr is not None else '未知'} · 分类未提供。{'历史数值；' if historical else ''}黄色竖线为返回事件，非电脑检测。")
             else: self.events_text.set('尚无板端事件；分类和滤波未提供，不能把无事件解释为正常心拍。')
         # 复用原码绘图几何；上下坐标单位分别标明，不把int16画成24位或mV。
         for name, values in (('source', samples), ('result', result_samples)):
             canvas = self.canvases[name]
             draw_trace(canvas, values, 'ecg', active, title_override=(
+                ('标准CSV · int16 / 4096单位每mV' if name=='source' else f'Zynq返回 · {rate}Hz源时轴 / 4096单位每mV') if native else (
                 '来源 CH2 · 有符号24位原码（未标定）' if name == 'source' else
-                'Zynq返回 · 右移/饱和后的int16算法输入及事件（未标定）'))
+                'Zynq返回 · 右移/饱和后的int16算法输入及事件（未标定）')))
             if name == 'result' and values:
                 _, bounds = trace_geometry(values, 'ecg', False, canvas.winfo_width(), canvas.winfo_height())
                 if bounds:
                     lo, hi, t0, t1, left, right, top, bottom = bounds
                     for e in events:
-                        t = e.pos/500
+                        t = e.pos/rate
                         if t0 <= t <= t1 and t1 > t0:
                             x = left+(t-t0)/(t1-t0)*(right-left)
                             canvas.create_line(x, top, x, bottom, fill='#ffc14d', dash=(3, 3))

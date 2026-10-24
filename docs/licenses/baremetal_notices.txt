@@ -1,0 +1,203 @@
+当前裸机候选第三方声明（不改变原许可）
+
+这些声明取自当前构建源码，完整来源及SHA见docs/licenses.md；只读参考，不代表最终发布已获验收。
+
+MIT License
+
+Copyright notices from inspected source headers:
+Copyright (C) 1995 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2009 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2010 - 2020 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2010 - 2021 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2010 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2010-2020 Xilinx, Inc. All rights reserved.
+Copyright (C) 2011 - 2020 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2013 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2019 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (C) 2022 - 2023 Advanced Micro Devices, Inc.  All rights reserved.
+Copyright (C) 2022 - 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2022 - 2024 Advanced Micro Devices, Inc.  All rights reserved.
+Copyright (C) 2022 - 2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
+Copyright (C) 2022 - 2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2022 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
+Copyright (C) 2022 - 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2022 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2023 - 2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2023 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
+Copyright (C) 2023 - 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2024 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
+Copyright (C) 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2009 - 2020 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2009 - 2021 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2009 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2010 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2011 - 2021 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2011 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2012 - 2020 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2012 - 2021 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2012 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2013 - 2021 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2014 - 2021 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2014 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2015 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2019 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2021 - 2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2021 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2021-2022 Xilinx, Inc.  All rights reserved.
+Copyright (c) 2022 - 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2022 - 2023 Advanced Micro Devices, Inc. All rights reserved.
+Copyright (c) 2022 - 2023, Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2022 - 2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2022 - 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2022 - 2026 Advanced Micro Devices, Inc. All rights reserved.
+Copyright (c) 2022 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2023 - 2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2023 - 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2024 - 2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2024 - 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (c) 2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+
+Source: ecg_platform/zynq_fsbl/md5.c
+SHA256: 48f4be62c33ba0e83728eebb84c10b123e305bb1899724b433333b8b891c7e4e
+/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+ * All rights reserved.
+ *
+ * This package is an SSL implementation written
+ * by Eric Young (eay@cryptsoft.com).
+ * The implementation was written so as to conform with Netscapes SSL.
+ *
+ * This library is free for commercial and non-commercial use as long as
+ * the following conditions are adhered to.  The following conditions
+ * apply to all code found in this distribution, be it the RC4, RSA,
+ * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
+ * included with this distribution is covered by the same copyright terms
+ * except that the holder is Tim Hudson (tjh@cryptsoft.com).
+ *
+ * Copyright remains Eric Young's, and as such any Copyright notices in
+ * the code are not to be removed.
+ * If this package is used in a product, Eric Young should be given attribution
+ * as the author of the parts of the library used.
+ * This can be in the form of a textual message at program startup or
+ * in documentation (online or textual) provided with the package.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *    "This product includes cryptographic software written by
+ *     Eric Young (eay@cryptsoft.com)"
+ *    The word 'cryptographic' can be left out if the routines from the library
+ *    being used are not cryptographic related :-).
+ * 4. If you include any Windows specific code (or a derivative thereof) from
+ *    the apps directory (application code) you must include an acknowledgement:
+ *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * The licence and distribution terms for any publicly available version or
+ * derivative of this code cannot be changed.  i.e. this code cannot simply be
+ * copied and put under another distribution licence
+ * [including the GNU Public Licence.]
+ */
+
+
+Source: ecg_platform/zynq_fsbl/zynq_fsbl_bsp/libsrc/xilffs/src/ff.c
+SHA256: 15ab02e2ee1f56a76e8f20897edda8b474055e54dd06d9460ab6ebab81811d28
+/*----------------------------------------------------------------------------/
+/  FatFs - Generic FAT Filesystem Module  R0.16                               /
+/-----------------------------------------------------------------------------/
+/
+/ Copyright (C) 2025, ChaN, all right reserved.
+/
+/ FatFs module is an open source software. Redistribution and use of FatFs in
+/ source and binary forms, with or without modification, are permitted provided
+/ that the following condition is met:
+/
+/ 1. Redistributions of source code must retain the above copyright notice,
+/    this condition and the following disclaimer.
+/
+/ This software is provided by the copyright holder and contributors "AS IS"
+/ and any warranties related to this software are DISCLAIMED.
+/ The copyright owner or contributors be NOT LIABLE for any damages caused
+/ by use of this software.
+/
+/----------------------------------------------------------------------------*/
+
+
+Source: ecg_platform/ps7_cortexa9_0/standalone_ps7_cortexa9_0/bsp/libsrc/standalone/src/common/print.c
+SHA256: 8eefed252268ce021e138ebbebc626533ab2efdf40cb2e1150a3bb19eb2e1017
+/* print.c -- print a string on the output device.
+ *
+ * Copyright (c) 1995 Cygnus Support
+ *
+ * The authors hereby grant permission to use, copy, modify, distribute,
+ * and license this software and its documentation for any purpose, provided
+ * that existing copyright notices are retained in all copies and that this
+ * notice is included verbatim in any distributions. No written agreement,
+ * license, or royalty fee is required for any of the authorized uses.
+ * Modifications to this software may be copyrighted by their authors
+ * and need not follow the licensing terms described here, provided that
+ * the new terms are clearly indicated on the first page of each file where
+ * they apply.
+ *
+ *****************************************************************************/
+
+
+Source: ecg_platform/ps7_cortexa9_0/standalone_ps7_cortexa9_0/bsp/libsrc/standalone/src/arm/common/putnum.c
+SHA256: d5c73e1dc16f0e05f7f25b28ece81972541992192e32fa6cdce20bb7620eb258
+/* putnum.c -- put a hex number on the output device.
+ *
+ * Copyright (c) 1995 Cygnus Support
+ *
+ * The authors hereby grant permission to use, copy, modify, distribute,
+ * and license this software and its documentation for any purpose, provided
+ * that existing copyright notices are retained in all copies and that this
+ * notice is included verbatim in any distributions. No written agreement,
+ * license, or royalty fee is required for any of the authorized uses.
+ * Modifications to this software may be copyrighted by their authors
+ * and need not follow the licensing terms described here, provided that
+ * the new terms are clearly indicated on the first page of each file where
+ * they apply.
+ *****************************************************************************/

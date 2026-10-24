@@ -1,6 +1,6 @@
 # QRS逐样本运行时与切拍
 
-> 当前状态：2026-10-23用户暂停QRS优化，保留360Hz阶段基线与失败证据。500Hz转换候选未通过，暂停继续改进；接口/集成可解耦推进。风险与恢复条件见[主体计划](../report/system.md#qrs暂停决定与风险)。
+> 当前状态：360Hz阶段基线和旧失败保留；2026-10-24用户已明确恢复500Hz衔接，独立C适配路径达到已知记录配对等效，详见[500Hz说明](rate500.md)。旧InputRuntime(500)的61抽头方案仍未采用，不把它当新路径。风险与恢复条件见[主体计划](../report/system.md#qrs暂停决定与风险)。
 
 ## 用途与边界
 
@@ -60,3 +60,7 @@ python -B data/benchmark_qrs_runtime.py --raw-dir <mit_raw_dir> --output-dir <ne
 原重放目录可用[研究26说明](qrs_research.md)的两个stage命令生成；`--reference-run`仅用于逐事件比对，省略时仍可独立计分，不依赖已有tmp。输出目录存在即停止，不覆盖旧实验。冻结依据见`data/qrs_runtime_protocol.json`；实际结果与未完成项见[本轮记录](records/runtime_20261023.md)。
 
 后续先核对分类接口、单位/编号/窗口和PS/PL分工，再做端到端软件参考及同源移植准备。QRS调参和500Hz算法路线改进已暂停；500Hz实采衔接、整数实现和新镜像/实板仍未验收，不因暂停而标为通过。
+
+## ARM C移植入口
+
+冻结360Hz数学流程的C实现和运行方式见[板端运行](runtime_board.md)，正式源码src/ps/ecg_runtime，实际对照/实板范围见[记录](records/system_port_20261024.md)。原Python参考、原门槛和105失败不改；C语言移植不等于模型训练、算法改善、500Hz合格或PL核心实现。

@@ -153,3 +153,21 @@ Git记录范围：docs/records/保留报告和过程说明；原始下载、安�
 
 
 QRS受控噪声入口：[使用说明](qrs_noise.md)，[实验记录](records/qrs_noise_20261023.md)。
+
+分类集成：[分类接口](classification_protocol.md)定义128点、训练折RR、身份/有效状态、有界队列与E单发；[接口验证记录](records/classification_20261023.md)保存软件闭环、失败和PS移植边界。
+
+冻结360Hz新流程：[ARM运行与标准CSV入口](runtime_board.md)，[移植/实板记录](records/system_port_20261024.md)。厂商500Hz旧入口和真实无线仍单独验收，不把两种合同混用。
+
+主体准备入口：[输入合同](input_contract.md)、[整数算子](int8_ops.md)、[性能测量](performance.md)。
+
+当前源码复现及许可边界见[依赖与许可](dependencies.md)。
+
+主体离线准备及XSim阻塞证据见[本轮记录](records/system_offline_20261024.md)。
+
+后续主体入口：[当前设计开发稿](../report/design.md)、[裸机许可复核](licenses.md)。
+
+标准仿真复核、重建与故障状态的后续证据见[主体后续记录](records/system_build_20261024.md)。
+
+## 500Hz源输入
+
+500Hz ARM适配、源切拍与独立标准CSV入口见[500Hz处理](rate500.md)；配对实验及失败见[500Hz记录](records/rate500_20261024.md)。

@@ -79,6 +79,7 @@ class Application:
         self.running = False; self.input_file = None; self.frames = None; self.pending = None
         self.output = None; self.kind = None; self.serial_input = None
         self.state = 'idle'; self.stop_reason = None; self._detail_cache = None
+        self._sample_count_seen = 0; self._sample_progress_at = None
         root.title('ECG PC监视器')
         # 96像素/英寸为1.0；DPI感知时Windows 150%缩放约为1.5。只用于像素边距，字号由Tk按点数自动缩放。
         self.ui_scale = max(root.winfo_fpixels('1i') / 96, 1.0)
@@ -497,6 +498,12 @@ class Application:
         m = self.monitor; h = m.header
         history = not self.running and self.stop_reason is not None and m.counts['samples'] > 0
         note = '历史数据（已停止）' if history else ''
+        now=time.monotonic();count=m.counts['samples']
+        if count!=self._sample_count_seen:
+            self._sample_count_seen=count;self._sample_progress_at=now if count else None
+        if self.running and self.kind=='serial' and self._sample_progress_at is not None and now-self._sample_progress_at>QUIET_SECONDS:
+            note='历史数值（暂无新波形）'
+
         if h is None:
             values = {'hr': '—', 'rr': '—', 'cls': '—'}
             note_unknown = '等待会话头' if self.state == 'serial_wait' else ''

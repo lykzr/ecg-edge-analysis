@@ -43,6 +43,10 @@ foreach rtl_file [list $rtl_detector $rtl_axi] {
     }
     set_property file_type SystemVerilog [get_files $rtl_file]
 }
+# 新BD创建前先以AXI包装为顶层，使检测器和AXI源均在有效层次中。
+if {![llength [get_files -quiet *ecg_system.bd]]} {
+    set_property top ecg_qrs_axi_lite [current_fileset]
+}
 update_compile_order -fileset sources_1
 
 set current_part [get_property PART [current_project]]

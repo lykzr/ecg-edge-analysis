@@ -153,3 +153,27 @@ myself.md
 !/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/
 /vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/*
 !/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/ecg_system.bd
+
+!/docs/records/classification_board_20261024/uart.log
+!/docs/records/classification_board_20261024/jtag.log
+
+# 冻结360Hz C移植生成器和精选新实板证据。
+!/build/generate_runtime_coeffs.py
+!/docs/records/runtime_board_20261024/bad_crc_uart.log
+!/docs/records/runtime_board_20261024/idle_uart.log
+!/docs/records/runtime_board_20261024/partial_uart.log
+!/docs/records/runtime_board_20261024/record100_uart.log
+!/docs/records/runtime_board_20261024/record105_uart.log
+!/docs/records/runtime_board_20261024/recovery_uart.log
+
+# INT8独立准备综合脚本；日志和DCP仍在tmp。
+!/build/check_int8_ops.tcl
+
+# 当前软硬件重建入口；产物仍默认忽略。
+!/build/rebuild_system.tcl
+
+# 500Hz源适配的正式生成器；派生产物和失败版本仍在tmp。
+!/build/generate_rate500.py
+!/build/generate_rate500_runtime.py
+!/build/generate_window500.py
+!/build/generate_runtime500.py

@@ -224,3 +224,13 @@ H启动及名义每秒重发，同一会话字段不变；不等待PC命令即�
 独立ecg_auto使用firmware=ps-auto-1、detector=QRS-AUTOPEAK-60，维持500Hz、caps=0xD、scale=-1、filt=NA、cls/conf=?/-1。它与QRS-ORIG-60是两个明确实现身份，不改变ECG-UART-1字段或ECG-IN-1确认。先有合法H，然后L说明WARMUP samples=1000 policy=no_events preserve_indices，最后A READY；L是说明文本，不是输入确认或新增能力位。
 
 两秒预热不输出候选，随后3个内部时钟提交启动计算，期间原样本序号继续推进；首次RR=0仍表示未知。事件位置仍是积分窗中心近似，不能直接宣称精确R峰。电脑中转显式接受上述两个detector身份，其他未知身份仍拒绝。候选构建/操作和边界见[说明](qrs_auto.md)，准确性和是否上板以[记录](records/qrs_auto_20261021.md)为准，不能沿用原版验收。
+
+## 分类接口结果的单发规则
+
+内部心拍/模型合同见[ECG-CLASS-1](classification_protocol.md)。保持本版E字段和重复evt拒绝行为：检测后暂存，待分类完成、超时或确定无效后按原evt顺序只发一次E，不先发未知再重发同evt回填。未知class/conf仍为?/-1。软件参考可携带开发权重的真实分类，但必须通过L,W标明DEV_MODEL_UNACCEPTED及模型身份，不冒称最终模型或板卡来源；假后端不能声明真实CLASS_RESULT。无分类时限/INT8/硬件寄存器的暗含承诺。
+
+## QRS26-ARM候选的输出范围
+
+新360Hz ARM应用返回QRS26-ARM，fs=360、scale4096、caps0xD；波形为上传原值，滤波支路NA，类别?/置信度-1，状态明确NO_MODEL。分类模型未交付，不能声明CLASS_RESULT；原W/E字段与重复evt拒绝行为不变。调试L,WIN是128点float32窗口的十六进制分块，只作当前验证旁证，不作为新增分类结果报文。
+
+接受I之前的boot H是初始化就绪，电脑送样客户端另按[输入协议](bridge_protocol.md)识别，不作为真实采样会话。原旧500Hz/AXI链路证据不继承到本候选，完整新C流程的实板证据另见[移植记录](records/system_port_20261024.md)。

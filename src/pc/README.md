@@ -17,9 +17,12 @@
 ecg_capture_core.py负责五列RawData校验、原码恢复、34字节起始候选及后台完整记录；窗口为ui/capture.py。ecg_ports.py只读枚举Windows端口和USB身份，不发送探测命令。使用说明见[采集操作](../../docs/pc_monitor.md#采集与厂商csv)，针对性检查为sim/test_pc_capture.py。
 
 采集视图不构造ECG-UART-1报文、不运行QRS/CNN、不向Zynq送样。CSV滤波列仅为厂商保存的历史结果，实时来源未提供滤波。完整原文、双通道与算法预览分别保存在tmp/pc_capture_logs/的新目录；默认右移8位仅作int16算法预览，无物理标定含义。需要送样时使用单独的“送样 / 双向中转…”视图，避免串口所有者冲突。
-
-## 独立双向中转
-
+
+
+## 独立双向中转
+
+
+
 同一功能的文件统一使用`ecg_bridge_`前缀，后缀表示职责：
 
 | 文件 | 职责 |
@@ -36,3 +39,13 @@ ecg_bridge.py为CLI入口；ui/bridge.py调用ecg_bridge_worker.py，后台从ec
 
 
 电脑送样客户端只显式接受QRS-ORIG-60或独立候选QRS-AUTOPEAK-60身份，其余会话/来源/采样率/能力仍严格核对；未知身份拒绝。候选前两秒只预热，位置保留原样本序号；不能因没有早期事件补造心拍。格式仍是ECG-IN-1输入、ECG-UART-1结果，详见[候选说明](../../docs/qrs_auto.md)。已验发布内的旧客户端只支持原检测器，候选请用正式源码入口。
+
+## 冻结360Hz板端回放
+
+送样子窗口新增“360Hz标准CSV → Zynq…”；由ecg_runtime_worker后台驱动runtime360客户机，电脑只发送、显示、记录，不在此客户端执行QRS/CNN。CSV必须index,sample,fs,scale且360Hz/4096单位；旧厂商CSV/蓝牙入口仍走旧500Hz应用，不能相互替代。启动、停止/错误保存、重新Run的新会话和示例数据导出见[板端教程](../../docs/runtime_board.md)。
+
+中转摘要的timing为PC往返耗时，包含写入/通信/板端/读取；不当作推理时间。RuntimeWorker的maximum可配置记录总限额（默认64MiB、最少1024字节），到限额失败留前缀和摘要。见[测量说明](../../docs/performance.md)。
+
+中转摘要sample_age_s为PC最后一段合法回传W后的接收间隔，不是源采样时间或断连证明；供界面提示历史数值。
+
+500Hz标准输入使用RuntimeWorker(sampling_hz=500)和BridgeClient(profile='runtime500')；旧默认360Hz与厂商legacy500不变。500Hz单位必须明确为4096单位/mV，不能直接拿右移厂商码替代，详见[500Hz说明](../../docs/rate500.md)。

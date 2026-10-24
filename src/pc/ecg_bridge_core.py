@@ -5,17 +5,25 @@ import time
 
 from ecg_bridge_protocol import ack, encode, samples
 from ecg_uart import Header, Wave, Event, Telemetry, Log, parse_line
+from ecg_metrics import StageMetrics
 
 
 class BridgeClient:
     def __init__(self, port, monitor, session, source, *, clock=time.monotonic,
-                 write_log=lambda name, data: None, capacity=4096, timeout=2):
+                 write_log=lambda name, data: None, capacity=4096, timeout=2, profile='legacy500'):
         if not re.fullmatch(r'[A-Za-z0-9_.-]{1,32}', session) or source not in ('ADC', 'REPLAY', 'SYNTH'):
             raise ValueError('会话或来源错误')
         if capacity < 32 or not 0 < timeout <= 30:
             raise ValueError('队列/超时参数错误')
         self.port, self.monitor, self.session, self.source = port, monitor, session, source
         self.clock, self.log, self.capacity, self.timeout = clock, write_log, capacity, timeout
+        if profile not in ('legacy500','runtime360','runtime500'):
+            raise ValueError('未知板端合同')
+        self.boot_seen=profile=='legacy500'
+        self.boot_deadline=clock()+timeout
+        self.profile=profile
+        self.rate,self.scale,self.detectors={'legacy500':(500,None,('QRS-ORIG-60','QRS-AUTOPEAK-60')),'runtime360':(360,4096,('QRS26-ARM',)),'runtime500':(500,4096,('QRS26-500-ARM',))}[profile]
+        self.ready_header=(b'H,ECG-UART-1,ps-runtime500-ready,boot,UNKNOWN,QRS26-500-ARM,500,4096,0xD\n' if profile=='runtime500' else b'H,ECG-UART-1,ps-runtime-ready,boot,UNKNOWN,QRS26-ARM,360,4096,0xD\n')
         self.queue = deque()
         self.pending = b''
         self.lines = bytearray()
@@ -29,6 +37,10 @@ class BridgeClient:
         self.peak = 0
         self.event_next = 1
         self.event_pos = None
+        self.last_wave_at = None
+        self.metrics = StageMetrics()
+        self.sent_at = None
+        self.created_at = clock()
 
     def add(self, values):
         values = tuple(values)
@@ -50,9 +62,15 @@ class BridgeClient:
         if self.waiting or self.pending:
             raise RuntimeError('违反一包在途约定')
         self.pending = data; self.waiting = state
+        self.sent_at = self.clock()
         self.deadline = self.clock() + self.timeout
 
     def _line(self, line):
+        if (self.profile in ('runtime360','runtime500') and not self.started and
+            line==self.ready_header):
+            self.boot_seen=True
+            self.log('controls.log',line)
+            return
         if line.startswith(b'A,'):
             self.log('controls.log', line)
             session, next_value, state, reason = ack(line)
@@ -74,13 +92,15 @@ class BridgeClient:
                 if not self.end_seen or self.echoed != self.received:
                     raise ValueError('结束确认与完整结果不一致')
                 self.done = True
+            self.metrics.record({'I':'init_roundtrip','D':'batch_roundtrip','F':'finish_roundtrip'}[self.waiting],self.clock()-self.sent_at)
+            if self.done:self.metrics.record('session_wall',self.clock()-self.created_at)
             self.waiting = None
             return
         frame = parse_line(line.decode('ascii').rstrip('\r\n'), self.monitor.header)
         if isinstance(frame, Header):
             if ((frame.session, frame.source, frame.fs, frame.scale, frame.caps) != (
-                self.session, self.source, 500, None, 0xD)
-                or frame.detector not in ('QRS-ORIG-60', 'QRS-AUTOPEAK-60')):
+                self.session, self.source, self.rate, self.scale, 0xD)
+                or frame.detector not in self.detectors):
                 raise ValueError('Zynq结果会话/来源/采样率/能力不匹配')
             if self.monitor.header is not None and frame != self.monitor.header:
                 raise ValueError('会话中途变更元数据')
@@ -92,6 +112,7 @@ class BridgeClient:
             if actual != self.inflight[offset:offset + len(actual)] or any(filt is not None for raw, filt in frame.pairs):
                 raise ValueError('回传样本与上传值不一致')
             self.echoed += len(actual)
+            self.last_wave_at = self.clock()
         elif isinstance(frame, Event):
             if frame.pos >= self.confirmed + len(self.inflight):
                 raise ValueError('事件位置超出已经发送的样本')
@@ -131,10 +152,12 @@ class BridgeClient:
                     line = bytes(self.lines); self.lines.clear()
                     self._line(line)
         now = self.clock()
-        if not self.started:
+        if not self.boot_seen and now>=self.boot_deadline:
+            raise TimeoutError('等待板端初始化就绪超时；检查应用和重新Run')
+        if not self.started and self.boot_seen:
             self.started = True
-            self._send(encode(f'I,ECG-IN-1,{self.session},500,{self.source},-1'), 'I')
-        if self.waiting is None and not self.done:
+            self._send(encode(f'I,ECG-IN-1,{self.session},{self.rate},{self.source},{self.scale if self.scale is not None else -1}'), 'I')
+        if self.started and self.waiting is None and not self.done:
             if self.queue and (len(self.queue) >= 32 or self.eof or now - self.last_batch >= .064):
                 self.inflight = tuple(self.queue.popleft() for _ in range(min(32, len(self.queue))))
                 self._send(samples(self.confirmed, self.inflight), 'D'); self.last_batch = now
@@ -152,4 +175,6 @@ class BridgeClient:
     def summary(self):
         return dict(source_samples=self.received, confirmed=self.confirmed, echoed=self.echoed,
                     queue_peak=self.peak, done=self.done, pending_bytes=len(self.pending),
-                    incomplete_rx_bytes=len(self.lines), upstream_source_drop=None)
+                    incomplete_rx_bytes=len(self.lines), upstream_source_drop=None,
+                    sample_age_s=None if self.last_wave_at is None else max(0.,self.clock()-self.last_wave_at),
+                    timing=self.metrics.summary(), timing_scope='PC roundtrip includes write, transport, board work and read; not board compute')

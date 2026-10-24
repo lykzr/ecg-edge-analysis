@@ -50,3 +50,17 @@ python -B data/analyze_capture.py --source <五列RawData.csv> --output tmp/capt
 ## 旧协议
 
 `data/protocols/` 只保留迁移说明；协议为兼容脚本默认路径已回到 `data/` 根目录。历史 CNN 协议内部字段中的 `data/cnn_mf_v1_protocol.json` 字样属于冻结旧字节，未改写；当前实际位置是 `model/protocols/cnn_mf_v1_protocol.json`。
+
+## 分类软件闭环
+
+`replay_classification.py`只读已有已知MIT记录，按冻结360Hz运行时自动检测/切拍，使用本地冻结的未合格开发权重核验接口，输出ECG-UART-1记录和请求/结果JSONL，不发送串口或训练。需要已有QRS环境和PyTorch环境，允许分开，不自动安装：
+
+```powershell
+python -B data/replay_classification.py --raw-dir <MIT原始数据目录> --record 100 --seconds 30 --output-dir tmp/class_replay_new --inference-python <已有PyTorch解释器>
+```
+
+输出目录必须不存在。完整输入、来源/许可和有效性合同见[分类接口](../docs/classification_protocol.md)及[模型交接](../docs/model_training_handoff.md)。原始标注不用于补峰或生成窗口；本入口不评分、不访问独立6人，不能据此报告分类准确率或板上成功。
+
+## C移植对照与标准回放数据
+
+verify_ps_runtime.py以原冻结360Hz全记录输出核对C主机程序的确认时刻/位置/RR，不恢复调参，不访问独立分类患者；必须显式raw/golden/executable/output。export_runtime_samples.py生成严格360Hz/4096单位的标准CSV用于新ARM回放入口，不处理厂商500Hz文件。说明和边界见[ARM运行](../docs/runtime_board.md)。

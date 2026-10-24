@@ -11,7 +11,7 @@
 | 电脑→Zynq | 本文ECG-IN-1：单通道int16样本、会话、序号、CRC32及确认 |
 | Zynq→电脑 | 运算/波形用既有[ECG-UART-1](uart_protocol.md)；本次输入的确认用独立A行，不混成结果E或旧命令K |
 
-USB_UART为全双工双向连接，不是两条单工串口。A盘主目录V3.9底板图第6页的CH340C/U11/U12/P5与Vitis指南第201、205页提供双向通路依据；实物修订、P5选择和持续收发仍待验。蓝牙模块型号未知，不假定BLE等于虚拟COM；厂商帧边界必须由实际固件/抓包确认。
+USB_UART为全双工双向连接，不是两条单工串口。A盘主目录V3.9底板图第6页的CH340C/U11/U12/P5与Vitis指南第201、205页提供双向通路依据；实物修订、P5选择和持续收发仍待验。蓝牙为用户确认的JDY18及配套USB接收器；实际串口身份/固件和帧边界仍须实测，不能由型号推定。
 
 ## ECG-IN-1约定
 
@@ -46,4 +46,18 @@ Zynq接收缓存中的已采样数字数据按序送PL，不再生成脉冲，�
 
 使用原板载UART0，115200/8N1/无硬件流控；收发通过独立队列和确认解耦。满宽int16、原始W回传、A与事件/状态会消耗带宽；一包在途不是无限吞吐保证。采集连接必须持续排空，有界缓存满即失败留证，不静默丢弃或暂停显示冒充采集未丢样。蓝牙/USB驱动、500Hz持续吞吐、拔插和实际PL事件都必须上板验收。
 
-对应程序为独立ecg_bridge，保留ecg_stream合成回归与smoke；[中转使用说明](bridge.md)给出入口和边界。**现有流式程序和本次双向候选均未上板验证。**
+对应程序为独立ecg_bridge，保留ecg_stream合成回归与smoke；[中转使用说明](bridge.md)给出入口和边界。旧500Hz有限合成/双向数字回放已上板，冻结360Hz ARM另有数字回放证据；真实无线/物理拔插与新QRS原生500Hz仍待验。
+
+## 冻结360Hz ARM候选的显式输入合同
+
+独立ecg_runtime接受I,ECG-IN-1,<session>,360,<REPLAY或SYNTH>,4096及原CRC，源样本必须已经是4096单位/mV的int16。D/F/A语法不变，原旧500Hz/-1合同仍是ecg_bridge默认值。电脑明确选择runtime360 profile，只接受QRS26-ARM/360/4096/0xD，不自动猜测或换算两种合同。
+
+新应用在接受I前周期发送合法的ECG-UART-1启动H：firmware=ps-runtime-ready、session=boot、source=UNKNOWN、detector=QRS26-ARM、fs360、scale4096、caps0xD。它表示算法初始化就绪，不含样本；客户端仅在runtime360未启动状态识别后发送I，旁证保留到controls/usb_rx，不混入正式results采样会话。新的I得到电脑session对应的正常H和READY后才送D。旧500Hz客户机不接受该身份，不改变默认语义。
+
+真实500Hz厂商数据仍不得送此合同；不采用失败500Hz转换候选。操作与ARM/PL分工见[板端运行](runtime_board.md)。
+
+输入码值、序号与缺口合同统一见[输入合同](input_contract.md)；当前往返计时字段见[性能测量](performance.md)，不等同板端纯计算。
+
+## 新500Hz标准数字输入
+
+独立ecg_runtime500使用相同D/F/A语法，显式I声明500/4096、来源REPLAY或SYNTH；profile=runtime500，启动身份ps-runtime500-ready、detector=QRS26-500-ARM，正式会话firmware=ps-runtime500-1。W、E位置、RR和fs均使用500Hz源时轴，内部转换不改变源编号。标准500和旧厂商500/-1是不同合同，不能自动互换。细节见[500Hz说明](rate500.md)；已知构造数据的软件等效不代替真实采集/无线验收。

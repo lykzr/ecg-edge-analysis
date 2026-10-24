@@ -58,12 +58,18 @@ class BridgeRecords:
             self.monitor.finish(summary['reason'])
         except OSError as error:
             errors.append(str(error))
+            # finish失败也释放结果文件句柄；重复close在Python文件对象上安全。
+            for stream in self.monitor.recorder.files.values():
+                try:stream.close()
+                except OSError as close_error:errors.append(str(close_error))
         for stream in self.files.values():
             try:
                 stream.close()
             except OSError as error:
                 errors.append(str(error))
         summary.update(data_bytes=self.budget.used, close_errors=errors)
+        if errors:
+            summary.update(reason='failed',error='记录收尾失败：'+'; '.join(errors))
         (self.directory/'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         if errors:
             raise OSError('; '.join(errors))

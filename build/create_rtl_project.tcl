@@ -20,9 +20,12 @@ if {[file exists $project_dir]} {
 
 file mkdir [file dirname $project_dir]
 create_project ecg_edge $project_dir -part $device_part
-add_files -norecurse $rtl_file
-set_property top ecg_qrs_detector [current_fileset]
-set_property file_type SystemVerilog [get_files $rtl_file]
+# 模块引用需要先加入全部依赖并确定语言，再选择顶层；避免缓存不完整层次。
+set rtl_files [list $rtl_file [file join $project_root src rtl ecg_qrs_axi_lite.sv]]
+foreach path $rtl_files {if {![file isfile $path]} {error "缺少RTL：$path"}}
+add_files -norecurse $rtl_files
+foreach path $rtl_files {set_property file_type SystemVerilog [get_files $path]}
+set_property top ecg_qrs_axi_lite [current_fileset]
 update_compile_order -fileset sources_1
 source [file join $script_dir build_navigator_ecg_system.tcl]
 

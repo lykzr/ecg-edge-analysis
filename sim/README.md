@@ -235,3 +235,21 @@ python -B -m unittest discover -s sim -p test_qrs_noise.py -v检查212/16解码�
 ## 逐样本运行时与自动切拍
 
 在已有QRS依赖环境运行`python -B -m unittest discover -s sim -p test_qrs_runtime.py`和`test_beat_window.py`，覆盖确认时刻、前缀不变、重置/序号缺口、有界缓冲、幅值饱和、500Hz映射和训练端窗口逐值对照。`check_qrs_runtime.py`只核冻结来源/门槛；完整42条与500Hz转换另跑`data/benchmark_qrs_runtime.py`。说明见[运行时](../docs/qrs_runtime.md)。模型迁移路径由`test_model_paths.py`核验，不改变冻结模型文件。
+
+## 分类输入及PS队列
+
+QRS/NumPy环境分别运行`test_classifier.py`（窗口适配、状态、超时、单发结果）和`test_classification_ps.py`（已有GCC编译实际C核心并对照）；PyTorch环境单独运行`test_classification_torch.py`，核对训练端RR变换和冻结开发权重直接推理。避免用同一通配模式在缺Torch的环境导入模型用例。以上均不训练、不给模型质量评分，不替代板卡或新QRS移植。协议和命令见[分类接口](../docs/classification_protocol.md)。
+
+## 冻结360Hz C移植
+
+已有QRS/NumPy/SciPy环境与GCC下，分别运行test_ps_runtime.py、test_runtime_link.py、test_runtime_worker.py；覆盖实际C事件/窗口、满幅/噪声、缺口/复位、就绪握手、有界传输/错误、后台停止与隐藏Tk路径。已有旧通信/PC测试继续单独跑。ECG_HOST_CC指定已有GCC，不安装；主机/隐藏窗口不等于实板或视觉。完整已知记录移植对照和实际USB_UART入口见[板端教程](../docs/runtime_board.md)。
+
+## 主体离线准备检查
+
+`python -B sim/check_system_offline.py --output tmp/offline_new --clean-copy`从正式清单复制源码后重跑通信/C/Tk/合同检查；使用现有外部依赖，不安装。整数参考：test_int8_reference.py；真实RTL：check_int8_ops.py（参数见[算子说明](../docs/int8_ops.md)）；主机CPU计时：check_host_performance.py。结果日志不放README。
+
+故障显示回归：test_ui_faults.py包含状态纯函数及隐藏Tk检查；XSim的check_int8_ops.py严格拒绝X输出，含近INT32界、池化末尾和busy重复start。check_licenses.py只生成当前工作区的许可/编译输入证据，不自动宣布合规。
+
+## 500Hz源适配
+
+已有QRS解释器与GCC运行test_pipeline500.py，编译实际C并检查源500Hz窗口/RR、内存/因果、500Hz UART/PC闭环、错误拒绝、CSV后台及隐藏窗口；不训练、不替代实板。完整记录检测配对和模型窗口分别用data/benchmark_rate500.py与data/verify_pipeline500.py，说明见docs/rate500.md。test_rate500.py的ECG_RATE500_EXE指向sim/ecg_rate500_host.c配合生成器输出编译的FIR候选，不能误指向完整pipeline主机入口。

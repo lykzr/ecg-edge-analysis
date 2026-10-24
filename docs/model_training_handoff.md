@@ -65,3 +65,7 @@ python -B sim/check_baseline.py --cache-dir tmp/cnn_git/cache --replay-weights
 ```
 
 不重新训练、不使用独立6人测试。当前基线仍未合格；其他历史候选的完整缓存/权重不自动随Git交接，不能把已选对照复核当全部历史复现。完整交接清单另由sim/check_checkout.py检查，仍需实际提交号才能在远端克隆得到。
+
+## 系统分类适配交接
+
+系统内部合同已独立写入[ECG-CLASS-1](classification_protocol.md)：wave128、basicRR与完整RR的区别、同权重rr_mean/std及哈希、内部差分、N/S/V/F映射、会话/心拍元数据与未知/超时。正式代码为src/reference/ecg_classifier.py和src/ps/ecg_classification。当前默认加载冻结三折中的fold0仅作接口回归，accepted=false，不能当最终选择；最终模型、置信度、INT8布局及数值黄金向量仍须交付。独立6人未用于本轮，不恢复训练。
