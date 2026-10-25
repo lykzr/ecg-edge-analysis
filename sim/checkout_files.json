@@ -82,6 +82,7 @@
     "data/requirements_qrs.txt",
     "data/requirements_system.txt",
     "data/results/README.md",
+    "data/results/handoff_20261025.json",
     "data/results/ps_runtime_port_20261024.json",
     "data/results/qrs_research26_20261023.json",
     "data/results/qrs_runtime_20261023.json",

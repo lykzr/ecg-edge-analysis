@@ -1,0 +1,287 @@
+{
+  "schema": 1,
+  "passed": true,
+  "source_commit": "862347247519f5dbe3d1c9bac77e6ad667dbd0ab",
+  "branch": "system",
+  "verification": "actual local Git clone without original tmp",
+  "software_tests": 156,
+  "skipped": 0,
+  "release_tests": 10,
+  "strict_release_passed": true,
+  "release_source_drift": [],
+  "bootgen_from_clone_byte_identical": true,
+  "boot_sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc",
+  "environment": {
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "dependencies": {
+      "numpy": "2.4.4",
+      "scipy": "1.18.1",
+      "wfdb": "4.3.1",
+      "pandas": "3.0.6"
+    }
+  },
+  "checks": [
+    {
+      "args": [
+        "sim/check_checkout.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "sim/check_qrs_runtime.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "sim/check_system_release.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_ecg_bridge.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_pc_bridge.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_pc_monitor.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_pc_serial.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_pc_capture.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_runtime_link.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_system_edges.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_input_contract.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_int8_reference.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_checkout.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_ui_faults.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_rate500.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_pipeline500.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_system_consistency.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_binary_licenses.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_runtime500_board.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_vendor500.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "sim",
+        "-p",
+        "test_qspi_release.py"
+      ],
+      "passed": true,
+      "returncode": 0
+    }
+  ],
+  "limits": [
+    "uses existing external Python, GCC, Tk and AMD Bootgen",
+    "does not repeat complete Vivado/Vitis hardware rebuild",
+    "not real wireless, calibration, final model or complete FPGA inference"
+  ],
+  "git_pushed": false
+}
