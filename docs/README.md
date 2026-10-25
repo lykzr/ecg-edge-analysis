@@ -180,4 +180,4 @@ QRS受控噪声入口：[使用说明](qrs_noise.md)，[实验记录](records/qr
 
 当前下载使用[release入口](../releases/latest/runtime500/download.cmd)，操作见[下载教程](download_guide.md#当前项目直接下载新版)；本地归档/新版验收见[发布记录](records/runtime500_release_20261025.md)。
 
-当前交接汇总：[工程交接](../report/交接.md)，[QSPI固化验证](records/qspi_20261025.md)；操作继续使用[下载教程](download_guide.md)。
+接手步骤见[工程交接](../report/交接.md)，操作见[下载教程](download_guide.md)。跨工程复用见[技能包](../skill/README.md)，验证分别见[技能记录](records/skill_20261025.md)与[QSPI记录](records/qspi_20261025.md)。

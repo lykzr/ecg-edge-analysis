@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "passed": true,
+  "checks": 22,
+  "software_tests": 168,
+  "skill_tests": 12,
+  "skipped": 0,
+  "current_release_sources_match": true,
+  "portable_test": "copies skill only; invokes CLI from a different project directory including spaces",
+  "environment": {
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "source_sha256": {
+    "skill/README.md": "80e3a6bb10e6b7a2c31fb65bcdb0bd80611fe166db447542d1cb0274601dbfb5",
+    "skill/artifact-check/SKILL.md": "3bb95ffb10225498a1a9a7c4c5a61a9b1c585278ca359385bc0b7981c2163886",
+    "skill/download-diagnose/SKILL.md": "7bc9900541b088db6c4c8086c1573648a8e8cb47fc7fd9cc9ad6a6d1774d7b87",
+    "skill/trace-check/SKILL.md": "6d1d96166138acf2837a0d992ef31985cadba46bd0d1717ce754594b08bb4c6c",
+    "skill/trace-check/scripts/compare_csv.py": "ac0a8f6639163107e11428be74b9b2149b191b4937a7358c109d930bdb1487dc",
+    "skill/artifact-check/scripts/check_files.py": "7158ab72805201f69dd32df12d4225afafde9a76208e6d82d388d5bf73269100"
+  },
+  "official_quick_validate": "NOT_RUN_SUCCESSFULLY_MISSING_PYYAML",
+  "board_operated": false,
+  "other_os_or_second_board_verified": false,
+  "scope": "software and instructions only; not final AI transcript, PYNQ, cross-team or hardware acceptance"
+}

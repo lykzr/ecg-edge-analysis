@@ -1,28 +1,33 @@
-# 可复用工程流程
+# 可复用工程技能包
 
-本目录说明参考对照、工具工作目录诊断和串口自检的可复用方法。案例证据与历史实测统一见[文档目录](../docs/README.md)。
+面向陌生队伍、开发者或AI助手，按AMD自主选题指南3.3.5.2提供可复制的校验工具和诊断流程。不依赖原作者电脑、聊天、ECG数据或历史tmp；不是安装Codex插件的要求，不声明通用PYNQ加分资格。
 
-## 1. 黄金参考逐周期对照
+| 项目 | 使用入口 | 适用与边界 |
+| --- | --- | --- |
+| [交付文件校验](artifact-check/SKILL.md) | [校验脚本](artifact-check/scripts/check_files.py) | 任意文件集的SHA/字节校验；不证明来源真实性或板卡匹配 |
+| [黄金参考比对](trace-check/SKILL.md) | [比对脚本](trace-check/scripts/compare_csv.py) | 同时轴CSV，默认精确比较；不自动对齐，不替代准确率 |
+| [下载与启动排查](download-diagnose/SKILL.md) | 人工排查表 | 工作目录、器件、镜像头、编程与冷启动分级；硬件参数须取自自己的资料 |
 
-- 适用：已明确复位、有效拍、位宽和流水线语义的同步RTL。
-- 经验来源：整数参考必须先算旧状态，再应用更新；空拍不推进采样计数，负数右移与位宽回绕不能用浮点替代。
-- 用法：以`src/reference/ecg_reference.py`和`sim/tb_ecg_reference.sv`为模板，列出需比较的状态字段，用`sim/check_ecg_reference.py`生成同输入并调用XSim。换题目时替换状态、参考实现和testbench，保留失败时的案例/周期/字段定位。
-- 命令：`python -B sim/check_ecg_reference.py --vivado-bin '<Vivado安装目录>/bin' --output-dir tmp/reference_check_new`。
-- 失效条件：算法本身可能错但两侧一致；未覆盖参数不能外推；它不替代AXI、板上或真实数据准确率验证。
+每项SKILL.md分别列出适用、方法、失败来源、已验证效果与失效条件。可以只复制需要的子目录；脚本仅用Python3.10及以上标准库，不导入ECG工程或第三方包。
 
-## 2. 图形界面烧录的临时文件失败定位
+## 快速使用
 
-- 适用：工具提示无法在安装目录创建临时文件，而从可写目录启动命令行可以成功。
-- 原理：子进程可能继承启动工作目录；无法写入安装目录时，应检查cwd与相对路径。
-- 用法：先记录报错绝对路径，核对启动入口工作目录和后端是否指定cwd；确认相对启动器依赖，再使用绝对入口与可写工作目录。完整定位过程见`docs/download_guide.md`第19节。
-- 失效条件：硬件未上电、JTAG不通、Flash型号/镜像错误不能靠改cwd解决；不要把增加管理员权限或修改安装目录ACL当默认方案。
+从仓库根检查现有发布（只读、不连板）：
 
-## 3. 串口自检证据分级
+```text
+python -B skill/artifact-check/scripts/check_files.py --root releases/latest --manifest releases/latest/manifest.json
+```
 
-- 适用：PS通过MMIO验证PL寄存器、事件队列等接口。
-- 用法：以`src/ps/ecg_smoke/main.c`为例，先核对配置和初态，再送受控输入，分别检查字段、消费、溢出及清提示；输出BEGIN、逐阶段PASS与最终失败计数。
-- 失效条件：无软件复位时必须先重新配置PL；只看到Hello World、Build成功或仿真PASS都不足以证明PS→PL实测通过。
+同表头、同序号CSV比较：
 
-## 迁移与复用边界
+```text
+python -B skill/trace-check/scripts/compare_csv.py --reference golden.csv --candidate actual.csv --key cycle
+```
 
-脚本从自己的位置定位项目根；换板必须重新核查器件、DDR、MIO、时钟和地址，不复制本机路径/串口号作为他人默认。技能依据与失败轨迹先保留实验记录，完整提示词/模型回答与自我纠错交付仍是计划中的工作，不以本页代替原始协作记录。
+具体JSON/CSV合同与退出码见对应SKILL.md；复制到其他工程时替换文件路径和预先冻结的容差，不照搬ECG采样率、幅值、寄存器、端口或拨码。
+
+## 验证与来源
+
+运行`python -B -m unittest discover -s sim -p test_skills.py`。测试只复制skill到独立含空格路径，使用另一个工程作工作目录，验证成功、篡改、缺失、换行、越界、序号、容差、NaN及大整数等行为；不安装或操作硬件。效果与旧案例见[验证记录](../docs/records/skill_20261025.md)。独立复制技能目录无需取得这些历史记录。
+
+已有ECG仿真、Flash及Git案例仅作为经验来源；新通用脚本不自动继承原硬件成绩。当前在Windows/Python实跑，尚未验证Linux/macOS、第二板卡或PYNQ。原始提示词、模型回答、自我纠错仍需另行整理，不能以技能总结替代。

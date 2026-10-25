@@ -259,3 +259,5 @@ test_system_consistency.py回归匹配文件、显式采样率、结束残行和
 新500Hz验板入口为board/verify_runtime500.py；test_runtime500_board.py只检查事件/窗口/状态解析，不接板。发布测试支持当前runtime500组件，原smoke和旧bridge证据不变。真实数字结果见[记录](../docs/records/runtime500_board_20261024.md)。
 
 厂商500Hz回归：test_vendor500.py检查原码/单位/舍入/饱和、去直流常量偏置不变性与初态、CSV/分块34字节到实际C、手动停止/新会话及新UI路由。test_pc_bridge.py与test_ecg_bridge.py中的旧链路明确指定legacy500；不把它们当新ADC无线验收。board/verify_vendor500.py需显式实物参数，--simulate-radio仍是模拟来源。
+
+通用技能CLI行为检查：`python -B -m unittest discover -s sim -p test_skills.py`。只复制skill到独立含空格位置测试，不要求板卡或第三方依赖；已纳入check_system_offline.py。

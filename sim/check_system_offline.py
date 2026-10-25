@@ -3,7 +3,7 @@ import argparse,hashlib,importlib.metadata,json,os,platform,shutil,subprocess,sy
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 MODULES=['test_ecg_bridge.py','test_pc_bridge.py','test_pc_monitor.py','test_pc_serial.py','test_pc_capture.py',
-         'test_runtime_link.py','test_system_edges.py','test_input_contract.py','test_int8_reference.py','test_checkout.py','test_ui_faults.py','test_rate500.py','test_pipeline500.py','test_system_consistency.py','test_binary_licenses.py','test_runtime500_board.py','test_vendor500.py','test_qspi_release.py']
+         'test_runtime_link.py','test_system_edges.py','test_input_contract.py','test_int8_reference.py','test_checkout.py','test_ui_faults.py','test_rate500.py','test_pipeline500.py','test_system_consistency.py','test_binary_licenses.py','test_runtime500_board.py','test_vendor500.py','test_qspi_release.py','test_skills.py']
 def run(output,clean,release_artifacts_only=False):
     output=Path(output).resolve();output.relative_to(ROOT/'tmp');output.mkdir(parents=True,exist_ok=False)
     root=ROOT
