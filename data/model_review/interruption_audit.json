@@ -1,0 +1,350 @@
+{
+  "checked_at_beijing": "2026-10-31T20:14:53.085860+08:00",
+  "purpose": "核2026-10-30晚至31日凌晨用户喊停时是否有半截训练",
+  "passed": true,
+  "new_fits": 0,
+  "unfinished_fits_in_audited_runs": 0,
+  "audited_runs": [
+    {
+      "run": "ecg_block_rotation_v84_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_block_rotation_v84_20261028_01/decision.json": "7f2eb0dd4211b853d5dd494142be9b22583dd0ba9aa80335f099f344ad8af76b",
+        "tmp/ecg_block_rotation_v84_20261028_01/verification.json": "1d5a1fcb1eafbc68610f0ee46be2b0039b05f00fea9f77bd36c93b7267790164"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_causal_moment_v86_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_causal_moment_v86_20261029_01/decision.json": "5c06fb13ccb54e9d5f3cd3c1587d760b6d457704282dbe7f5b81dad17d449bf9",
+        "tmp/ecg_causal_moment_v86_20261029_01/verification.json": "41955c2229910ad807ab3af2cf149b488cd7034bb8b5381b972afc9820b8d73a"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_elastic_v78_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 2,
+        "active_fold": 2
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": true,
+      "evidence_sha256": {
+        "tmp/ecg_elastic_v78_20261028_01/decision.json": "8e4828dd51b5638bea32c7c2d50f4a8804dd7521a378d858a0d75295f41f5dae",
+        "tmp/ecg_elastic_v78_20261028_01/verification.json": "4608b7ea8696a711b5b222e452986f0e02e235df1dc58718cce5d20673598c87"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_energy_training_v92_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_energy_training_v92_20261029_01/decision.json": "59c68d13040e29a8805dba9522d4c8d592917c5f887daaa15ebb875fe19207ad",
+        "tmp/ecg_energy_training_v92_20261029_01/verification.json": "71a297913821a889a84dbe37b83b6617eaf63a7fa4c53fd64aa17a49bd530fd6"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_fine_merge_v82_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 2,
+        "active_fold": 2
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": true,
+      "evidence_sha256": {
+        "tmp/ecg_fine_merge_v82_20261028_01/decision.json": "f260e27a01bafecb7905e10e4bb5209464c7c834d65be36bebfcdf8e3928b05c",
+        "tmp/ecg_fine_merge_v82_20261028_01/verification.json": "9cc7b5a65e58d5cbc4e1778c65128f9bf00357eddbe69289af65c8870cfaf91e"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_fine_weight_v88_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_fine_weight_v88_20261029_01/decision.json": "a6272eee58b33e21c7c3b023ab60a6f21d4deb6fd0a30bc7f3aeb82f1da24073",
+        "tmp/ecg_fine_weight_v88_20261029_01/verification.json": "b13cd3978df440a7e0b7ad016ef4012b18d3730e3dfaa712bd855ff5dd7dad2e"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_hermite_v90_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_hermite_v90_20261029_01/decision.json": "722690bf974a30ad90923963dcd6eefd19d7cf2264074bb09d276d407d8f1afd",
+        "tmp/ecg_hermite_v90_20261029_01/verification.json": "9437476c09d4c1d06f38dcc76eb66dfbd97f3c8fa7a4a862e83789917dca4fba"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_native_residual_v81_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 2,
+        "active_fold": 2
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": true,
+      "evidence_sha256": {
+        "tmp/ecg_native_residual_v81_20261028_01/decision.json": "d53cc0abf7167aec28d1de2a12e1c05eab8886454c772b3bf6bb0c9f884fa496",
+        "tmp/ecg_native_residual_v81_20261028_01/verification.json": "6dacf8a0b0a5e5b9de6608a4161106a4a0b97611c28e8e335ba4655f99eeb38a"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_ordered_model_v85_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_ordered_model_v85_20261029_01/decision.json": "a5d61568460c866cabd39fb3f790094bf8beef9ac0c616a8af0526cb58cc890f",
+        "tmp/ecg_ordered_model_v85_20261029_01/verification.json": "143b75864cd00219f1133f7d44a7476475f90f6be6f3b67c5c311dd88080c5cc"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_ordinal_v79_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 2,
+        "active_fold": 2
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": true,
+      "evidence_sha256": {
+        "tmp/ecg_ordinal_v79_20261028_01/decision.json": "b408e10ec84a5f39710ea01eed29c597f36789ad26d04535dba69382f3f5a2a6",
+        "tmp/ecg_ordinal_v79_20261028_01/verification.json": "70b6187611523de6be8328a6f45a2a79d646daef40ba0ec2344e892c49219c9f"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_patient_interpolation_v83_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_patient_interpolation_v83_20261028_01/decision.json": "8632fa74ab74b19380ae01481ef86547c3593c44dda521a639bb250c0a95b76c",
+        "tmp/ecg_patient_interpolation_v83_20261028_01/verification.json": "acdc08586cc10e1d3a34bf1d37df8a06ee87dfee7748d8f1a5c1086606dcf42a"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_pre_rr_v102_20261030_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_pre_rr_v102_20261030_01/decision.json": "2b66abb88f83e45e79815b36e0e8d7000c8cb9dda06f05694db5da353a06a1bc",
+        "tmp/ecg_pre_rr_v102_20261030_01/verification.json": "30e6a5951d2e406f367439b6249ddb5453d047d4321288e552e9d7e2bd1247ee"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_pwave_basis_v105_20261030_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_pwave_basis_v105_20261030_01/decision.json": "c7a3d3cc1e7a102121b56fe97ee4c4b50647d2c5ffde658bfaff926a6abaf4e8",
+        "tmp/ecg_pwave_basis_v105_20261030_01/verification.json": "a140e1f6c9f9e19092cfa81af6dcb6c65737f92b35a86a3f57072d4a97616d8c"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_pwave_norr_v108_20261030_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_pwave_norr_v108_20261030_01/decision.json": "ae7af8471734136ad9f2b4ee9d1e6b4f4757fe75778ff4f4393889fe4dcd4430",
+        "tmp/ecg_pwave_norr_v108_20261030_01/verification.json": "42676182cd234229efa830b69e0ec9382e625fcffa04ab5f0321206f92f2f121"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_random_feature_v87_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_random_feature_v87_20261029_01/decision.json": "43a660db3204f9487fe08f94f37b6d9f890c5f9fbf5ae42ba35aa98806a15ba3",
+        "tmp/ecg_random_feature_v87_20261029_01/verification.json": "d0b3afcc4007b8051ecafdbe88d95c5c49118b874bb8700a4633dd58e9401a19"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_rr_sequence_v80_20261028_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 2,
+        "active_fold": 2
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": true,
+      "evidence_sha256": {
+        "tmp/ecg_rr_sequence_v80_20261028_01/decision.json": "dc76aa21ec16a4eea641e55d1b34169b6c7e17fd94f7c9b924f62d97d9e0efa8",
+        "tmp/ecg_rr_sequence_v80_20261028_01/verification.json": "57d220ce4f4bf18b45ff96b97b691064bc73fde0d72310da5ca239ae327820f2"
+      },
+      "qualified": false
+    },
+    {
+      "run": "ecg_symmetric_three_v89_20261029_01",
+      "intermediate_status": {
+        "started_fits": 3,
+        "completed_fits": 3,
+        "active_fold": null
+      },
+      "final_started_fits": 3,
+      "final_completed_fits": 3,
+      "independently_verified": true,
+      "fold_result_files": 3,
+      "intermediate_status_is_stale": false,
+      "evidence_sha256": {
+        "tmp/ecg_symmetric_three_v89_20261029_01/decision.json": "d543005cbc9cd7afd18a14ec471017dc157d51ba50be1ea59aafdbc584c2fa6b",
+        "tmp/ecg_symmetric_three_v89_20261029_01/verification.json": "b85466f7cef3e9bb5aafccf09358c9a03687660a36eb6bf0df97bc248cdc7796"
+      },
+      "qualified": false
+    }
+  ],
+  "stale_intermediate_status_count": 5,
+  "latest_classification_runs": [
+    "ecg_pre_rr_v102_20261030_01",
+    "ecg_pwave_basis_v105_20261030_01",
+    "ecg_pwave_norr_v108_20261030_01"
+  ],
+  "last_activity": {
+    "type": "data_and_input_precheck",
+    "version": "v113",
+    "completed": true,
+    "fits": 0,
+    "subjects": 200,
+    "source_points": 4874,
+    "C_windows": 1830,
+    "maximum_C_window_difference": 0,
+    "maximum_descriptor_difference": 0,
+    "evidence_sha256": {
+      "tmp/ecg_ludb_raw_v112_20261031_03/verification.json": "b656752b9c3a5c5a4bc6f76558e4157f772f82a2f06500085656c18f084e125c",
+      "tmp/ecg_wave_point_review_v113_20261031_01/verification.json": "d88f06dc9a1a97fcdd701a993d6461df5116e40af8f774d986be7b1db1839d1d"
+    }
+  },
+  "next_teacher": {
+    "started": false,
+    "trained": false,
+    "labels": [
+      "P_wave",
+      "QRS_wave",
+      "T_wave"
+    ],
+    "note": "尚未开始拟合的拟议辅助任务，不是被用户打断的一次训练，也不是最终N/S/VF类别"
+  },
+  "model_quality_passed": false,
+  "sealed_test_loaded": false,
+  "old_status_files_modified": false,
+  "conclusion": "没有因最近用户喊停留下的未完成拟合；最近6次训练及v113预检均已结束。无需重复训练或为制造续训结果而开启未启动的新实验。"
+}

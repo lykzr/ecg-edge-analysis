@@ -46,13 +46,15 @@
     "synthetic_vectors.npz": "ad36fc952d82dc81a2398df2c2534c22888ca99c0bc3f8ccccb6b0d6fa2a423d",
     "models/v92_fold0.npz": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
     "models/v92_fold1.npz": "ec5c75fcff5d2f850af6757a1ae379784db282d44921ae0c48620b5a4071b19f",
-    "models/v92_fold2.npz": "4dd6e54e1f04a028e7e90e059b0075403d3e0ca6527e259a7562bfa87d6059c6"
+    "models/v92_fold2.npz": "4dd6e54e1f04a028e7e90e059b0075403d3e0ca6527e259a7562bfa87d6059c6",
+    "interruption_audit.json": "e3246e526e2a052bce607151f36b0ecacf867248376a239d50678af1c948cca6"
   },
   "feature_names_source_sha256": "f9accf1d682c4a3ff12202c6c66432efda4617cf6113503be0c2256c1e871539",
   "lf_normalized_text_files": [
     "evaluation_summary.json",
     "feature_names.json",
     "README.md",
-    "requirements.txt"
+    "requirements.txt",
+    "interruption_audit.json"
   ]
 }
