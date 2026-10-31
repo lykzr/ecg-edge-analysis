@@ -1,0 +1,21 @@
+{
+  "name": "ecg_founder",
+  "version": "1.0.0",
+  "description": "ECGFounder 12-lead ECG analysis",
+  "input": {
+    "channels": 12,
+    "sample_rate": 500,
+    "duration_sec": 10,
+    "format": "float32"
+  },
+  "output": {
+    "rhythm": "string",
+    "confidence": 0.95,
+    "heart_rate": 72
+  },
+  "weights_path": "models/ecg_founder/weights/",
+  "format": "savedmodel",
+  "runtime": "tensorflow",
+  "status": "pending",
+  "created_at": "2026-10-19"
+}

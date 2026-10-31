@@ -1,0 +1,11 @@
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: business_logic/deploy/Dockerfile
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - health-runtime:/app/runtime
+volumes:
+  health-runtime:

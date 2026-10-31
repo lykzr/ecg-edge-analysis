@@ -261,3 +261,7 @@ test_system_consistency.py回归匹配文件、显式采样率、结束残行和
 厂商500Hz回归：test_vendor500.py检查原码/单位/舍入/饱和、去直流常量偏置不变性与初态、CSV/分块34字节到实际C、手动停止/新会话及新UI路由。test_pc_bridge.py与test_ecg_bridge.py中的旧链路明确指定legacy500；不把它们当新ADC无线验收。board/verify_vendor500.py需显式实物参数，--simulate-radio仍是模拟来源。
 
 通用技能CLI行为检查：`python -B -m unittest discover -s sim -p test_skills.py`。只复制skill到独立含空格位置测试，不要求板卡或第三方依赖；已纳入check_system_offline.py。
+
+## 网页适配验证
+
+使用独立环境运行 `python -B -m pytest sim/web -q -p no:cacheprovider`；波形几何用 `node --experimental-strip-types --test sim/web/waveform.test.mjs`。测试包括账户/记录、实时会话、HTTP/WebSocket与实际PS C核心的模拟串口，不连接板卡。C测试需要已有GCC，可用ECG_HOST_CC指定。实际浏览器视觉和设备验收仍单独进行，见[网页教程](../docs/web_monitor.md)。

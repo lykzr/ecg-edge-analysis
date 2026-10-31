@@ -1,5 +1,7 @@
 # 工程文档导航
 
+[模型研究交接](model_handoff.md)提供权重、历史评价与数值复核入口；[模型合并计划](../report/model_merge.md)说明独立merge分支的范围、输入缺口和后续系统接入步骤。研究模型尚未合格，不替代当前发布固件。
+
 
 
 按信息采集、项目主体、模型训练查找文档。[总计划](../report/project_plan.md)统一维护目标与排期；[修改日志](records/lykzr.md)按相同三类记录过程。
@@ -181,3 +183,7 @@ QRS受控噪声入口：[使用说明](qrs_noise.md)，[实验记录](records/qr
 当前下载使用[release入口](../releases/latest/runtime500/download.cmd)，操作见[下载教程](download_guide.md#当前项目直接下载新版)；本地归档/新版验收见[发布记录](records/runtime500_release_20261025.md)。
 
 接手步骤见[工程交接](../report/交接.md)，操作见[下载教程](download_guide.md)。跨工程复用见[技能包](../skill/README.md)，验证分别见[技能记录](records/skill_20261025.md)与[QSPI记录](records/qspi_20261025.md)。
+
+## 网页客户端
+
+[网页使用教程](web_monitor.md)提供安装、启动、采集/回放/双向中转、保存和边界；[网页集成计划](../report/ui_merge.md)列出软件与实物待验；[集成记录](records/web_merge_20261031.md)保存实际检查和失败过程。原Tk教程继续保留为诊断入口。

@@ -53,3 +53,5 @@ ecg_bridge.py为CLI入口；ui/bridge.py调用ecg_bridge_worker.py，后台从ec
 标准CSV后台收到DONE后仍检查同次接收的残缺尾行，有残行必须失败保存，不当作完整成功。队列/发送/记录均有上限，不保证任意慢接收或无限时长。负载验证入口见[系统检查](../../docs/system_checks.md)。
 
 厂商接入的NominalConverter只用标准库实现固定去直流/标称转换，CaptureWorker(normalization="nominal500")保存前后mV和转换参数；standalone采集预览仍可保留legacy_shift。协议、启动和失败行为见[厂商接入](../../docs/vendor_input.md)。
+
+网页通过ecg_web_service.py适配同一套后台，不另造采集/QRS/分类流程。该适配器本身仍仅依赖标准库，FastAPI和前端依赖在src/web单独声明；使用见[网页教程](../../docs/web_monitor.md)。

@@ -2,7 +2,7 @@
 
 
 
-本目录只保存正式Tcl脚本，工具工程、缓存和报告写入tmp/。
+本目录保存正式构建脚本和生成器，工具工程、缓存和报告写入tmp/。
 
 
 
@@ -69,3 +69,5 @@ Windows建议使用靠近项目根的短输出路径，例如`tmp/rb01`，避免
 ## 500Hz ARM构建
 
 同一board/build_runtime.py通过ECG_RUNTIME_RATE=500生成独立ecg_runtime500组件；窗口/FIR系数已保存，build/generate_rate500_runtime.py核对冻结360Hz父本SHA后生成独立源到新tmp。系数复核分别使用generate_rate500.py与generate_window500.py，实际步骤见[500Hz说明](../docs/rate500.md)。
+
+网页构建入口build_web.ps1将src/web/frontend复制到tmp/web_frontend后安装及构建；-SkipInstall复用项目缓存。它不调用Vivado/Vitis，不下载板卡。环境和启动见[网页教程](../docs/web_monitor.md)。

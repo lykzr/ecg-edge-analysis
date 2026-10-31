@@ -235,3 +235,8 @@ myself.md
 !/docs/records/qspi_20261025/replay_uart.log
 !/docs/records/qspi_20261025/reset.log
 !/docs/records/qspi_20261025/reset_uart.log
+
+# 网页正式构建入口；依赖、数据库和打包输出仍留tmp。
+!/build/build_web.ps1
+/src/web/frontend/dist/
+/src/web/runtime/

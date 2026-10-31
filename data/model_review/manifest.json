@@ -1,0 +1,60 @@
+{
+  "version": "research_review_20261031",
+  "purpose": "RESEARCH_REVIEW_ONLY",
+  "qualified": false,
+  "production_model_selected": false,
+  "fits": 0,
+  "input_features": 192,
+  "labels": [
+    "N",
+    "S",
+    "VF"
+  ],
+  "VF_definition": "原V/E/F合并，非心室颤动",
+  "models": [
+    {
+      "fold": 0,
+      "path": "models/v92_fold0.npz",
+      "sha256": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+      "source_joblib_sha256": "5f05a43437591ca1a20e272848a609eba0b15d6f36215a9bd30163c4045aa63d",
+      "trees": 192
+    },
+    {
+      "fold": 1,
+      "path": "models/v92_fold1.npz",
+      "sha256": "ec5c75fcff5d2f850af6757a1ae379784db282d44921ae0c48620b5a4071b19f",
+      "source_joblib_sha256": "3e2d72bb11958a7cd34c1cc98c995a108417873f803395111fa1664e60524f63",
+      "trees": 192
+    },
+    {
+      "fold": 2,
+      "path": "models/v92_fold2.npz",
+      "sha256": "4dd6e54e1f04a028e7e90e059b0075403d3e0ca6527e259a7562bfa87d6059c6",
+      "source_joblib_sha256": "6a0455460b68406cf93f684df58e4d3914b27ab39cf32e0fe1c1a63a42c00540",
+      "trees": 192
+    }
+  ],
+  "synthetic_seed": 20261031,
+  "synthetic_rows": 160,
+  "contains_patient_waveforms": false,
+  "source_portable_manifest_sha256": "bce48145ca0290148728e00eba794584a9f985494e24741ea6533413395fd2ee",
+  "files": {
+    "evaluation_summary.json": "efcddf7e2130c7259214cfe1c2a1c376342a93cb584cb3548c892bb513f5e815",
+    "feature_names.json": "fadbc04d221f2960ffbe77a7bd9903263acd34fd15177324fe6971345d17649c",
+    "README.md": "370c352292476cc27a97027bdfc7bd60a8e0c21efad2a6bf81693fc99bf2a6a7",
+    "requirements.txt": "ea0cb65b74168b371263f615ca31f62636d19deb8186edfcf9e9a0320f49fd0b",
+    "synthetic_vectors.npz": "ad36fc952d82dc81a2398df2c2534c22888ca99c0bc3f8ccccb6b0d6fa2a423d",
+    "models/v92_fold0.npz": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+    "models/v92_fold1.npz": "ec5c75fcff5d2f850af6757a1ae379784db282d44921ae0c48620b5a4071b19f",
+    "models/v92_fold2.npz": "4dd6e54e1f04a028e7e90e059b0075403d3e0ca6527e259a7562bfa87d6059c6",
+    "interruption_audit.json": "e3246e526e2a052bce607151f36b0ecacf867248376a239d50678af1c948cca6"
+  },
+  "feature_names_source_sha256": "f9accf1d682c4a3ff12202c6c66432efda4617cf6113503be0c2256c1e871539",
+  "lf_normalized_text_files": [
+    "evaluation_summary.json",
+    "feature_names.json",
+    "README.md",
+    "requirements.txt",
+    "interruption_audit.json"
+  ]
+}
