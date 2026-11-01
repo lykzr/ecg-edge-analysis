@@ -28,11 +28,12 @@ python -B build/build_hgb_arm.py --cc '<已有工具链>/bin/arm-none-eabi-gcc.e
 
 ## 独立板端应用
 
-`board_test.c`提供固定受控输入的ARM自检，`main.c`提供独立`HGB-BATCH-1`批处理应用。两者从当前已验smoke硬件建立Vitis裸机平台，不改变PS7/MIO/DDR配置。默认构建自检；批处理使用`ECG_HGB_APP=batch`。输出目录必须为新目录，依赖现有Vitis 2026.1、NumPy/SciPy，不安装软件。
+`board_test.c`提供固定受控输入的ARM自检，`main.c`提供双协议应用：原`ECG-IN-1/ECG-UART-1`实时QRS与新增`HGB-BATCH-1`整段分类。两者从当前已验smoke硬件建立Vitis裸机平台，不改变PS7/MIO/DDR配置。默认构建自检；双协议使用`ECG_HGB_APP=batch`。输出目录必须为新目录，依赖现有Vitis 2026.1、NumPy/SciPy和ARM GCC，不安装软件。
 
 ```powershell
 $env:ECG_HGB_WORKSPACE = '<仓库绝对路径>/tmp/hgb_batch_new'
 $env:ECG_HGB_APP = 'batch'
+$env:ECG_ARM_GCC = '<工具链目录>/bin/arm-none-eabi-gcc.exe'
 & '<Vitis目录>/bin/vitis.bat' -s board/build_hgb_test.py
 ```
 
@@ -42,7 +43,9 @@ $env:ECG_HGB_APP = 'batch'
 
 电脑端运行`python -B src/pc/ecg_hgb.py --input-mv <单列无表头mV文件> --preprocess hp05 --port <端口> --device-id <USB身份> --output <新目录>`。原始mV用hp05，严格匹配高通后的数据才用raw。`board/verify_hgb_uart.py --directory <结果目录> --input-mv <相同输入>`重新调用冻结参考核对。协议与故障检查见`docs/protocols.md`、`board/check_hgb_uart_faults.py --help`。不得向未核对身份的采集端发送命令。
 
-该独立应用不兼容现有网页的ECG-IN-1/ECG-UART-1会话，尚未接入网页板端分类。当前Flash/release未替换；掉电后回到既有QSPI固件。后续仍需持续状态调度、网页三类来源展示与真实采集验收；ARM执行不代表FPGA PL推理。
+双协议通过`legacy.c`复用原实时源码，单独编译为`libhgb_legacy.a`，避免模型冻结检测器与正式QRS的同名符号混用。空闲广播原实时就绪头，收到HGB握手才宣布模型身份；同一时刻只执行一种会话，不交错报文。正常结束可切换模式，错误停止规则以各自协议为准。网页勾选“Zynq ARM整段分类”使用新协议，取消后保留原实时心率。该模型仍是整段收齐后运算，不提供连续分类；ARM执行不代表FPGA PL推理。
+
+`board/check_hgb_web.py --port <串口> --device-id <USB身份> --output <新tmp目录>`显式操作实板，依次验证模型、原实时QRS、厂商格式模型回放，不复位，不写Flash；它不是无硬件单元测试。`board/prepare_hgb_qspi.py --manifest <构建清单> --bootgen <bootgen.bat> --output <新tmp目录>`核对同源FSBL/bit/ELF并生成QSPI候选，不自动写板。编程、复位和冷启动必须另验，步骤见[统一教程](../../../docs/download_guide.md)。
 
 本次Cortex-A9编译报告的`ecg_hgb_prepare`单函数栈帧约20KB，且会嵌套调用原检测器；不能沿用未经核对的8KB默认栈。最终栈峰值、DDR总量、每拍耗时和500Hz持续处理能力仍须在实际应用中测量。
 

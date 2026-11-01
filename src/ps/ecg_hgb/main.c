@@ -1,5 +1,6 @@
 /* HGB-BATCH-1独立整段推理应用。只接已明确单位/采样率的mV，不接厂商34字节。 */
 #include "hgb.h"
+#include "legacy.h"
 #include "xiltimer.h"
 #include "xuartps.h"
 #include "xuartps_hw.h"
@@ -63,11 +64,22 @@ static int number(const char *s,unsigned base,uint32_t *out){
 static uint32_t crc32(const unsigned char *p,unsigned n){
     uint32_t crc=~0U;for(unsigned i=0;i<n;i++){crc^=p[i];for(unsigned j=0;j<8;j++)crc=(crc>>1)^((crc&1)?0xedb88320U:0U);}return ~crc;
 }
-static void ready(void){tx("H,HGB-BATCH-1,READY,500,mV,%s\n",hgb_model_sha256);}
+static void model_ready(void){tx("H,HGB-BATCH-1,READY,500,mV,%s\n",hgb_model_sha256);}
+static void ready(void){tx("H,ECG-UART-1,ps-runtime500-ready,boot,UNKNOWN,QRS26-500-ARM,500,4096,0xD\n");}
+static uint64_t legacy_clock(void *ctx){(void)ctx;return now()*1000000ULL/frequency;}
+static int legacy_receive(void *ctx,unsigned char *c){
+    (void)ctx;
+    if(XUartPs_ReadReg(uart_base,XUARTPS_ISR_OFFSET)&(XUARTPS_IXR_OVER|XUARTPS_IXR_PARITY|XUARTPS_IXR_FRAMING))return -1;
+    if(!XUartPs_IsReceiveData(uart_base))return 0;
+    *c=(unsigned char)XUartPs_ReadReg(uart_base,XUARTPS_FIFO_OFFSET);return 1;
+}
+static int legacy_ready(void *ctx){(void)ctx;return !XUartPs_IsTransmitFull(uart_base);}
+static void legacy_send(void *ctx,unsigned char c){(void)ctx;XUartPs_WriteReg(uart_base,XUARTPS_FIFO_OFFSET,c);}
 static int session(char *v[8],unsigned fields_count){
     uint32_t sid,total,fs;
     if(fields_count!=7||strcmp(v[0],"I")||strcmp(v[1],"HGB-BATCH-1")||number(v[2],10,&sid)||!sid||number(v[3],10,&fs)||fs!=500||strcmp(v[4],"mV")||(strcmp(v[5],"hp05")&&strcmp(v[5],"raw"))||number(v[6],10,&total)||!total||total>LIMIT){tx("F,0,BAD_HEADER\n");return -1;}
     int highpass=!strcmp(v[5],"hp05");HgbInput input={0};uint32_t index=0,input_us=0;
+    model_ready();
     if(tx("A,%u,READY,32\n",sid))return -1;
     while(index<total){
         char text[192],*f[8];uint32_t got_sid,start,n,crc;
@@ -107,6 +119,12 @@ int main(void){
     for(;;){char text[192],*f[8];int rc=line(text,2000000);
         if(rc==-1){ready();continue;}
         if(rc){tx("F,0,BAD_LINE\n");continue;}
-        (void)session(f,fields(text,f));ready();
+        if(!strncmp(text,"I,ECG-IN-1,",11)){
+            if(hgb_legacy_run(text,NULL,legacy_clock,legacy_receive,legacy_ready,legacy_send))return 4;
+            XTime start=now();while(!XUartPs_IsTransmitEmpty(&uart)||XUartPs_IsSending(&uart))if(micros(start)>4000000)return 5;
+            /* 不紧跟DONE追加H，兼容原客户端的完整结束检查。 */
+            continue;
+        }
+        (void)session(f,fields(text,f));
     }
 }

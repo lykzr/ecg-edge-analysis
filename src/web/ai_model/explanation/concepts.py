@@ -76,7 +76,7 @@ def build_evidence_payload(prediction: dict[str, Any], quality: dict[str, Any]) 
             'flags': prediction.get('flags', []),
         },
         'quality': quality,
-        'limitations': (['HGB研究模型，尚未通过全部质量目标；N不表示健康',
+        'limitations': (['HGB研究模型，尚未通过当前分类验收（各类比例90%，F子类召回75%）；N类不能作为健康结论',
                          'VF是V/E/F合并，不表示心室颤动']
                         if prediction.get('task_type') == 'beat_level' else
                         ['单导联短时记录', '仅用于辅助分析，不替代临床诊断']),

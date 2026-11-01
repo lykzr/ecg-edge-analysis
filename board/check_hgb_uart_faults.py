@@ -7,7 +7,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'src/pc'))
-from ecg_hgb import Channel, READY, transfer
+from ecg_hgb import Channel, READY, LEGACY_READY, transfer
 from ecg_bridge_serial import DuplexSerial
 from ecg_ports import enumerate_ports
 
@@ -22,19 +22,19 @@ def run(port, device_id, output):
     try:
         channel = Channel(serial, output)
         try:
-            channel.expect(READY)
+            channel.expect(LEGACY_READY)
             channel.write(b'I,HGB-BATCH-1,100,360,mV,hp05,1000\n')
             channel.expect('F,0,BAD_HEADER'); checks.append('reject_360Hz')
-            channel.expect(READY)
+            channel.expect(LEGACY_READY)
             channel.write(b'I,HGB-BATCH-1,101,500,mV,hp05,1000\n')
             channel.expect('A,101,READY,32')
             channel.write(b'B,101,0,1,00000000\n'+bytes(8))
             channel.expect('F,101,BAD_CRC'); checks.append('reject_crc')
-            channel.expect(READY)
+            channel.expect(LEGACY_READY)
             channel.write(b'I,HGB-BATCH-1,102,500,mV,raw,1000\n')
             channel.expect('A,102,READY,32'); channel.write(b'X,102\n')
             channel.expect('S,102,CANCEL'); checks.append('cancel')
-            channel.expect(READY)
+            channel.expect(LEGACY_READY)
             channel.write(b'I,HGB-BATCH-1,103,500,mV,raw,1000\n')
             channel.expect('A,103,READY,32')
             channel.expect('F,103,INPUT_TIMEOUT_OR_UART'); checks.append('idle_timeout')

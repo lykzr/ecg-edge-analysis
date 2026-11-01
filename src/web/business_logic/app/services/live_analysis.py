@@ -2,6 +2,7 @@
 import csv
 import io
 import math
+import json
 
 from ecg_bridge_capture import NominalConverter
 from app.services import records
@@ -59,19 +60,31 @@ def submit(manager, owner, identifier, *, standard_preprocess=None):
         raise ValueError('完整文件点数与采集合计不符')
     if kind.startswith('bridge_') or kind == 'standard500':
         info = snapshot['info']
-        if not info.get('done') or any(info.get(key) != len(samples) for key in ('source_samples', 'confirmed', 'echoed')):
+        board_model=snapshot.get('board_model',False)
+        counters=('source_samples','confirmed') if board_model else ('source_samples','confirmed','echoed')
+        if not info.get('done') or any(info.get(key) != len(samples) for key in counters):
             raise ValueError('板卡会话未完整确认，或来源/确认/回显点数不一致')
         header = snapshot['result'].get('header') or {}
-        if header.get('fs') != 500 or header.get('scale') != 4096:
+        if header.get('fs') != 500 or header.get('scale') != (1 if board_model else 4096):
             raise ValueError('板端会话头采样率或单位不符')
         positions = []
-        events_path = manager.file(owner, identifier, 'results/events.csv')
-        with events_path.open(encoding='utf-8-sig', newline='') as stream:
-            for row in csv.DictReader(stream):
-                pos = int(row['rpos'])
-                if row['session'] != header.get('session') or not 0 <= pos < len(samples) or (positions and pos <= positions[-1]['r_sample500']):
-                    raise ValueError('板端事件时轴或会话不一致')
-                positions.append(dict(event_id=int(row['evt']), r_sample500=pos))
+        if board_model:
+            result=json.loads(manager.file(owner,identifier,'result.json').read_text(encoding='utf-8'))
+            if str(result['session'])!=header['session'] or result['samples']!=len(samples) or result['model_sha256']!=info['model_sha256']:
+                raise ValueError('板端模型完整结果身份不匹配')
+            for row in result['events']:
+                pos=int(row['position'])
+                if not 0<=pos<len(samples) or (positions and pos<=positions[-1]['r_sample500']):raise ValueError('板端模型事件时轴不符')
+                positions.append(dict(event_id=row['beat_id'],r_sample500=pos))
+            acquisition.update(board_model_sha256=result['model_sha256'],board_execution='zynq_arm',board_waveform_echoed=False)
+        else:
+            events_path = manager.file(owner, identifier, 'results/events.csv')
+            with events_path.open(encoding='utf-8-sig', newline='') as stream:
+                for row in csv.DictReader(stream):
+                    pos = int(row['rpos'])
+                    if row['session'] != header.get('session') or not 0 <= pos < len(samples) or (positions and pos <= positions[-1]['r_sample500']):
+                        raise ValueError('板端事件时轴或会话不一致')
+                    positions.append(dict(event_id=int(row['evt']), r_sample500=pos))
         acquisition.update(board_events=positions, board_session=header.get('session'),
                            board_result=snapshot['result'].get('cls'), board_confirmed=True)
     signal = dict(samples=samples, sample_rate_hz=500, unit='mV', lead='CH2' if kind != 'standard500' else 'single_lead',

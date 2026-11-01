@@ -1,5 +1,7 @@
 # ECG Edge：Zynq 心电边缘分析工程
 
+队友接手先看[Git接手与外部资料获取](docs/download_guide.md)，再看[剩余任务及最高优先级](report/handoff.md)。固定模型、参考结果及重建代码随Git；工具与数据按教程另取，不依赖原作者tmp。
+
 面向正点原子领航者 V2（Zynq-7020）的心电边缘分析原型。当前交付以500Hz接收数字样本，在 ARM 端检测 QRS 波群中的 R 峰、计算相邻心拍间隔 RR 与心率，并在本机网页显示、保存波形和事件。正常结束后可以直接开启下一轮会话。
 
 ```text
@@ -20,6 +22,29 @@ ADS1292R → STM32 → JDY18 → 配套USB接收器 → 电脑换算与去直流
 | vivado/ | 可打开的文本工程及板级设计 |
 | releases/latest/ | 匹配的当前JTAG/QSPI镜像与完整性清单 |
 | docs/、report/ | 教程、协议、许可和实际实现报告 |
+
+## 板卡下载与烧录
+
+从项目根操作，使用 `releases/latest/` 中的匹配镜像。先运行 `python -B sim/check_system_release.py` 校验发布文件；下列 `<Vitis>` 和 `<唯一JTAG序列号>` 替换为本机工具路径与实际下载器序列号。
+
+**JTAG临时运行（掉电失效）：** 断电并拔除所有可能供电的USB，将启动拨码设为JTAG（1=ON、2=ON，按实物编号复核），连接JTAG下载器并重新上电，执行：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/runtime500/run_runtime500.ps1 -Xsdb '<Vitis>/bin/xsdb.bat' -CableSerial '<唯一JTAG序列号>'
+```
+
+**QSPI固化（掉电后保留）：** 同样先以JTAG模式上电，先核对文件，再执行带 `-Program` 的命令写入并校验Flash；该命令会覆盖QSPI偏移0的镜像区域。
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/program_qspi.ps1 -CheckOnly
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/program_qspi.ps1 -Program -Xsdb '<Vitis>/bin/xsdb.bat' -ProgramFlash '<Vitis>/bin/program_flash.bat' -CableSerial '<唯一JTAG序列号>'
+```
+
+烧录成功后断电、拔除全部供电及USB，将拨码改为QSPI（1=ON、2=OFF），再上电。连接USB_UART，在网页完成一轮500Hz回放，确认收到 `DONE` 且上传、确认、回显点数一致。已有本版QSPI镜像时可直接按QSPI模式启动。
+
+接线、下载器选择和排错详见完整教程：[JTAG临时运行](docs/download_guide.md#jtag临时运行)、[QSPI掉电启动](docs/download_guide.md#qspi掉电启动)。
+
+## 网页启动
 
 从项目根执行；既有验证环境为 Windows、Python 3.14、Node 24，硬件重建使用 Vivado/Vitis 2026.1。已有环境不必重复安装。
 

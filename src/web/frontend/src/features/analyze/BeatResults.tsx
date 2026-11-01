@@ -10,7 +10,7 @@ export default function BeatResults({prediction}: {prediction: Prediction}) {
   return <section>
     <h2>电脑端逐心拍分类</h2>
     <p>模型 {prediction.model_version} · 500 Hz · {prediction.preprocess} · N/S/VF</p>
-    <p className="notice">研究联调结果，尚未通过全部质量目标。N不表示健康；VF为V/E/F合并，不表示心室颤动。板端原类别保持原样。</p>
+    <p className="notice">研究联调结果，尚未通过当前分类验收（各类比例90%，F子类召回75%）；这不是单拍正确率。N类不能作为健康结论；VF为V/E/F合并，不表示心室颤动。板端原类别保持原样。</p>
     <p>N {beats?.by_type?.N ?? 0} 拍 · S {beats?.by_type?.S ?? 0} 拍 · VF {beats?.by_type?.VF ?? 0} 拍 · 未分类 {beats?.unclassified_count ?? 0} 拍</p>
     <div className="live-table"><table><thead><tr>{['模型拍号', 'R位置（秒/样本）', '类别', '模型概率', '板端事件号', '位置差（样本）'].map(t=><th key={t}>{t}</th>)}</tr></thead>
       <tbody>{items.slice(current * 50, (current + 1) * 50).map(b=><tr key={b.beat_id}>

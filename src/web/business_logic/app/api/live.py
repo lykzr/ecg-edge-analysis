@@ -49,6 +49,7 @@ class Start(BaseModel):
     realtime: StrictBool = True
     analyze_when_complete: StrictBool = True
     standard_preprocess: Literal['hp05', 'raw'] | None = None
+    board_model: StrictBool = False
 
 
 @router.get('/ports')

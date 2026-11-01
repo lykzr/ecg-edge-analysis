@@ -14,6 +14,7 @@ from ecg_ports import enumerate_ports
 
 MODEL='375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8'
 READY='H,HGB-BATCH-1,READY,500,mV,'+MODEL
+LEGACY_READY='H,ECG-UART-1,ps-runtime500-ready,boot,UNKNOWN,QRS26-500-ARM,500,4096,0xD'
 
 class Channel:
     def __init__(self,serial,directory):
@@ -27,6 +28,26 @@ class Channel:
             if n:self.tx.write(data[:n]);self.tx.flush();data=data[n:]
             elif time.monotonic()>deadline:raise TimeoutError('发送超时')
             else:time.sleep(.001)
+    def wait_ready(self,timeout=10):
+        """仅握手前允许有界启动同步；原始字节留证，活动会话不跳过错误。"""
+        deadline=time.monotonic()+timeout
+        headers=[(value+'\n').encode() for value in (READY,LEGACY_READY)]
+        while True:
+            matches=[(self.buffer.find(header),header) for header in headers if header in self.buffer]
+            if matches:
+                offset,header=min(matches,key=lambda item:item[0])
+                if offset+len(header)>8192:raise ValueError('启动同步超过8192字节，未发送任何样本')
+                (self.directory/'startup_discard.bin').write_bytes(self.buffer[:offset])
+                self.buffer=self.buffer[offset+len(header):]
+                return
+            if len(self.buffer)>8192:raise ValueError('启动同步超过8192字节，未发送任何样本')
+            if b'\n' in self.buffer:
+                first=self.buffer.partition(b'\n')[0]
+                if first.startswith(b'H,'):raise ValueError('板卡就绪身份不匹配，未发送任何样本')
+            block=self.serial.read()
+            if block:self.rx.write(block);self.rx.flush();self.buffer.extend(block)
+            elif time.monotonic()>deadline:raise TimeoutError('启动同步超时，未发送任何样本')
+            else:time.sleep(.002)
     def line(self,timeout=20):
         deadline=time.monotonic()+timeout
         while True:
@@ -43,7 +64,7 @@ class Channel:
         for _ in range(10):
             value=self.line()
             if value==expected:return
-            if value==READY:continue
+            if value in (READY,LEGACY_READY):continue
             raise ValueError('板端响应不符合当前阶段：'+value)
         raise ValueError('没有收到当前阶段确认')
 
@@ -59,23 +80,23 @@ def parse_result(value,sid,total,previous):
     elif status not in (2,4) or cls!=-1 or not all(math.isnan(v) for v in p):raise ValueError('未知状态被错误分类')
     return dict(beat_id=beat,position=position,ready_at=ready,decision_at=decision,status=status,class_id=cls,label=('N','S','VF')[cls] if cls>=0 else 'UNCLASSIFIED',probability=[v if math.isfinite(v) else None for v in p])
 
-def transfer(signal,serial,directory,preprocess,sid=None):
+def transfer(signal,serial,directory,preprocess,sid=None,*,cancel=None,progress=None):
     signal=np.asarray(signal,dtype=np.float64)
     if signal.ndim!=1 or not 1<=len(signal)<=30000 or not np.isfinite(signal).all() or preprocess not in ('hp05','raw'):raise ValueError('仅接1—30000点有限单导联mV及明确hp05/raw')
     sid=sid or secrets.randbelow(0x7ffffffe)+1
     channel=Channel(serial,directory)
     try:
-        for _ in range(10):
-            message=channel.line(5)
-            if message==READY:break
-            if message.startswith('H,'):raise ValueError('板卡未运行匹配HGB-BATCH-1应用')
-        else:raise ValueError('没有匹配HGB模型就绪身份')
+        channel.wait_ready()
         channel.write(f'I,HGB-BATCH-1,{sid},500,mV,{preprocess},{len(signal)}\n'.encode())
         channel.expect(f'A,{sid},READY,32')
         for start in range(0,len(signal),32):
+            if cancel is not None and cancel.is_set():
+                channel.write(f'X,{sid}\n'.encode());channel.expect(f'S,{sid},CANCEL')
+                raise InterruptedError('用户取消板端分类送样，未把部分数据当成完整结果')
             block=signal[start:start+32].astype('<f8',copy=False).tobytes()
             channel.write(f'B,{sid},{start},{len(block)//8},{zlib.crc32(block):08x}\n'.encode())
             channel.write(block);channel.expect(f'A,{sid},NEXT,{start+len(block)//8}')
+            if progress:progress(start+len(block)//8,len(signal))
         channel.write(f'D,{sid},{len(signal)}\n'.encode());rows=[]
         while True:
             value=channel.line()

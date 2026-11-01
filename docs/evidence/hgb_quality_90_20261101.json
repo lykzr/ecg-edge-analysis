@@ -1,0 +1,22 @@
+{
+  "policy_version": "hgb-engineering-90-20261101",
+  "source_sha256": "f737b7debfaf88c7f74f4b37e3adda12fbe8e57141301aebd359276c9de40e0c",
+  "scope": "既有v92 hp05三折开发评价重判；未重跑原始记录，非部署fold0独立测试",
+  "checks": {
+    "N_precision": true,
+    "N_recall": true,
+    "S_precision": false,
+    "S_recall": false,
+    "VF_precision": true,
+    "VF_recall": true,
+    "macro_f1": false,
+    "F_recall": false,
+    "every_fold": false,
+    "patient_precision_recall": null,
+    "minute_MAE": false,
+    "worst_minute": false,
+    "table_budget": true
+  },
+  "qualified": false,
+  "historical_gate_fields_ignored": true
+}

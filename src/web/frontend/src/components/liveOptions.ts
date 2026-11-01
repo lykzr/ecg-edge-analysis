@@ -9,6 +9,10 @@ export function categoryFor(kind: string): LiveCategory {
 }
 
 export type SourceSignal = 'original' | 'vendor' | 'baseline' | 'display' | 'resp';
+/** 切换通道时选该通道的默认显示；缺列仍由selectSourceTrace回退。 */
+export function defaultSourceTrace(channel: string): SourceTrace {
+  return channel==='resp'?'resp':'mv';
+}
 const finite = (value: unknown) => typeof value === 'number' && Number.isFinite(value);
 
 /** 保持信号、单位两个控件；旧记录没有的新列不显示，也不补算。 */

@@ -1,4 +1,5 @@
 import BeatResults from './BeatResults';
+import { beatConfidence } from './beatConfidence';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -27,6 +28,7 @@ export default function RecordDetail({record, onDelete, deleting}: {
   const location = useLocation();
   const result = record.result;
   const prediction = result.prediction;
+  const confidence = beatConfidence(prediction.beats?.items ?? []);
   const quality = result.quality;
   const detail = prediction.explanation_detail;
   const owned = record.owned !== false;
@@ -230,7 +232,10 @@ export default function RecordDetail({record, onDelete, deleting}: {
       <section>
         <h2>分类结果</h2>
         <p>{prediction.label ? prediction.label : '未产生标签'}</p>
-        <p className="hint">置信度：{prediction.confidence == null ? '—' : `${(prediction.confidence * 100).toFixed(0)}%`}</p>
+        {prediction.task_type==='beat_level' ? <>
+          <p className="hint">有效心拍平均置信度：{confidence ? `${(confidence.mean*100).toFixed(1)}%` : '未提供有效逐拍概率'}</p>
+          {confidence && <p className="hint">{confidence.count}拍 · 范围{(confidence.min*100).toFixed(1)}%–{(confidence.max*100).toFixed(1)}%；逐拍明细见下表。模型概率未校准，不是整段诊断可靠性。</p>}
+        </> : <p className="hint">置信度：{prediction.confidence == null ? '—' : `${(prediction.confidence * 100).toFixed(1)}%`}</p>}
         <p className="hint">模型版本：{dash(record.model_version)}</p>
       </section>
       <section>

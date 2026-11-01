@@ -5,15 +5,15 @@ import Waveform from '../components/Waveform';
 import BackLink from '../components/BackLink';
 import { PlotPoint } from '../components/waveformGeometry';
 import { sourceTrace, SourceSample, SourceTrace } from '../components/liveSource';
-import { categoryFor, hasFilteredResult, sourceSignal, sourceSignals, selectSourceTrace, LiveCategory, SourceSignal } from '../components/liveOptions';
+import { categoryFor, hasFilteredResult, sourceSignal, sourceSignals, selectSourceTrace, defaultSourceTrace, LiveCategory, SourceSignal } from '../components/liveOptions';
 
 interface Port {port: string; label: string; device_id: string;}
 interface Ports {ports: Port[]; warnings: string[]; zynq: string; capture: string;}
 interface Sample {seq: number; index: number; raw: number; filt: number | null;}
 interface Beat {seq: number; pos: number; index: number | null; rr: number | null; hr: number | null; cls: string; conf: number | null;}
 interface Result {header: {fs: number | null; scale: number | null; source: string; detector: string; caps: number; session: string} | null;
-  samples: Sample[]; events: Beat[]; hr: number | null; rr_ms: number | null; cls: string;}
-interface Session {owned?:boolean; owner_username?:string; id: string; kind: string; created: number; active: boolean; info: Record<string, unknown>;
+  samples: Sample[]; events: Beat[]; hr: number | null; rr_ms: number | null; cls: string; waveform_origin?: string;}
+interface Session {owned?:boolean; board_model?:boolean; owner_username?:string; id: string; kind: string; created: number; active: boolean; info: Record<string, unknown>;
   capture_info: Record<string, unknown>; source_samples: SourceSample[]; result: Result; diagnostics: unknown;
   files: string[]; scope: string; source_unit: string; persistence_error: string | null; analysis?: {status:string; task_id:string|null; error:string|null}|null;}
 const needsFile = new Set(['log', 'vendor_csv', 'bridge_csv', 'standard360', 'standard500']);
@@ -30,7 +30,7 @@ export default function Live() {
   function setId(value: string) {setSearch({session: value});}
   const [kind, setKind] = useState('bridge_serial'), [ports, setPorts] = useState<Ports>({ports:[],warnings:[],zynq:'',capture:''});
   const category = categoryFor(kind);
-  function selectKind(value: string) {setKind(value);setFile(null);setMessage('');}
+  function selectKind(value: string) {setKind(value);setFile(null);setMessage('');setBoardModel(['standard500','bridge_csv','bridge_serial'].includes(value));}
   function selectCategory(value: LiveCategory) {selectKind({capture:'bridge_serial',file:'bridge_csv',demo:'demo',advanced:'result_serial'}[value]);}
   const [zynq, setZynq] = useState(''), [capture, setCapture] = useState('');
   const [file, setFile] = useState<File | null>(null), [limit, setLimit] = useState(5000), [seconds, setSeconds] = useState(10);
@@ -39,6 +39,7 @@ export default function Live() {
   const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [sourceMode, setSourceMode] = useState<SourceTrace>('mv');
   const [resultTrace, setResultTrace] = useState('raw');
   const [autoAnalyze, setAutoAnalyze] = useState(true), [standardPreprocess, setStandardPreprocess] = useState('');
+  const [boardModel, setBoardModel] = useState(true);
   const [manualTask, setManualTask] = useState<{session: string; id: string} | null>(null);
   const lastRequest = useRef(0);
   async function refresh() {
@@ -62,6 +63,7 @@ export default function Live() {
         if (cancelled || generation !== lastRequest.current) return;
         setSession(data);
         setKind(data.kind);
+        setBoardModel(Boolean(data.board_model));
         if (data.active || data.analysis?.status === 'waiting') timer = setTimeout(()=>void poll(), 250);
         else {void loadHistory().catch(()=>{});}
       } catch (error) {
@@ -77,7 +79,8 @@ export default function Live() {
   async function start() {
     setBusy(true); setMessage('');
     try {
-      if (autoAnalyze && kind==='standard500' && !standardPreprocess) throw new Error('请先选择标准500Hz的预处理状态，或关闭自动分析');
+      if ((autoAnalyze || boardModel) && kind==='standard500' && !standardPreprocess) throw new Error('请先选择标准500Hz的预处理状态');
+      if (boardModel && !['bridge_csv','bridge_serial','standard500'].includes(kind)) throw new Error('板端模型仅支持500Hz标准或厂商送样');
       let uploadId = '';
       if (needsFile.has(kind)) {
         if (!file) throw new Error('请先选择输入文件');
@@ -87,7 +90,7 @@ export default function Live() {
       }
       const board = ports.ports.find(p=>p.port===zynq), source = ports.ports.find(p=>p.port===capture);
       const data = await post<{id: string}>('/live/sessions', {kind, upload_id:uploadId, seconds, sample_limit:limit, realtime,
-        analyze_when_complete:autoAnalyze, standard_preprocess:kind==='standard500' ? standardPreprocess || null : null,
+        analyze_when_complete:autoAnalyze, board_model:boardModel, standard_preprocess:kind==='standard500' ? standardPreprocess || null : null,
         zynq_port:zynq, zynq_port_identity:board?.device_id ?? '', capture_port:capture, capture_port_identity:source?.device_id ?? ''});
       setSession(null); setId(data.id);
     } catch (error) {setMessage((error as Error).message);} finally {setBusy(false);}
@@ -163,6 +166,8 @@ export default function Live() {
         {kind==='demo' && <label>演示秒数<input type="number" min="1" max="300" value={seconds} disabled={active || busy} onChange={e=>setSeconds(Number(e.target.value))}/></label>}
         {needsCapture.has(kind) && <label>采集点数上限<input type="number" min="1" max="1800000" value={limit} disabled={active || busy} onChange={e=>setLimit(Number(e.target.value))}/></label>}
       </div>
+      {['bridge_csv','bridge_serial','standard500'].includes(kind) && <label className="inline"><input type="checkbox" checked={boardModel} disabled={active || busy} onChange={e=>setBoardModel(e.target.checked)}/>Zynq ARM整段分类（最多30000点，保存完整输入后分类）</label>}
+      {boardModel && <p className="notice">板端HGB v92/fold0研究模型，结果在整段收样后返回；非连续实时分类、非FPGA PL推理。N/S/VF中VF是V/E/F合并，不表示心室颤动。原实时心率模式请取消此项。</p>}
       <details className="live-advanced" open={category==='advanced' || undefined}><summary>高级工具</summary><div className="actions">
         <button className="secondary" disabled={active || busy} onClick={()=>selectKind('result_serial')}>仅接收板卡结果</button>
         <button className="secondary" disabled={active || busy} onClick={()=>selectKind('log')}>原始日志回放</button>
@@ -188,14 +193,15 @@ export default function Live() {
     </section>}
     {session && <section><div className="record-toolbar"><h2>波形与事件{!active?' · 历史数据':''}</h2><button className="secondary" disabled={session?.owned===false} onClick={()=>save(`/live/sessions/${id}/svg`,'ecg.svg')}>导出结果SVG</button></div>
       {session.info.state==='waiting' && <p className="notice">暂无新串口字节，数值为上次接收值；这不等于物理断连。</p>}
-      {session.source_samples.length>0 && <><div className="wave-toolbar"><strong>来源</strong>{!session.kind.startsWith('standard') && <select value={channel} onChange={e=>{setChannel(e.target.value);if(e.target.value!=='ecg' && sourceMode==='mv')setSourceMode('code');}}><option value="ecg">CH2 · ECG</option><option value="resp">CH1 · 呼吸</option></select>}
+      {session.source_samples.length>0 && <><div className="wave-toolbar"><strong>来源</strong>{!session.kind.startsWith('standard') && <select value={channel} onChange={e=>{setChannel(e.target.value);setSourceMode(defaultSourceTrace(e.target.value));}}><option value="ecg">CH2 · ECG</option><option value="resp">CH1 · 呼吸</option></select>}
         {!session.kind.startsWith('standard') && <><label className="inline">信号<select aria-label="来源信号" value={selectedSignal} onChange={e=>setSourceMode(selectSourceTrace(sourceSamples,channel,e.target.value as SourceSignal,true))}>{signalOptions.map(signal=><option key={signal} value={signal}>{signalLabels[signal]}</option>)}</select></label>
           {voltageTrace!==codeTrace && <label className="inline">单位<select aria-label="来源单位" value={effectiveSourceMode} onChange={e=>setSourceMode(e.target.value as SourceTrace)}><option value={voltageTrace}>mV（标称）</option><option value={codeTrace}>ADC码值</option></select></label>}</>}</div>
         <Waveform points={sourcePoints} offset={sourcePoints[0]?.t ?? 0} duration={span(sourcePoints,sourceRate)} unit={sourcePlot.unit}/>
         {effectiveSourceMode==='mv' && !session.kind.startsWith('standard') && <p className="hint">标称电压尚未实测标定，保留直流；与送板前去直流、量化后的波形幅值可能不同。</p>}
         {selectedSignal==='resp' && <p className="hint">PC因果呼吸显示滤波：0.05Hz高通和0.8Hz低通，存在相位延迟，开始约10秒为过渡；保留原码，不计算呼吸率。</p>}
         {(selectedSignal==='baseline'||selectedSignal==='display') && <p className="hint">PC基线校正为0.5Hz因果高通；节律显示另加40Hz低通和50Hz陷波，开始约5秒为过渡。不用于ST测量，不按典型幅值缩放，不改变Zynq或模型输入。</p>}</>}
-      <div className="wave-toolbar"><strong>{needsBoard.has(session.kind)?'板卡返回':'日志/演示'}</strong>{filteredAvailable ? <select aria-label="板卡波形" value={effectiveResultTrace} onChange={e=>setResultTrace(e.target.value)}><option value="raw">输入波形</option><option value="filt">板端滤波</option><option value="both">输入与滤波叠加</option></select> : <span>输入波形</span>}<span>{result?.header?.detector ?? '尚无合法会话头'}</span></div>
+      {session.board_model && <p className="notice">分类来源：Zynq ARM · {String(session.info.model_sha256 ?? '')} · 研究模型未全部达标。事件是模型自身检测/重切拍位置，未套用其他QRS事件编号。</p>}
+      <div className="wave-toolbar"><strong>{result?.waveform_origin==='host_input'?'送板输入（非板端波形回显）':needsBoard.has(session.kind)?'板卡返回':'日志/演示'}</strong>{filteredAvailable ? <select aria-label="板卡波形" value={effectiveResultTrace} onChange={e=>setResultTrace(e.target.value)}><option value="raw">输入波形</option><option value="filt">板端滤波</option><option value="both">输入与滤波叠加</option></select> : <span>输入波形</span>}<span>{result?.header?.detector ?? '尚无合法会话头'}</span></div>
       <Waveform points={waveform} secondary={secondary} offset={waveform[0]?.t ?? 0} duration={span(waveform,resultDivisor)} axisUnit={rate?'s':'样本号'} unit={scale?'mV（声明比例）':'码值（未标定）'} markers={markers}/>
       <div className="live-table"><table><thead><tr>{['事件号','源位置（样本号）','RR（点）','心率','类别'].map(title=><th key={title}>{title}</th>)}</tr></thead><tbody>{[...(result?.events ?? [])].reverse().map(event=><tr key={event.seq}><td>{event.seq}</td><td>{event.pos}{event.index===null?'（不在当前可见窗口）':''}</td><td>{event.rr ?? '未知'}</td><td>{number(event.hr,1)}</td><td>{result?.header && (result.header.caps & 16) ? event.cls==='?'?'未知':event.cls : '未提供'}</td></tr>)}</tbody></table></div>
       <details><summary>诊断与保存文件</summary><pre className="mono-wrap">{JSON.stringify({session:id,info:session.info,capture:session.capture_info,diagnostics:session.diagnostics},null,2)}</pre>

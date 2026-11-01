@@ -3,6 +3,7 @@
 
 # 本机资料、归档、开发辅助和打包输出
 /tmp/
+# 接手必需的代码/模型/配置放正式目录；不靠强制加入tmp交付。
 /docs/archive/
 /docs/reference/
 /myself.md
@@ -105,15 +106,21 @@ logs/
 /docs/records/
 /report/*
 !/report/report.md
+!/report/handoff.md
+# 接手依赖表是正式输入；不会放行患者波形或训练缓存。
+!/model/handoff_requirements.json
 
 # 必要验收证据，原始开发记录全部留本地
 /docs/evidence/**
+!/docs/evidence/git_handoff_20261101.json
+!/docs/evidence/hgb_quality_90_20261101.json
 !/docs/evidence/model_integration_20261101.md
 !/docs/evidence/hgb_web_integration_20261101.md
 !/docs/evidence/hgb_board_integration_20261101.md
 !/docs/evidence/hgb_board_integration_20261101.json
 !/docs/evidence/hgb_arm_20261101.json
 !/docs/evidence/hgb_arm_board_20261101.json
+!/docs/evidence/hgb_web_board_20261101.json
 !/docs/evidence/classification_board_20261024/
 !/docs/evidence/qspi_20261025/
 !/docs/evidence/runtime500_board_20261024/

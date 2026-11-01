@@ -5,6 +5,7 @@ import vitis
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'build'))
 from export_hgb import export
+from build_hgb_legacy import build as legacy_build
 workspace=Path(os.environ['ECG_HGB_WORKSPACE']).resolve();workspace.relative_to(ROOT/'tmp')
 kind=os.environ.get('ECG_HGB_APP','test')
 if kind not in ('test','batch'):raise ValueError('ECG_HGB_APP只支持test/batch')
@@ -25,6 +26,11 @@ sources += [native/n for n in ('pipeline500.c','pipeline.h','rate500.c','rate500
 sources += [workspace.parent/(workspace.name+'_parameters')/'hgb_parameters.c']
 if fixture:sources += [fixture/'hgb_fixture.c',fixture/'hgb_fixture.h']
 hashes={p.as_posix():sha(p) for p in sources}
+legacy_sources={};legacy_commands=[];archive=None
+if kind=='batch':
+    compiler=Path(os.environ['ECG_ARM_GCC'])
+    archive,legacy_sources,legacy_commands=legacy_build(workspace.parent/(workspace.name+'_legacy'),compiler)
+    sources.append(core/'legacy.h');hashes[(core/'legacy.h').as_posix()]=sha(core/'legacy.h')
 client=vitis.create_client()
 try:
     client.set_workspace(str(workspace))
@@ -36,7 +42,10 @@ try:
     text=config.read_text();text=text.replace('set(USER_COMPILE_OPTIMIZATION_LEVEL -O0)','set(USER_COMPILE_OPTIMIZATION_LEVEL -O2)')
     flags='-ffp-contract=off -fno-fast-math -fstack-usage -include '+(component/'frozen.h').as_posix()
     text=text.replace('set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS )','set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS "'+flags+'")')
-    text,n=re.subn(r'set\(USER_LINK_LIBRARIES\s*.*?\)','set(USER_LINK_LIBRARIES "m")',text,count=1,flags=re.S);assert n==1
+    libraries='"hgb_legacy" "m"' if archive else '"m"'
+    text,n=re.subn(r'set\(USER_LINK_LIBRARIES\s*.*?\)','set(USER_LINK_LIBRARIES '+libraries+')',text,count=1,flags=re.S);assert n==1
+    if archive:
+        text,n=re.subn(r'set\(USER_LINK_DIRECTORIES\s*.*?\)','set(USER_LINK_DIRECTORIES "'+archive.parent.as_posix()+'")',text,count=1,flags=re.S);assert n==1
     text,n=re.subn(r'set\(USER_LINK_OTHER_FLAGS\s*.*?\)','set(USER_LINK_OTHER_FLAGS "-Wl,-Map=ecg_hgb_test.map")',text,count=1,flags=re.S);assert n==1
     config.write_text(text)
     linker=component/'src/lscript.ld';text=linker.read_text();text,n=re.subn(r'(_STACK_SIZE\s*=.*?:\s*)0x[0-9a-fA-F]+',r'\g<1>0x40000',text,count=1);assert n==1;linker.write_text(text)
@@ -44,7 +53,9 @@ try:
     elf=component/'build/ecg_hgb_test.elf';link_map=elf.with_name('ecg_hgb_test.map')
     assert elf.is_file() and link_map.is_file()
     for p in sources:assert sha(component/p.name)==hashes[p.as_posix()],p.name
-    result=dict(application=kind,model=params,elf=elf.relative_to(ROOT).as_posix(),files={p.relative_to(ROOT).as_posix():dict(bytes=p.stat().st_size,sha256=sha(p)) for p in artifacts+[elf,link_map]},sources={p.relative_to(ROOT).as_posix():h for p,h in ((Path(k),v) for k,v in hashes.items())},stack_bytes=0x40000,scope='independent ARM '+kind+'; not continuous model scheduling or Flash')
+    fsbl=workspace/'ecg_platform/zynq_fsbl/build/fsbl.elf'
+    assert fsbl.is_file()
+    result=dict(application=kind,dual_protocol=kind=='batch',model=params,elf=elf.relative_to(ROOT).as_posix(),files={p.relative_to(ROOT).as_posix():dict(bytes=p.stat().st_size,sha256=sha(p)) for p in artifacts+[elf,link_map,fsbl]},sources={**{p.relative_to(ROOT).as_posix():h for p,h in ((Path(k),v) for k,v in hashes.items())},**legacy_sources},legacy_commands=legacy_commands,stack_bytes=0x40000,scope='ARM '+kind+'; batch model plus existing QRS input; not continuous model scheduling or Flash')
     (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
     print('PASS HGB_BUILD '+str(elf),flush=True)
 finally:vitis.dispose()

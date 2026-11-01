@@ -1,0 +1,15 @@
+{
+  "version": "hgb-engineering-90-20261101",
+  "authority": "用户2026-11-01指定分类比例90%，F子类召回率75%",
+  "minimum_precision": 0.9,
+  "minimum_recall": 0.9,
+  "minimum_macro_f1": 0.9,
+  "minimum_F_recall": 0.75,
+  "apply_to_each_fold": true,
+  "patient_minimum_precision_recall": 0.9,
+  "patient_minimum_support": null,
+  "maximum_VF_minute_MAE": 0.4,
+  "maximum_absolute_minute_error": 15,
+  "maximum_table_bytes24": 262144,
+  "historical_quality_checks_are_active": false
+}

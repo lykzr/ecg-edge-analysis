@@ -378,5 +378,26 @@
     "real acquisition and unplug recovery",
     "stack high-water measurement",
     "Flash/release integration under separate authorization"
-  ]
+  ],
+  "software_checks": {
+    "checkout": {
+      "passed": true,
+      "required_files": 513,
+      "python_parsed": 209,
+      "baseline_files": 29
+    },
+    "protocol_tests": 9,
+    "classification_ps_tests": 6,
+    "runtime500_board_parser_tests": 6,
+    "strict_existing_release": {
+      "passed": true,
+      "files": 32,
+      "evidence": 49,
+      "sources": 7
+    },
+    "repository": {
+      "passed": false,
+      "reason": "24 new required files and 6 linked targets not staged; no authorization to stage"
+    }
+  }
 }

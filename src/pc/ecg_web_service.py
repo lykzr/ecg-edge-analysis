@@ -16,6 +16,7 @@ from ecg_capture_core import CaptureWorker
 from ecg_bridge_capture import NominalConverter
 from ecg_bridge_worker import BridgeWorker
 from ecg_runtime_worker import RuntimeWorker
+from ecg_hgb_worker import HgbWorker
 from ecg_ports import enumerate_ports, remembered_identity, select_port, validate_port, remember_identity
 from ecg_uart import CLASS
 
@@ -208,6 +209,12 @@ class LiveManager:
             realtime = config.get('realtime', True)
             if type(realtime) is not bool:
                 raise ValueError('实时节拍须为布尔值')
+            board_model=config.get('board_model',False)
+            if type(board_model) is not bool or (board_model and kind not in {'standard500','bridge_csv','bridge_serial'}):
+                raise ValueError('板端模型仅支持500Hz标准或厂商送样')
+            if board_model and config.get('standard_preprocess') not in ('hp05','raw') and kind=='standard500':
+                raise ValueError('板端模型须声明标准500Hz预处理状态')
+            if board_model and kind=='bridge_serial' and limit>30000:raise ValueError('板端模型每段最多30000点')
             ports, _ = self.port_enumerator()
             zynq = capture = None
             if kind in {'result_serial', 'bridge_csv', 'bridge_serial', 'standard360', 'standard500'}:
@@ -219,6 +226,10 @@ class LiveManager:
             directory = self._base(owner) / 'sessions' / identifier
             if self.worker_factory:
                 worker = self.worker_factory(kind, source, directory, config)
+            elif board_model:
+                worker=HgbWorker(kind,capture['port'] if capture else source,zynq['port'],directory,
+                    preprocess=config.get('standard_preprocess'),sample_limit=limit,realtime=realtime,
+                    zynq_device=zynq,source_device=capture)
             elif kind in {'demo', 'log', 'result_serial'}:
                 worker = MonitorWorker(kind, zynq['port'] if zynq else source, directory,
                                        seconds=seconds, realtime=realtime)
@@ -233,7 +244,7 @@ class LiveManager:
             else:
                 worker = RuntimeWorker(source, zynq['port'], directory, zynq_device=zynq,
                                        realtime=realtime, sampling_hz=500 if kind == 'standard500' else 360)
-            self.jobs[identifier] = dict(owner=owner, kind=kind, worker=worker, directory=directory,
+            self.jobs[identifier] = dict(owner=owner, kind=kind, worker=worker, directory=directory,board_model=board_model,
                                          zynq=zynq, capture=capture, created=time.time(), on_complete=on_complete,
                                          analysis=dict(status='waiting', task_id=None, error=None) if on_complete else None)
             try:
@@ -282,7 +293,11 @@ class LiveManager:
     def _snapshot(self, identifier, job):
         kind, worker = job['kind'], job['worker']
         source = []
-        if kind in {'demo', 'log', 'result_serial'}:
+        board_model=job.get('board_model',False)
+        if board_model:
+            info,capture_info,source,view=worker.snapshot()
+            source=list(source);diagnostics=dict(info)
+        elif kind in {'demo', 'log', 'result_serial'}:
             info, capture_info, result, diagnostics = worker.snapshot()
         elif kind.startswith('vendor_'):
             info, samples = worker.snapshot()
@@ -297,7 +312,7 @@ class LiveManager:
         if kind in {'vendor_csv', 'vendor_serial', 'bridge_csv', 'bridge_serial'}:
             for sample in source:
                 sample['ecg_nominal_mv'] = NominalConverter.millivolts(sample['ecg_raw'] - 8388608)
-        view = result_view(result)
+        if not board_model:view = result_view(result)
         active = worker.is_alive()
         if active and info.get('state') in {'stopped', 'error'}:
             info['state'] = 'closing'
@@ -317,6 +332,7 @@ class LiveManager:
                     diagnostics=diagnostics, files=files, persistence_error=job.get('persistence_error'),
                     analysis=job.get('analysis'),
                     source_unit='int16 / 4096单位每mV' if kind.startswith('standard') else '未标定ADC原码',
+                    board_model=board_model,
                     scope='SYNTH预设标记' if kind == 'demo' else '日志接收回放' if kind == 'log' else '收到的设备数据；不代表本次实物已验收')
 
     def _get(self, owner, identifier):
@@ -393,7 +409,7 @@ class LiveManager:
         monitor = Monitor()
         monitor.header = Header(**view['header']) if view['header'] else None
         monitor.samples = deque((row['seq'], row['index'], row['raw'], row['filt']) for row in view['samples'])
-        monitor.events = deque(Event(**{key: value for key, value in row.items() if key != 'index'}) for row in view['events'])
+        monitor.events = deque(Event(**{key: value for key, value in row.items() if key in Event.__dataclass_fields__}) for row in view['events'])
         geometry = plot_geometry(monitor)
         title = '无数据' if not monitor.header else f'{monitor.header.source} / {monitor.header.detector}'
         parts = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">',
