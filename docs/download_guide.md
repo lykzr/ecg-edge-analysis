@@ -77,3 +77,15 @@ python -B -m unittest discover -s sim -p test_runtime_sessions.py
 ```
 
 算法依赖见 data/requirements_qrs.txt，网页依赖见 src/web/requirements-lock.txt。失败先保存输出，再查文件哈希、输入fs/scale、串口是否选反或占用、是否使用旧固件。CRC、超时和硬件错误不能当正常结束，不自动重传数据包。启动杂字节、真实无线长时、拔插恢复和网页人工操作仍缺全面验收。[协议](protocols.md)定义实际字段，[当前实现与缺项](../report/report.md)说明验证边界。
+
+## CH1呼吸波形显示
+
+网页来源切换为“CH1 · 呼吸”后默认选择“软件呼吸滤波”。PC采集后台以500Hz原码执行0.05Hz一阶高通和0.8Hz二阶Butterworth低通，跨普通传输块延续状态；每个新会话或样本索引断点重新初始化。滤波有相位延迟，前约10秒可能有启动过渡，建议点数上限设为30000（60秒）以上观察多个周期。它用于波形显示，不提供呼吸率、呼吸暂停判断或物理标定，也不表示FPGA执行了呼吸处理。
+
+原始CH1、厂商滤波列保留，新增samples.csv列resp_display_code和summary.json中的respiration_display参数。旧会话没有新增字段时不绘制软件滤波，须新建采集/CSV回放会话。滤波只能抑制噪声，不能修复电极接触、运动伪差或缺样。
+
+## CH2心电三套数值
+
+来源CH2默认显示“节律显示滤波 · 标称mV”，可切换：原始值（含直流的有符号ADC码/标称mV）、基线校正值（0.5Hz一阶高通）、节律显示值（基线校正后40Hz二阶Butterworth低通＋50Hz Q=30陷波）。均为500Hz因果PC处理，状态跨块保持，新会话/索引断点重置，前约5秒为启动过渡。滤波可能改变幅值和相位，不用于ST段或诊断幅度判定。各档ADC码与mV使用同一固定换算，沿用当前工程2^23−1分母；与2^23口径相差约0.000012%，不影响直流偏置问题。
+
+samples.csv新增ecg_baseline_code、ecg_baseline_mv（基线校正后的信号，非基线估计值）、ecg_display_code、ecg_display_mv；原始ADC和nominal.csv原始mV仍保留，summary.json记录ecg_display参数。典型生理幅值仅用于观察，不决定增益、裁剪阈值或归一化，不强行将峰值调成1mV。该显示链不替换模型输入或板端检测。旧会话无字段时不绘制，重新回放原始厂商CSV或新建采集即可生成。

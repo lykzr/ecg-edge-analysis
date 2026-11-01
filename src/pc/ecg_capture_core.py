@@ -2,7 +2,7 @@
 from collections import deque
 import argparse
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import hashlib
 import io
 import json
@@ -14,6 +14,8 @@ import time
 from ecg_bridge_capture import VendorFrames, InputConverter, NominalConverter
 from ecg_monitor_core import RecordingLimitError
 from ecg_serial import WindowsSerial
+from ecg_respiration import RespirationFilter
+from ecg_display import EcgDisplayFilter
 
 FIELDS = ['timestamp(s)', 'resp_raw', 'ecg_raw', 'resp_filtered', 'ecg_filtered']
 RATE = 500
@@ -27,6 +29,11 @@ class CaptureSample:
     ecg_raw: int
     resp_filtered: float | None = None
     ecg_filtered: float | None = None
+    resp_display_code: float | None = None
+    ecg_baseline_code: float | None = None
+    ecg_baseline_mv: float | None = None
+    ecg_display_code: float | None = None
+    ecg_display_mv: float | None = None
 
     @property
     def pair(self):
@@ -154,7 +161,8 @@ class CaptureRecorder:
             for n in ('source.csv', 'capture.bin', 'samples.csv', 'normalized.csv', 'nominal.csv'):
                 self.files[n] = (self.directory / n).open('xb')
             self.row('samples.csv', ['index', 'time_s', 'resp_raw', 'ecg_raw', 'resp_code24',
-                                    'ecg_code24', 'resp_filtered', 'ecg_filtered'])
+                                    'ecg_code24', 'resp_filtered', 'ecg_filtered', 'resp_display_code',
+                                    'ecg_baseline_code', 'ecg_baseline_mv', 'ecg_display_code', 'ecg_display_mv'])
             self.row('normalized.csv', ['index', 'sample'])
             self.row('nominal.csv', ['index', 'ecg_code24', 'ecg_nominal_mv', 'conditioned_mv', 'sample_int16', 'clipped'])
         except BaseException:
@@ -174,7 +182,9 @@ class CaptureRecorder:
 
     def sample(self, sample, normalized):
         self.row('samples.csv', [sample.index, sample.time_s, sample.resp_raw, sample.ecg_raw,
-                                *sample.pair, sample.resp_filtered, sample.ecg_filtered])
+                                *sample.pair, sample.resp_filtered, sample.ecg_filtered, sample.resp_display_code,
+                                sample.ecg_baseline_code, sample.ecg_baseline_mv,
+                                sample.ecg_display_code, sample.ecg_display_mv])
         self.row('normalized.csv', [sample.index, normalized])
 
     def flush(self):
@@ -209,6 +219,8 @@ class CaptureWorker(threading.Thread):
         self.idle_timeout = idle_timeout
         self.normalization = normalization
         self.converter = NominalConverter(dc_block=True) if normalization == 'nominal500' else InputConverter(2, shift)
+        self.respiration = RespirationFilter()
+        self.ecg_display = EcgDisplayFilter()
         self.maximum, self.factory, self.realtime, self.clock = maximum, serial_factory, realtime, clock
         if sample_limit is not None and (type(sample_limit) is not int or not 1 <= sample_limit <= 1800000):
             raise ValueError('采集点数上限须为1..1800000或留空')
@@ -223,6 +235,8 @@ class CaptureWorker(threading.Thread):
                          csv_complete=False, clipped=0, output_dir=str(directory),
                          device_info=dict(device_info or {}), source_read_to_eof=False)
         self.info.update(profile='vendor_v2.1.2_document34', firmware_verified=False,
+                         respiration_display=RespirationFilter.metadata(),
+                         ecg_display=EcgDisplayFilter.metadata(),
                          normalization=normalization, conversion=NominalConverter.metadata(dc_block=True) if normalization=='nominal500' else None)
         if normalization=='nominal500': self.info.update(shift=None,unit='4096 units/mV; nominal, uncalibrated')
 
@@ -238,6 +252,8 @@ class CaptureWorker(threading.Thread):
         self.cancel.set()
 
     def accept(self, sample, recorder):
+        sample = replace(sample, resp_display_code=self.respiration.process(sample.index, sample.pair[0]))
+        sample = replace(sample, **self.ecg_display.process(sample.index, sample.pair[1]))
         before_clipped = self.converter.clipped
         value = self.converter.convert(sample.pair)
         recorder.sample(sample, value)

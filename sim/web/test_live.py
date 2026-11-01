@@ -79,6 +79,11 @@ def test_vendor_preserves_raw_and_declares_conversion(manager):
     assert snapshot['info']['error'] is None
     assert snapshot['capture_info']['conversion']['pga_gain'] == 6
     assert snapshot['source_samples'][0]['ecg_raw'] == 8388608
+    assert all(s['resp_display_code'] == 0 for s in snapshot['source_samples'])
+    assert snapshot['capture_info']['respiration_display']['location'] == 'PC'
+    assert snapshot['source_samples'][0]['ecg_baseline_mv'] == 0
+    assert snapshot['source_samples'][1]['ecg_display_mv'] is not None
+    assert snapshot['capture_info']['ecg_display']['amplitude_normalization'] is False
     assert snapshot['result']['hr'] is None
     assert manager.file('a',identifier,'source.csv').read_bytes() == content
 

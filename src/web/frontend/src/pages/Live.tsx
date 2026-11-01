@@ -35,7 +35,7 @@ export default function Live() {
   const [file, setFile] = useState<File | null>(null), [limit, setLimit] = useState(5000), [seconds, setSeconds] = useState(10);
   const [realtime, setRealtime] = useState(true), [busy, setBusy] = useState(false), [message, setMessage] = useState('');
   const [session, setSession] = useState<Session | null>(null), [id, setId] = useState('');
-  const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [sourceMode, setSourceMode] = useState<SourceTrace>('code');
+  const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [sourceMode, setSourceMode] = useState<SourceTrace>('display_mv');
   const [resultTrace, setResultTrace] = useState('raw');
   const [autoAnalyze, setAutoAnalyze] = useState(true), [standardPreprocess, setStandardPreprocess] = useState('');
   const [manualTask, setManualTask] = useState<{session: string; id: string} | null>(null);
@@ -163,9 +163,11 @@ export default function Live() {
     </section>
     {session && <section><div className="record-toolbar"><h2>波形与事件{!active?' · 历史数据':''}</h2><button className="secondary" onClick={()=>save(`/live/sessions/${id}/svg`,'ecg.svg')}>导出结果SVG</button></div>
       {session.info.state==='waiting' && <p className="notice">暂无新串口字节，数值为上次接收值；这不等于物理断连。</p>}
-      {session.source_samples.length>0 && <><div className="wave-toolbar"><strong>来源</strong>{!session.kind.startsWith('standard') && <select value={channel} onChange={e=>{setChannel(e.target.value);if(e.target.value!=='ecg' && sourceMode==='mv')setSourceMode('code');}}><option value="ecg">CH2 · ECG</option><option value="resp">CH1 · 呼吸</option></select>}
-        {!session.kind.startsWith('standard') && <select aria-label="来源幅值" value={sourceMode} onChange={e=>setSourceMode(e.target.value as SourceTrace)}><option value="code">ADC原码</option>{channel==='ecg' && <option value="mv">标称电压 · mV</option>}<option value="vendor">厂商滤波列（如有）</option></select>}</div>
+      {session.source_samples.length>0 && <><div className="wave-toolbar"><strong>来源</strong>{!session.kind.startsWith('standard') && <select value={channel} onChange={e=>{const next=e.target.value;setChannel(next);setSourceMode(next==='resp'?'resp':'display_mv');}}><option value="ecg">CH2 · ECG</option><option value="resp">CH1 · 呼吸</option></select>}
+        {!session.kind.startsWith('standard') && <select aria-label="来源幅值" value={sourceMode} onChange={e=>setSourceMode(e.target.value as SourceTrace)}><option value="code">原始值 · 有符号ADC码</option>{channel==='resp' && <option value="resp">软件呼吸滤波</option>}{channel==='ecg' && <><option value="mv">原始值 · 标称mV（含直流）</option><option value="baseline_code">基线校正 · ADC码</option><option value="baseline_mv">基线校正 · 标称mV</option><option value="display_code">节律显示滤波 · ADC码</option><option value="display_mv">节律显示滤波 · 标称mV</option></>}<option value="vendor">厂商滤波列（如有）</option></select>}</div>
         <Waveform points={sourcePoints} offset={sourcePoints[0]?.t ?? 0} duration={span(sourcePoints,sourceRate)} unit={sourcePlot.unit}/>
+        {sourceMode==='resp' && <p className="hint">PC因果滤波：0.05Hz高通、0.8Hz二阶低通，存在相位延迟；新会话前约10秒为启动过渡。原码仍完整保存，不计算呼吸率。旧会话缺少此字段时不绘制，请重新采集。建议采集至少60秒观察多个呼吸周期。</p>}
+        {(sourceMode.startsWith('baseline_') || sourceMode.startsWith('display_')) && !session.kind.startsWith('standard') && <p className="hint">基线校正为0.5Hz一阶因果高通；节律显示在此基础上增加40Hz二阶低通和50Hz陷波。前约5秒为启动过渡，存在相位延迟，不用于ST段测量。保留实测幅值，不按典型1mV缩放；AI与Zynq输入不受此显示处理影响。旧会话无处理字段时不绘制，请重新回放或采集。</p>}
         {sourceMode==='mv' && !session.kind.startsWith('standard') && <p className="hint">电压由未额外数字滤波的CH2原码换算，保留直流；Zynq输入另有去直流和int16量化，两者幅值不必相同。历史记录若无电压字段则不绘制。</p>}</>}
       <div className="wave-toolbar"><strong>{needsBoard.has(session.kind)?'Zynq返回':'日志/演示'}</strong><select value={resultTrace} onChange={e=>setResultTrace(e.target.value)}><option value="raw">raw</option><option value="filt">filt（未提供不绘制）</option><option value="both">raw绿色 / filt蓝色</option></select><span>{result?.header?.detector ?? '尚无合法会话头'}</span></div>
       <Waveform points={waveform} secondary={secondary} offset={waveform[0]?.t ?? 0} duration={span(waveform,resultDivisor)} axisUnit={rate?'s':'样本号'} unit={scale?'mV（声明比例）':'码值（未标定）'} markers={markers}/>
