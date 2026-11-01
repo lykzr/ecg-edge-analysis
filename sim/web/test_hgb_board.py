@@ -15,7 +15,8 @@ def test_contract_rejects_missing_preprocess(tmp_path):
     with pytest.raises(ValueError,match='30000'):manager.start('a',dict(kind='bridge_serial',board_model=True,sample_limit=30001))
     with pytest.raises(Exception):Start(kind='standard500',board_model='yes')
 
-def test_worker_view_and_retained_result(tmp_path,monkeypatch):
+@pytest.mark.parametrize('location',['zynq_arm','zynq_pl'])
+def test_worker_view_and_retained_result(tmp_path,monkeypatch,location):
     source=tmp_path/'input.csv';source.write_bytes(standard(1000))
     received=[]
     class Port:
@@ -23,9 +24,10 @@ def test_worker_view_and_retained_result(tmp_path,monkeypatch):
         def close(self):pass
     def fake(signal,serial,directory,preprocess,**kwargs):
         received.extend(signal);kwargs['progress'](len(signal),len(signal))
-        result=dict(session=7,samples=len(signal),model_sha256=module.MODEL,clipped=0,compute_us={'input':1,'prepare':2,'classify':3},
+        result=dict(session=7,samples=len(signal),model_sha256=module.MODEL,clipped=0,compute_us={'input':1,'prepare':2,'classify':3},execution_location='zynq_arm',performance=None,precision='float64',
             events=[dict(beat_id=1,position=200,ready_at=466,decision_at=600,status=2,label='UNCLASSIFIED',probability=[None]*3),
                     dict(beat_id=2,position=600,ready_at=866,decision_at=999,status=0,label='VF',probability=[.1,.1,.8])])
+        result.update(execution_location=location,precision='Q40' if location=='zynq_pl' else 'float64',performance={'beats':1,'mismatches':0} if location=='zynq_pl' else None)
         (directory/'result.json').write_text(json.dumps(result));return result
     monkeypatch.setattr(module,'transfer',fake)
     worker=module.HgbWorker('standard500',source,'COMX',tmp_path/'session',preprocess='raw',realtime=False,port_factory=Port)
@@ -35,7 +37,8 @@ def test_worker_view_and_retained_result(tmp_path,monkeypatch):
     assert received[99]==99/4096 and ci['total']==1000
     assert view['cls']=='VF' and view['events'][0]['cls']=='UNCLASSIFIED'
     assert view['hr']==75 and view['rr_ms']==800
-    assert view['waveform_origin']=='host_input' and info['execution_location']=='zynq_arm'
+    assert view['waveform_origin']=='host_input' and info['execution_location']==location
+    assert info['performance']==({'beats':1,'mismatches':0} if location=='zynq_pl' else None)
 
 def test_excess_csv_not_truncated(tmp_path):
     source=tmp_path/'input.csv';source.write_bytes(standard(30001))
@@ -61,7 +64,7 @@ def test_api_board_mode_and_analysis_separation(tmp_path,monkeypatch,client):
     monkeypatch.setattr('ecg_web_service.HgbWorker',lambda *args,**kw:original(*args,**kw,port_factory=Port))
     def transport(signal,serial,directory,preprocess,**kw):
         kw['progress'](len(signal),len(signal))
-        result=dict(session=7,samples=len(signal),model_sha256=module.MODEL,clipped=0,compute_us={},events=[])
+        result=dict(session=7,samples=len(signal),model_sha256=module.MODEL,clipped=0,compute_us={},events=[],execution_location='zynq_arm',performance=None,precision='float64')
         (directory/'result.json').write_text(json.dumps(result));return result
     monkeypatch.setattr(module,'transfer',transport)
     headers=account(client,'board-api-owner');other=account(client,'board-api-other')

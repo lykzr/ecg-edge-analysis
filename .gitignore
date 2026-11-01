@@ -112,6 +112,12 @@ logs/
 
 # 必要验收证据，原始开发记录全部留本地
 /docs/evidence/**
+!/docs/evidence/hgb_pl_20261101/
+!/docs/evidence/hgb_pl_20261101/summary.json
+!/docs/evidence/hgb_pl_20261101/real_input_summary.json
+!/docs/evidence/hgb_pl_20261101/serial.log
+!/docs/evidence/hgb_pl_20261101/timing.rpt
+!/docs/evidence/hgb_pl_20261101/utilization.rpt
 !/docs/evidence/git_handoff_20261101.json
 !/docs/evidence/hgb_quality_90_20261101.json
 !/docs/evidence/model_integration_20261101.md

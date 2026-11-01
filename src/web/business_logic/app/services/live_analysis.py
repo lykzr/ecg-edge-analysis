@@ -76,7 +76,8 @@ def submit(manager, owner, identifier, *, standard_preprocess=None):
                 pos=int(row['position'])
                 if not 0<=pos<len(samples) or (positions and pos<=positions[-1]['r_sample500']):raise ValueError('板端模型事件时轴不符')
                 positions.append(dict(event_id=row['beat_id'],r_sample500=pos))
-            acquisition.update(board_model_sha256=result['model_sha256'],board_execution='zynq_arm',board_waveform_echoed=False)
+            acquisition.update(board_model_sha256=result['model_sha256'],board_execution=result.get('execution_location','zynq_arm'),board_waveform_echoed=False,
+                               board_performance=result.get('performance'),board_precision=result.get('precision','float64'))
         else:
             events_path = manager.file(owner, identifier, 'results/events.csv')
             with events_path.open(encoding='utf-8-sig', newline='') as stream:

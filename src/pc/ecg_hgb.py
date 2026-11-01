@@ -14,6 +14,7 @@ from ecg_ports import enumerate_ports
 
 MODEL='375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8'
 READY='H,HGB-BATCH-1,READY,500,mV,'+MODEL
+PL_READY='H,HGB-PL-1,READY,500,mV,'+MODEL
 LEGACY_READY='H,ECG-UART-1,ps-runtime500-ready,boot,UNKNOWN,QRS26-500-ARM,500,4096,0xD'
 
 class Channel:
@@ -31,7 +32,7 @@ class Channel:
     def wait_ready(self,timeout=10):
         """仅握手前允许有界启动同步；原始字节留证，活动会话不跳过错误。"""
         deadline=time.monotonic()+timeout
-        headers=[(value+'\n').encode() for value in (READY,LEGACY_READY)]
+        headers=[(value+'\n').encode() for value in (READY,PL_READY,LEGACY_READY)]
         while True:
             matches=[(self.buffer.find(header),header) for header in headers if header in self.buffer]
             if matches:
@@ -39,7 +40,7 @@ class Channel:
                 if offset+len(header)>8192:raise ValueError('启动同步超过8192字节，未发送任何样本')
                 (self.directory/'startup_discard.bin').write_bytes(self.buffer[:offset])
                 self.buffer=self.buffer[offset+len(header):]
-                return
+                return header.decode().strip()
             if len(self.buffer)>8192:raise ValueError('启动同步超过8192字节，未发送任何样本')
             if b'\n' in self.buffer:
                 first=self.buffer.partition(b'\n')[0]
@@ -64,7 +65,7 @@ class Channel:
         for _ in range(10):
             value=self.line()
             if value==expected:return
-            if value in (READY,LEGACY_READY):continue
+            if value in (READY,PL_READY,LEGACY_READY):continue
             raise ValueError('板端响应不符合当前阶段：'+value)
         raise ValueError('没有收到当前阶段确认')
 
@@ -80,13 +81,28 @@ def parse_result(value,sid,total,previous):
     elif status not in (2,4) or cls!=-1 or not all(math.isnan(v) for v in p):raise ValueError('未知状态被错误分类')
     return dict(beat_id=beat,position=position,ready_at=ready,decision_at=decision,status=status,class_id=cls,label=('N','S','VF')[cls] if cls>=0 else 'UNCLASSIFIED',probability=[v if math.isfinite(v) else None for v in p])
 
+def parse_performance(value,sid):
+    f=value.split(',')
+    if len(f)!=10 or f[:3]!=['P',str(sid),'Q40']:raise ValueError('PL性能报文身份错误')
+    beats,mismatches,arm,call,cycles,hz,clock=map(int,f[3:])
+    if min(beats,mismatches,arm,call,cycles)<0 or hz<=0 or clock!=100000000 or mismatches:
+        raise ValueError('PL性能计数或ARM/PL一致性错误')
+    if (beats==0 and any((arm,call,cycles))) or (beats>0 and min(arm,call,cycles)<=0):raise ValueError('PL心拍与计时不符')
+    return dict(precision='Q40',beats=beats,mismatches=mismatches,arm_ticks=arm,pl_call_ticks=call,
+        pl_core_cycles=cycles,timer_hz=hz,pl_clock_hz=clock,
+        arm_mean_us=arm/hz*1e6/beats if beats else None,
+        pl_call_mean_us=call/hz*1e6/beats if beats else None,
+        pl_core_mean_us=cycles/clock*1e6/beats if beats else None,
+        call_speedup=arm/call if call else None,core_speedup=(arm/hz)/(cycles/clock) if cycles else None)
+
+
 def transfer(signal,serial,directory,preprocess,sid=None,*,cancel=None,progress=None):
     signal=np.asarray(signal,dtype=np.float64)
     if signal.ndim!=1 or not 1<=len(signal)<=30000 or not np.isfinite(signal).all() or preprocess not in ('hp05','raw'):raise ValueError('仅接1—30000点有限单导联mV及明确hp05/raw')
     sid=sid or secrets.randbelow(0x7ffffffe)+1
     channel=Channel(serial,directory)
     try:
-        channel.wait_ready()
+        identity=channel.wait_ready();pl=identity==PL_READY;performance=None
         channel.write(f'I,HGB-BATCH-1,{sid},500,mV,{preprocess},{len(signal)}\n'.encode())
         channel.expect(f'A,{sid},READY,32')
         for start in range(0,len(signal),32):
@@ -101,12 +117,19 @@ def transfer(signal,serial,directory,preprocess,sid=None,*,cancel=None,progress=
         while True:
             value=channel.line()
             if value.startswith('R,'):rows.append(parse_result(value,sid,len(signal),rows))
+            elif value.startswith('P,'):
+                if not pl or performance is not None:raise ValueError('意外或重复PL性能报文')
+                performance=parse_performance(value,sid)
             elif value.startswith('D,'):
                 fields=value.split(',')
                 if len(fields)!=8:raise ValueError('完成报文长度错误')
                 values=[int(v) for v in fields[1:]]
                 if values[:3]!=[sid,len(signal),len(rows)] or any(v<0 for v in values):raise ValueError('完成计数错误')
                 result=dict(passed=True,session=sid,model_sha256=MODEL,model_qualified=False,classes=['N','S','VF'],vf_meaning='V/E/F merged, not ventricular fibrillation',sampling_hz=500,input_unit='mV',preprocess=preprocess,samples=len(signal),events=rows,clipped=values[3],compute_us=dict(input=values[4],prepare=values[5],classify=values[6]),flash_written=False)
+                if pl and (performance is None or performance['beats']!=sum(r['status']==0 for r in rows)):
+                    raise ValueError('PL性能心拍数与有效分类数不符')
+                result.update(execution_location='zynq_pl' if pl else 'zynq_arm',performance=performance,
+                    precision='Q40' if pl else 'float64',classifier='HGB-v92-fold0')
                 break
             else:raise ValueError('分类阶段失败：'+value)
         (Path(directory)/'result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

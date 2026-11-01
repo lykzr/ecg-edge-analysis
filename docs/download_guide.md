@@ -104,6 +104,57 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File tmp/hgb_qspi_new/qspi/pr
 
 构建复用已验smoke硬件，不改PS/MIO；先用board/load_hgb.py临时下载、board/check_hgb_web.py核对实板（参数见--help），通过后在当前写Flash授权下使用生成目录中的program_qspi.ps1显式-Program。JTAG/QSPI拨码、全拔线掉电及校验步骤与下节相同；生成候选不等于写入或发布，不混用旧latest的BOOT.BIN。
 
+## HGB分类器的PL临时演示
+
+这条路径把固定v92/fold0的192棵树放入PL，三类并行遍历。ARM仍负责特征生成及softmax；独立自检直接输入包内160组特征，当前不接网页采集协议。它不需要INT8、不训练，不提高模型既有质量指标。2026-11-01实板证据见[summary.json](evidence/hgb_pl_20261101/summary.json)与[串口原文](evidence/hgb_pl_20261101/serial.log)。不能把此证据写成整条采集链路或神经网络的加速。
+
+数值约定：特征为float32，原double阈值转换为不大于它的最大float32并比较有序IEEE754位编码，正负零统一。叶值和基线按最邻近偶数舍入到有符号64位、40位小数，累加不溢出。单类理论分数量化误差上界约2.96e-11；492组软件核对的最大概率误差约1.67e-12、类别变化0，这不保证所有可能输入的类别都不变化。PL输出分类分数；概率的softmax仍在ARM完成。
+
+首次生成及构建（PowerShell，位于仓库根目录；每次使用新输出目录）：
+
+```powershell
+$vivado = '<Vivado>/bin'
+$vitis = '<Vitis>/bin'
+$python = '<已安装numpy的Python>'
+& $python build/export_hgb_pl.py --output tmp/hgb_pl_parameters_new
+& "$vivado/vivado.bat" -mode batch -log tmp/hgb_pl_new.log -journal tmp/hgb_pl_new.jou -source build/build_hgb_pl.tcl -tclargs tmp/hgb_pl_hardware_new tmp/hgb_pl_parameters_new
+$env:ECG_HGB_PL_WORKSPACE = "$PWD/tmp/hgb_pl_app_new"
+$env:ECG_HGB_PL_HARDWARE = "$PWD/tmp/hgb_pl_hardware_new"
+$env:ECG_HGB_PL_ROM = "$PWD/tmp/hgb_pl_parameters_new"
+& "$vitis/vitis.bat" -s board/build_hgb_pl_test.py
+```
+
+独立仿真可执行 `sim/run_hgb_pl.ps1 -VivadoBin '<Vivado>/bin' -Python '<Python>' -Output tmp/hgb_pl_sim_new`，包括492组核心分数核对及AXI分离地址/数据、读写响应等待、错误输入检查。候选硬件复用正式领航者生成器，DDR/UART/MIO不改，保留QRS外设，额外增加HGB地址0x43C10000。与厂家6_axi_gpio_fsbl核对：器件、33.333333MHz晶振、DDR型号/频率及UART0 MIO14/15相同；厂家例程FCLK0为50MHz，本工程沿用既有100MHz并检查实现时序。
+
+本机已生成的匹配组合：`tmp/hgb_pl_build_02/hgb_pl.bit`、同目录`hgb_pl.xsa`，`tmp/hgb_pl_vitis_01/hgb_pl_test/build/hgb_pl_test.elf`，`tmp/hgb_pl_vitis_01/hgb_pl_platform/hw/sdt/ps7_init.tcl`。文件哈希保存在上述summary.json；它们是本机候选，不是latest发布。
+
+演示重放步骤：
+
+1. 保持板卡供电、JTAG和USB_UART连接、原JTAG启动设置；结束网页采集。Vitis Serial Monitor选板端COM口、115200、8N1，可提前打开以接收日志。
+2. 调试服务器运行时执行下列本机命令，仅对已经核实的唯一电缆有效：
+
+```powershell
+& '<Vitis>/bin/xsdb.bat' board/hgb_handoff/load.tcl 210512180081 tmp/hgb_pl_build_02/hgb_pl.bit tmp/hgb_pl_vitis_01/hgb_pl_platform/hw/sdt/ps7_init.tcl tmp/hgb_pl_vitis_01/hgb_pl_test/build/hgb_pl_test.elf
+```
+
+3. 应看到BEGIN、160行BEAT及`PASS HGB_PL vectors=160`。程序自动运行两轮核对，第一轮预热，第二轮计时；每组都核对ARM、PL及预期分数。结束后停在演示空循环，不会继续输出旧采集协议。脚本沿用加载器，所以`PASS HGB_BATCH_JTAG_STARTED`只代表下载启动，必须以串口`PASS HGB_PL`判断本自检成功。
+4. 单行ARM_ticks和PL_call_ticks分别除以最终timer_hz得到秒；PL_cycles除以100000000得到纯核秒数。本次实测平均80.39µs、49.07µs及7.29µs；包含传输的调用加速约1.64倍，纯核约11.03倍。范围仅为树分数计算，不含检测、特征提取、softmax及串口。
+5. 临时JTAG运行不会改变Flash。若要继续原网页采集，先关闭串口监视器，再按下面正式JTAG节加载原runtime500匹配组合；不要拿这个演示ELF配旧bit，也不要直接将候选写Flash。
+
+HGB寄存器（相对0x43C10000）：
+
+| 偏移 | 访问 | 含义 |
+| --- | --- | --- |
+| 0x00 | 读 | 标识0x48474231 |
+| 0x04 | 写/读 | 写1启动；读bit0忙、bit1完成、bit2输入错误 |
+| 0x08 | 读 | 本次纯核周期，包含启动/完成识别 |
+| 0x0C | 读 | 时钟100000000Hz |
+| 0x10/14、18/1C、20/24 | 读 | N/S/VF的64位Q40分数，先低32位后高32位 |
+| 0x28 | 读 | 小数位40 |
+| 0x100至0x3FC | 写 | 192项float32原始位，每项整32位写 |
+
+复位后必须写齐特征；非有限值使对应项无效，启动返回错误。忙时写入、部分字节写或非法地址返回AXI SLVERR。运行期间分数未定，完成后再读取。连续分类必须在启动前更新全部192项；接口不会代替软件识别漏写的旧特征。
+
 ## JTAG临时运行
 
 使用 releases/latest/runtime500/ 匹配组合，不混用 smoke/bridge 的ELF或硬件。先检查：
@@ -171,3 +222,33 @@ samples.csv新增ecg_baseline_code、ecg_baseline_mv（基线校正后的信号�
 波形默认开启“归一化显示（仅绘图）”：当前可见窗口按极值居中缩放至[-1,1]，恒定信号画在0，叠加曲线共用尺度。纵轴无量纲，不是mV，也不适合跨窗口比较绝对幅度；取消勾选可恢复标题所示原单位。原始保存值、导出数据、模型输入和板端送样不变，事件时间和缺口不变。
 
 HGB逐拍分类的结果卡显示“有效心拍平均置信度”，为有效心拍各自最大类别概率的平均值，并给出拍数和范围；逐拍概率仍在下方明细。无有效概率时明确显示未提供，不补零或正常类别。这是未校准模型概率的描述统计，不是整段诊断可靠性或检测准确率。
+
+
+## 网页实测输入的PL分类
+
+2026-11-01已使用用户ADS1292R原始文件通过网页HTTP接口、真实COM4及PL候选完整回放5148点。13个检测事件、12个有效分类、首拍未分类、裁剪0，ARM/PL分数不一致0。本次是离线实测文件回放，不是新的人体实时采集或专家分类评分。ECGHeatData为厂商心率摘要，不是模型输入。输入文件保留本地，不随Git发布。
+
+当前匹配PL硬件仍为tmp/hgb_pl_build_02；整段固件为tmp/hgb_pl_batch_01/ecg_hgb_test/build/ecg_hgb_test.elf，初始化为tmp/hgb_pl_batch_01/ecg_platform/hw/sdt/ps7_init.tcl。重新构建设置ECG_HGB_WORKSPACE为新tmp目录、ECG_HGB_APP=batch、ECG_HGB_PL_HARDWARE和ECG_HGB_PL_ROM为已验硬件与参数目录、ECG_ARM_GCC为裸机工具链，执行Vitis `-s board/build_hgb_pl_batch.py`。入口pl_main.c与正式ARM main.c分开，正式latest不变。
+
+网页操作：进入实时采集，选择“文件回放→厂商CSV经板卡处理（500Hz）”，上传ECGRawData文件，选择Zynq COM4；勾选“Zynq板端整段分类”。如只看板端结果，可取消电脑端自动分析。开始后等待完整送样；波形与事件区域将显示“Zynq FPGA PL · HGB Q40”及本次ARM/FPGA对比。串口监视器须关闭，避免占用COM4。每次计时随缓存与运行状态波动，展示本次原始计数，不使用固定演示值。事件表前的FPGA性能区域给出纯核、含传输及不一致拍数。导出result.json保留逐拍概率、位置及性能。
+
+当前支持整段最多30000点，收齐后分析；实时蓝牙来源也先收整段，不能称逐拍实时PL调度。后续连续调度与Flash部署另行验收。
+
+
+### 组员修改与重新下载
+
+PL电路由仓库的src/rtl/ecg_hgb_core.sv、ecg_hgb_axi_lite.sv描述；ARM及PL访问代码在src/ps/ecg_hgb/pl_main.c、pl_tree.c。修改RTL需要重新运行Vivado综合/实现、生成bit和XSA；仅修改网页不需要重新生成PL。当前通过JTAG加载到易失配置存储器，断电不保留；烧入QSPI需要另外制作匹配启动镜像并验收，不能只把某个源码文件“写进板子”。
+
+从main克隆后，不要求存在开发者的tmp目录。完成上面的参数导出和候选硬件构建，再按以下命令生成整段网页分类固件（使用刚生成的路径）：
+
+```powershell
+$env:ECG_HGB_WORKSPACE = "$PWD/tmp/hgb_pl_batch_new"
+$env:ECG_HGB_APP = 'batch'
+$env:ECG_HGB_PL_HARDWARE = "$PWD/tmp/hgb_pl_hardware_new"
+$env:ECG_HGB_PL_ROM = "$PWD/tmp/hgb_pl_parameters_new"
+$env:ECG_ARM_GCC = '<Vitis>/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe'
+& '<Vitis>/bin/vitis.bat' -s board/build_hgb_pl_batch.py
+& '<Vitis>/bin/xsdb.bat' board/hgb_handoff/load.tcl <实物电缆序列号> tmp/hgb_pl_hardware_new/hgb_pl.bit tmp/hgb_pl_batch_new/ecg_platform/hw/sdt/ps7_init.tcl tmp/hgb_pl_batch_new/ecg_hgb_test/build/ecg_hgb_test.elf
+```
+
+运行前确认目标板、JTAG启动设置、电缆唯一及COM口释放，并启动hw_server。这里的尖括号为需要替换的参数，不能原样执行。加载器仅操作唯一匹配Zynq-7020；日志中的STARTED不能代替实际分类验收。构建产物留tmp，不随源码提交；最新正式QSPI镜像仍在releases/latest，未被候选替换。

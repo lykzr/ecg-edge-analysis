@@ -1,0 +1,54 @@
+{
+  "scope": "Zynq-7020 JTAG独立分类核；160个固定特征向量；两轮、第二轮计时；非网页或真实采集端到端",
+  "model_sha256": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+  "precision": "两端相同float32分支及Q40叶值/累加；不含softmax",
+  "board": "Navigator V2 xc7z020clg400-2",
+  "cable": "210512180081",
+  "vectors": 160,
+  "score_mismatches": 0,
+  "arm_ticks": 4287713,
+  "pl_call_ticks": 2616974,
+  "pl_core_cycles": 116568,
+  "timer_hz": 333333343,
+  "pl_clock_hz": 100000000,
+  "arm_mean_us": 80.39461641855613,
+  "pl_call_mean_us": 49.06826107702042,
+  "pl_core_mean_us": 7.285500000000001,
+  "call_speedup": 1.6384239965700844,
+  "core_speedup": 11.034879749990544,
+  "timing_setup_slack_ns": 0.198,
+  "timing_hold_slack_ns": 0.08,
+  "qualified": false,
+  "limitations": [
+    "固定特征自检，不是新的分类准确率验收",
+    "未接网页、未做真实采集PL分类",
+    "ARM参考为同精度通用树遍历，并非所有可能优化ARM实现",
+    "纯核计时含启动与完成识别周期；PL调用包括写入、轮询与结果读取",
+    "Flash未改，正式发布未替换"
+  ],
+  "artifacts": {
+    "tmp/hgb_pl_build_02/hgb_pl.bit": {
+      "bytes": 4045773,
+      "sha256": "c0766e95c83c8e6ed68a082ea08371ff7e382960cf86e712c9bb4cb0f4d0fd91"
+    },
+    "tmp/hgb_pl_build_02/hgb_pl.xsa": {
+      "bytes": 543610,
+      "sha256": "d6421d5ada36fa9f0badd9cf084433ffa8eb44bbe6f92cd68f6430045654bb14"
+    },
+    "tmp/hgb_pl_vitis_01/hgb_pl_test/build/hgb_pl_test.elf": {
+      "bytes": 688728,
+      "sha256": "fa9f2431b69192420738a52fc08513945787616ca2a860dd40b9a18fdd6f0fdc"
+    },
+    "tmp/hgb_pl_vitis_01/hgb_pl_platform/hw/sdt/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    }
+  },
+  "sources": {
+    "src/rtl/ecg_hgb_core.sv": "0e455918e271ba35bb3744c0f4f638af4d42395507a45767d70d61975ee88204",
+    "src/ps/ecg_hgb/pl_test.c": "2463b0e11ae6a0560ec091e83fe2146e8c234e916dec6e715c97303172137121",
+    "build/export_hgb_pl.py": "d58bdde03d521208d95630979275c9eedc17fae4da2fc833e67edec0a10fd8c9",
+    "board/build_hgb_pl_test.py": "8a4f8b9c9cd0263e1ba8599781b16639f77bbcc7283ca275df17eeb2768fe5ea"
+  },
+  "source_notes": "AXI包装仅在构建后更新注释路径；构建Tcl在生成后补充保持时序拦截，未改变电路。原始导入源码仍保存在tmp候选工程。"
+}

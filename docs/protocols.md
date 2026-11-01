@@ -84,3 +84,18 @@ POST /api/v1/live/sessions新增`board_model`布尔值，默认false；只允许
 `analyze_when_complete`仍独立控制电脑端报告分析。即使同时启用，板载结果的execution_location和电脑端的host_pc分别保留；电脑分析读取完整原文件与板端完整result.json，不使用页面缓存。保存input_mv.csv、输入SHA、发送/接收原始记录及summary.json，所有者隔离和停止保存规则继续生效。
 
 PC只在发送I之前执行最多10秒/8192字节的完整就绪头同步，允许上电时杂字节前缀，原字节留rx.log与startup_discard.bin。错误就绪身份拒绝，不发送样本；启动头之后的应答、序号、CRC与ASCII均按严格会话规则检查。该有限同步不等于活动会话坏字节重同步或断线续传。
+
+
+## HGB PL候选扩展
+
+PL候选空闲广播`H,HGB-PL-1,READY,500,mV,<model_sha256>`，同一候选仍接收HGB-BATCH-1的I/B/D输入及原实时入口。客户端必须先识别该身份才接受性能报文；旧ARM固件继续使用既有身份，不因板卡名称或网页选项猜测PL执行。模型SHA标识原始权重，候选精度另标Q40。
+
+成功分类后、R结果之前返回一行：
+
+```text
+P,<sid>,Q40,<beats>,<mismatches>,<arm_ticks>,<pl_call_ticks>,<pl_core_cycles>,<timer_hz>,100000000
+```
+
+beats仅计status=0的有效分类拍，须与完整R记录数量一致。两端采用相同float32比较及Q40分数；任何分数不一致或PL超时直接分类失败，不返回成功结果。P只能出现一次，缺P、重复P、非PL身份携带P、非法频率/计数均拒绝。零有效拍时累计计数为零、平均及加速比为null。PL_call包括192项写入、启动、轮询及3项64位分数读取，PL_core是100MHz核周期；ARM_ticks测同一输入的Q40软件树遍历。两者均不含softmax、检测/特征、串口等待；整段classify_us还包含特征生成、两端计算和概率换算，不能作为纯PL耗时。
+
+电脑result.json及网页info增加execution_location（zynq_pl/zynq_arm）、precision及performance原始计数与派生指标。网页必须以成功报文确定执行位置，尚无完整结果时显示等待；旧记录缺字段不伪造成PL。研究质量边界及VF合并含义不变。

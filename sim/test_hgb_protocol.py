@@ -2,10 +2,19 @@
 import sys,unittest,struct,tempfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src/pc'))
-from ecg_hgb import parse_result,Channel,LEGACY_READY
+from ecg_hgb import parse_result,parse_performance,Channel,LEGACY_READY,PL_READY
 def row(status=0,cls=0,probs=(.8,.1,.1),beat=1,pos=500,decision=1000):
     return f'R,7,{beat},{pos},800,{decision},{status},{cls},'+','.join(struct.pack('>d',v).hex() for v in probs)
 class ResultTests(unittest.TestCase):
+    def test_pl_timing(self):
+        p=parse_performance('P,7,Q40,2,0,10000,6000,1500,333333333,100000000',7)
+        self.assertAlmostEqual(p['call_speedup'],10000/6000)
+        self.assertEqual(p['pl_core_mean_us'],7.5)
+        for value in ('P,8,Q40,2,0,10000,6000,1500,333333333,100000000',
+                      'P,7,Q40,2,1,10000,6000,1500,333333333,100000000',
+                      'P,7,Q40,2,0,10000,6000,1500,0,100000000',
+                      'P,7,Q40,0,0,1,1,1,333333333,100000000'):
+            with self.assertRaises(ValueError):parse_performance(value,7)
     def test_valid(self):self.assertEqual(parse_result(row(),7,1500,[])['label'],'N')
     def test_merged_vf(self):self.assertEqual(parse_result(row(cls=2,probs=(.1,.1,.8)),7,1500,[])['label'],'VF')
     def test_unknown(self):self.assertEqual(parse_result(row(2,-1,(float('nan'),)*3),7,1500,[])['probability'],[None]*3)

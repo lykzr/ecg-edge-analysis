@@ -166,8 +166,8 @@ export default function Live() {
         {kind==='demo' && <label>演示秒数<input type="number" min="1" max="300" value={seconds} disabled={active || busy} onChange={e=>setSeconds(Number(e.target.value))}/></label>}
         {needsCapture.has(kind) && <label>采集点数上限<input type="number" min="1" max="1800000" value={limit} disabled={active || busy} onChange={e=>setLimit(Number(e.target.value))}/></label>}
       </div>
-      {['bridge_csv','bridge_serial','standard500'].includes(kind) && <label className="inline"><input type="checkbox" checked={boardModel} disabled={active || busy} onChange={e=>setBoardModel(e.target.checked)}/>Zynq ARM整段分类（最多30000点，保存完整输入后分类）</label>}
-      {boardModel && <p className="notice">板端HGB v92/fold0研究模型，结果在整段收样后返回；非连续实时分类、非FPGA PL推理。N/S/VF中VF是V/E/F合并，不表示心室颤动。原实时心率模式请取消此项。</p>}
+      {['bridge_csv','bridge_serial','standard500'].includes(kind) && <label className="inline"><input type="checkbox" checked={boardModel} disabled={active || busy} onChange={e=>setBoardModel(e.target.checked)}/>Zynq板端整段分类（自动识别ARM或FPGA，最多30000点）</label>}
+      {boardModel && <p className="notice">板端HGB v92/fold0研究模型，结果在整段收样后返回；执行位置以板卡身份及结果为准。PL固件额外逐拍核对ARM并报告耗时。N/S/VF中VF是V/E/F合并，不表示心室颤动。原实时心率模式请取消此项。</p>}
       <details className="live-advanced" open={category==='advanced' || undefined}><summary>高级工具</summary><div className="actions">
         <button className="secondary" disabled={active || busy} onClick={()=>selectKind('result_serial')}>仅接收板卡结果</button>
         <button className="secondary" disabled={active || busy} onClick={()=>selectKind('log')}>原始日志回放</button>
@@ -200,7 +200,8 @@ export default function Live() {
         {effectiveSourceMode==='mv' && !session.kind.startsWith('standard') && <p className="hint">标称电压尚未实测标定，保留直流；与送板前去直流、量化后的波形幅值可能不同。</p>}
         {selectedSignal==='resp' && <p className="hint">PC因果呼吸显示滤波：0.05Hz高通和0.8Hz低通，存在相位延迟，开始约10秒为过渡；保留原码，不计算呼吸率。</p>}
         {(selectedSignal==='baseline'||selectedSignal==='display') && <p className="hint">PC基线校正为0.5Hz因果高通；节律显示另加40Hz低通和50Hz陷波，开始约5秒为过渡。不用于ST测量，不按典型幅值缩放，不改变Zynq或模型输入。</p>}</>}
-      {session.board_model && <p className="notice">分类来源：Zynq ARM · {String(session.info.model_sha256 ?? '')} · 研究模型未全部达标。事件是模型自身检测/重切拍位置，未套用其他QRS事件编号。</p>}
+      {session.board_model && <p className="notice">分类来源：{session.info.execution_location==='zynq_pl'?'Zynq FPGA PL · HGB Q40':session.info.execution_location==='zynq_arm'?'Zynq ARM':'等待板卡身份及完整结果'} · 研究模型未全部达标。事件是模型自身检测/重切拍位置，未套用其他QRS事件编号。</p>}
+      {session.board_model && session.info.execution_location==='zynq_pl' && <FpgaPerformance info={session.info}/>}
       <div className="wave-toolbar"><strong>{result?.waveform_origin==='host_input'?'送板输入（非板端波形回显）':needsBoard.has(session.kind)?'板卡返回':'日志/演示'}</strong>{filteredAvailable ? <select aria-label="板卡波形" value={effectiveResultTrace} onChange={e=>setResultTrace(e.target.value)}><option value="raw">输入波形</option><option value="filt">板端滤波</option><option value="both">输入与滤波叠加</option></select> : <span>输入波形</span>}<span>{result?.header?.detector ?? '尚无合法会话头'}</span></div>
       <Waveform points={waveform} secondary={secondary} offset={waveform[0]?.t ?? 0} duration={span(waveform,resultDivisor)} axisUnit={rate?'s':'样本号'} unit={scale?'mV（声明比例）':'码值（未标定）'} markers={markers}/>
       <div className="live-table"><table><thead><tr>{['事件号','源位置（样本号）','RR（点）','心率','类别'].map(title=><th key={title}>{title}</th>)}</tr></thead><tbody>{[...(result?.events ?? [])].reverse().map(event=><tr key={event.seq}><td>{event.seq}</td><td>{event.pos}{event.index===null?'（不在当前可见窗口）':''}</td><td>{event.rr ?? '未知'}</td><td>{number(event.hr,1)}</td><td>{result?.header && (result.header.caps & 16) ? event.cls==='?'?'未知':event.cls : '未提供'}</td></tr>)}</tbody></table></div>
@@ -212,4 +213,19 @@ export default function Live() {
       {history.filter(row=>row.active && row.id!==id).map(row=><p key={row.id}><Link className="button secondary" to={'/live?session='+row.id}>继续查看进行中的测量</Link></p>)}
     </section>
   </>;
+}
+
+function FpgaPerformance({info}:{info:Record<string,unknown>}) {
+  const p=info.performance as Record<string,unknown>|null;
+  if(!p)return <p>尚无本次FPGA性能数据。</p>;
+  return <section aria-label="FPGA分类性能"><h3>本次 ARM / FPGA 对比</h3>
+    <div className="stat-grid">
+      <div><span>ARM分类 · µs/拍</span><strong>{number(p.arm_mean_us,2)}</strong></div>
+      <div><span>FPGA纯计算 · µs/拍</span><strong>{number(p.pl_core_mean_us,2)}</strong></div>
+      <div><span>FPGA含传输 · µs/拍</span><strong>{number(p.pl_call_mean_us,2)}</strong></div>
+      <div><span>含传输加速比</span><strong>{number(p.call_speedup,2)} 倍</strong></div>
+    </div>
+    <p>已对比 {number(p.beats)} 拍 · 分数不一致 {number(p.mismatches)} 拍 · 纯计算加速 {number(p.core_speedup,2)} 倍</p>
+    <p className="hint">两端均在同一Zynq运行相同Q40树分类。ARM负责高通、R峰检测、特征提取和概率换算；PL负责分类树。计时不含这些前后处理或串口等待。数据来自本次板端计数，原始结果可下载result.json。</p>
+  </section>;
 }

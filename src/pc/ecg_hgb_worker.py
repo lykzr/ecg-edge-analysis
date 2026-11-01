@@ -23,7 +23,7 @@ class HgbWorker(threading.Thread):
         self.cancel=threading.Event();self.lock=threading.RLock()
         self.samples=deque(maxlen=4096);self.values=[];self.capture=None
         self.info=dict(state='starting',reason=None,error=None,source_samples=0,confirmed=0,done=False,
-                       execution_location='zynq_arm',model_sha256=MODEL,qualified=False,
+                       execution_location='pending_board_identity',model_sha256=MODEL,qualified=False,
                        protocol='HGB-BATCH-1',sampling_hz=500,preprocess=self.mode,
                        zynq_device=zynq_device,source_device=source_device,upstream_source_drop=None)
         self.view=dict(header=None,samples=[],events=[],hr=None,rr_ms=None,cls='未提供',waveform_origin='host_input')
@@ -101,11 +101,12 @@ class HgbWorker(threading.Thread):
             last=rows[-1] if rows else None
             with self.lock:
                 self.view=dict(header=dict(firmware='hgb-batch-1',session=str(result['session']),source='REPLAY' if self.kind!='bridge_serial' else 'ADC',
-                    detector='HGB-v92-fold0-ARM',fs=500,scale=1,caps=20),
+                    detector='HGB-v92-fold0-'+('PL-Q40' if result['execution_location']=='zynq_pl' else 'ARM'),fs=500,scale=1,caps=20),
                     samples=[dict(seq=i,index=i,raw=self.values[i],filt=None) for i in range(max(0,len(self.values)-4096),len(self.values))],
                     events=rows[-256:],hr=last['hr'] if last else None,rr_ms=last['rr']*2 if last and last['rr'] else None,
                     cls=last['cls'] if last else '未提供',waveform_origin='host_input')
-                self.info.update(state='stopped',reason='completed',done=True,compute_us=result['compute_us'],clipped=result['clipped'])
+                self.info.update(state='stopped',reason='completed',done=True,compute_us=result['compute_us'],clipped=result['clipped'],
+                    execution_location=result['execution_location'],performance=result['performance'],precision=result['precision'])
         except InterruptedError as exc:self.info.update(state='stopped',reason='stopped_by_user',error=None,note=str(exc))
         except Exception as exc:self.info.update(state='error',reason='failed',error=type(exc).__name__+': '+str(exc))
         finally:
