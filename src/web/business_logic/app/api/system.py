@@ -45,6 +45,7 @@ def health(response: Response):
 
 
 def _model_state() -> dict:
+    from ai_model.inference.factory import model_setting
     raw = os.environ.get('ECG_MODEL_TYPE')
     source = 'environment'
     if raw is None:
@@ -58,7 +59,7 @@ def _model_state() -> dict:
                     break
         except OSError:
             source = 'default'
-    value = (raw or 'none').strip().lower() or 'none'
+    value = model_setting('ECG_MODEL_TYPE', 'hgb').strip().lower() or 'none'
     configured = value not in {'none', 'unavailable'}
     return {'type': value, 'configured': configured, 'loaded': None, 'source': source}
 

@@ -5,3 +5,5 @@ React页面沿用来源项目的布局与交互，实时页接本项目PC后台�
 从项目根执行 `./build/build_web.ps1`；依赖和构建输出写 `tmp/web_frontend`，不要在正式源码目录安装node_modules。构建后通过 `src/web/run.py` 同源提供网页和API；开发代理配置在vite.config.ts。使用与限制见[网页教程](../../../docs/download_guide.md)。
 
 Waveform使用原始采样时刻及可选缺口标记，抽稀不改变事件坐标；实时页面与导入历史共用该组件。页面不启动QRS、CNN或训练，分类缺失不能填成正常。
+
+采集结束可由后台自动提交完整记录到电脑HGB；实时页给分析任务链接，记录详情按50拍分页展示N/S/VF、未分类、概率和板端事件关联。运算位置与板端原类别分别标明，详见[模型接入](../../../docs/model_integration.md)。

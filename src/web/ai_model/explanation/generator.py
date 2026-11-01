@@ -90,6 +90,27 @@ def _template(payload: dict[str, Any]) -> dict[str, Any]:
         result.update(_common_fields(labels, limitations))
         return result
 
+    if payload['classification'].get('task_type') == 'beat_level':
+        if payload['classification'].get('status') != 'classified':
+            summary = payload['classification'].get('message') or '未获得有效逐心拍分类；没有输出N/S/VF结论。'
+            result = dict(summary=summary, elderly_summary=summary,
+                professional_interpretation='本次没有有效的逐心拍分类结果，不能按零异常或正常解读。',
+                risk_level='needs_review', advice='核对模型运行环境及完整输入后重试。',
+                reassurance='没有分类结论不表示已经排除异常。',
+                next_steps=['保留原始记录，核对模型环境及输入合同。'], measurement_guidance=[])
+            result.update(_common_fields(labels, limitations))
+            return result
+        beats = payload.get('measurements', {}).get('beats') or {}
+        counts = beats.get('by_type') or {}
+        summary = f"逐拍研究分类：N {counts.get('N', 0)} 拍，S {counts.get('S', 0)} 拍，VF {counts.get('VF', 0)} 拍；未分类 {beats.get('unclassified_count', 0)} 拍。"
+        result = dict(summary=summary, elderly_summary=summary,
+            professional_interpretation='这是电脑端逐心拍分类，不是整段节律诊断。N不表示健康，VF为V/E/F合并，不表示心室颤动。',
+            risk_level='needs_review', advice='保存波形与逐拍结果供复核。',
+            reassurance='研究模型输出需要结合原始心电核对。',
+            next_steps=['保存原始波形和逐拍结果。'], measurement_guidance=[])
+        result.update(_common_fields(labels, limitations))
+        return result
+
     heart_rate_text = _heart_rate_text(payload)
     if classification == 'normal':
         result = {
@@ -172,6 +193,9 @@ def _llm(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def generate_explanation(payload: dict[str, Any]) -> dict[str, Any]:
+    # HGB仅输出拍类；使用对应模板，不能借外部解释生成并未训练的节律诊断。
+    if payload.get('classification', {}).get('task_type') == 'beat_level':
+        return _template(payload)
     if os.environ.get('ECG_EXPLANATION_PROVIDER') in ('openai_compatible', 'deepseek'):
         try:
             result = _llm(payload)

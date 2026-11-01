@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import BeatResults from './BeatResults';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   AnalysisTask, RecordDetail as RecordDetailType, WaveformPoint, WaveformWindow,
@@ -242,9 +243,13 @@ export default function RecordDetail({record, onDelete, onBack, deleting}: {
       <section>
         <h2>心拍统计</h2>
         <p>共 {prediction.beats?.count ?? '—'} 个心拍</p>
-        <p className="hint">室性早搏：{prediction.beats?.vpc_count ?? '未提供'} 次</p>
+        <p className="hint">{prediction.task_type === 'beat_level'
+          ? `N ${prediction.beats?.by_type?.N ?? 0} · S ${prediction.beats?.by_type?.S ?? 0} · VF ${prediction.beats?.by_type?.VF ?? 0}`
+          : `室性早搏：${prediction.beats?.vpc_count ?? '未提供'} 次`}</p>
       </section>
     </div>
+
+    {prediction.task_type === 'beat_level' && prediction.beats?.items && <BeatResults key={record.id} prediction={prediction} />}
 
     {modelMissing && <div className="notice notice-info">
       <strong>本次只完成了信号检查，没有做 AI 分类。</strong>

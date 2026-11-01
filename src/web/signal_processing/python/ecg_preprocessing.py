@@ -114,7 +114,7 @@ def process(signal):
               'heart_rate_bpm': None,
               'processing_version': 'ads1292r-mv-v1',
               'filter_metadata': {'profile': 'offline-rhythm-view', 'bandpass_hz': [0.5, min(40, rate*.4)], 'order': 2, 'zero_phase': True, 'notch_hz': 50 if rate > 110 else None, 'notch_q': 30, 'model_waveform': 'unfiltered_mV'}}
-    for key in ('lead', 'source', 'conversion'):
+    for key in ('lead', 'source', 'conversion', 'model_preprocess', 'acquisition'):
         if key in signal:
             result[key] = signal[key]
     return result

@@ -13,6 +13,14 @@ export interface HeartRate {
   rr_cv?: number;
   regularity?: string;
 }
+export interface BeatPrediction {
+  beat_id: number; r_sample500: number; r_seconds: number;
+  decision_sample500: number; waveform_ready_sample500: number;
+  valid: boolean; label: string; input_status: number;
+  probabilities: number[] | null;
+  board_event_id?: number | null; board_r_sample500?: number | null;
+  board_delta_samples?: number | null; board_association?: string;
+}
 export interface Prediction {
   status: string;
   label: string | null;
@@ -20,7 +28,13 @@ export interface Prediction {
   model_version?: string | null;
   explanation: string;
   heart_rate?: HeartRate | null;
-  beats?: {count: number; vpc_count?: number} | null;
+  task_type?: string;
+  execution_location?: string;
+  qualified?: boolean;
+  preprocess?: string;
+  model_sha256?: string;
+  beats?: {count: number; vpc_count?: number; classified_count?: number; unclassified_count?: number;
+    by_type?: Record<string, number>; items?: BeatPrediction[]} | null;
   explanation_detail?: {
     elderly_summary?: string;
     professional_interpretation?: string;
@@ -246,6 +260,7 @@ export function qualityLabel(status: string | null): string {
 }
 
 export function outcomeLabel(outcome: string | null): string {
+  if (outcome === 'no_valid_beats') return '未获得可分类心拍';
   if (outcome === 'classified') return '已分类';
   if (outcome === 'skipped_quality') return '质量不足，未分类';
   if (outcome === 'model_unavailable') return '未接入模型';

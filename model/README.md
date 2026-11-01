@@ -9,7 +9,7 @@ python -X utf8 -B model/inference/check.py
 python -X utf8 -B model/inference/run.py --input model/inference/examples/synthetic500.csv --fold 0 --preprocess hp05 --output tmp/model_beats.csv
 ```
 
-模型模块已验证环境为Python3.12、NumPy2.2.6、SciPy1.16.2，与网页使用的Python3.14环境分别管理，不要求替换网页依赖。先用匹配模型环境独立运行；网页默认分类配置及实时跨块状态不由本次代码合入自动变更。详见[merge接入说明](../docs/model_integration.md)。
+模型模块已验证环境为Python3.12、NumPy2.2.6、SciPy1.16.2，与网页使用的Python3.14环境分别管理，不要求替换网页依赖。网页默认HGB，可通过ECG_HGB_PYTHON调用独立模型环境；采集结束后处理完整记录，不把实时块独立推理后拼接。详见[merge接入说明](../docs/model_integration.md)。
 
 ## 结构
 

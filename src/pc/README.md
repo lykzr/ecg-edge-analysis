@@ -51,3 +51,5 @@ ecg_bridge.py为CLI入口；ui/bridge.py调用ecg_bridge_worker.py，后台从ec
 厂商接入的NominalConverter只用标准库实现固定去直流/标称转换，CaptureWorker(normalization="nominal500")保存前后mV和转换参数；standalone采集预览仍可保留legacy_shift。协议、启动和失败行为见[厂商接入](../../docs/download_guide.md)。
 
 网页通过ecg_web_service.py适配同一套后台，不另造采集/QRS/分类流程。该适配器本身仍仅依赖标准库，FastAPI和前端依赖在src/web单独声明；使用见[网页教程](../../docs/download_guide.md)。
+
+网页可在start时注入on_complete回调，采集线程关闭后向现有分析队列提交完整记录。回调状态与任务号随会话持久化；独立Tk/命令行未注入回调时行为保持。HGB在网页模型独立进程执行，不写回或替代板端分类，详见[模型接入](../../docs/model_integration.md)。

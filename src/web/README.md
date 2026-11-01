@@ -8,7 +8,7 @@
 | --- | --- |
 | frontend | React/TypeScript页面、波形与请求适配 |
 | business_logic | FastAPI、SQLite账户/记录/授权/任务与实时API |
-| ai_model | 来源项目的可选离线分类/解释适配，默认无模型 |
+| ai_model | 默认HGB逐拍研究分类及解释，可显式关闭或选OpenECG节律适配 |
 | signal_processing/python | 离线CSV和显示滤波，不替代板端实时处理 |
 | hardware | 合成记录及ADS导出辅助，不采用上游固件协议 |
 | run.py | 本机、单进程、同源网页启动入口 |

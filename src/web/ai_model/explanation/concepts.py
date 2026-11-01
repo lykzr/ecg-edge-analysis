@@ -60,6 +60,8 @@ def build_concepts(prediction: dict[str, Any], quality: dict[str, Any]) -> list[
 def build_evidence_payload(prediction: dict[str, Any], quality: dict[str, Any]) -> dict[str, Any]:
     return {
         'classification': {
+            'status': prediction.get('status'),
+            'message': prediction.get('explanation'),
             'label': prediction.get('label'),
             'raw_label': prediction.get('raw_label'),
             'confidence': prediction.get('confidence'),
@@ -74,5 +76,8 @@ def build_evidence_payload(prediction: dict[str, Any], quality: dict[str, Any]) 
             'flags': prediction.get('flags', []),
         },
         'quality': quality,
-        'limitations': ['单导联短时记录', '仅用于辅助分析，不替代临床诊断'],
+        'limitations': (['HGB研究模型，尚未通过全部质量目标；N不表示健康',
+                         'VF是V/E/F合并，不表示心室颤动']
+                        if prediction.get('task_type') == 'beat_level' else
+                        ['单导联短时记录', '仅用于辅助分析，不替代临床诊断']),
     }

@@ -4,6 +4,8 @@
 
 ## 提交前检查
 
+网页模型联调使用已有、已获准准备的独立环境执行`python -B -m pytest sim/web -q`；实际PS C核心核对还需要PATH中的GCC或ECG_HOST_CC指向已有主机编译器，不自动安装或跳过。`python -B model/inference/check.py`核对完整模型冻结向量。输入均为合成记录；这些检查不代表真实设备或模型质量已验收。入口和配置见[模型接入](../docs/model_integration.md)。
+
 ```powershell
 python -B sim/check_repository.py
 python -B sim/check_checkout.py

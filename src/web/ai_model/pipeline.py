@@ -34,5 +34,6 @@ def analyze(signal):
     prediction['explanation'] = explanation.get('summary', '')
     result['prediction'] = prediction
     result['source'] = signal.get('source', 'unknown')
-    result['mode'] = 'openecg-evidence-pipeline' if prediction['status'] == 'classified' else 'framework_demo'
+    result['mode'] = ('hgb-beat-pipeline' if prediction.get('task_type') == 'beat_level'
+                      else 'openecg-evidence-pipeline') if prediction['status'] == 'classified' else 'framework_demo'
     return result

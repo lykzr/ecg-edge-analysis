@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { downloadFile, post, request, uploadWithProgress } from '../services/api';
+import { Link } from 'react-router-dom';
+import { AnalysisTask, downloadFile, post, request, uploadWithProgress } from '../services/api';
 import Waveform from '../components/Waveform';
 import { PlotPoint } from '../components/waveformGeometry';
 import { sourceTrace, SourceSample, SourceTrace } from '../components/liveSource';
@@ -12,7 +13,8 @@ interface Result {header: {fs: number | null; scale: number | null; source: stri
   samples: Sample[]; events: Beat[]; hr: number | null; rr_ms: number | null; cls: string;}
 interface Session {id: string; kind: string; created: number; active: boolean; info: Record<string, unknown>;
   capture_info: Record<string, unknown>; source_samples: SourceSample[]; result: Result; diagnostics: unknown;
-  files: string[]; scope: string; source_unit: string; persistence_error: string | null;}
+  files: string[]; scope: string; source_unit: string; persistence_error: string | null;
+  analysis?: {status: string; task_id: string | null; error: string | null} | null;}
 const modes = [
   ['demo', '合成演示（预设标记）'], ['log', '日志回放（raw.log）'],
   ['result_serial', '只接收Zynq结果'], ['vendor_csv', '厂商CSV · 查看采集'],
@@ -22,6 +24,7 @@ const modes = [
 const needsFile = new Set(['log', 'vendor_csv', 'bridge_csv', 'standard360', 'standard500']);
 const needsBoard = new Set(['result_serial', 'bridge_csv', 'bridge_serial', 'standard360', 'standard500']);
 const needsCapture = new Set(['vendor_serial', 'bridge_serial']);
+const modelInputs = new Set(['vendor_csv', 'vendor_serial', 'bridge_csv', 'bridge_serial', 'standard500']);
 const states: Record<string, string> = {starting:'准备中', connecting:'连接中', running:'运行中', waiting:'已打开串口 · 暂无新字节',
   draining:'停止来源 · 收尾中', closing:'关闭并保存中', stopped:'已停止 · 历史数据', error:'出错 · 已保留记录'};
 const number = (value: unknown, digits = 0) => typeof value === 'number' && Number.isFinite(value) ? value.toFixed(digits) : '未提供';
@@ -34,6 +37,8 @@ export default function Live() {
   const [session, setSession] = useState<Session | null>(null), [id, setId] = useState('');
   const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [sourceMode, setSourceMode] = useState<SourceTrace>('code');
   const [resultTrace, setResultTrace] = useState('raw');
+  const [autoAnalyze, setAutoAnalyze] = useState(true), [standardPreprocess, setStandardPreprocess] = useState('');
+  const [manualTask, setManualTask] = useState<{session: string; id: string} | null>(null);
   const lastRequest = useRef(0);
   async function refresh() {
     const data = await request<Ports>('/live/ports');
@@ -53,7 +58,7 @@ export default function Live() {
         const data = await request<Session>(`/live/sessions/${id}`);
         if (cancelled || generation !== lastRequest.current) return;
         setSession(data);
-        if (data.active) timer = setTimeout(()=>void poll(), 250);
+        if (data.active || data.analysis?.status === 'waiting') timer = setTimeout(()=>void poll(), 250);
         else {void loadHistory().catch(()=>{});}
       } catch (error) {
         if (!cancelled) {setMessage((error as Error).message); timer=setTimeout(()=>void poll(),2000);}
@@ -74,6 +79,7 @@ export default function Live() {
       }
       const board = ports.ports.find(p=>p.port===zynq), source = ports.ports.find(p=>p.port===capture);
       const data = await post<{id: string}>('/live/sessions', {kind, upload_id:uploadId, seconds, sample_limit:limit, realtime,
+        analyze_when_complete:autoAnalyze, standard_preprocess:kind==='standard500' ? standardPreprocess || null : null,
         zynq_port:zynq, zynq_port_identity:board?.device_id ?? '', capture_port:capture, capture_port_identity:source?.device_id ?? ''});
       setSession(null); setId(data.id);
     } catch (error) {setMessage((error as Error).message);} finally {setBusy(false);}
@@ -85,7 +91,17 @@ export default function Live() {
     catch(error) {setMessage((error as Error).message);} finally {setBusy(false);}
   }
   function save(path: string, name: string) {void downloadFile(path,name).catch(error=>setMessage(error.message));}
+  async function analyzeSaved() {
+    if (!session) return;
+    setBusy(true); setMessage('');
+    try {
+      const task = await post<AnalysisTask>(`/live/sessions/${session.id}/analyze`,
+        {standard_preprocess:session.kind==='standard500' ? standardPreprocess || null : null});
+      setManualTask({session:session.id,id:task.id});
+    } catch(error) {setMessage((error as Error).message);} finally {setBusy(false);}
+  }
   const active = Boolean(session?.active);
+  const analysisTaskId = manualTask && manualTask.session === session?.id ? manualTask.id : session?.analysis?.task_id;
   const result = session?.result, rate = result?.header?.fs ?? null;
   const resultDivisor = rate ?? 1;
   const scale = result?.header?.scale;
@@ -131,6 +147,19 @@ export default function Live() {
       <p role="status" className={message || session?.info.error || session?.persistence_error?'notice notice-error':'hint'}>{message || String(session?.info.error || session?.persistence_error || session?.scope || '就绪；每次运行建立新目录，不覆盖旧记录。')}</p>
       <div className="stat-grid"><div><span>心率（次/分）</span><strong>{number(result?.hr,1)}</strong></div><div><span>RR（ms）</span><strong>{number(result?.rr_ms,1)}</strong></div><div><span>心拍类别</span><strong>{result?.cls ?? '未提供'}</strong></div><div><span>累计来源点数</span><strong>{number(samples)}</strong></div></div>
       {(session?.kind==='demo' || result?.header?.source==='SYNTH') && <p className="notice">合成波形，事件是预设标记。它们不代表算法检测或分类结果。</p>}
+    </section>
+    <section><h2>电脑端模型分析</h2>
+      <label><input type="checkbox" checked={autoAnalyze} disabled={active} onChange={e=>setAutoAnalyze(e.target.checked)}/>采集结束后自动提交完整记录分析</label>
+      {(kind==='standard500' || session?.kind==='standard500') && <label>标准500Hz输入处理状态
+        <select value={standardPreprocess} disabled={active} onChange={e=>setStandardPreprocess(e.target.value)}>
+          <option value="">请选择，不猜测处理状态</option><option value="hp05">未额外滤波mV → 模型hp05</option>
+          <option value="raw">已匹配0.5Hz因果高通 → 模型raw</option>
+        </select></label>}
+      <p className="hint">模型在电脑运行，使用完整保存记录，不使用显示缓存或厂商滤波列。Zynq当前仍只检测/切拍；不代表ARM或FPGA已运行HGB。</p>
+      {session?.analysis?.status==='waiting' && <p role="status">正在关闭采集文件并提交分析…</p>}
+      {session?.analysis?.error && <p className="notice notice-error">{session.analysis.error}</p>}
+      {session && modelInputs.has(session.kind) && <button disabled={active || busy || session.analysis?.status==='waiting'} onClick={()=>void analyzeSaved()}>分析已保存记录</button>}
+      {analysisTaskId && <Link className="button" to={`/analyze?task=${analysisTaskId}`}>查看模型分析进度与逐拍结果</Link>}
     </section>
     {session && <section><div className="record-toolbar"><h2>波形与事件{!active?' · 历史数据':''}</h2><button className="secondary" onClick={()=>save(`/live/sessions/${id}/svg`,'ecg.svg')}>导出结果SVG</button></div>
       {session.info.state==='waiting' && <p className="notice">暂无新串口字节，数值为上次接收值；这不等于物理断连。</p>}

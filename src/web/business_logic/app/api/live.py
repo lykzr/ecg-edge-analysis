@@ -7,6 +7,8 @@ from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from app.api.auth import current_user
 from app.services import family
+from app.services import live_analysis
+from app.core.runner import runner
 from ecg_web_service import manager
 
 router = APIRouter(prefix='/live', tags=['实时采集与中转'])
@@ -23,6 +25,8 @@ class Start(BaseModel):
     sample_limit: int = Field(default=5000, ge=1, le=1800000, strict=True)
     seconds: float = Field(default=10, ge=1, le=300)
     realtime: StrictBool = True
+    analyze_when_complete: StrictBool = True
+    standard_preprocess: Literal['hp05', 'raw'] | None = None
 
 
 @router.get('/ports')
@@ -41,7 +45,11 @@ async def upload(file: UploadFile = File(...), user: str = Depends(current_user)
 
 @router.post('/sessions', status_code=201)
 def start(body: Start, user: str = Depends(current_user)):
-    return manager.start(user, body.model_dump())
+    callback = None
+    if body.analyze_when_complete and body.kind in {'vendor_csv', 'vendor_serial', 'bridge_csv', 'bridge_serial', 'standard500'}:
+        def callback(owner, identifier):
+            return _submit_analysis(owner, identifier, body.standard_preprocess)
+    return manager.start(user, body.model_dump(), on_complete=callback)
 
 
 @router.get('/sessions')
@@ -57,6 +65,24 @@ def snapshot(identifier: str, user: str = Depends(current_user)):
 @router.post('/sessions/{identifier}/stop')
 def stop(identifier: str, user: str = Depends(current_user)):
     return manager.stop(user, identifier)
+
+
+class AnalyzeSession(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    standard_preprocess: Literal['hp05', 'raw'] | None = None
+
+
+@router.post('/sessions/{identifier}/analyze', status_code=202)
+def analyze_session(identifier: str, body: AnalyzeSession, user: str = Depends(current_user)):
+    return _submit_analysis(user, identifier, body.standard_preprocess)
+
+
+def _submit_analysis(user, identifier, standard_preprocess):
+    task, created = live_analysis.submit(manager, user, identifier,
+                                        standard_preprocess=standard_preprocess)
+    if created:
+        runner.enqueue(task['id'])
+    return task
 
 
 @router.get('/sessions/{identifier}/files/{name:path}')

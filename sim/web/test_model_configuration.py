@@ -19,8 +19,13 @@ def test_process_environment_overrides_dotenv(tmp_path, monkeypatch):
     assert factory.configured_classifier() == 'none'
 
 
-def test_no_config_defaults_to_unavailable(tmp_path, monkeypatch):
+def test_no_config_defaults_to_repository_hgb(tmp_path, monkeypatch):
     module = tmp_path / 'ai_model' / 'inference' / 'factory.py'
     monkeypatch.delenv('ECG_MODEL_TYPE', raising=False)
     monkeypatch.setattr(factory, 'Path', lambda _: module)
+    assert factory.configured_classifier().model_version == 'HGB-v92-fold0'
+
+
+def test_explicit_none_still_disables_model(monkeypatch):
+    monkeypatch.setenv('ECG_MODEL_TYPE', 'none')
     assert factory.configured_classifier() is None

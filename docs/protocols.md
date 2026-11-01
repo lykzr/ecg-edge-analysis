@@ -39,6 +39,14 @@ H声明量纲/能力；就绪头source=UNKNOWN、detector=QRS26-500-ARM、fs=500
 
 T的rr_ms为毫秒，与E的rr不同；未知计数为−1，不能当0。L给出就绪、结束和错误说明，不替代A流控。runtime500不接受旧显示命令K；128点心拍和RR等内部准备接口也不表示最终分类模型已经冻结。
 
+## 网页电脑端HGB分析
+
+POST /api/v1/live/sessions支持analyze_when_complete（默认true）及standard_preprocess（仅标准500Hz，hp05/raw；未声明拒绝分析）。厂商来源固定完整CH2原码→标称mV→hp05。采集关闭后自动提交现有记录任务；会话快照analysis给waiting/submitted/failed、task_id和error。
+
+POST /api/v1/live/sessions/{id}/analyze接受JSON对象，可对自己的已保存会话手动提交。重复请求复用同一模型/预处理任务，保持账户隔离。分析结果经原tasks/records接口查询；prediction.task_type=beat_level、execution_location=host_pc、qualified=false，beats.items保留逐拍位置、有效性、N/S/VF和概率。未分类保留UNCLASSIFIED/null，不用N替代。
+
+板端事件关联只在±25点双向唯一时成立，board_event_id、board_r_sample500、board_delta_samples分别保留关联身份及模型位置减板端位置的差；无唯一对应时返回null。它不是检测准确率，不改变ECG-1或固件NO_MODEL/?，也不提供专家标注。完整输入和限制见[模型接入](model_integration.md)。
+
 ## 独立PL回归
 
 smoke/及legacy bridge/使用各自匹配的bit/XSA/ELF，不用于本版ARM检测计分。AXI基地址0x43C00000，完整偏移/位域/FIFO消费顺序见 src/rtl/ecg_qrs_axi_lite.v。legacy500的scale=−1不得混入runtime500。RTL是电路描述，软件参考用于行为核对；保留两者不等于已实现最终FPGA CNN。

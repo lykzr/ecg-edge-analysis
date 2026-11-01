@@ -179,7 +179,7 @@ class LiveManager:
             raise ValueError('缺少USB设备身份，请刷新端口后重新选择')
         return validate_port(name, {'device_id': identity}, ports, excluded=excluded)
 
-    def start(self, owner, config):
+    def start(self, owner, config, *, on_complete=None):
         kind = config.get('kind')
         if kind not in self.KINDS:
             raise ValueError('不支持的运行方式')
@@ -223,7 +223,8 @@ class LiveManager:
                 worker = RuntimeWorker(source, zynq['port'], directory, zynq_device=zynq,
                                        realtime=realtime, sampling_hz=500 if kind == 'standard500' else 360)
             self.jobs[identifier] = dict(owner=owner, kind=kind, worker=worker, directory=directory,
-                                         zynq=zynq, capture=capture, created=time.time())
+                                         zynq=zynq, capture=capture, created=time.time(), on_complete=on_complete,
+                                         analysis=dict(status='waiting', task_id=None, error=None) if on_complete else None)
             try:
                 worker.start()
             except Exception:
@@ -242,6 +243,16 @@ class LiveManager:
         with self.lock:
             job = self.jobs[identifier]
         job['worker'].join()
+        if job.get('on_complete'):
+            try:
+                task = job['on_complete'](job['owner'], identifier)
+                with self.lock:
+                    job['analysis'] = dict(status='submitted', task_id=task['id'], error=None)
+            except Exception as exc:
+                with self.lock:
+                    # 预期输入拒绝只含合同说明；其他内部错误不泄露本机路径。
+                    job['analysis'] = dict(status='failed', task_id=None,
+                        error=str(exc) if isinstance(exc, ValueError) else '分析提交失败；采集文件保留，可手动重试。')
         try:
             snapshot = self._snapshot(identifier, job)
             job['directory'].mkdir(parents=True, exist_ok=True)
@@ -293,6 +304,7 @@ class LiveManager:
         return dict(id=identifier, kind=kind, created=job['created'], active=active,
                     info=info, capture_info=capture_info, source_samples=source, result=view,
                     diagnostics=diagnostics, files=files, persistence_error=job.get('persistence_error'),
+                    analysis=job.get('analysis'),
                     source_unit='int16 / 4096单位每mV' if kind.startswith('standard') else '未标定ADC原码',
                     scope='SYNTH预设标记' if kind == 'demo' else '日志接收回放' if kind == 'log' else '收到的设备数据；不代表本次实物已验收')
 
