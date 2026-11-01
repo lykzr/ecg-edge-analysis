@@ -12,7 +12,7 @@
 
 ## 构建与运行
 
-通过board/build_runtime.py显式设置ECG_RUNTIME_RATE=500，选择新的项目tmp短工作区；默认360Hz构建保留。PC标准CSV使用500Hz/4096单位每mV；厂商CH2现默认先做独立去直流和标称换算再进入runtime500，不手动右移。旧500Hz/-1路径仅显式legacy500使用，不混用。步骤与边界见[500Hz说明](../../../docs/rate500.md)。
+通过board/build_runtime.py显式设置ECG_RUNTIME_RATE=500，选择新的项目tmp短工作区；默认360Hz构建保留。PC标准CSV使用500Hz/4096单位每mV；厂商CH2现默认先做独立去直流和标称换算再进入runtime500，不手动右移。旧500Hz/-1路径仅显式legacy500使用，不混用。步骤与边界见[500Hz说明](../../../docs/download_guide.md)。
 
 ## 检查
 

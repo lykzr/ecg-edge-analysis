@@ -11,4 +11,4 @@ python -B sim/check_baseline.py --metrics
 python -B sim/check_baseline.py --cache-dir tmp/cnn_git/cache --replay-weights
 ```
 
-缓存重建见[训练交接](../../docs/model_training_handoff.md)。files.json保存复制来源、逐文件字节与SHA256；原protocol/decision/manifest和预测原字节保留，原smoke未上板字段是当时状态。只保留已选候选，其他历史方案仍留本机tmp，并非全部历史试验都已随Git共享。复核程序要求匹配源码哈希，不能为兼容新算法重写旧结果哈希。
+缓存重建须按本目录冻结protocol和对应数据准备脚本执行；当前报告不提供该历史实验的完整重建教程。files.json保存复制来源、逐文件字节与SHA256；原protocol/decision/manifest和预测原字节保留，原smoke未上板字段是当时状态。只保留已选候选，其他历史方案仍留本机tmp，并非全部历史试验都已随Git共享。复核程序要求匹配源码哈希，不能为兼容新算法重写旧结果哈希。

@@ -15,7 +15,7 @@ python -m venv tmp/web_env
 & ./tmp/web_env/Scripts/python.exe -B src/web/run.py
 ```
 
-首次准备执行全部命令；日常只执行最后一行。打开终端显示的本机地址，注册本地账号（密码至少8位），登录后进入“实时与板卡”。端口占用时追加 --port 8001。前端更新后重新构建；已有依赖可用 ./build/build_web.ps1 -SkipInstall。依赖、网页dist、数据库和记录留 tmp/，不进入提交副本。
+首次准备执行全部命令；日常只执行最后一行。打开终端显示的本机地址，注册本地账号（密码至少8位），登录后进入“实时与板卡”。端口占用时追加 --port 8001。前端更新后重新构建；已有依赖可用 ./build/build_web.ps1 -SkipInstall。依赖、网页dist、数据库和记录留 tmp/，由Git忽略。
 
 | 输入 | 选择方法 |
 | --- | --- |
@@ -66,9 +66,10 @@ python -B board/prepare_qspi.py --release releases/latest --bootgen '<Vitis>/bin
 ## 离线核对与排错
 
 ```powershell
+python -B sim/check_repository.py
 python -B sim/check_checkout.py
 python -B sim/check_system_release.py
 python -B -m unittest discover -s sim -p test_runtime_sessions.py
 ```
 
-算法依赖见 data/requirements_qrs.txt，网页依赖见 src/web/requirements-lock.txt。失败先保存输出，再查文件哈希、输入fs/scale、串口是否选反或占用、是否使用旧固件。CRC、超时和硬件错误不能当正常结束，不自动重传数据包。启动杂字节、真实无线长时、拔插恢复和网页人工操作仍缺全面验收。[协议](protocols.md)定义实际字段，[报告](../report/report.md)说明验证边界。
+算法依赖见 data/requirements_qrs.txt，网页依赖见 src/web/requirements-lock.txt。失败先保存输出，再查文件哈希、输入fs/scale、串口是否选反或占用、是否使用旧固件。CRC、超时和硬件错误不能当正常结束，不自动重传数据包。启动杂字节、真实无线长时、拔插恢复和网页人工操作仍缺全面验收。[协议](protocols.md)定义实际字段，[当前实现与缺项](../report/report.md)说明验证边界。

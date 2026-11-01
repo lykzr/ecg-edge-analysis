@@ -44,11 +44,11 @@ model/
 ## 使用边界
 
 - 旧实验记录和失败保留在 `docs/records/`；不要按旧版本号批量启动实验。
-- 运行训练前先核对[训练交接](../docs/model_training_handoff.md)、协议、数据缓存和依赖；不覆盖已评估协议，不把已查看开发数据称新测试。
+- 运行训练前先核对[当前实现与缺项](../report/report.md)、协议、数据缓存和依赖；不覆盖已评估协议，不把已查看开发数据称新测试。
 
 ## 依赖与入口检查
 
-数据准备需要`requirements_cnn_data.txt`列出的WFDB、NumPy、SciPy等；训练需要`requirements_cnn.txt`中的PyTorch等。环境应分别核对，不能因训练入口能导入Torch就认定数据准备依赖齐全。本机两个隔离环境的区别与实际检查见[迁移记录](../docs/archive/records/model_structure_20261023.md)。不默认安装依赖。
+数据准备需要`requirements_cnn_data.txt`列出的WFDB、NumPy、SciPy等；训练需要`requirements_cnn.txt`中的PyTorch等。环境应分别核对，不能因训练入口能导入Torch就认定数据准备依赖齐全。数据准备和训练环境应独立核对，历史环境记录留本地归档；当前部署边界见[当前实现与缺项](../report/report.md)。不默认安装依赖。
 
 ```powershell
 python -B model/prepare/prepare_cnn_git.py --help

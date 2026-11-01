@@ -5,10 +5,8 @@
 /tmp/
 /docs/archive/
 /docs/reference/
-/AGENTS.md
 /myself.md
 /lykzr.md
-/skill/
 
 # 环境、凭证和编辑器本地状态
 .env
@@ -93,6 +91,7 @@ logs/
 !/build/*.tcl
 !/build/*.py
 !/build/*.ps1
+!/build/README.md
 
 # 文档只保留提交正文、许可原文及精确列出的验证证据
 /docs/*

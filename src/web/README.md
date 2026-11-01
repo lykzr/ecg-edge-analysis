@@ -13,4 +13,4 @@
 | hardware | 合成记录及ADS导出辅助，不采用上游固件协议 |
 | run.py | 本机、单进程、同源网页启动入口 |
 
-从项目根运行 `./build/build_web.ps1` 构建，再用独立环境执行 `python -B src/web/run.py`。环境建立、操作、数据目录与验收边界见[网页教程](../../docs/web_monitor.md)；软件测试在 `sim/web`。[来源与许可](NOTICE.md)、[导入原始哈希](upstream.json)用于追溯；导入哈希是改动前的来源身份，不表示当前适配文件未修改。
+从项目根运行 `./build/build_web.ps1` 构建，再用独立环境执行 `python -B src/web/run.py`。环境建立、操作、数据目录与验收边界见[网页教程](../../docs/download_guide.md)；软件测试在 `sim/web`。[来源与许可](NOTICE.md)、[导入原始哈希](upstream.json)用于追溯；导入哈希是改动前的来源身份，不表示当前适配文件未修改。

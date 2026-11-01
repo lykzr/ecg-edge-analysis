@@ -1,273 +1,37 @@
-# 仿真与软件验证
+# 检查与回归
 
+从仓库根运行，使用已有Python环境。检查不安装依赖、不训练、不操作板卡，也不创建提交副本或压缩包。临时日志放tmp/，正式发布证据放docs/evidence/，开发过程记录留在被忽略的docs/records/。
 
-
-从项目根目录运行，输出必须选择新目录，派生数据写tmp/，需要长期保留的验证日志写docs/records/：
-
-
+## 提交前检查
 
 ```powershell
-
-python -B sim/test_mitdb_100.py
-
-& './tmp/qrs_env/Scripts/python.exe' -B -m unittest discover -s sim -p 'test_*.py'
-
-python -B sim/check_ecg_reference.py --vivado-bin '<Vivado安装目录>/bin' --output-dir tmp/reference_check_new
-
-./sim/run_ecg_smoke_test.ps1 -VivadoBin '<Vivado安装目录>/bin' -OutputDir tmp/smoke_check_new
-
-./sim/run_rtl_tests.ps1 -VivadoBin '<Vivado安装目录>/bin' -OutputDir tmp/axi_check_new
-
-```
-
-
-
-## 验证范围与文档
-
-
-
-ecg_reference.py逐周期对照针对现有RTL；v4的软件测试针对当前候选算法，两者不能混用。软件仿真不替代板上验收。
-
-
-
-使用说明见上述命令；实验日志、历史通过/失败与准确性评估统一见[文档目录](../docs/README.md)。
-
-
-
-克隆完整性运行python -B sim/check_checkout.py；历史基线清单允许Windows反斜杠，检查脚本按相对目录分隔符统一换算，并保留目录边界校验，不修改基线清单字节或哈希。针对性检查为python -B -m unittest discover -s sim -p test_checkout.py -v，覆盖POSIX拆分规则、Windows/双反斜杠、绝对路径/盘符/越界拒绝和当前清单哈希。Windows上的规则测试不等于Linux/macOS原生运行验收。
-
-
-
-分类当前检查采用test_ecg_torch.py、test_cnn_cv.py及verify_cnn_cv.py；原始数据处理另用test_cnn_expanded.py、test_cnn_ltdb.py。旧实验专属测试已随实现归档，不参与当前discover。跨电脑命令与数据边界见[训练交接](../docs/model_training_handoff.md)。
-
-
-
-## PC监视器与串口适配验证
-
-
-
-只使用Python标准库；隐藏窗口检查另需Tkinter。以下输出目录必须不存在：
-
-
-
-```powershell
-
-python -B -m unittest discover -s sim -p test_pc_monitor.py
-
-python -B -m unittest discover -s sim -p test_pc_serial.py
-
-python -B src/pc/ecg_monitor.py --ui-self-test --output-dir tmp/pc_ui_new
-
-python -B src/pc/ecg_monitor.py --headless --demo --seconds 10.01 --output-dir tmp/pc_demo_new
-
-python -B src/pc/ecg_monitor.py --headless --replay tmp/pc_demo_new/raw.log --output-dir tmp/pc_replay_new
-
-```
-
-
-
-测试覆盖流解析、坏行恢复、序号回绕/缺口、会话、未知值、容量保护与原文重放；隐藏窗口仅核对控件和绘图对象，不代表人工操作或串口验收。使用说明见[PC监视器](../docs/pc_monitor.md)。
-
-
-
-test_pc_serial.py使用假驱动检查Windows结构/配置、读取上限、空读、驱动错误、句柄清理、分块接收/回放、半行断连、记录限额，以及隐藏窗口连接/停止/重连。不会打开实际COM端口；真实驱动、拔插、持续吞吐和板端联调另验。隐藏窗口用例另检查界面状态（未开始/等待/接收/停止/出错/演示/回放）及不同Canvas尺寸下图元不越界；没有Tkinter时这3项跳过。
-
-
-
-## PS流式核心验证
-
-
-
-```powershell
-
-python -B -m unittest discover -s sim -p test_ps_stream.py -v
-
-```
-
-
-
-需要已有GCC（可设ECG_HOST_CC），编译实际src/ps/ecg_stream/stream.c。stream_host.c注入假计时器/AXI/FIFO/UART，由现有PC解析器检查分块输出，覆盖正常/末批、慢速丢弃、超期停止、UART停滞及启动拒绝。输出保留在tmp/ps_stream_tests的独立目录，编译器临时目录也仅作用于该子进程；不自动清理、改权限或安装编译器。假FIFO不执行QRS，真实驱动、节拍、事件和板上运行须另验；入口见[PS说明](../docs/ps_stream.md)。
-
-
-
-## 克隆后完整性与已选对照
-
-
-
-```powershell
-
+python -B sim/check_repository.py
 python -B sim/check_checkout.py
-
-python -B sim/check_training_checkout.py
-
-python -B sim/check_baseline.py
-
-python -B sim/check_baseline.py --metrics
-
-python -B sim/check_baseline.py --cache-dir tmp/cnn_git/cache --replay-weights
-
+python -B sim/check_system_release.py
 ```
 
+check_repository读取实际Git索引，拒绝本地资料混入、已跟踪但被忽略、必需文件漏跟踪及Markdown文件链接失效。新增正式文件须加入Git跟踪后再检查；加入索引不等于提交。该检查不核对远端，不检查Markdown标题锚点或外网URL。
 
+check_checkout核对必要文件、Python语法/局部导入、Vivado工程来源和冻结基线哈希。check_system_release核对当前匹配镜像、源码身份和既有实板证据；不得把离线核对称作再次上板。原始收据内部保留历史路径，由发布检查映射至docs/evidence/读取。
 
-前三项是标准库静态/哈希检查；后两项分别需要NumPy和Torch，使用已有独立环境，不自动安装。checkout_files.json明确列出当前源码/协议、工程与基线依赖；新增正式入口时随修改维护，不能只看本机文件存在或哈希通过就称已提交共享。算法/QRS测试与RTL逐周期入口保持独立，派生缓存由脚本重建。
-
-
-
-## ADS1292R离线字节解码
-
-
+## 针对性回归
 
 ```powershell
-
-python -B -m unittest discover -s sim -p test_ads1292.py -v
-
+python -B -m unittest discover -s sim -p test_repository.py
+python -B -m unittest discover -s sim -p test_checkout.py
+python -B -m unittest discover -s sim -p test_system_release.py
+python -B -m unittest discover -s sim -p test_qspi_release.py
+python -B -m unittest discover -s sim -p test_runtime_sessions.py
 ```
 
+仓库检查回归覆盖漏跟踪、失效链接和本地资料误跟踪；发布回归覆盖路径边界、文件篡改、源码漂移、便携启动及精确忽略规则；会话回归覆盖正常结束后的状态重置与故障停止。测试输出才是本次实际结果，本文不累计成绩。
 
-
-仅需标准库；覆盖SPI状态/24位补码和显式版本的厂商偏移码帧，不打开设备或实现自动同步。格式、来源冲突和待核项见[ADS1292R说明](../docs/archive/materials/ads1292.md)。合成向量通过不代表真实ADC采集或PS流式程序已上板。
-
-
-
-PS流式测试默认500Hz，并单独核对360Hz兼容参数。RTL合成/FIFO检查可运行`./sim/run_ecg_smoke_test.ps1 -VivadoBin '<Vivado安装目录>/bin' -OutputDir tmp/rtl_500_new -SampleRate 500`；不传SampleRate仍为原smoke的360Hz。两种参数均不代表真实节拍或板上通过。
-
-
-
-## 电脑→Zynq输入与双向中转
-
-
+通信/软件运行时的完整离线回归：
 
 ```powershell
-
-python -B -m unittest discover -s sim -p test_ecg_bridge.py -v
-
+python -B sim/check_system_offline.py --output tmp/offline_new
 ```
 
+输出目录必须不存在；直接检查当前仓库，使用已有NumPy/SciPy/WFDB、主机C编译器及Tk环境。检查会编译主机C对照并产生测试日志，但不构建新的FPGA镜像。具体依赖见data/requirements_qrs.txt，网页依赖见src/web/requirements-lock.txt。
 
-
-使用已有GCC编译正式src/ps/ecg_bridge/bridge.c为测试共享库，注入受控串口与原检测器500Hz软件参考AXI；测试CLI厂商文件/模拟实时入口及协议错误，不操作板卡。产物保留tmp/usb_bridge_tests/独立目录；回调异常必须失败，不能由ctypes忽略后当成功。说明见[中转入口](../docs/bridge.md)。
-
-
-
-计时回归同时编译正式bridge_time.h，用无括号的BSP频率宏模拟调用处求值，检查两秒边界和长期tick→微秒一致性；不改变频率/预分频或用假时钟推断实物抖动。实际CLOCK_REVERSED定位和数字回放见[实板修复记录](../docs/records/bridge_board_20261020.md)。
-
-
-
-## 厂商CSV与独立采集视图
-
-
-
-```powershell
-
-python -B -m unittest discover -s sim -p test_pc_capture.py -v
-
-```
-
-
-
-标准库检查覆盖五列RawData、偏移码恢复、原文保存、候选起始对齐/锁定后错误、尾部/限额/驱动异常、端口身份变化和双通道绘图几何；Tk可用时验证隐藏采集窗口及主入口。缺Tk只跳过隐藏窗口用例，不把跳过当作人工视觉验收。产物保留tmp/pc_capture_tests/独立目录；不打开实物端口、不运行模型或板端程序。
-
-
-
-## UI目录与启动回归
-
-
-
-界面位于src/ui，后台位于src/pc；从项目根运行python -B src/ui/main.py，旧入口仍兼容。python -B -m unittest discover -s sim -p test_ui_layout.py -v检查新旧入口从其他工作目录启动、无界面输出一致、后台不依赖CLI/UI/Tk和隐藏窗口自检；它不打开真实串口，不代替人工视觉或新的上板验收。
-
-
-
-## 端口识别与界面中转
-
-
-
-```powershell
-
-python -B -m unittest discover -s sim -p test_pc_bridge.py -v
-
-```
-
-
-
-使用已有GCC、标准库及Tk；覆盖USB实例跟随COM变化/缺席/复用、歧义和角色冲突、身份保存、CSV与34字节双源中转、实际PS C核心与软件参考AXI的假双串口回传、记录原件、有限点数、手动停止收尾、断连、超时、记录限额和队列满；隐藏窗口仅检查构造/入口，不替代人工显示验收。测试保留tmp/pc_bridge_tests/，不打开真实端口。使用说明见[界面送样](../docs/bridge.md#界面送样)。
-
-
-
-## 输入诊断与500Hz滤波回归
-
-
-
-python -B -m unittest discover -s sim -p test_capture_analysis.py -v检查能量死区、常量平移、脉冲事件和CSV来源/拒绝覆盖。test_ecg_filter_reference.py另核对500Hz/50Hz差分方程；不操作板卡或评估无标注准确率。实物有限验证入口board/verify_ecg_bridge.py须显式USB身份，运行前另行授权并启动匹配应用。
-
-
-
-## 系统发布与历史回归
-
-
-
-python -B sim/check_system_release.py --repository .核对latest文件、两套XSA内嵌bit、源码/ELF及精选数字实板原文；python -B sim/check_smoke_release.py默认检查latest/smoke。旧smoke归档清单原字节保留，当前三个迁移工具发生的历史哈希差异明确列出，核心RTL/main.c/ELF/硬件/验收证据仍必须一致。python -B -m unittest discover -s sim -p test_system_release.py -v检查路径边界、损坏拒绝、复制后演示/新旧回放/隐藏窗口及包内工作区参数。测试不连接板卡；运行产生的日志放tmp，不把本机复制当另一台电脑实测。
-
-
-
-## 启动学习候选检查
-
-python -B -m unittest discover -s sim -p test_qrs_auto.py -v检查预热、幅值/极性、静默、复位/暂停、因果、定点界限和显式检测器身份。check_qrs_auto.py用现有XSim逐周期核对候选RTL/整数参考，并复跑已知开发记录；需要已有Vivado及本机输入，参数见脚本帮助。原检测器与smoke独立保留；离线/构建通过不等于上板或准确性通过，详见[候选说明](../docs/archive/qrs_auto.md)。
-
-
-精简发布由`check_system_release.py`校验当前latest的镜像、仓库来源及`docs/records/system_board_20261020/`原始实板证据。默认仓库根由脚本定位，`--repository`可替换为另一检出的源码根；不会到tmp选择历史候选。`test_system_release.py`只测发布物复制/损坏拒绝/入口路径与精确ignore，PC/UI测试仍从正式源码入口独立运行，不要求发布包重复携带源码。
-
-
-## 原波形确认候选
-
-python -B -m unittest discover -s sim -p test_qrs_peak.py -v检查360/500Hz、原波形位置/RR、宽波/双相/快速真心拍、暂停/复位、因果和尾部。data/evaluate_qrs_peak.py完整复跑19条已知开发记录并核对基线来源，参数见[说明](../docs/archive/qrs_peak.md)。当前仅软件，不继承旧候选RTL/bit/实板成绩；失败滤波和平方核心已归档tmp，不能称准确性通过。
-
-
-## 成熟QRS独立候选
-
-在data/requirements_qrs.txt指定环境运行python -B -m unittest discover -s sim -p test_qrs_v5.py -v，检查原码平台、40Hz候选支路、正负/快速/弱尖/宽波/双相、暂停/复位、未来/过期读取和前缀/尾部。完整已知记录回归另由data/benchmark_qrs_v5.py执行；软件检查不代表500Hz、整数RTL或上板通过，见[说明](../docs/archive/qrs_v5.md)。
-
-
-## QRS噪声计分检查
-
-python -B -m unittest discover -s sim -p test_qrs_noise.py -v检查212/16解码、全段起尾、一次匹配分段归属和V召回。这里只校验计分；实际全长入口与依赖见[说明](../docs/archive/qrs_noise.md)，不连接板卡。
-
-## 逐样本运行时与自动切拍
-
-在已有QRS依赖环境运行`python -B -m unittest discover -s sim -p test_qrs_runtime.py`和`test_beat_window.py`，覆盖确认时刻、前缀不变、重置/序号缺口、有界缓冲、幅值饱和、500Hz映射和训练端窗口逐值对照。`check_qrs_runtime.py`只核冻结来源/门槛；完整42条与500Hz转换另跑`data/benchmark_qrs_runtime.py`。说明见[运行时](../docs/qrs_runtime.md)。模型迁移路径由`test_model_paths.py`核验，不改变冻结模型文件。
-
-## 分类输入及PS队列
-
-QRS/NumPy环境分别运行`test_classifier.py`（窗口适配、状态、超时、单发结果）和`test_classification_ps.py`（已有GCC编译实际C核心并对照）；PyTorch环境单独运行`test_classification_torch.py`，核对训练端RR变换和冻结开发权重直接推理。避免用同一通配模式在缺Torch的环境导入模型用例。以上均不训练、不给模型质量评分，不替代板卡或新QRS移植。协议和命令见[分类接口](../docs/protocols.md#class)。
-
-## 冻结360Hz C移植
-
-已有QRS/NumPy/SciPy环境与GCC下，分别运行test_ps_runtime.py、test_runtime_link.py、test_runtime_worker.py；覆盖实际C事件/窗口、满幅/噪声、缺口/复位、就绪握手、有界传输/错误、后台停止与隐藏Tk路径。已有旧通信/PC测试继续单独跑。ECG_HOST_CC指定已有GCC，不安装；主机/隐藏窗口不等于实板或视觉。完整已知记录移植对照和实际USB_UART入口见[板端教程](../docs/runtime_board.md)。
-
-## 主体离线准备检查
-
-`python -B sim/check_system_offline.py --output tmp/offline_new --clean-copy`从正式清单复制源码后重跑通信/C/Tk/合同检查；使用现有外部依赖，不安装。整数参考：test_int8_reference.py；真实RTL：check_int8_ops.py（参数见[算子说明](../docs/int8_ops.md)）；主机CPU计时：check_host_performance.py。结果日志不放README。
-
-故障显示回归：test_ui_faults.py包含状态纯函数及隐藏Tk检查；XSim的check_int8_ops.py严格拒绝X输出，含近INT32界、池化末尾和busy重复start。check_licenses.py只生成当前工作区的许可/编译输入证据，不自动宣布合规。
-
-## 500Hz源适配
-
-已有QRS解释器与GCC运行test_pipeline500.py，编译实际C并检查源500Hz窗口/RR、内存/因果、500Hz UART/PC闭环、错误拒绝、CSV后台及隐藏窗口；不训练、不替代实板。完整记录检测配对和模型窗口分别用data/benchmark_rate500.py与data/verify_pipeline500.py，说明见docs/rate500.md。test_rate500.py的ECG_RATE500_EXE指向sim/ecg_rate500_host.c配合生成器输出编译的FIR候选，不能误指向完整pipeline主机入口。
-
-test_system_consistency.py回归匹配文件、显式采样率、结束残行和坐标脚注；test_runtime_link.py/test_pipeline500.py同时检查事件后的周期T保留已知心率/RR。check_rate500_load.py使用实际C加有界虚拟UART检查负载和明确失败边界；check_binary_licenses.py核对应用/FSBL实际链接成员。用法及限制见[系统构建与检查](../docs/system_checks.md)。
-
-新500Hz验板入口为board/verify_runtime500.py；test_runtime500_board.py只检查事件/窗口/状态解析，不接板。发布测试支持当前runtime500组件，原smoke和旧bridge证据不变。真实数字结果见[记录](../docs/archive/records/runtime500_board_20261024.md)。
-
-厂商500Hz回归：test_vendor500.py检查原码/单位/舍入/饱和、去直流常量偏置不变性与初态、CSV/分块34字节到实际C、手动停止/新会话及新UI路由。test_pc_bridge.py与test_ecg_bridge.py中的旧链路明确指定legacy500；不把它们当新ADC无线验收。board/verify_vendor500.py需显式实物参数，--simulate-radio仍是模拟来源。
-
-通用技能CLI行为检查：`python -B -m unittest discover -s sim -p test_skills.py`。只复制skill到独立含空格位置测试，不要求板卡或第三方依赖；已纳入check_system_offline.py。
-
-## 网页适配验证
-
-板端正常会话复用回归：`python -B -m unittest discover -s sim -p test_runtime_sessions.py`。使用已有NumPy/WFDB环境和GCC，编译实际360/500Hz C实现，检查多轮计数/RR/事件重置、零点/短会话、空闲等待、DONE队列与错误锁存，并覆盖厂商后台停止后重新开始；不打开设备串口，不代替实际板卡验收。
-
-使用独立环境运行 `python -B -m pytest sim/web -q -p no:cacheprovider`；波形几何用 `node --experimental-strip-types --test sim/web/waveform.test.mjs`。测试包括账户/记录、实时会话、HTTP/WebSocket与实际PS C核心的模拟串口，不连接板卡。C测试需要已有GCC，可用ECG_HOST_CC指定。实际浏览器视觉和设备验收仍单独进行，见[网页教程](../docs/web_monitor.md)。
-
-`sim/web/test_capture_chain.py`专门检查34字节任意分块/通道、来源电压和板端去直流的分离、坏帧停止与原文保留、原件关联先于任务执行、原件写盘失败回滚。`liveSource.ts`的Node测试检查原码/mV/厂商滤波视图不混用；没有电压字段时不补画。后台旧链路需要WFDB时使用已有QRS环境，不在网页环境自动安装。所有串口均为模拟；HTTP/WebSocket测试需要允许本机回环套接字。
-
-当前会话复用发布核验：sim/check_system_release.py按版本选择旧规则或check_session_release.py。新版核对匹配bit/XSA/ELF/FSBL/BOOT.BIN、正式源码哈希、JTAG与QSPI各四轮收据，严格区分此前冷启动前三轮和后续系统复位四轮。test_system_release.py与test_qspi_release.py检查便携路径、默认不连板、组件篡改和源码漂移拒绝；不产生新的实板验收。
+独立INT8算子、训练参考及数据评估脚本仍按自身参数使用，不表示最终模型或PL整网已部署。板端下载与源码重建统一见[使用教程](../docs/download_guide.md)，当前报文见[协议](../docs/protocols.md)，实际系统分工与缺项见[当前实现与缺项](../report/report.md)。

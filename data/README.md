@@ -2,7 +2,7 @@
 
 本目录只保留 **QRS 评估、数据获取和 QRS/CNN 共用的数据读取**。CNN 的协议、数据准备、训练、基线和依赖已迁移到顶层 [`model/`](../model/README.md)，不要在这里找 CNN 训练入口。
 
-模型接手者先读[训练交接](../docs/model_training_handoff.md)和[model/README](../model/README.md)。
+模型接手者先读[当前实现与缺项](../report/report.md)和[model/README](../model/README.md)。
 
 ## 当前文件
 
@@ -37,7 +37,7 @@ MIT 原始文件校验官方 SHA256 及 212 首值/长度/校验和，按 MLII �
 
 ## QRS运行时回归
 
-`benchmark_qrs_runtime.py`按`qrs_runtime_protocol.json`分别核对360Hz原重放事件和500Hz输入转换候选。输出必须指定不存在的新目录；不依赖旧tmp，不读取分类独立测试。运行方式见[运行时说明](../docs/qrs_runtime.md)，实验结果见[运行时记录](../docs/archive/records/runtime_20261023.md)。冻结研究快照和原门槛入口保持独立，详见[研究26](../docs/archive/analysis/qrs_research.md)。
+`benchmark_qrs_runtime.py`按`qrs_runtime_protocol.json`分别核对360Hz原重放事件和500Hz输入转换候选。输出必须指定不存在的新目录；不依赖旧tmp，不读取分类独立测试。运行方式见[运行时说明](../docs/download_guide.md)，实验结果应读取对应输出JSON；冻结研究快照和原门槛仍由各自协议定义，当前部署边界见[当前实现与缺项](../report/report.md)。
 
 ## 实际 CSV 输入诊断
 
@@ -59,8 +59,8 @@ python -B data/analyze_capture.py --source <五列RawData.csv> --output tmp/capt
 python -B data/replay_classification.py --raw-dir <MIT原始数据目录> --record 100 --seconds 30 --output-dir tmp/class_replay_new --inference-python <已有PyTorch解释器>
 ```
 
-输出目录必须不存在。完整输入、来源/许可和有效性合同见[分类接口](../docs/protocols.md#class)及[模型交接](../docs/model_training_handoff.md)。原始标注不用于补峰或生成窗口；本入口不评分、不访问独立6人，不能据此报告分类准确率或板上成功。
+输出目录必须不存在。该历史分类入口的输入与有效性条件以对应脚本、冻结协议及源码注释为准；当前公开通信合同见[接口协议](../docs/protocols.md)，部署边界见[当前实现与缺项](../report/report.md)。原始标注不用于补峰或生成窗口；本入口不评分、不访问独立6人，不能据此报告分类准确率或板上成功。
 
 ## C移植对照与标准回放数据
 
-verify_ps_runtime.py以原冻结360Hz全记录输出核对C主机程序的确认时刻/位置/RR，不恢复调参，不访问独立分类患者；必须显式raw/golden/executable/output。export_runtime_samples.py生成严格360Hz/4096单位的标准CSV用于新ARM回放入口，不处理厂商500Hz文件。说明和边界见[ARM运行](../docs/runtime_board.md)。
+verify_ps_runtime.py以原冻结360Hz全记录输出核对C主机程序的确认时刻/位置/RR，不恢复调参，不访问独立分类患者；必须显式raw/golden/executable/output。export_runtime_samples.py生成严格360Hz/4096单位的标准CSV用于新ARM回放入口，不处理厂商500Hz文件。说明和边界见[ARM运行](../docs/download_guide.md)。

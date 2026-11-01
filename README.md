@@ -30,12 +30,8 @@ python -m venv tmp/web_env
 & ./tmp/web_env/Scripts/python.exe -B src/web/run.py
 ```
 
-打开启动终端显示的本机地址，注册本地账号，进入“实时与板卡”。启动、接线、回放、重建和故障处理统一见[使用教程](docs/download_guide.md)；报文及量纲见[接口协议](docs/protocols.md)；设计、证据及缺项见[实现报告](report/report.md)。自有许可见 [LICENSE](LICENSE)，第三方及网页来源的分发边界见 [third_party.md](third_party.md) 与[许可说明](docs/licenses.md)。
+打开启动终端显示的本机地址，注册本地账号，进入“实时与板卡”。启动、接线、回放、重建和故障处理统一见[使用教程](docs/download_guide.md)；报文及量纲见[接口协议](docs/protocols.md)；设计、证据及缺项见[当前实现与缺项](report/report.md)。自有许可见 [LICENSE](LICENSE)，第三方及网页来源的分发边界见 [third_party.md](third_party.md) 与[许可说明](docs/licenses.md)。
 
-提交副本按明确清单生成，不复制本地归档、账号数据库、环境、原始数据或工具缓存：
+本工程直接通过 Git 仓库交付，不生成提交副本或压缩包。tmp/、本地资料、开发记录及历史发布由Git忽略；源码、依赖锁文件、当前发布、许可及必要证据保留。
 
-```powershell
-python -B board/package_submission.py --output tmp/submission_new
-```
-
-输出目录必须不存在，检查收据写在输出目录旁。保留的参考实现是构建/回归依赖，不表示已部署功能。该副本供本地审阅；网页来源未带根许可，对外再分发仍需权利确认。操作不提交或上传代码。
+提交前运行 python -B sim/check_repository.py、python -B sim/check_checkout.py 和 python -B sim/check_system_release.py，分别核对Git跟踪边界与文档链接、源码结构和发布身份，不替代构建或实板验收。提交及推送由负责人单独执行。

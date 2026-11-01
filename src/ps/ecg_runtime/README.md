@@ -9,8 +9,8 @@
 - 静态预留192KiB算法缓存；构建脚本配置128KiB应用栈和libm，不改PS7/DDR/MIO/时钟。main.c沿用已核UART/计时器接口，运行中接收溢出/校验/帧错误立即停止。
 - link.c独立实现ECG-IN-1的360Hz/scale4096配置，返回ECG-UART-1 QRS26-ARM；旧500Hz应用源码和默认PC合同保留。接收新I前周期发送合法启动H，电脑收到就绪后才上传；此H不包含采样或检测结果。
 
-构建/运行/复现见[板端说明](../../../docs/runtime_board.md)，原数学和接口见[运行时](../../../docs/qrs_runtime.md)、[分类接口](../../../docs/protocols.md#class)。C实现派生WFDB4.3.1 MIT许可GQRS及本项目冻结版本；完整MIT版权与许可见[原许可](../../third_party/wfdb_license.txt)，源码身份见provenance.json。实做成绩、失败和限制集中docs/records。
+构建/运行/复现见[板端说明](../../../docs/download_guide.md)，原数学和接口见[运行时](../../../docs/download_guide.md)、[分类接口](../../../docs/protocols.md)。C实现派生WFDB4.3.1 MIT许可GQRS及本项目冻结版本；完整MIT版权与许可见[原许可](../../third_party/wfdb_license.txt)，源码身份见provenance.json。实做成绩、失败和限制集中docs/records。
 
-UART周期T重复最近已知事件的心率/RR，尚未知时仍为-1；收到T不证明有新的采样。完整窗口L跟踪默认关闭，仅显式ECG_RUNTIME_TRACE=1用于逐窗口数字验收。匹配构建/许可入口见[系统检查](../../../docs/system_checks.md)。
+UART周期T重复最近已知事件的心率/RR，尚未知时仍为-1；收到T不证明有新的采样。完整窗口L跟踪默认关闭，仅显式ECG_RUNTIME_TRACE=1用于逐窗口数字验收。匹配构建/许可入口见[系统检查](../../../docs/download_guide.md)。
 
 正常会话完成后的复用：main.c等待DONE与UART硬件发送结束后，调用ecg_link_rearm重新初始化算法、缓存、心拍号、样本号、RR和分类队列；下一整秒广播新的空闲启动H。电脑按原ECG-IN-1协议创建新会话即可，无需在每轮正常结束后复位。500Hz生成器共用这段生命周期逻辑，保持各自采样率和数学流程。仅done、无错误且发送队列清空时允许复用；CRC、序号、超时、UART硬件错误仍锁存并停止，不能将错误数据自动拼接成新会话。旧冻结镜像不因源码修改自动获得此功能，实际固化身份查下载教程和过程记录。

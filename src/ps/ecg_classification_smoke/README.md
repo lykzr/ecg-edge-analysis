@@ -20,4 +20,4 @@
 python -B board/verify_classification.py --manifest <项目tmp工作区/build_manifest.json> --xsdb <Vitis/bin/xsdb.bat> --cable <实际JTAG序列号> --port <实际COM> --device-id '<实际USB实例>' --output tmp/class_board_new
 ```
 
-完整7项PASS和本次build_id对应的PASS ECG_CLASS_INTERFACE failures=0才通过；输出和错误保存在新目录，不自动重试/复位覆盖现象。详细输入与待验边界见[分类接口](../../../docs/protocols.md#class)，实际运行证据集中[记录](../../../docs/archive/records/classification_20261023.md)。
+完整7项PASS和本次build_id对应的PASS ECG_CLASS_INTERFACE failures=0才通过；输出和错误保存在新目录，不自动重试/复位覆盖现象。详细输入与待验边界见[分类接口](../../../docs/protocols.md)，实际运行证据集中[当前实现与缺项](../../../report/report.md)。

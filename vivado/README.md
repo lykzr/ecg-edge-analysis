@@ -17,4 +17,4 @@ update_compile_order -fileset sources_1
 & '<Vivado安装目录>/bin/vivado.bat' -mode batch -source build/share.tcl -tclargs tmp/share_new
 ```
 
-不传输出目录时默认vivado/ecg_edge；已存在即停止，不覆盖当前工程。正式分享文件仅XPR、ecg_system.bd及sources_1/hdl/ecg_system_wrapper.v；原tmp工程和历史缓存保留，不当当前交付。完整综合/实现/bit/XSA流水线仍需另行验收。相关核查见[交接审查](../docs/archive/records/checkout_20261017.md)。
+不传输出目录时默认vivado/ecg_edge；已存在即停止，不覆盖当前工程。正式分享文件仅XPR、ecg_system.bd及sources_1/hdl/ecg_system_wrapper.v；原tmp工程和历史缓存保留，不当当前交付。完整综合/实现/bit/XSA流水线仍需另行验收。相关核查见[当前实现与缺项](../report/report.md)。

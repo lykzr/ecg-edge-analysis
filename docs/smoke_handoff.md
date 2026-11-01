@@ -2,7 +2,7 @@
 
 本自检只验证 PS→AXI→QRS候选检测器→事件FIFO，不验证当前ARM检测算法、真实输入或分类。使用 releases/latest/smoke/ 的匹配硬件、ELF及 run_smoke.tcl，不与 runtime500/、bridge/ 混用。
 
-从项目根执行（实际工具和下载器替换占位值）：
+从项目根执行（实际工具安装路径替换占位值）：
 
 ```powershell
 & '<Vitis>/bin/xsdb.bat' releases/latest/smoke/run_smoke.tcl --check-only

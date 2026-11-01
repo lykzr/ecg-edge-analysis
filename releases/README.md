@@ -16,4 +16,4 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/pro
 
 旧版32份文件完整保留在history/20261025-runtime500-qspi-v1/，原字节与归档前逐项哈希一致；其他历史目录继续保留，不覆盖、不删除。替换latest前须校验现有文件、确认目标在工程内且历史版本不存在；先生成并检查候选，再归档替换。历史默认忽略，latest仅明确放行清单文件；本地更新不代表提交、推送或上传。
 
-本次验收与发布记录见[板端会话复用记录](../docs/records/session_reuse_20261101.md)及[发布收据](../data/results/session_reuse_release_20261101.json)。
+本次验收与发布记录见[当前实现与缺项](../report/report.md)及[发布收据](../data/results/session_reuse_release_20261101.json)。
