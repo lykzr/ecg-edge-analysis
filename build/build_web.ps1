@@ -6,10 +6,8 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $sourceRoot  = Join-Path $projectRoot 'src/web/frontend'
 $workRoot    = Join-Path $projectRoot 'tmp/web_frontend'
 
-# 干净重建工作目录，避免残留旧产物干扰构建
-if (Test-Path -LiteralPath $workRoot) {
-    Remove-Item -LiteralPath $workRoot -Recurse -Force
-}
+# 保留已有依赖和本地历史；SkipInstall不能先删掉node_modules。
+# 正式输入在下面同步，构建产物仍由Vite写到tmp，不自动清空工作区。
 New-Item -ItemType Directory -Force $workRoot | Out-Null
 
 # 仅同步正式输入；依赖、Vite 临时文件和 dist 始终留在 tmp

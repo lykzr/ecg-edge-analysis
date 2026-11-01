@@ -177,12 +177,16 @@ def test_actual_ps_c_core_to_http_hgb_preserves_board_unknown(client, monkeypatc
                       standard_preprocess='hp05' if kind=='standard500' else None))
         assert response.status_code == 201
         identifier = response.json()['id']
-        deadline = time.monotonic()+45
+        # 等待真实后台关闭，不以高频下载完整快照争用模拟串口的CPU/GIL。
+        # 仍从HTTP结果检查完整6000点、真实C事件及HGB输出，不放宽数值条件。
+        manager.jobs[identifier]['worker'].join(timeout=30)
+        assert not manager.jobs[identifier]['worker'].is_alive(), '后台未在30秒内完成'
+        deadline = time.monotonic()+10
         while time.monotonic() < deadline:
             snapshot = client.get('/api/v1/live/sessions/'+identifier, headers=headers).json()
             if not snapshot['active'] and snapshot['analysis']['status'] != 'waiting':
                 break
-            time.sleep(.03)
+            time.sleep(.1)
         assert snapshot['info']['error'] is None, snapshot['info']
         assert snapshot['info']['source_samples'] == snapshot['info']['confirmed'] == snapshot['info']['echoed'] == 6000
         assert snapshot['analysis']['status'] == 'submitted', snapshot['analysis']

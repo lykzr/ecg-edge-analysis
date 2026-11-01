@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-01",
+  "source_commit": "90c85535df4a5f48dcb72ff46b419b778fb10aab",
+  "actual_hardware": true,
+  "transport": "physical USB UART with real local HTTP service",
+  "input_kind": "synthetic digital replay, no electrodes or ADS input",
+  "sampling_hz": 500,
+  "scale": 4096,
+  "preprocess": "synthetic mV -> fixed hp05 -> int16; model raw (no repeated highpass)",
+  "model": "HGB-v92-fold0",
+  "model_execution": "host_pc",
+  "model_sha256": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+  "firmware_declared": "ps-runtime500-1",
+  "detector_declared": "QRS26-500-ARM",
+  "board_classification": "?",
+  "board_flash_identity_verified": false,
+  "reset_between_rounds": false,
+  "downloaded": false,
+  "flash_written": false,
+  "probability_comparison": {
+    "rtol": 1e-12,
+    "atol": 1e-12
+  },
+  "association_tolerance_samples": 25,
+  "rounds": [
+    {
+      "samples": 5000,
+      "source_confirmed_echoed_equal": true,
+      "echo_bit_exact": true,
+      "board_events": 11,
+      "board_positions_and_rr_equal_host_reference": true,
+      "model_beats": 11,
+      "classified": 10,
+      "unclassified": 1,
+      "classes": {
+        "N": 7,
+        "S": 1,
+        "VF": 2
+      },
+      "matched": 11,
+      "model_unmatched": 0,
+      "board_unmatched": 0,
+      "input_csv_sha256": "d8d18335cca78e351a515194ec9ec5fbf9bef2e395f636723b9f1d004da3d132",
+      "source_samples_sha256": "5c3bc81dc8ba9c2a32b3151ef9a008626c2564b7f28e12401fc2805e116df9f3"
+    },
+    {
+      "samples": 15000,
+      "source_confirmed_echoed_equal": true,
+      "echo_bit_exact": true,
+      "board_events": 36,
+      "board_positions_and_rr_equal_host_reference": true,
+      "model_beats": 36,
+      "classified": 35,
+      "unclassified": 1,
+      "classes": {
+        "N": 27,
+        "S": 4,
+        "VF": 4
+      },
+      "matched": 36,
+      "model_unmatched": 0,
+      "board_unmatched": 0,
+      "input_csv_sha256": "6f0f9eb8b10fab6d02fd8c8f3753ea00015e25a74739e6661b876d77a7cd270f",
+      "source_samples_sha256": "707ca9df1d055a3290d0a3e57f861ac136468ed81187602ada6f692548b56a6b"
+    }
+  ],
+  "ads_connected": false,
+  "clinical_accuracy_evaluated": false,
+  "model_qualified": false,
+  "fits": 0
+}

@@ -43,3 +43,5 @@ ECG_HGB_PYTHON=<已通过模型check.py的Python可执行文件>
 模块中的docs/records及evidence保留原ZIP时的研究报告/来源快照，其中旧src/model_inference是当时来源路径；当前可执行位置统一为model/inference。本次合入的范围和实际检查见[集成记录](evidence/model_integration_20261101.md)。
 
 电脑端网页接线的实际验证、失败与剩余边界见[联调检查报告](evidence/hgb_web_integration_20261101.md)。
+
+Zynq实物数字回放已按两条完整记录验证；输入、逐点回显、R峰/RR及电脑模型结果的具体证据见[实物联调报告](evidence/hgb_board_integration_20261101.md)。真实ADS输入仍需接模块另验。
