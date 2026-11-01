@@ -19,6 +19,12 @@ PROJECT = Path(__file__).resolve().parents[2]
 MODULE = PROJECT / 'model/inference'
 
 
+def test_analysis_route_registered_once():
+    routes = [r for r in live.router.routes if getattr(r, 'path', None) == '/live/sessions/{identifier}/analyze'
+              and 'POST' in getattr(r, 'methods', set())]
+    assert len(routes) == 1
+
+
 @pytest.fixture
 def synthetic():
     return np.loadtxt(MODULE / 'examples/synthetic500.csv', delimiter=',')
@@ -121,6 +127,10 @@ def test_complete_capture_auto_analysis_uses_all_ch2_and_survives_restart(client
         assert record['n_samples'] == len(synthetic) > len(snapshot['source_samples']) == 4096
         assert record['result']['prediction']['status'] == 'classified'
         assert record['result']['prediction']['preprocess'] == 'hp05'
+        assert record['result']['source_session_id'] == identifier
+        assert client.get('/api/v1/live/sessions', headers=headers).json()[0]['analysis_count'] == 1
+        versions = client.get('/api/v1/live/sessions/'+identifier+'/analyses', headers=headers).json()
+        assert any(v['record_id'] == task['record_id'] for v in versions)
         with storage.connect() as db:
             payload = db.execute('SELECT payload FROM task_inputs WHERE task_id=?', (task['id'],)).fetchone()[0]
         import json
@@ -129,6 +139,10 @@ def test_complete_capture_auto_analysis_uses_all_ch2_and_survives_restart(client
         # 重复点击不会生成另一轮推理或重复记录。
         again = client.post('/api/v1/live/sessions/'+identifier+'/analyze', headers=headers, json={})
         assert again.status_code == 202 and again.json()['id'] == task['id']
+        # 本地历史列表的无请求体调用也使用同一入口，不生成重复分析。
+        again_legacy = client.post('/api/v1/live/sessions/'+identifier+'/analyze', headers=headers)
+        assert again_legacy.status_code == 202 and again_legacy.json()['id'] == task['id']
+        assert client.get('/api/v1/live/sessions', headers=headers).json()[0]['analysis_count'] == 1
         other = account(client, 'hgb-other')
         assert client.post('/api/v1/live/sessions/'+identifier+'/analyze', headers=other, json={}).status_code == 404
         manager.jobs[identifier]['watcher'].join(3)
@@ -177,16 +191,15 @@ def test_actual_ps_c_core_to_http_hgb_preserves_board_unknown(client, monkeypatc
                       standard_preprocess='hp05' if kind=='standard500' else None))
         assert response.status_code == 201
         identifier = response.json()['id']
-        # 等待真实后台关闭，不以高频下载完整快照争用模拟串口的CPU/GIL。
-        # 仍从HTTP结果检查完整6000点、真实C事件及HGB输出，不放宽数值条件。
-        manager.jobs[identifier]['worker'].join(timeout=30)
-        assert not manager.jobs[identifier]['worker'].is_alive(), '后台未在30秒内完成'
-        deadline = time.monotonic()+10
+        # ctypes逐字节软件串口不是物理设备速度；按网页250ms节奏轮询，
+        # 避免序列化4096点快照占满宿主而饿死送样线程。完成条件仍为全部6000点。
+        deadline = time.monotonic()+90
         while time.monotonic() < deadline:
             snapshot = client.get('/api/v1/live/sessions/'+identifier, headers=headers).json()
             if not snapshot['active'] and snapshot['analysis']['status'] != 'waiting':
                 break
-            time.sleep(.1)
+            time.sleep(.25)
+        assert not snapshot['active'], snapshot['info']
         assert snapshot['info']['error'] is None, snapshot['info']
         assert snapshot['info']['source_samples'] == snapshot['info']['confirmed'] == snapshot['info']['echoed'] == 6000
         assert snapshot['analysis']['status'] == 'submitted', snapshot['analysis']

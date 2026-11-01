@@ -50,3 +50,27 @@ POST /api/v1/live/sessions/{id}/analyze接受JSON对象，可对自己的已保�
 ## 独立PL回归
 
 smoke/及legacy bridge/使用各自匹配的bit/XSA/ELF，不用于本版ARM检测计分。AXI基地址0x43C00000，完整偏移/位域/FIFO消费顺序见 src/rtl/ecg_qrs_axi_lite.v。legacy500的scale=−1不得混入runtime500。RTL是电路描述，软件参考用于行为核对；保留两者不等于已实现最终FPGA CNN。
+
+## 独立ARM模型批处理：HGB-BATCH-1
+
+这是`src/ps/ecg_hgb/main.c`与`src/pc/ecg_hgb.py`的独立候选协议，不兼容网页当前ECG-IN-1/ECG-UART-1，不接厂商34字节。USB_UART为115200/8N1/无流控。输入固定500Hz、单导联mV；hp05表示原始mV由ARM执行指定高通，raw仅接严格匹配高通后的mV。三类为N/S/VF，VF是V/E/F合并；研究模型未全部达标，不能解释为疾病诊断。
+
+```text
+H,HGB-BATCH-1,READY,500,mV,<model_sha256>
+I,HGB-BATCH-1,<sid>,500,mV,<hp05|raw>,<total>
+A,<sid>,READY,32
+B,<sid>,<offset>,<count>,<crc32_hex>
+<count个little-endian float64 mV，无分隔符>
+A,<sid>,NEXT,<new_offset>
+D,<sid>,<total>
+R,<sid>,<beat_id>,<position>,<ready_at>,<decision_at>,<status>,<class_id>,<pN_hex>,<pS_hex>,<pVF_hex>
+D,<sid>,<total>,<events>,<clipped>,<input_us>,<prepare_us>,<classify_us>
+```
+
+sid为非零uint32，total为1—30000，count为1—32且不得超过剩余数。offset从0严格连续，不重发/跳包；每块收到NEXT后才发下一块，保证背压。CRC为该块原始二进制的标准CRC32（与zlib.crc32一致）；每个值必须有限。普通分块保持高通状态；记录结束才整段检测/重切拍、192项特征和分类。事件上限480，工作区512KiB，容量不足明确失败。完整记录最多60秒，不是循环流或实时逐拍返回。
+
+beat_id从1递增；position/ready_at/decision_at均为该会话500Hz、0起点样本位置，分别为模型定位、切窗就绪和含后继信息的决定时刻。status=0有效，class_id=0/1/2对应N/S/VF；status=2窗口不足、4首RR未知时class_id=-1且三概率NaN。概率字段为double位型的16位十六进制文本，高位先写；电脑转换未知为null，不能补成N。这些编号来自模型自身重切拍，不自动等于现有QRS事件号。
+
+接收块期间`X,<sid>`取消并返回`S,<sid>,CANCEL`。错误返回`F,<sid>,<reason>`（头错误sid=0），停止该会话；等待头/块体/结束最多10秒，发送等待最多4秒。空闲每2秒重复READY，正常完成/明确失败/取消均回到等待新会话。错误率、CRC、取消、空闲超时后的新会话已受控验证；物理拔插、半包后任意残留字节重同步未验，不承诺自动续传。来源缺样、设备/增益/导联变化必须终止并开新记录，不插值或跨断点连RR。
+
+clipped为mV量化到int16时的饱和点数，不是无线丢样数；三项us仅统计ARM输入换算、检测切拍、特征分类计算，不包括串口与等待，不用于宣称加速比。输出为ASCII且无独立CRC；电脑验证会话/时轴/计数/概率，尚不能代替链路完整性全面验收。输入原文件、tx.bin、rx.log及result.json保留独立收据，按冻结参考另做数值核对。该程序仅临时JTAG，尚未更新Flash或latest。

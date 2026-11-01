@@ -112,6 +112,8 @@ logs/
 !/docs/evidence/hgb_web_integration_20261101.md
 !/docs/evidence/hgb_board_integration_20261101.md
 !/docs/evidence/hgb_board_integration_20261101.json
+!/docs/evidence/hgb_arm_20261101.json
+!/docs/evidence/hgb_arm_board_20261101.json
 !/docs/evidence/classification_board_20261024/
 !/docs/evidence/qspi_20261025/
 !/docs/evidence/runtime500_board_20261024/

@@ -13,6 +13,28 @@ from ecg_web_service import manager
 
 router = APIRouter(prefix='/live', tags=['实时采集与中转'])
 
+from app.services.user_files import directory as user_directory
+manager.owner_directory = user_directory
+
+
+def visible_owners(user, shared=False):
+    from app.services.storage import connect
+    with connect() as db:
+        if shared:
+            rows = db.execute('SELECT DISTINCT u.id,u.username FROM grants g JOIN users u ON u.id=g.owner_id WHERE g.relative_id=? AND g.active=1', (user,)).fetchall()
+        else:
+            rows = db.execute('SELECT id,username FROM users WHERE id=?', (user,)).fetchall()
+    return [dict(row) for row in rows]
+
+
+def visible_session(user, identifier):
+    for owner in visible_owners(user) + visible_owners(user, True):
+        try:
+            return owner, manager.snapshot(owner['id'], identifier)
+        except LookupError:
+            continue
+    raise LookupError('会话不存在或没有查看权限')
+
 
 class Start(BaseModel):
     model_config = ConfigDict(extra='forbid')
@@ -53,13 +75,84 @@ def start(body: Start, user: str = Depends(current_user)):
 
 
 @router.get('/sessions')
-def history(user: str = Depends(current_user)):
-    return manager.history(user)
+def history(shared: bool = False, user: str = Depends(current_user)):
+    owners = visible_owners(user, shared)
+    from app.services.storage import connect
+    counts = {}
+    with connect() as db:
+        for owner in owners:
+            for row in db.execute('SELECT payload FROM records WHERE owner_id=?', (owner['id'],)):
+                source = json.loads(row['payload']).get('result', {}).get('source_session_id')
+                if source:
+                    counts[source] = counts.get(source, 0) + 1
+    return [dict(row, owner_username=owner['username'], owned=owner['id']==user,
+                 analysis_count=counts.get(row['id'], 0))
+            for owner in owners for row in manager.history(owner['id'])]
+
+
+@router.get('/sessions/{identifier}/analyses')
+def analyses(identifier: str, user: str = Depends(current_user)):
+    owner, _ = visible_session(user, identifier)
+    from app.services.storage import connect
+    with connect() as db:
+        rows = db.execute('SELECT t.id,t.status,t.record_id,i.payload FROM analysis_tasks t JOIN task_inputs i ON i.task_id=t.id WHERE t.owner_id=? ORDER BY t.created_at DESC', (owner['id'],)).fetchall()
+    return [{key: row[key] for key in ('id', 'status', 'record_id')} for row in rows
+            if (owner['id']==user or row['record_id']) and json.loads(row['payload']).get('source_session_id') == identifier]
+
+
+def _analyze_legacy(identifier: str, user: str):
+    import csv
+    from app.services import records
+    from app.core.runner import runner
+    from app.core.config import settings
+    snapshot = manager.snapshot(user, identifier)
+    if snapshot['active']:
+        raise ValueError('请先停止测量并等待保存完成')
+    # 读取完整落盘序列，绝不拿4096点显示缓存冒充完整测量。
+    names = snapshot['files']
+    name = next((n for n in names if n.endswith('nominal.csv')), None)
+    if not name:
+        name = next((n for n in ('normalized.csv', 'result/samples.csv', 'samples.csv') if n in names), None)
+    if not name:
+        name = next((n for n in names if n.endswith('/samples.csv')), None)
+    if not name:
+        raise ValueError('此记录尚无可分析的标定波形；请导入含ecg_raw的采集CSV')
+    header = snapshot['result']['header'] or {}
+    nominal = name.endswith('nominal.csv')
+    rate = 500 if nominal else header.get('fs') or (500 if snapshot['kind'].startswith('bridge') else None)
+    scale = 1 if nominal else 4096 if name == 'normalized.csv' else header.get('scale')
+    if not rate or not scale:
+        raise ValueError('记录缺少采样率或幅值比例，不能猜测后分析')
+    samples = []
+    previous = None
+    with manager.file(user, identifier, name).open(encoding='utf-8-sig', newline='') as stream:
+        for row in csv.DictReader(stream):
+            index = int(row.get('index', row.get('seq', -1)))
+            if previous is not None and index != previous + 1:
+                raise ValueError('测量序列有缺口，不能按连续波形分析')
+            previous = index
+            value = row['ecg_nominal_mv'] if nominal else row.get('sample_int16', row.get('raw'))
+            samples.append(float(value) / scale)
+            if len(samples) > settings.max_samples:
+                raise ValueError('测量超过当前离线分析点数上限，请先截取明确时间段再导入')
+    if not samples:
+        raise ValueError('此记录没有有效采样点')
+    signal = dict(samples=samples, sample_rate_hz=rate, unit='mV',
+                  source='measurement:' + snapshot['kind'], source_session_id=identifier)
+    content = ('value\n' + '\n'.join(map(str, samples)) + '\n').encode()
+    task, created = records.submit_analysis(user, signal, raw_content=content)
+    if created:
+        runner.enqueue(task['id'])
+    return task
 
 
 @router.get('/sessions/{identifier}')
 def snapshot(identifier: str, user: str = Depends(current_user)):
-    return manager.snapshot(user, identifier)
+    owner, data = visible_session(user, identifier)
+    if owner['id'] != user:
+        data = dict(data, files=[], diagnostics={}, capture_info={}, analysis=None, info={
+            key:value for key,value in data['info'].items() if key in {'state','error','source_samples'}})
+    return dict(data, owned=owner['id']==user, owner_username=owner['username'])
 
 
 @router.post('/sessions/{identifier}/stop')
@@ -73,8 +166,11 @@ class AnalyzeSession(BaseModel):
 
 
 @router.post('/sessions/{identifier}/analyze', status_code=202)
-def analyze_session(identifier: str, body: AnalyzeSession, user: str = Depends(current_user)):
-    return _submit_analysis(user, identifier, body.standard_preprocess)
+def analyze_session(identifier: str, body: AnalyzeSession | None = None, user: str = Depends(current_user)):
+    from ai_model.inference.factory import model_setting
+    if model_setting('ECG_MODEL_TYPE', 'hgb').strip().lower() != 'hgb':
+        return _analyze_legacy(identifier, user)
+    return _submit_analysis(user, identifier, body.standard_preprocess if body else None)
 
 
 def _submit_analysis(user, identifier, standard_preprocess):

@@ -129,7 +129,18 @@ class LiveManager:
         self.lock = threading.RLock()
         self.jobs = {}
         self.uploads = {}
+        self.owner_directory = None
         self.closing = False
+
+    def _base(self, owner):
+        return Path(self.owner_directory(owner)) if self.owner_directory else self.directory
+
+    def _session_dir(self, owner, identifier):
+        job = self.jobs.get(identifier)
+        if job and job['owner'] == owner:
+            return job['directory']
+        current = self._base(owner) / 'sessions' / identifier
+        return current if (current / 'web_session.json').exists() else self.directory / 'sessions' / identifier
 
     def reopen(self):
         with self.lock:
@@ -151,7 +162,7 @@ class LiveManager:
         if suffix not in {'.csv', '.log'}:
             raise ValueError('仅支持CSV或原始raw.log')
         with self.lock:
-            upload_dir = self.directory / 'uploads'
+            upload_dir = self._base(owner) / 'uploads'
             existing = list(upload_dir.glob('*')) if upload_dir.exists() else []
             if len(existing) >= 64 or sum(p.stat().st_size for p in existing if p.is_file()) + len(content) > 256 * 1024 * 1024:
                 raise ValueError('网页上传累计达到256MiB或64个文件，请先整理本机tmp/web_runtime/live/uploads')
@@ -205,7 +216,7 @@ class LiveManager:
                 capture = self._port(config, 'capture_port', ports, excluded=zynq['port'] if zynq else '')
             source = self._source(owner, config.get('upload_id'), kind) if kind in {'log', 'vendor_csv', 'bridge_csv', 'standard360', 'standard500'} else None
             identifier = uuid.uuid4().hex
-            directory = self.directory / 'sessions' / identifier
+            directory = self._base(owner) / 'sessions' / identifier
             if self.worker_factory:
                 worker = self.worker_factory(kind, source, directory, config)
             elif kind in {'demo', 'log', 'result_serial'}:
@@ -314,7 +325,7 @@ class LiveManager:
         job = self.jobs.get(identifier)
         if job and job['owner'] == owner:
             return job
-        path = self.directory / 'sessions' / identifier / 'web_session.json'
+        path = self._session_dir(owner, identifier) / 'web_session.json'
         if not path.exists():
             raise LookupError('会话不存在')
         data = json.loads(path.read_text(encoding='utf-8'))
@@ -335,15 +346,16 @@ class LiveManager:
                     snapshot = self._snapshot(identifier, job)
                     rows.append({key: snapshot[key] for key in ('id', 'kind', 'created', 'active', 'info')})
             known = set(self.jobs)
-        sessions = self.directory / 'sessions'
-        if sessions.exists():
-            for folder in sessions.iterdir():
+        folders = set((self.directory / 'sessions').glob('*')) | set((self._base(owner) / 'sessions').glob('*'))
+        if folders:
+            for folder in folders:
                 if folder.name in known or not folder.is_dir() or folder.is_symlink():
                     continue
                 try:
                     payload = json.loads((folder / 'web_meta.json').read_text(encoding='utf-8'))
                     if payload['owner'] == owner:
-                        rows.append(payload['metadata'])
+                        if not any(row['id'] == payload['metadata']['id'] for row in rows):
+                            rows.append(payload['metadata'])
                         rows = sorted(rows, key=lambda row: row['created'], reverse=True)[:100]
                 except (OSError, ValueError, KeyError):
                     continue
@@ -365,7 +377,7 @@ class LiveManager:
             raise ValueError('请停止并等待文件关闭后再下载')
         if name not in snapshot['files']:
             raise LookupError('记录文件不存在')
-        base = (self.directory / 'sessions' / identifier).resolve()
+        base = self._session_dir(owner, identifier).resolve()
         path = (base / name).resolve()
         if not path.is_relative_to(base) or path.is_symlink() or not path.is_file():
             raise LookupError('记录文件不存在')

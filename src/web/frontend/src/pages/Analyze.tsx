@@ -1,6 +1,7 @@
 // 记录模块：记录与分析页面；模型模块提供统一分析结果。
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import BackLink, {returnPath} from '../components/BackLink';
 import {
   AnalysisTask, RecordDetail as RecordDetailType, post, request, uploadWithProgress,
 } from '../services/api';
@@ -12,6 +13,7 @@ import RecordDetail from '../features/analyze/RecordDetail';
 export default function Analyze() {
   const {id} = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [search, setSearch] = useSearchParams();
   const taskId = id ? null : search.get('task');
   const {task, error: pollError} = useTaskPolling(taskId);
@@ -24,9 +26,9 @@ export default function Analyze() {
 
   useEffect(() => {
     if (task?.status === 'completed' && task.record_id) {
-      navigate('/records/' + task.record_id, {replace: true});
+      navigate('/records/' + task.record_id, {replace: true, state:location.state});
     }
-  }, [task, navigate]);
+  }, [task, navigate, location.state]);
 
   useEffect(() => {
     if (!id) {
@@ -91,7 +93,8 @@ export default function Analyze() {
     setRecordError('');
     try {
       await request(`/records/${record.id}`, {method: 'DELETE'});
-      navigate('/records', {replace: true});
+      const target=returnPath(location.state);
+      navigate(target.startsWith('/records/') ? '/records' : target, {replace: true});
     } catch (caught) {
       setRecordError((caught as Error).message);
     } finally {
@@ -101,14 +104,14 @@ export default function Analyze() {
 
   if (id) {
     return <section>
+      <div className="page-back"><BackLink label="返回记录列表" /></div>
       <p className="eyebrow">记录与分析</p>
       {recordError && <div className="notice notice-error" role="alert">
         <p>{recordError}</p>
-        <p><Link to="/records">返回记录列表</Link></p>
       </div>}
       {!record && !recordError && <p role="status">加载记录…</p>}
-      {record && <RecordDetail record={record} onDelete={() => void removeRecord()}
-                               onBack={() => navigate('/records')} deleting={deleting} />}
+      {record && <RecordDetail key={record.id} record={record} onDelete={() => void removeRecord()}
+                               deleting={deleting} />}
     </section>;
   }
 
@@ -116,18 +119,18 @@ export default function Analyze() {
     return <section>
       <p className="eyebrow">记录与分析</p>
       <h1>分析任务</h1>
+      <div className="page-back"><BackLink fallback="/analyze" /></div>
       <TaskProgress task={task} error={pollError || submitError} onCancel={() => void cancelTask()} />
-      <div className="actions">
-        <button className="secondary" onClick={() => {setSearch({}); setSubmitError('');}}>返回导入</button>
-        <Link className="button secondary" to="/records">查看历史记录</Link>
-      </div>
       <p className="hint">任务编号会保留在地址栏，刷新页面可继续查询。</p>
     </section>;
   }
 
   return <section>
     <p className="eyebrow">记录与分析</p>
-    <h1>新建记录</h1>
+    <h1>导入与分析</h1>
+    <p>分析已有测量，请从历史记录中选择。</p>
+    <Link className="button secondary" to="/records">从历史记录选择测量</Link>
+    <h2>导入新数据</h2>
     <UploadForm onSubmit={(file, rate) => void submitFile(file, rate)}
                 onReplay={() => void replay()} busy={busy} progress={progress} error={submitError} />
   </section>;

@@ -42,7 +42,8 @@ export default function Dashboard() {
     <p>{device}</p>
     {error && <p className="notice notice-error" role="alert">{error}</p>}
     <div className="actions">
-      <Link className="button" to="/analyze">导入或回放</Link>
+      <Link className="button" to="/live">实时采集与板卡</Link>
+      <Link className="button" to="/analyze">导入与分析</Link>
       <Link className="button secondary" to="/records">查看历史</Link>
     </div>
 
@@ -56,15 +57,16 @@ export default function Dashboard() {
     </div>}
 
     <div className="stat-grid">
-      <div><strong>{stats?.total ?? 0}</strong><span>近 30 天记录</span></div>
+      <div><strong>{stats?.total ?? 0}</strong><span>近 30 天分析版本数</span></div>
       <div><strong>{stats?.insufficient ?? 0}</strong><span>质量不足</span></div>
       <div><strong>{stats?.heart_rate_days ?? 0}</strong><span>有心率的日期</span></div>
       <div><strong>{stats?.avg_heart_rate_bpm ?? '—'}</strong><span>平均心率（次/分）</span></div>
     </div>
 
     <article className="recent-records">
-      <h2>最近记录</h2>
-      {recent.length === 0 && <p className="hint">还没有记录，导入或回放一条开始。</p>}
+      <h2>最近分析结果</h2>
+      <p className="hint">测量波形、板卡结果与分析版本统一在<Link to="/records">历史记录</Link>中查看。</p>
+      {recent.length === 0 && <p className="hint">暂无分析结果，可选择已有测量或导入新数据开始分析。</p>}
       {recent.map(record => <Link className="recent-row" key={record.id} to={'/records/' + record.id}>
         <span>{new Date(record.created_at).toLocaleString()}</span>
         <span className="badge badge-muted">{record.source ?? '未知来源'}</span>

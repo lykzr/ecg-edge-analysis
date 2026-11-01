@@ -189,3 +189,30 @@ def test_multi_worker_configuration_is_rejected(monkeypatch):
         _guard_single_process()
     monkeypatch.setenv('WEB_CONCURRENCY', '1')
     _guard_single_process()
+
+
+def test_reuse_analysis_concurrent_configuration_and_owner(client, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    account(client, 'reuse-owner')
+    account(client, 'reuse-other')
+    runner.stop()
+    with storage.connect() as db:
+        owners = {r['username']:r['id'] for r in db.execute('SELECT id,username FROM users')}
+    monkeypatch.setattr(records, 'analysis_configuration', lambda:'config-a')
+    signal = dict(samples=[0,1,0,-1]*150, sample_rate_hz=500, unit='mV', source='upload')
+    owner=owners['reuse-owner']
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        answers=list(pool.map(lambda _:records.submit_analysis(owner,signal),range(8)))
+    assert len({answer[0]['id'] for answer in answers})==1
+    assert sum(answer[1] for answer in answers)==1
+    first=answers[0][0]['id']
+    assert records.execute(first)
+    assert records.submit_analysis(owner,signal)[0]['id']==first
+    assert records.submit_analysis(owners['reuse-other'],signal)[0]['id']!=first
+    forced=records.submit_analysis(owner,signal,force=True)[0]
+    assert forced['id']!=first
+    assert records.submit_analysis(owner,signal)[0]['id']==forced['id']
+    monkeypatch.setattr(records, 'analysis_configuration', lambda:'config-b')
+    assert records.submit_analysis(owner,signal)[0]['id']!=forced['id']
+    changed=dict(signal,samples=[0,2,0,-1]*150)
+    assert records.submit_analysis(owner,changed)[0]['id']!=first

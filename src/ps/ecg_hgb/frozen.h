@@ -1,0 +1,23 @@
+/* 强制包含以隔离冻结模型内部符号，避免链接到既有固件的同名QRS实现。 */
+#ifndef ECG_HGB_FROZEN_NAMES_H
+#define ECG_HGB_FROZEN_NAMES_H
+#define ecg_pipeline_size hgb_frozen_pipeline_size
+#define ecg_pipeline_events hgb_frozen_pipeline_events
+#define ecg_pipeline_init hgb_frozen_pipeline_init
+#define ecg_pipeline_push hgb_frozen_pipeline_push
+#define ecg_pipeline_finish hgb_frozen_pipeline_finish
+#define ecg_runtime_size hgb_frozen_runtime_size
+#define ecg_runtime_init hgb_frozen_runtime_init
+#define ecg_runtime_pending hgb_frozen_runtime_pending
+#define ecg_runtime_push hgb_frozen_runtime_push
+#define ecg_rate500_init hgb_frozen_rate500_init
+#define ecg_rate500_source hgb_frozen_rate500_source
+#define ecg_rate500_push hgb_frozen_rate500_push
+#define ecg_class_init hgb_frozen_class_init
+#define ecg_class_submit hgb_frozen_class_submit
+#define ecg_class_take hgb_frozen_class_take
+#define ecg_class_expire hgb_frozen_class_expire
+#define ecg_class_complete hgb_frozen_class_complete
+#define ecg_class_normalize_rr hgb_frozen_class_normalize_rr
+#define ecg_class_cancel hgb_frozen_class_cancel
+#endif

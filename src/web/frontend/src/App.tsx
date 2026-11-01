@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {const logout=()=>setSignedIn(false); window.addEventListener('ecg:logout',logout);return()=>window.removeEventListener('ecg:logout',logout);},[]);
   if (!signedIn) return <Login onLogin={()=>setSignedIn(true)} />;
   return <Layout><Routes>
-    <Route path="/" element={<Dashboard />} /><Route path="/analyze" element={<Analyze />} />
+    <Route path="/" element={<Navigate to="/live" replace />} /><Route path="/overview" element={<Dashboard />} /><Route path="/analyze" element={<Analyze />} />
     <Route path="/records" element={<Records />} /><Route path="/records/:id" element={<Analyze />} />
     <Route path="/live" element={<Live />} /><Route path="/family" element={<Family />} /><Route path="*" element={<Navigate to="/" replace />} />
   </Routes></Layout>;

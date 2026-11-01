@@ -75,12 +75,12 @@ def submit(manager, owner, identifier, *, standard_preprocess=None):
         acquisition.update(board_events=positions, board_session=header.get('session'),
                            board_result=snapshot['result'].get('cls'), board_confirmed=True)
     signal = dict(samples=samples, sample_rate_hz=500, unit='mV', lead='CH2' if kind != 'standard500' else 'single_lead',
-                  source='live_'+kind, model_preprocess=standard_preprocess or 'hp05', acquisition=acquisition)
+                  source='live_'+kind, source_session_id=identifier,
+                  model_preprocess=standard_preprocess or 'hp05', acquisition=acquisition)
     # 原始采集仍由会话文件保留；此CSV精确表示提交模型的整段mV输入。
     text = io.StringIO(newline='')
     writer = csv.writer(text, lineterminator='\n')
     writer.writerow(['mv'])
     writer.writerows([value] for value in samples)
-    from ai_model.inference.factory import model_setting
-    key = f"live:{identifier}:{model_setting('ECG_MODEL_TYPE', 'hgb')}:{signal['model_preprocess']}"
-    return records.submit_task(owner, signal, idempotency_key=key, raw_content=text.getvalue().encode())
+    # 沿用本地账号、输入及代码/配置指纹；不能用静态会话键复用不同处理版本。
+    return records.submit_analysis(owner, signal, raw_content=text.getvalue().encode())

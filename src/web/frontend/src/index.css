@@ -75,3 +75,29 @@
 
 /* 实时页沿用记录页面的布局与色彩，窄屏自动换列。 */
 .live-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 22px}.live-controls label{min-width:0}.live-controls select,.wave-toolbar select{display:block;width:100%;padding:10px;border:1px solid #bcd0cd;border-radius:8px;background:white;color:#183e48;margin-top:7px}.live-controls input{width:100%}.live-table{max-height:360px;overflow:auto;margin:16px 0}.live-table table{width:100%;border-collapse:collapse}.live-table th,.live-table td{text-align:left;padding:10px;border-bottom:1px solid #d8e4e2;white-space:nowrap}.live-table th{position:sticky;top:0;background:#f2f7f5}details summary{cursor:pointer;color:#147b74}.wave-toolbar select{width:auto;margin:0}
+
+/* 测量操作与链接使用同一按钮尺度，窄屏整组换行。 */
+.measurement-item{padding:16px 0;border-bottom:1px solid #e1eae7}
+.measurement-row{display:grid;grid-template-columns:minmax(190px,1fr) auto auto;gap:16px;align-items:center}
+.measurement-row>.badge{justify-self:start}
+.measurement-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.measurement-actions button,.measurement-actions .button{padding:8px 13px;font-size:14px;line-height:1.5;white-space:nowrap;text-align:center}
+.measurement-error{margin-top:8px;font-size:13px}.measurement-error summary{color:#8c2f27}
+.measurement-versions{padding:10px 14px;margin-top:10px;background:#f7fbf9;border-radius:8px;font-size:14px}
+.live-advanced{margin:6px 0 18px}.live-advanced .actions{margin-top:12px}
+.wave-toolbar label{margin:0}
+@media(max-width:760px){.measurement-row{grid-template-columns:1fr auto}.measurement-actions{grid-column:1/-1;justify-content:flex-start}}
+.live-configuration{border:0;padding:0;margin:0;min-width:0}
+
+/* 统一全站链接、表单与记录操作。 */
+a{color:#147b74;text-underline-offset:3px}
+input,select,textarea{font:inherit;color:inherit}
+select{padding:10px 12px;border:1px solid #bcd0cd;border-radius:8px;background:white}
+button:disabled,.row-actions button:disabled{cursor:not-allowed}
+button.danger{background:#fbe2df;color:#8c2f27}
+.record-actions button,.record-actions .button{padding:8px 13px;font-size:14px;line-height:1.5;white-space:nowrap}
+.page-back{margin-bottom:16px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible{outline:2px solid #147b74;outline-offset:3px}
+.dropzone:focus-within{border-color:#147b74;outline:2px solid #147b74;outline-offset:3px}
+.dropzone input:disabled{cursor:not-allowed}
+@media(max-width:640px){.pager{gap:10px;flex-wrap:wrap}.record-toolbar{align-items:center}.record-toolbar h2{margin:0}}

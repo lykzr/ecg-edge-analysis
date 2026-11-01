@@ -1,0 +1,382 @@
+{
+  "date": "2026-11-01",
+  "passed": true,
+  "hardware_operated": true,
+  "flash_written": false,
+  "release_updated": false,
+  "training": false,
+  "model_sha256": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+  "sources": {
+    "board/build_hgb_test.py": "2e7d9f67bb5b69764e77310545ccdcce664719526a14954f433f214016e5f89a",
+    "board/prepare_hgb_test.py": "2616e54b292c6de682ead69ab852fd6ec1f70ac034b4e150b4a96975b98eb348",
+    "board/run_hgb_test.py": "0ba52477af075a02af5bab3690776f0eab1d18ee3f158f17c7a4a9ac84d24617",
+    "board/verify_hgb_test.py": "5cecf4e4fc05ac73aeba1f4d9af31cfb472f4237a9f6f2b21a4fad647368d7f2",
+    "board/load_hgb.py": "40ab6e597c521f9a61eeb4a2d98a24f73a39fc893d7c2df26d35b0cd88eef511",
+    "board/verify_hgb_uart.py": "bebf0f4ad3e81efb4dae6e967de1949a1a0377f8c5848e4429a9f972086db733",
+    "board/check_hgb_uart_faults.py": "9b9b0ae7b32384cbd3daeec9502efcac698a8a3389e308e0b04323c2e8cee19c",
+    "board/hgb_handoff/run.tcl": "d82ee4518e59703a3fadc6719e12a93004961691ba8c16dfcede3546ee0ee0b6",
+    "board/hgb_handoff/load.tcl": "48ea752da6d4b30979fd84cd1d04f59d5c3c511edfc9371f298c41d8aab7af32",
+    "src/ps/ecg_hgb/board_test.c": "0d94be1fd7820201c1777856bb8190a0543dc6283d381e830feaeda06406fcbf",
+    "src/ps/ecg_hgb/main.c": "9ac2ea05b5c6d60ebb7afdae6d2554b718158b0237382703d2f0e4aeacaa5fac",
+    "src/pc/ecg_hgb.py": "7d5958434587743ec866e67575ba4ec1f0feb36648ca9180828098a03ca85c85",
+    "sim/test_hgb_protocol.py": "58181b74110c82ece6c1b2552d11047ef4117cb941c86b76c13e00a395b41599"
+  },
+  "arm_selftest": {
+    "passed": true,
+    "arm_executed": true,
+    "hardware_operated": true,
+    "flash_written": false,
+    "fits": 0,
+    "cases": [
+      {
+        "name": "synthetic_hp05",
+        "events": 73,
+        "valid": 72,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 6.938893903907228e-18,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 41811
+      },
+      {
+        "name": "synthetic_raw",
+        "events": 73,
+        "valid": 72,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 0.0,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 41753
+      },
+      {
+        "name": "random",
+        "events": 480,
+        "valid": 479,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 2.220446049250313e-16,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 293398
+      },
+      {
+        "name": "zero",
+        "events": 480,
+        "valid": 479,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 1.1102230246251565e-16,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 265673
+      },
+      {
+        "name": "constant",
+        "events": 480,
+        "valid": 479,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 5.551115123125783e-17,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 272254
+      },
+      {
+        "name": "alternating",
+        "events": 480,
+        "valid": 479,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 6.938893903907228e-18,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 270464
+      },
+      {
+        "name": "boundary",
+        "events": 4,
+        "valid": 2,
+        "features_max_abs": 0.0,
+        "probability_max_abs": 0.0,
+        "classes_equal": true,
+        "decisions_equal": true,
+        "record_compute_us": 791
+      }
+    ],
+    "input_compute_us": [
+      5125,
+      4165
+    ],
+    "prepare_compute_us": [
+      325716,
+      328349
+    ],
+    "scope": "physical ARM controlled batch test; not continuous wireless, accuracy or PL acceleration",
+    "files": {
+      "codes.bin": {
+        "bytes": 120000,
+        "sha256": "5fc4979a2aebad6add1789335dcb3aee3752dc556b60315d07e0ac25c9d77ee9"
+      },
+      "dumps.txt": {
+        "bytes": 108,
+        "sha256": "5eaadb882b04ab85848344adb21edc0ed849db3086620fc67ec6743cfd6c9fa5"
+      },
+      "identity.json": {
+        "bytes": 1221,
+        "sha256": "e05a85087ffa07bfb18385ef85855f791da6a9d84723214401ae21fdea30ece5"
+      },
+      "jtag.log": {
+        "bytes": 178,
+        "sha256": "03440a4b3991bb0dd889c33c5b9c0ee95e01bbb1560f6bf9189a36178503be66"
+      },
+      "requests.bin": {
+        "bytes": 80592,
+        "sha256": "0b01ca91f3c39cfba96f4f713e8c9a35a07dab9b39ee218efd2697a486b212d5"
+      },
+      "results.bin": {
+        "bytes": 1689120,
+        "sha256": "af9a0542c12984954d6b296f125061ba8a558b5317d070086ea0022faf633de3"
+      },
+      "status.bin": {
+        "bytes": 132,
+        "sha256": "b2eedcf42a1a3fe8c2d2aa5ed33bca7f5bffb3ac6395e63e48c676a26a83f774"
+      },
+      "uart.log": {
+        "bytes": 319,
+        "sha256": "ab394304693ad822c0ebbf2ac88af8cb79890800ef27350bf63198d12d0a6313"
+      }
+    }
+  },
+  "selftest_identity": {
+    "port": {
+      "port": "COM23",
+      "label": "USB-SERIAL CH340 (COM23)",
+      "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+      "candidate": true
+    },
+    "cable": "210512180081",
+    "manifest_sha256": "fef2ce6826bb11f497bdb0538ada4c859dc0b7919d3155463d8811fc2dcbff22",
+    "elf_sha256": "09e4e8e63399d2c044916b1bda29630d776fb270b97c3d33adc2de26093db695",
+    "symbols": {
+      "hgb_board_codes": 3558400,
+      "hgb_board_requests": 3678400,
+      "hgb_board_results": 3758992,
+      "hgb_board_status": 2769016
+    },
+    "command": [
+      "D:/AMDDesignTools/2026.1/Vitis/bin/xsdb.bat",
+      "C:\\Users\\23006\\Desktop\\ecg_edge\\board\\hgb_handoff\\run.tcl",
+      "210512180081",
+      "C:\\Users\\23006\\Desktop\\ecg_edge\\releases\\latest\\smoke\\hardware\\ecg_system_candidate.bit",
+      "C:\\Users\\23006\\Desktop\\ecg_edge\\releases\\latest\\smoke\\hardware\\ps7_init.tcl",
+      "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\hgb_arm_20261101\\board02\\ecg_hgb_test\\build\\ecg_hgb_test.elf",
+      "0x2a4078",
+      "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\hgb_arm_20261101\\physical03\\dumps.txt",
+      "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\hgb_arm_20261101\\physical03"
+    ],
+    "flash_written": false
+  },
+  "selftest_build": {
+    "model": {
+      "model_sha256": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+      "config_sha256": "cec71feba1a80a6b04c9370c7576f9041660f46b926d990f11870190d2fa6d5f",
+      "basis_sha256": "9c24ca79f06f87c23d2200fd6ba00a95ef467e0f0632557518d46285dd1aac0e",
+      "generator_sha256": "f66e9b5c42d36452938aa1bd8b4181a6de2a1d3859ae3f9d7f1ec35e0ab209f6",
+      "generated_sha256": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29",
+      "fold": 0,
+      "trees": 192,
+      "nodes": 8630,
+      "fits": 0,
+      "quantized": false,
+      "source": "model/inference",
+      "qualified": false
+    },
+    "elf": "tmp/hgb_arm_20261101/board02/ecg_hgb_test/build/ecg_hgb_test.elf",
+    "files": {
+      "releases/latest/smoke/hardware/ecg_system_candidate.bit": {
+        "bytes": 4045773,
+        "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
+      },
+      "releases/latest/smoke/hardware/ecg_system_candidate.xsa": {
+        "bytes": 321430,
+        "sha256": "fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248"
+      },
+      "releases/latest/smoke/hardware/ps7_init.tcl": {
+        "bytes": 27602,
+        "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+      },
+      "tmp/hgb_arm_20261101/board02/ecg_hgb_test/build/ecg_hgb_test.elf": {
+        "bytes": 2102288,
+        "sha256": "09e4e8e63399d2c044916b1bda29630d776fb270b97c3d33adc2de26093db695"
+      },
+      "tmp/hgb_arm_20261101/board02/ecg_hgb_test/build/ecg_hgb_test.map": {
+        "bytes": 264315,
+        "sha256": "2483e97de4ea1bda731d179768603fca8e738f41d9fa55cafe8882935c9b5adc"
+      }
+    },
+    "sources": {
+      "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+      "src/ps/ecg_hgb/features.c": "3877247b12437a2204b8e7fac49772ba4501adb2ccc45bcaf9ce069fea5f77ef",
+      "src/ps/ecg_hgb/tree.c": "543175b33d8b67732bf9d991b02d7d8215de3269e2f07963c78e68aaa598815f",
+      "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+      "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+      "src/ps/ecg_hgb/board_test.c": "0d94be1fd7820201c1777856bb8190a0543dc6283d381e830feaeda06406fcbf",
+      "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+      "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "tmp/hgb_arm_20261101/fixture01/hgb_fixture.c": "51af4675ff9b6e30a85ab577900563add66f96f32dae530591b23af10198707e",
+      "tmp/hgb_arm_20261101/fixture01/hgb_fixture.h": "75c1874b42caff41f529c5c37049f37bb7954b8566abbcfefead9f8ac9d7779c",
+      "tmp/hgb_arm_20261101/board02_parameters/hgb_parameters.c": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29"
+    },
+    "stack_bytes": 262144,
+    "scope": "independent ARM batch test; not continuous protocol or Flash"
+  },
+  "batch_build": {
+    "application": "batch",
+    "model": {
+      "model_sha256": "375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8",
+      "config_sha256": "cec71feba1a80a6b04c9370c7576f9041660f46b926d990f11870190d2fa6d5f",
+      "basis_sha256": "9c24ca79f06f87c23d2200fd6ba00a95ef467e0f0632557518d46285dd1aac0e",
+      "generator_sha256": "f66e9b5c42d36452938aa1bd8b4181a6de2a1d3859ae3f9d7f1ec35e0ab209f6",
+      "generated_sha256": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29",
+      "fold": 0,
+      "trees": 192,
+      "nodes": 8630,
+      "fits": 0,
+      "quantized": false,
+      "source": "model/inference",
+      "qualified": false
+    },
+    "elf": "tmp/hgb_arm_20261101/batch01/ecg_hgb_test/build/ecg_hgb_test.elf",
+    "files": {
+      "releases/latest/smoke/hardware/ecg_system_candidate.bit": {
+        "bytes": 4045773,
+        "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
+      },
+      "releases/latest/smoke/hardware/ecg_system_candidate.xsa": {
+        "bytes": 321430,
+        "sha256": "fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248"
+      },
+      "releases/latest/smoke/hardware/ps7_init.tcl": {
+        "bytes": 27602,
+        "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+      },
+      "tmp/hgb_arm_20261101/batch01/ecg_hgb_test/build/ecg_hgb_test.elf": {
+        "bytes": 805304,
+        "sha256": "5f804a163b825c404810a660a6610ccb97568edcbe2daf8ef783f19ca05a0ce2"
+      },
+      "tmp/hgb_arm_20261101/batch01/ecg_hgb_test/build/ecg_hgb_test.map": {
+        "bytes": 309448,
+        "sha256": "05d660b9c8493f6e4949d66eb8708795982535b7c7e0089d89cbd2d727311dfc"
+      }
+    },
+    "sources": {
+      "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+      "src/ps/ecg_hgb/features.c": "3877247b12437a2204b8e7fac49772ba4501adb2ccc45bcaf9ce069fea5f77ef",
+      "src/ps/ecg_hgb/tree.c": "543175b33d8b67732bf9d991b02d7d8215de3269e2f07963c78e68aaa598815f",
+      "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+      "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+      "src/ps/ecg_hgb/main.c": "9ac2ea05b5c6d60ebb7afdae6d2554b718158b0237382703d2f0e4aeacaa5fac",
+      "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+      "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "tmp/hgb_arm_20261101/batch01_parameters/hgb_parameters.c": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29"
+    },
+    "stack_bytes": 262144,
+    "scope": "independent ARM batch; not continuous model scheduling or Flash"
+  },
+  "batch_load": {
+    "passed": true,
+    "port": "COM23",
+    "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+    "cable": "210512180081",
+    "manifest_sha256": "d97fbcfc5d62fbb93268b151ccf1a276f70ba4abdc3fc258d4acc30d33641f38",
+    "elf_sha256": "5f804a163b825c404810a660a6610ccb97568edcbe2daf8ef783f19ca05a0ce2",
+    "flash_written": false,
+    "scope": "temporary JTAG start; results separately verified"
+  },
+  "uart_hp05": {
+    "passed": true,
+    "physical_arm_uart": true,
+    "samples": 30000,
+    "events": 73,
+    "valid": 72,
+    "probability_max_abs": 6.938893903907228e-18,
+    "positions_status_classes_decisions_equal": true,
+    "compute_us": {
+      "input": 4689,
+      "prepare": 326145,
+      "classify": 41736
+    },
+    "scope": "controlled full-record ARM UART; not wireless, patient accuracy or rolling inference",
+    "files": {
+      "input.json": "e67f1d8218c0ea217704fb2c88429919141f540ecca5986276d64c13ff68f1f0",
+      "result.json": "0b78577de22f63265cb439adb3dd0b75775f10dc2a0025ebb897dbcb1a424cd4",
+      "rx.log": "163cd627cd4cba4cd10dad71e9a31aac8a14de9120d8d50ccb0e066331565d28",
+      "tx.bin": "fc1d0ce5e4b6417559a48d2a66321614b7b1a515a472de696ad77c38c3236fe7"
+    }
+  },
+  "uart_raw": {
+    "passed": true,
+    "physical_arm_uart": true,
+    "samples": 30000,
+    "events": 73,
+    "valid": 72,
+    "probability_max_abs": 0.0,
+    "positions_status_classes_decisions_equal": true,
+    "compute_us": {
+      "input": 3751,
+      "prepare": 325893,
+      "classify": 41602
+    },
+    "scope": "controlled full-record ARM UART; not wireless, patient accuracy or rolling inference",
+    "files": {
+      "input.json": "e67f1d8218c0ea217704fb2c88429919141f540ecca5986276d64c13ff68f1f0",
+      "result.json": "04ce2c1e275cc9c5c6e82be4c66712c78969f65f7f42299651cb83c3473d04c4",
+      "rx.log": "2e1481ab047aa24629ea86a3eff686184f8d5c3a59f5811cb4670faed06b368b",
+      "tx.bin": "b9009fe34a932cdcfae782d7df994a87b0fc878e89fcf69be24913410c2ded4e"
+    }
+  },
+  "faults": {
+    "passed": true,
+    "checks": [
+      "reject_360Hz",
+      "reject_crc",
+      "cancel",
+      "idle_timeout",
+      "new_session_after_faults_no_reset"
+    ],
+    "port": "COM23",
+    "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+    "hardware_operated": true,
+    "flash_written": false,
+    "scope": "controlled complete bad CRC/cancel/idle timeout; not physical unplug or arbitrary byte resynchronization"
+  },
+  "original_selftest_uart": "BEGIN HGB_ARM model=375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8\nCASE HGB_ARM id=0 count=73\nCASE HGB_ARM id=1 count=73\nCASE HGB_ARM id=2 count=480\nCASE HGB_ARM id=3 count=480\nCASE HGB_ARM id=4 count=480\nCASE HGB_ARM id=5 count=480\nCASE HGB_ARM id=6 count=4\nDONE HGB_ARM cases=7 events=2070\n",
+  "original_selftest_jtag": "BOOT_MODE_BEFORE=1\nDUMPED status.bin words=33\nDUMPED results.bin words=422280\nDUMPED requests.bin words=20148\nDUMPED codes.bin words=30000\nPASS HGB_ARM_EXECUTED_AND_DUMPED\n",
+  "original_fault_uart": "H,HGB-BATCH-1,READY,500,mV,375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8\nF,0,BAD_HEADER\nH,HGB-BATCH-1,READY,500,mV,375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8\nA,101,READY,32\nF,101,BAD_CRC\nH,HGB-BATCH-1,READY,500,mV,375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8\nA,102,READY,32\nS,102,CANCEL\nH,HGB-BATCH-1,READY,500,mV,375cf45ac1f315ecc517a219cb03340727304db8e7738626ac4b4920a5af00f8\nA,103,READY,32\nF,103,INPUT_TIMEOUT_OR_UART\nH,HG",
+  "scope": "actual Cortex-A9 controlled full-record inference and USB_UART; not web integration, rolling state, real AFE, clinical accuracy, INT8, CNN or PL acceleration",
+  "preserved_failures": [
+    "board01: current BSP lacks xtime_l.h; switched to installed xiltimer API",
+    "physical01: MMU translation fault after default system reset resumed old QSPI; XSDB exit zero was not success",
+    "physical02: model constant prefix in DDR differed; features/requests matched but tree failed; suspected prior firmware/cache contamination, not proven root mechanism",
+    "physical03: same ELF after system reset -stop and processor reset passed; no PS/MIO/clock changes"
+  ],
+  "pending": [
+    "continuous state and bounded scheduling",
+    "web board-result source/version integration",
+    "real acquisition and unplug recovery",
+    "stack high-water measurement",
+    "Flash/release integration under separate authorization"
+  ]
+}

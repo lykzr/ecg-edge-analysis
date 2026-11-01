@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import BeatResults from './BeatResults';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   AnalysisTask, RecordDetail as RecordDetailType, WaveformPoint, WaveformWindow,
   downloadFile, post, request,
@@ -18,13 +18,13 @@ function timeText(value: string): string {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleString();
 }
 
-export default function RecordDetail({record, onDelete, onBack, deleting}: {
+export default function RecordDetail({record, onDelete, deleting}: {
   record: RecordDetailType;
   onDelete: () => void;
-  onBack: () => void;
   deleting: boolean;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const result = record.result;
   const prediction = result.prediction;
   const quality = result.quality;
@@ -84,7 +84,7 @@ export default function RecordDetail({record, onDelete, onBack, deleting}: {
     setActionError('');
     try {
       const task = await post<AnalysisTask>(`/records/${record.id}/reanalyze`);
-      navigate('/analyze?task=' + task.id);
+      navigate('/analyze?task=' + task.id, {state:location.state});
     } catch (caught) {
       setActionError((caught as Error).message);
     } finally {
@@ -154,6 +154,7 @@ export default function RecordDetail({record, onDelete, onBack, deleting}: {
   ];
 
   return <article className="record-detail">
+    {result.source_session_id && <p><Link className="button secondary" state={{returnTo:'/records/'+record.id}} to={'/live?session='+result.source_session_id}>查看原始测量</Link></p>}
     <header className="detail-head">
       <div>
         <p className="eyebrow">记录详情</p>
@@ -165,12 +166,12 @@ export default function RecordDetail({record, onDelete, onBack, deleting}: {
         </p>
       </div>
       <div className="actions detail-actions">
-        <button className="secondary" disabled={Boolean(exporting)} onClick={() => void exportAs('csv')}>
+        {owned && <button className="secondary" disabled={Boolean(exporting)} onClick={() => void exportAs('csv')}>
           {exporting === 'csv' ? '导出中…' : '导出 CSV'}
-        </button>
-        <button className="secondary" disabled={Boolean(exporting)} onClick={() => void exportAs('json')}>
+        </button>}
+        {owned && <button className="secondary" disabled={Boolean(exporting)} onClick={() => void exportAs('json')}>
           {exporting === 'json' ? '导出中…' : '导出 JSON'}
-        </button>
+        </button>}
         {owned && record.has_raw_file &&
           <button className="secondary" disabled={Boolean(exporting)} onClick={() => void downloadRaw()}>
             {exporting === 'raw' ? '下载中…' : '下载原件'}
@@ -179,7 +180,6 @@ export default function RecordDetail({record, onDelete, onBack, deleting}: {
           {reanalyzing ? '提交中…' : '重新分析'}
         </button>}
         {owned && <button className="danger" disabled={deleting} onClick={onDelete}>删除记录</button>}
-        <button className="secondary" onClick={onBack}>返回列表</button>
       </div>
     </header>
     {actionError && <p className="notice notice-error" role="alert">{actionError}</p>}

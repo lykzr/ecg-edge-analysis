@@ -47,6 +47,9 @@ def grant(owner, username):
         relative = db.execute('SELECT id FROM users WHERE username=?', (username,)).fetchone()
         if not relative or relative['id'] == owner:
             raise ValueError('请输入其他已注册用户的用户名')
+        existing = db.execute('SELECT id FROM grants WHERE owner_id=? AND relative_id=? AND active=1', (owner, relative['id'])).fetchone()
+        if existing:
+            return {'id': existing['id'], 'message': '授权已存在；仅开放记录查看'}
         identifier = secrets.token_hex(12)
         db.execute('INSERT INTO grants VALUES (?,?,?,1)', (identifier, owner, relative['id']))
         db.execute('INSERT INTO notifications VALUES (?,?,?,?,?)', (secrets.token_hex(12), relative['id'], identifier, '一位用户已向你开放记录查看权限', 'in_app_available'))
@@ -61,4 +64,4 @@ def revoke(owner, identifier):
 
 def notifications(user):
     with connect() as db:
-        return [dict(r) for r in db.execute('SELECT n.id,n.message,n.status FROM notifications n JOIN grants g ON g.id=n.grant_id WHERE n.recipient_id=? AND g.active=1', (user,))]
+        return [dict(r) for r in db.execute('SELECT n.id,n.message,n.status,u.username AS owner_username FROM notifications n JOIN grants g ON g.id=n.grant_id JOIN users u ON u.id=g.owner_id WHERE n.recipient_id=? AND g.active=1', (user,))]

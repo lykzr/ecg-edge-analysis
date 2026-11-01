@@ -239,3 +239,79 @@ def test_request_body_cap_includes_chunked_upload():
         await BodyLimit(app,maximum=5)({'type':'http'},receive,send)
         assert sent[0]['status']==413
     asyncio.run(run())
+
+
+def test_user_measurement_folder_analysis_and_legacy(manager, client, tmp_path):
+    from app.services import storage
+    from app.services.user_files import directory
+    from test_api_flow import wait_task
+    a, b = account(client, 'measurement-owner'), account(client, 'measurement-other')
+    with storage.connect() as db:
+        owner = db.execute("SELECT id FROM users WHERE username='measurement-owner'").fetchone()['id']
+    manager.owner_directory = lambda user: directory(user, tmp_path)
+    upload = manager.upload(owner, 'capture.csv', ('timestamp(s),resp_raw,ecg_raw,resp_filtered,ecg_filtered\n' +
+        '\n'.join(f'{i/500:.3f},8388608,{8388608+i},0,0' for i in range(120))).encode())
+    assert 'measurement-owner--' in str(manager.uploads[upload['id']][1])
+    # 完整标定输入来自落盘文件而非显示缓存。
+    identifier = manager.start(owner,dict(kind='demo',seconds=1,realtime=False))['id']
+    completed(manager, owner, identifier)
+    manager.jobs[identifier]['watcher'].join(3)
+    base = directory(owner, tmp_path)/'sessions'/identifier
+    assert (base/'web_session.json').is_file()
+    snapshot = json.loads((base/'web_session.json').read_text(encoding='utf-8'))
+    snapshot['snapshot']['result']['header']['scale'] = 4096
+    (base/'web_session.json').write_text(json.dumps(snapshot), encoding='utf-8')
+    manager.jobs.clear()
+    assert client.get('/api/v1/live/sessions',headers=a).json()[0]['id'] == identifier
+    assert client.post('/api/v1/live/sessions/'+identifier+'/analyze',headers=b).status_code == 404
+    response = client.post('/api/v1/live/sessions/'+identifier+'/analyze',headers=a)
+    assert response.status_code == 202, response.text
+    task = wait_task(client,a,response.json()['id'])
+    assert task['status']=='completed'
+    assert task['record']['result']['source_session_id']==identifier
+    assert client.get('/api/v1/live/sessions',headers=a).json()[0]['analysis_count']==1
+    again = client.post('/api/v1/live/sessions/'+identifier+'/analyze',headers=a)
+    assert wait_task(client,a,again.json()['id'])['status']=='completed'
+    assert again.json()['id']==task['id']
+    assert client.get('/api/v1/live/sessions',headers=a).json()[0]['analysis_count']==1
+    forced = client.post('/api/v1/records/'+task['record_id']+'/reanalyze',headers=a)
+    assert forced.status_code==202
+    assert forced.json()['id']!=task['id']
+    assert wait_task(client,a,forced.json()['id'])['status']=='completed'
+    assert client.get('/api/v1/live/sessions',headers=a).json()[0]['analysis_count']==2
+    assert task['record_id'] in [row['record_id'] for row in client.get('/api/v1/live/sessions/'+identifier+'/analyses',headers=a).json()]
+    assert client.get('/api/v1/live/sessions/'+identifier+'/analyses',headers=b).status_code==404
+    # 旧布局仍可读取，不抢占或移动旧后台文件。
+    legacy = manager.directory/'sessions'/identifier
+    legacy.parent.mkdir(parents=True,exist_ok=True)
+    base.rename(legacy)
+    assert manager.snapshot(owner,identifier)['id']==identifier
+
+
+def test_shared_measurement_read_revoke_and_owner_only_writes(manager, client):
+    from app.services import storage
+    a,b=account(client,'share-owner'),account(client,'share-reader')
+    with storage.connect() as db:
+        owner=db.execute("SELECT id FROM users WHERE username='share-owner'").fetchone()['id']
+    identifier=manager.start(owner,dict(kind='demo',seconds=1,realtime=False))['id']
+    completed(manager,owner,identifier)
+    manager.jobs[identifier]['watcher'].join(3)
+    path='/api/v1/live/sessions/'+identifier
+    assert client.get(path,headers=b).status_code==404
+    grant=client.post('/api/v1/family/grants',headers=a,json=dict(username='share-reader')).json()
+    assert client.get('/api/v1/live/sessions',headers=b).json()==[]
+    shared=client.get('/api/v1/live/sessions?shared=true',headers=b).json()
+    assert shared[0]['owner_username']=='share-owner'
+    assert shared[0]['owned'] is False
+    detail=client.get(path,headers=b)
+    assert detail.status_code==200
+    assert detail.json()['files']==[]
+    for action in ['stop','analyze']:
+        assert client.post(path+'/'+action,headers=b).status_code==404
+    assert client.get(path+'/files/raw.log',headers=b).status_code==404
+    assert client.get(path+'/svg',headers=b).status_code==404
+    assert client.get(path+'/analyses',headers=b).status_code==200
+    client.delete('/api/v1/family/grants/'+grant['id'],headers=a)
+    assert client.get(path,headers=b).status_code==404
+    assert client.get(path+'/analyses',headers=b).status_code==404
+    assert client.get('/api/v1/live/sessions?shared=true',headers=b).json()==[]

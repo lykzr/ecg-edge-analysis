@@ -48,6 +48,10 @@ def test_full_record_grant_revoke(client):
     path = '/api/v1/records/' + identifier
     assert client.get(path, headers=relative).status_code == 404
     grant = client.post('/api/v1/family/grants', json={'username': 'relative'}, headers=owner).json()
+    duplicate = client.post('/api/v1/family/grants', json={'username': 'relative'}, headers=owner).json()
+    assert duplicate['id'] == grant['id']
+    assert len(client.get('/api/v1/family/grants', headers=owner).json()) == 1
+    assert client.get('/api/v1/family/notifications', headers=relative).json()[0]['owner_username'] == 'owner'
     assert client.get(path, headers=relative).status_code == 200
     assert len(client.get('/api/v1/records?shared=true', headers=relative).json()) == 1
     shared = client.get('/api/v1/records?shared=true&page=1&page_size=10', headers=relative).json()

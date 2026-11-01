@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AnalysisTask, request } from '../services/api';
+import { AnalysisTask, ApiError, request } from '../services/api';
 
 const TERMINAL = new Set(['completed', 'failed', 'cancelled']);
 
@@ -23,14 +23,17 @@ export function useTaskPolling(taskId: string | null) {
     function schedule() {
       if (cancelled) return;
       if (document.hidden) {
-        window.addEventListener('visibilitychange', onVisible, {once: true});
+        document.addEventListener('visibilitychange', onVisible);
         return;
       }
       timer = window.setTimeout(() => {void poll();}, delay);
     }
 
     function onVisible() {
-      if (!document.hidden && !cancelled) void poll();
+      if (!document.hidden && !cancelled) {
+        document.removeEventListener('visibilitychange', onVisible);
+        void poll();
+      }
     }
 
     async function poll() {
@@ -48,11 +51,16 @@ export function useTaskPolling(taskId: string | null) {
       } catch (caught) {
         if (cancelled || (caught as Error).name === 'AbortError') return;
         setError((caught as Error).message);
+        if (caught instanceof ApiError && [401, 403, 404].includes(caught.status)) {
+          setPolling(false);
+          return;
+        }
         delay = Math.min(Math.round(delay * 1.5), 5000);
         schedule();
       }
     }
 
+    setTask(null);
     setError('');
     setPolling(true);
     void poll();
@@ -60,9 +68,9 @@ export function useTaskPolling(taskId: string | null) {
       cancelled = true;
       controller.abort();
       if (timer) window.clearTimeout(timer);
-      window.removeEventListener('visibilitychange', onVisible);
+      document.removeEventListener('visibilitychange', onVisible);
     };
   }, [taskId]);
 
-  return {task, error, polling};
+  return {task: task?.id === taskId ? task : null, error, polling};
 }

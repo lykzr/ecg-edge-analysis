@@ -25,7 +25,7 @@ export default function TaskProgress({task, error, onCancel}: {
 }) {
   if (!task) {
     return <div className="task-panel">
-      <p role="status">正在查询任务 {error ? '' : '…'}</p>
+      <p role="status">{error ? '暂时无法读取任务' : '正在查询任务…'}</p>
       {error && <p className="notice notice-error" role="alert">{error}</p>}
     </div>;
   }

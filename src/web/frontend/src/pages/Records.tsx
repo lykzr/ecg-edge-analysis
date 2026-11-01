@@ -1,10 +1,11 @@
 // 记录模块：历史、趋势、导出与记录删除页面。
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import {
   RecordPage, RecordTrends, downloadFile, localTimezone, request,
 } from '../services/api';
 import TrendChart from '../components/TrendChart';
+import Measurements from '../components/Measurements';
 import { QualityBadge } from '../components/badges';
 
 const PAGE_SIZES = [10, 20, 50];
@@ -18,14 +19,18 @@ const RANGES = [
 function fromDate(days: number): string {
   const date = new Date();
   date.setDate(date.getDate() - (days - 1));
-  return date.toISOString().slice(0, 10);
+  date.setHours(0, 0, 0, 0);
+  return date.toISOString();
 }
 
 export default function Records() {
+  const location=useLocation();
   const [search, setSearch] = useSearchParams();
-  const page = Math.max(1, Number(search.get('page') ?? '1') || 1);
+  const rawPage = Number(search.get('page') ?? '1');
+  const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? rawPage : 1;
   const shared = search.get('shared') === 'true';
-  const range = search.get('range') ?? '30';
+  const requestedRange = search.get('range') ?? '30';
+  const range = RANGES.some(item => item.value === requestedRange) ? requestedRange : '30';
   const quality = search.get('quality') ?? '';
   const rawSize = Number(search.get('size') ?? '10');
   const size = PAGE_SIZES.includes(rawSize) ? rawSize : 10;
@@ -41,6 +46,8 @@ export default function Records() {
   useEffect(() => {
     let active = true;
     setLoading(true);
+    setData(null);
+    setTrends(null);
     setError('');
     const params = new URLSearchParams({
       page: String(page), page_size: String(size), shared: String(shared),
@@ -94,6 +101,7 @@ export default function Records() {
   return <section>
     <p className="eyebrow">记录业务</p>
     <h1>历史记录</h1>
+    <p>当前账号的测量与分析统一在此查看。</p>
 
     <div className="filter-bar">
       <label className="inline">时间范围
@@ -122,8 +130,12 @@ export default function Records() {
         <button className="secondary" onClick={() => update({quality: null, range: '30', shared: null, page: '1'})}>重置筛选</button>}
     </div>
 
+    <p className="hint">趋势统计最近 {days} 天的{shared ? '共享' : '本人'}全部质量记录；质量筛选只影响下方列表。选择“全部”时列表不限日期，趋势最多显示365天。</p>
+    <Measurements key={String(shared)} days={range==='all'?0:days} shared={shared} />
+    <h2>分析结果与统计</h2>
+    <p className="hint">以下统计为分析结果数量，不是测量次数。</p>
     {summary && <div className="stat-grid">
-      <div><strong>{summary.total}</strong><span>近 {days} 天记录</span></div>
+      <div><strong>{summary.total}</strong><span>近 {days} 天分析版本数</span></div>
       <div><strong>{summary.insufficient}</strong><span>质量不足</span></div>
       <div><strong>{summary.heart_rate_days}</strong><span>有心率的日期</span></div>
       <div><strong>{summary.avg_heart_rate_bpm ?? '—'}</strong><span>平均心率（次/分）</span></div>
@@ -135,8 +147,8 @@ export default function Records() {
 
     {!loading && !error && data && <>
       {data.items.length === 0 && <div className="empty-state">
-        <p>{shared ? '暂时没有授权给你的记录。' : '还没有记录。'}</p>
-        {!shared && <Link className="button" to="/analyze">导入第一条记录</Link>}
+        <p>{shared ? '当前筛选下暂无共享分析结果。' : '当前筛选下暂无分析结果，可从上方测量发起分析。'}</p>
+        {!shared && <Link className="button" to="/analyze">导入新数据</Link>}
       </div>}
       <div className="record-list">
         {data.items.map(record => <div className="record-row" key={record.id}>
@@ -152,13 +164,13 @@ export default function Records() {
           <span className="record-metric">{record.duration_sec == null ? '—' : `${record.duration_sec.toFixed(1)} s`}</span>
           <span className="record-metric">{record.heart_rate_bpm == null ? '—' : `${record.heart_rate_bpm} 次/分`}</span>
           <span className="record-actions">
-            <Link to={'/records/' + record.id}>查看</Link>
-            {!shared && <button className="link-button" disabled={deleting === record.id}
+            <Link className="button secondary" to={'/records/' + record.id} state={{returnTo:location.pathname+location.search}}>查看</Link>
+            {!shared && <button className="secondary" disabled={deleting === record.id}
               onClick={() => void downloadFile(`/records/${record.id}/export?format=csv`,
                 `ecg-record-${record.id}.csv`).catch(caught => setError((caught as Error).message))}>
               导出
             </button>}
-            {!shared && <button className="danger-link" disabled={deleting === record.id}
+            {!shared && <button className="danger" disabled={deleting === record.id}
               onClick={() => void remove(record.id)}>{deleting === record.id ? '删除中…' : '删除'}</button>}
             {shared && <span className="badge badge-muted">只读</span>}
           </span>

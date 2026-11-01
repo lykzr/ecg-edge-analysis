@@ -47,6 +47,7 @@ export interface Prediction {
   } | null;
 }
 export interface EcgResult {
+  source_session_id?: string | null;
   source: string;
   waveform: number[];
   sample_rate_hz: number;
@@ -147,7 +148,7 @@ export interface AnalysisTask {
 }
 export interface TaskPage {items: AnalysisTask[]; page: number; page_size: number; total: number; pages: number;}
 export interface Grant {id: string; username: string; active: number;}
-export interface Notification {id: string; message: string; status: string;}
+export interface Notification {id: string; message: string; status: string; owner_username: string;}
 
 export class ApiError extends Error {
   status: number;

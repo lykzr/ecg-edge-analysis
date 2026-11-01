@@ -15,7 +15,9 @@ export default function UploadForm({onSubmit, onReplay, busy, progress, error}: 
   const [dragging, setDragging] = useState(false);
 
   function pick(next: File | null) {
+    if (busy) return;
     setLocalError('');
+    setFile(null);
     if (!next) return setFile(null);
     if (!next.name.toLowerCase().endsWith('.csv')) {
       setLocalError('请选择 CSV 文件；支持单列 mV 或包含 ecg_raw 的 ADS1292R 导出文件');
@@ -30,6 +32,7 @@ export default function UploadForm({onSubmit, onReplay, busy, progress, error}: 
 
   function submit(event: FormEvent) {
     event.preventDefault();
+    if (busy) return;
     if (!file) {
       setLocalError('请选择 CSV 文件');
       return;
@@ -47,17 +50,17 @@ export default function UploadForm({onSubmit, onReplay, busy, progress, error}: 
   return <form onSubmit={submit}>
     <p>支持单列 mV CSV（value/sample/mv 表头），或包含 ecg_raw 的 ADS1292R 原始 CSV，系统按 2.42 V、6 倍增益换算。默认采样率为 500 Hz；其他设备请按实际采样率修改。</p>
     <div className={`dropzone${dragging ? ' dragging' : ''}`}
-         onDragOver={event => {event.preventDefault(); setDragging(true);}}
+         onDragOver={event => {event.preventDefault(); if (!busy) setDragging(true);}}
          onDragLeave={() => setDragging(false)}
          onDrop={drop}>
-      <input id="ecg-file" type="file" accept=".csv" onChange={event => pick(event.target.files?.[0] ?? null)} />
+      <input id="ecg-file" type="file" disabled={busy} accept=".csv" onChange={event => pick(event.target.files?.[0] ?? null)} />
       <label htmlFor="ecg-file" className="dropzone-label">
         <strong>{file ? file.name : '点击选择或拖入 CSV'}</strong>
         <span>{file ? `${(file.size / 1024).toFixed(1)} KB` : 'mV 或 ADS1292R 原始 CSV · UTF-8 · ≤2 MB'}</span>
       </label>
     </div>
     <label>采样率 Hz
-      <input type="number" min={50} max={2000} value={rate} required
+      <input type="number" disabled={busy} min={50} max={2000} value={rate} required
              onChange={event => setRate(Number(event.target.value))} />
     </label>
     <small className="hint">单列CSV用于离线分析；实时Zynq送样请使用“实时与板卡”页，选择匹配的标准或厂商格式。</small>
@@ -66,7 +69,8 @@ export default function UploadForm({onSubmit, onReplay, busy, progress, error}: 
     {(localError || error) && <p className="notice notice-error" role="alert">{localError || error}</p>}
     <div className="actions">
       <button disabled={busy}>{busy ? '提交中…' : '导入并分析'}</button>
-      <button type="button" className="secondary" disabled={busy} onClick={onReplay}>使用合成回放</button>
+
     </div>
+    <details className="live-advanced"><summary>演示分析</summary><p className="hint">用合成数据体验离线分析；实时演示请在实时页选择“演示”。</p><button type="button" className="secondary" disabled={busy} onClick={onReplay}>分析合成数据</button></details>
   </form>;
 }

@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import io
+import os
 import json
 import re
 import secrets
@@ -26,6 +27,44 @@ TERMINAL = {"completed", "failed", "cancelled"}
 QUALITY_VALUES = {"basic_checks_passed", "insufficient", "unknown"}
 SORTS = {"created_at_desc", "created_at_asc"}
 ACCESS_ACTIONS = {"view", "waveform", "raw", "export", "note", "reanalyze", "delete"}
+_analysis_submission_lock = threading.RLock()
+
+
+def analysis_configuration():
+    """只保存配置指纹，凭证不进入输入或日志；代码/参数变化后不复用旧结果。"""
+    root = Path(__file__).resolve().parents[3]
+    digest = hashlib.sha256(PROCESSING_VERSION.encode())
+    for folder in (root / 'ai_model', root / 'signal_processing'):
+        for path in sorted(folder.rglob('*.py')):
+            digest.update(path.relative_to(root).as_posix().encode())
+            digest.update(path.read_bytes())
+    config_keys = {'ECG_MODEL_TYPE', 'ECG_MODEL_PATH', 'ECG_MODEL_FOLD', 'ECG_MODEL_PREPROCESS',
+                   'ECG_EXPLANATION_PROVIDER', 'ECG_LLM_ENDPOINT', 'ECG_LLM_MODEL'}
+    for path in sorted(root.rglob('.env')):
+        for line in path.read_text(encoding='utf-8-sig').splitlines():
+            key, separator, value = line.partition('=')
+            if separator and key.strip() in config_keys and key.strip() not in os.environ:
+                digest.update(key.strip().encode() + b'=' + value.strip().encode())
+    for key, value in sorted(os.environ.items()):
+        if key in config_keys:
+            digest.update(key.encode() + b'=' + value.encode())
+    return digest.hexdigest()
+
+
+def submit_analysis(user, signal, *, raw_content=None, force=False, source_record_id=None):
+    signal = dict(signal, analysis_configuration=analysis_configuration())
+    digest = hashlib.sha256(_canonical(signal).encode('utf-8')).hexdigest()
+    # 单进程服务内原子检查及提交，覆盖连续点击和并发HTTP请求。
+    with _analysis_submission_lock:
+        if not force:
+            with connect() as db:
+                existing = db.execute(
+                    "SELECT * FROM analysis_tasks WHERE owner_id=? AND input_sha256=? "
+                    "AND status IN ('pending','running','completed') ORDER BY created_at DESC LIMIT 1",
+                    (user, digest)).fetchone()
+            if existing:
+                return _task_dict(existing), False
+        return submit_task(user, signal, raw_content=raw_content, source_record_id=source_record_id)
 
 
 def _now() -> str:
@@ -130,10 +169,20 @@ def submit_task(user: str, signal: dict, *, idempotency_key: str | None = None,
                 if existing:
                     return _task_dict(existing), False
             raise
+        from app.services.user_files import directory
+        folder = directory(user, settings.upload_dir.parent)
+        session_id = signal.get('source_session_id')
+        if session_id:
+            if not re.fullmatch('[0-9a-f]{32}', session_id):
+                raise ValidationError('测量编号无效')
+            folder = folder / 'sessions' / session_id
+        folder = folder / 'analyses' / task_id
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / 'input.json').write_text(_canonical(signal), encoding='utf-8')
         if raw_content is not None:
             # pending提交前完成原件保存和路径关联。后台会补取SQLite pending，
             # 不能假设只有路由enqueue之后才会执行。保存失败让本事务回滚。
-            path = (settings.upload_dir / user / f"{task_id}.csv").resolve()
+            path = (folder / 'original.csv').resolve()
             path.parent.mkdir(parents=True, exist_ok=True)
             with path.open('xb') as stream:
                 stream.write(raw_content)
@@ -173,6 +222,7 @@ def execute(task_id: str) -> bool:
     try:
         signal = json.loads(row["payload"])
         result = analyze(signal)
+        result['source_session_id'] = signal.get('source_session_id')
         result.setdefault("lead", signal.get("lead"))
         if _cancel_requested(task_id):
             _finish_cancelled(task_id)
@@ -260,6 +310,13 @@ def _save_result(task_id: str, owner: str, result: dict, source_record_id: str |
         "task_status": "completed",
         "result": stored_result,
     }
+    from app.services.user_files import directory
+    folder = directory(owner, settings.upload_dir.parent)
+    if result.get('source_session_id'):
+        folder = folder / 'sessions' / result['source_session_id']
+    folder = folder / 'analyses' / task_id
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / 'result.json').write_text(json.dumps(dict(payload, waveform=waveform), ensure_ascii=False), encoding='utf-8')
     with connect() as db:
         current = db.execute("SELECT status, cancel_requested FROM analysis_tasks WHERE id=?", (task_id,)).fetchone()
         if not current or current["status"] != "running":
@@ -702,7 +759,10 @@ def raw_file(user: str, identifier: str):
         raise InputUnavailable("该记录没有保存原始文件")
     path = Path(row["input_path"])
     try:
-        path.resolve().relative_to(settings.upload_dir.resolve())
+        from app.services.user_files import directory
+        roots = (settings.upload_dir.resolve(), directory(user, settings.upload_dir.parent).resolve())
+        if not any(path.resolve().is_relative_to(root) for root in roots):
+            raise ValueError('原始文件越出用户数据目录')
     except (ValueError, OSError) as exc:
         raise InputUnavailable("原始文件路径无效") from exc
     if not path.is_file():
@@ -791,7 +851,8 @@ def reanalyze(user: str, identifier: str) -> dict:
         raise InputUnavailable("原始输入已清理，无法重分析")
     source_path = task["input_path"]
     raw_content = Path(source_path).read_bytes() if source_path and Path(source_path).is_file() else None
-    return submit(user, json.loads(task["payload"]), source_record_id=identifier, raw_content=raw_content)
+    return submit_analysis(user, json.loads(task["payload"]), force=True,
+                           source_record_id=identifier, raw_content=raw_content)[0]
 
 
 def export_record(user: str, identifier: str, format: str = "csv"):

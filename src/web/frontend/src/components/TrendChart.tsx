@@ -1,8 +1,9 @@
 import { RecordTrendPoint } from '../services/api';
+import {trendSegments, trendTicks} from './trendGeometry';
 
 export default function TrendChart({days}: {days: RecordTrendPoint[]}) {
   const total = days.reduce((sum, point) => sum + point.records, 0);
-  if (!days.length) return <p className="empty-state">暂无趋势数据。导入第一条记录后会在这里显示每日记录数与平均心率。</p>;
+  if (!total) return <p className="empty-state">此时间范围内暂无分析结果。完成分析后显示每日分析版本数与平均心率。</p>;
 
   const width = 760;
   const height = 200;
@@ -19,16 +20,12 @@ export default function TrendChart({days}: {days: RecordTrendPoint[]}) {
   const yRecords = (value: number) => padding.top + plotHeight - (value / maxRecords) * plotHeight;
   const yRate = (value: number) => padding.top + plotHeight - ((value - minRate) / (maxRate - minRate || 1)) * plotHeight;
 
-  const linePoints = days
-    .map((point, index) => point.heart_rate_bpm == null ? null : `${x(index)},${yRate(point.heart_rate_bpm)}`)
-    .filter((value): value is string => value != null)
-    .join(' ');
-
-  const labelEvery = Math.max(1, Math.ceil(days.length / 8));
+  const lines = trendSegments(days.map(point=>point.heart_rate_bpm));
+  const ticks = trendTicks(days.length);
 
   return <figure className="trend-chart">
     <svg viewBox={`0 0 ${width} ${height}`} role="img"
-         aria-label={`近 ${days.length} 天趋势：共 ${total} 条记录，心率折线`}>
+         aria-label={`近 ${days.length} 天趋势：共 ${total} 个分析版本，心率折线`}>
       <pattern id="trend-grid" width="38" height="38" patternUnits="userSpaceOnUse">
         <path d="M 38 0 L 0 0 0 38" fill="none" stroke="#e3ece9" />
       </pattern>
@@ -42,16 +39,16 @@ export default function TrendChart({days}: {days: RecordTrendPoint[]}) {
           <title>{hint}</title>
           <rect className="trend-bar" x={x(index) - barWidth / 2} y={yRecords(point.records)}
                 width={barWidth} height={Math.max(point.records ? 2 : 0, barHeight)} rx="2" />
-          {index % labelEvery === 0 && <text x={x(index)} y={height - 10} textAnchor="middle"
+          {ticks.includes(index) && <text x={x(index)} y={height - 10} textAnchor="middle"
                 className="trend-label">{point.date.slice(5)}</text>}
         </g>;
       })}
-      {linePoints && <polyline className="trend-line" points={linePoints} fill="none" />}
+      {lines.map((indices,i)=><polyline key={i} className="trend-line" points={indices.map(index=>[x(index),yRate(days[index].heart_rate_bpm!)].join(',')).join(' ')} fill="none" />)}
       {days.map((point, index) => point.heart_rate_bpm == null ? null :
         <circle key={`dot-${point.date}`} className="trend-dot" cx={x(index)} cy={yRate(point.heart_rate_bpm)} r="2.5" />)}
       <text x={padding.left - 6} y={padding.top + 4} textAnchor="end" className="trend-label">{maxRecords}</text>
       <text x={padding.left - 6} y={padding.top + plotHeight} textAnchor="end" className="trend-label">0</text>
     </svg>
-    <figcaption>柱：每日记录数（最高 {maxRecords} 条）· 线：已有心率的日均值 · 时区由浏览器提供</figcaption>
+    <figcaption>柱：每日分析版本数（最高 {maxRecords} 条）· 线：已有心率的日均值 · 时区由浏览器提供</figcaption>
   </figure>;
 }
