@@ -54,7 +54,7 @@ def evidence(base, case, count=None, reason=None):
 
 
 def check(repository):
-    base = Path(repository) / 'docs/records/system_board_20261020'
+    base = Path(repository) / 'docs/evidence/system_board_20261020'
     manifest = json.loads((base / 'manifest.json').read_text(encoding='utf-8'))
     for name, row in manifest['files'].items():
         path = (base / name).resolve()

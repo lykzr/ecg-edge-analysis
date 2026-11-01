@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "kind": "session_reuse_release",
+  "passed": true,
+  "build_id": "36e807fd28c440f5",
+  "boot_sha256": "9eb64345c2febd39ddbafae929251bd8de36a97507a588892f4a079e7e15fc68",
+  "image_bytes": 4265620,
+  "components": {
+    "fsbl": {
+      "path": "qspi/fsbl.elf",
+      "bytes": 360652,
+      "sha256": "01d8de12ca69e534f68df611cfb5e288a85e4d0453f9325f3b93f87b2440a5ec"
+    },
+    "bit": {
+      "path": "runtime500/hardware/ecg_system_candidate.bit",
+      "bytes": 4045773,
+      "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
+    },
+    "app": {
+      "path": "runtime500/prebuilt/ecg_runtime500.elf",
+      "bytes": 458156,
+      "sha256": "e1f3e639cd4835d3006063380319d2516c1c9d62c82f0eae80899e68869e9020"
+    }
+  },
+  "offset": 0,
+  "flash_type": "qspi-x4-single",
+  "programming_verified": true,
+  "cold_boot_user_confirmed": true,
+  "boot_mode": 1,
+  "cold_boot_jtag_download_used": false,
+  "qspi_reset_verified": true,
+  "cold_boot_completed_sessions": 3,
+  "cold_boot_fourth_session_interrupted": true,
+  "formal_bootgen_rebuild_byte_identical": true,
+  "jtag_sessions": "docs/evidence/session_reuse_20261101/jtag_receipt.json",
+  "qspi_sessions": "docs/evidence/session_reuse_20261101/qspi_resume_receipt.json",
+  "real_wireless": false,
+  "accuracy_evaluated": false,
+  "calibrated": false,
+  "evidence": {
+    "docs/evidence/session_reuse_20261101/jtag_receipt.json": "94262d09d996c14666b69829744eb8166bc8263ad59103e3a0244d5054395b75",
+    "docs/evidence/session_reuse_20261101/cold_boot_receipt.json": "f934538a0f947715143432086e5b6828916251161f92a6648ec8bf1da7177dc8",
+    "docs/evidence/session_reuse_20261101/cold_boot.log": "1cce715871885062326d0e47b610776abd6a71b0feb491381c2243b3d9638ce3",
+    "docs/evidence/session_reuse_20261101/qspi_reuse.log": "4b7d007c43637f9ea345ffc66737be11621c8f6c25b5f7f429f18d92b2bb2435",
+    "docs/evidence/session_reuse_20261101/build_manifest.json": "50436ef15f269887517479b61df7ace4fa558db9e457d0717f290ef75a2ff5f7",
+    "docs/evidence/session_reuse_20261101/generated_link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+    "docs/evidence/session_reuse_20261101/generated_runtime500.c": "e55ecc4f84122b9799813b82de72b1f9fb9b7872e45b2d16d86ecfa75be1ec7b",
+    "docs/evidence/session_reuse_20261101/independent_check.json": "c3d24291818f97cb3efdf793ec6c325bc208548b290762469154ea67cc153012",
+    "docs/evidence/session_reuse_20261101/offline_tests.log": "5f01fa8f90e58d5647053b18589fc1f11c91bbc29046b7a146f3691e61806eb2",
+    "docs/evidence/session_reuse_20261101/jtag_reuse.log": "4b78e67a7eeb25dbd993159d76f59dd868736a14387391a4acf714ac1b8645e6",
+    "docs/evidence/session_reuse_20261101/program_flash.log": "144bb7dc7c51a384e430ad7e9e30aa6d51886fe1e283ad3b816da0ff8b9aa99c",
+    "docs/evidence/session_reuse_20261101/identity.log": "689f5d79c46abfdfecd94d80a6a1a7dfd3f4eb2b3bf1ea794d4bda86911cdcd2",
+    "docs/evidence/session_reuse_20261101/qspi_resume_receipt.json": "413f1a6902eabdfe83d999f622860db1602c2bf40d6ccb291d46a85a0e3c3099"
+  }
+}

@@ -1,26 +1,26 @@
 {
   "schema": 1,
-  "version": "20261025-runtime500-qspi-v1",
-  "build_id": "a570b308ef7b46fe",
+  "version": "20261101-runtime500-session-reuse-v1",
+  "build_id": "36e807fd28c440f5",
   "flash_type": "qspi-x4-single",
   "offset": 0,
   "capacity_bytes": 33554432,
-  "boot_sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc",
+  "boot_sha256": "9eb64345c2febd39ddbafae929251bd8de36a97507a588892f4a079e7e15fc68",
   "components": {
     "fsbl": {
       "path": "qspi/fsbl.elf",
-      "bytes": 357592,
-      "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+      "bytes": 360652,
+      "sha256": "01d8de12ca69e534f68df611cfb5e288a85e4d0453f9325f3b93f87b2440a5ec"
     },
     "bit": {
       "path": "runtime500/hardware/ecg_system_candidate.bit",
       "bytes": 4045773,
-      "sha256": "38987b8d96237f6c202ab235ee66a985d0faf6b643d19af26772d3cd380be452"
+      "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
     },
     "app": {
       "path": "runtime500/prebuilt/ecg_runtime500.elf",
-      "bytes": 454088,
-      "sha256": "d7b948919b746333b145d90ce74d7be24e1e08964d52e6e07215c32baf0c77b9"
+      "bytes": 458156,
+      "sha256": "e1f3e639cd4835d3006063380319d2516c1c9d62c82f0eae80899e68869e9020"
     }
   },
   "programming_verified": true,
@@ -31,12 +31,12 @@
       "sha256": "783fbe74868351dd360f4b56a9902e5bee8d8d8d47c656777ee436451086f222"
     },
     "BOOT.BIN": {
-      "bytes": 4265108,
-      "sha256": "d71ceed2104ca113cbc1759f5162d4a65bb8e44108b3649e7b20808ba1bd87cc"
+      "bytes": 4265620,
+      "sha256": "9eb64345c2febd39ddbafae929251bd8de36a97507a588892f4a079e7e15fc68"
     },
     "fsbl.elf": {
-      "bytes": 357592,
-      "sha256": "8640c01dc66714cba990f37f0c803b29aa210af4ff1853c3b0c7354c88f2f179"
+      "bytes": 360652,
+      "sha256": "01d8de12ca69e534f68df611cfb5e288a85e4d0453f9325f3b93f87b2440a5ec"
     },
     "probe_qspi.tcl": {
       "bytes": 1239,
@@ -50,5 +50,7 @@
       "bytes": 465,
       "sha256": "64752e492acab180caf3019e269aba9bb504024f405c67ad65dcc4667826362c"
     }
-  }
+  },
+  "session_reuse_verified": true,
+  "cold_boot_scope": "前三轮完成，第四轮测试进程中断；随后系统复位四轮完成"
 }

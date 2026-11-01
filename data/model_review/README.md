@@ -25,7 +25,7 @@ python -X utf8 -B sim/check_model_handoff.py
 
 类别是N、S、VF；VF表示原V/E/F合并，不表示心室颤动，N也不等于临床健康。源码中保留的CNN属于早期实验，当前这组参数来自HGB。
 
-这里选择v92用于数值复核是因为它已有独立导出证明，并不表示它优于所有版本或已通过验收。v57冻结研究参照不因此替换。最新两组v105/v108同样未通过全部目标；见项目[交接入口](../../docs/model_handoff.md)及[检查报告](../../docs/records/model_handoff_audit_20261031.md)。
+这里选择v92用于数值复核是因为它已有独立导出证明，并不表示它优于所有版本或已通过验收。v57冻结研究参照不因此替换。最新两组v105/v108同样未通过全部目标；见项目[交接入口](../../docs/archive/analysis/model_handoff.md)及[检查报告](../../docs/archive/records/model_handoff_audit_20261031.md)。
 
 ## 来源与许可
 

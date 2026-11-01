@@ -60,16 +60,16 @@ class ReleaseChecks(unittest.TestCase):
 
     def test_current_release_is_strictly_matched(self):
         report=check(CANDIDATE,ROOT)
-        self.assertEqual(report['version'],'20261025-runtime500-qspi-v1')
+        self.assertEqual(report['version'],'20261101-runtime500-session-reuse-v1')
         self.assertTrue(report['current_sources_match'])
-        receipt=json.loads((ROOT/'data/results/runtime500_release_20261025.json').read_text())
+        receipt=json.loads((ROOT/'data/results/session_reuse_release_20261101.json').read_text())
         manifest=json.loads((CANDIDATE/'runtime500/manifest.json').read_text())
-        self.assertEqual(receipt['production_elf_sha256'],manifest['elf_sha256'])
+        self.assertEqual(receipt['components']['app']['sha256'],manifest['elf_sha256'])
         self.assertTrue(manifest['adc_source_supported'])
 
     def test_current_source_mutation_is_still_rejected(self):
         from unittest.mock import patch
-        import check_system_release as module
+        import check_session_release as module
         original=module.digest
         def altered(path):
             return '0'*64 if Path(path)==ROOT/'build/generate_rate500_runtime.py' else original(path)

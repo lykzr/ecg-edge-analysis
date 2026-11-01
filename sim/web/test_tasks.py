@@ -129,6 +129,8 @@ def test_upload_idempotency_key(client, monkeypatch):
 
 def test_recover_pending_and_stale_running(client):
     headers = account(client, 'task-recover')
+    # 本用例模拟服务重启前的数据库；停止补取线程，避免构造期间被正常消费。
+    runner.stop()
     owner = _owner_id('task-recover')
     signal = {'samples': [0.1, 0.2], 'sample_rate_hz': 250}
     pending = records.submit(owner, signal)

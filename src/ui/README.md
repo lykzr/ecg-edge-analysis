@@ -1,11 +1,13 @@
-# 电脑界面
+# Tk备用界面
+
+默认使用[网页客户端](../../docs/web_monitor.md)。本目录保留备用诊断与回归界面，不是日常主入口；切换前停止活动会话并释放串口。
 
 本目录只放Tk窗口、界面状态与共享绘图。协议、串口、采集/中转后台和记录逻辑在[PC后台](../pc/README.md)，板卡构建与下载脚本在board/，板端C源码在src/ps/。
 
 从项目根启动：
 
 ```powershell
-& './tmp/qrs_benchmark_env/Scripts/python.exe' -B src/ui/main.py
+python -B src/ui/main.py
 ```
 
 也可用已安装的Python3.10以上版本；界面需要Tkinter。入口按自身位置定位项目，支持从其他工作目录使用绝对路径启动。旧src/pc/ecg_monitor.py无参数启动仍兼容，无界面命令行继续使用该旧入口。

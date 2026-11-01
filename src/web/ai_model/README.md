@@ -4,4 +4,4 @@
 
 OpenECG适配代码保留为未启用候选：严格500Hz、至少10秒，仅用前10秒；未安装依赖或权重，也未验收模型效果。未知输出标签不自动归为异常。其记录级输出不能静默替换N/S/V/F心拍协议。
 
-本项目分类接入缺项见[模型合并计划](../../../report/model_merge.md)，当前目标仍包括CNN、INT8和FPGA推理。来源许可见[NOTICE](../NOTICE.md)。
+本项目分类接入缺项见[模型合并计划](../../../docs/archive/report/model_merge.md)，当前目标仍包括CNN、INT8和FPGA推理。来源许可见[NOTICE](../NOTICE.md)。

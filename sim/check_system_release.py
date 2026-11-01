@@ -19,6 +19,9 @@ def safe(base, name):
     p = PurePosixPath(name)
     if p.is_absolute() or PureWindowsPath(name).drive or '..' in p.parts:
         raise ValueError('发布路径越界：' + name)
+    # 原始收据保留产生时路径；迁移只改变证据位置。
+    if name.startswith("docs/records/"):
+        p = PurePosixPath(name.replace("docs/records/", "docs/evidence/", 1))
     target = base.joinpath(*p.parts).resolve()
     target.relative_to(base.resolve())
     return target
@@ -53,6 +56,9 @@ def check(directory, repository, *, require_current_sources=True):
     directory = Path(directory).resolve()
     repository = Path(repository).resolve()
     manifest = json.loads((directory / 'manifest.json').read_text(encoding='utf-8'))
+    if manifest['version'] == '20261101-runtime500-session-reuse-v1':
+        from check_session_release import check as check_session_release
+        return check_session_release(directory, repository, require_current_sources=require_current_sources)
     assert manifest['version'] in ('20261021-system-jtag-v1','20261024-runtime500-jtag-v1','20261025-runtime500-jtag-v2','20261025-runtime500-qspi-v1')
     qspi_release=manifest['version']=='20261025-runtime500-qspi-v1'
     assert manifest['flash_programming'] == ('PROGRAM_VERIFY_AND_COLD_BOOT_PASS' if qspi_release else 'NOT_PERFORMED')

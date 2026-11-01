@@ -24,8 +24,8 @@
     "flash": false
   },
   "logs": {
-    "docs/records/runtime500_release_20261025/download_jtag.log": "6064dfc15123beeac3eb181eb4ea977bf30a7d3475cba23b0de74604233e1233",
-    "docs/records/runtime500_release_20261025/ready_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1"
+    "docs/evidence/runtime500_release_20261025/download_jtag.log": "6064dfc15123beeac3eb181eb4ea977bf30a7d3475cba23b0de74604233e1233",
+    "docs/evidence/runtime500_release_20261025/ready_uart.log": "b701fac35c14179142ed324d1f39cf256d42c907d9f7df120c264a18d91098b1"
   },
   "flash": false,
   "git_operations": false,

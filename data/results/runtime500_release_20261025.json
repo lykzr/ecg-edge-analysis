@@ -29,8 +29,8 @@
       "simulated_radio": false,
       "normalized_sha256": "e2d58099606a708a35162b61d3ae96d8811b174f60bacdf5b7afdad9862302d9",
       "logs": {
-        "uart": "docs/records/vendor500_board_20261025/board_csv_uart.log",
-        "jtag": "docs/records/vendor500_board_20261025/board_csv_jtag.log"
+        "uart": "docs/evidence/vendor500_board_20261025/board_csv_uart.log",
+        "jtag": "docs/evidence/vendor500_board_20261025/board_csv_jtag.log"
       }
     },
     "board_simulated_adc": {
@@ -47,16 +47,16 @@
       "simulated_radio": true,
       "normalized_sha256": "e2d58099606a708a35162b61d3ae96d8811b174f60bacdf5b7afdad9862302d9",
       "logs": {
-        "uart": "docs/records/vendor500_board_20261025/board_simulated_adc_uart.log",
-        "jtag": "docs/records/vendor500_board_20261025/board_simulated_adc_jtag.log"
+        "uart": "docs/evidence/vendor500_board_20261025/board_simulated_adc_uart.log",
+        "jtag": "docs/evidence/vendor500_board_20261025/board_simulated_adc_jtag.log"
       }
     }
   },
   "evidence": {
-    "docs/records/vendor500_board_20261025/board_csv_uart.log": "c8c8d3d89bc55284de62e5182ceb37f7ec273ee5a472017442dbaa71995796f5",
-    "docs/records/vendor500_board_20261025/board_csv_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
-    "docs/records/vendor500_board_20261025/board_simulated_adc_uart.log": "2a70d4b219e82eeeb886b5517d9af4be71ff25dba4f3a58a781abc8457964c22",
-    "docs/records/vendor500_board_20261025/board_simulated_adc_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/evidence/vendor500_board_20261025/board_csv_uart.log": "c8c8d3d89bc55284de62e5182ceb37f7ec273ee5a472017442dbaa71995796f5",
+    "docs/evidence/vendor500_board_20261025/board_csv_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
+    "docs/evidence/vendor500_board_20261025/board_simulated_adc_uart.log": "2a70d4b219e82eeeb886b5517d9af4be71ff25dba4f3a58a781abc8457964c22",
+    "docs/evidence/vendor500_board_20261025/board_simulated_adc_jtag.log": "5c7eade4e3fc32de6e99c8858cec7101f882ce0f75acc815fc9ebda007c7802c",
     "data/results/runtime500_components_20261025.json": "3738586b31f3759fe0a403b3a99e33213af815729dad6becff3cb1fdcd0c337a"
   },
   "scope": "new ELF: saved vendor CSV and simulated34 source over physical USB_UART; original window/load/fault results belong to their original build"

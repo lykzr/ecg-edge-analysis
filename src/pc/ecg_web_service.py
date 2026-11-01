@@ -13,6 +13,7 @@ from ecg_paths import ROOT
 from ecg_monitor_core import Monitor, Recorder, demo_frames
 from ecg_serial import SerialCapture
 from ecg_capture_core import CaptureWorker
+from ecg_bridge_capture import NominalConverter
 from ecg_bridge_worker import BridgeWorker
 from ecg_runtime_worker import RuntimeWorker
 from ecg_ports import enumerate_ports, remembered_identity, select_port, validate_port, remember_identity
@@ -269,6 +270,11 @@ class LiveManager:
             info, capture_info, samples, result = worker.snapshot()
             diagnostics = dict(info)
             source = [asdict(sample) for sample in samples]
+        # 来源电压只由未滤波CH2原码计算；不使用厂商滤波列，也不复用
+        # 已去直流/量化的板端输入。标准CSV不是ADC偏移码，不能套此公式。
+        if kind in {'vendor_csv', 'vendor_serial', 'bridge_csv', 'bridge_serial'}:
+            for sample in source:
+                sample['ecg_nominal_mv'] = NominalConverter.millivolts(sample['ecg_raw'] - 8388608)
         view = result_view(result)
         active = worker.is_alive()
         if active and info.get('state') in {'stopped', 'error'}:

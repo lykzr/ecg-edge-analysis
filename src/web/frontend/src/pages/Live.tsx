@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { downloadFile, post, request, uploadWithProgress } from '../services/api';
 import Waveform from '../components/Waveform';
 import { PlotPoint } from '../components/waveformGeometry';
+import { sourceTrace, SourceSample, SourceTrace } from '../components/liveSource';
 
 interface Port {port: string; label: string; device_id: string;}
 interface Ports {ports: Port[]; warnings: string[]; zynq: string; capture: string;}
 interface Sample {seq: number; index: number; raw: number; filt: number | null;}
-interface Source {index: number; time_s: number; resp_raw: number; ecg_raw: number; resp_filtered: number | null; ecg_filtered: number | null;}
 interface Beat {seq: number; pos: number; index: number | null; rr: number | null; hr: number | null; cls: string; conf: number | null;}
 interface Result {header: {fs: number | null; scale: number | null; source: string; detector: string; caps: number; session: string} | null;
   samples: Sample[]; events: Beat[]; hr: number | null; rr_ms: number | null; cls: string;}
 interface Session {id: string; kind: string; created: number; active: boolean; info: Record<string, unknown>;
-  capture_info: Record<string, unknown>; source_samples: Source[]; result: Result; diagnostics: unknown;
+  capture_info: Record<string, unknown>; source_samples: SourceSample[]; result: Result; diagnostics: unknown;
   files: string[]; scope: string; source_unit: string; persistence_error: string | null;}
 const modes = [
   ['demo', '合成演示（预设标记）'], ['log', '日志回放（raw.log）'],
@@ -32,7 +32,7 @@ export default function Live() {
   const [file, setFile] = useState<File | null>(null), [limit, setLimit] = useState(5000), [seconds, setSeconds] = useState(10);
   const [realtime, setRealtime] = useState(true), [busy, setBusy] = useState(false), [message, setMessage] = useState('');
   const [session, setSession] = useState<Session | null>(null), [id, setId] = useState('');
-  const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [filtered, setFiltered] = useState(false);
+  const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [sourceMode, setSourceMode] = useState<SourceTrace>('code');
   const [resultTrace, setResultTrace] = useState('raw');
   const lastRequest = useRef(0);
   async function refresh() {
@@ -106,17 +106,8 @@ export default function Live() {
       breakBefore:previousResult!==null && sample.index!==previousResult+1});
     previousResult=sample.index;
   }
-  const sourceRate = session?.kind==='standard360' ? 360 : 500;
-  const sourcePoints: PlotPoint[] = [];
-  let previousSource: number | null = null;
-  for (const sample of session?.source_samples ?? []) {
-    const raw = channel==='ecg' || session?.kind.startsWith('standard') ? sample.ecg_raw : sample.resp_raw;
-    const value = filtered && !session?.kind.startsWith('standard') ? (channel==='ecg' ? sample.ecg_filtered : sample.resp_filtered) : raw-8388608;
-    if (value===null) continue;
-    sourcePoints.push({t:sample.index/sourceRate, v:value,
-      breakBefore:previousSource!==null && sample.index!==previousSource+1});
-    previousSource=sample.index;
-  }
+  const sourcePlot = sourceTrace(session?.source_samples ?? [], session?.kind ?? '', channel, sourceMode);
+  const sourcePoints = sourcePlot.points, sourceRate = sourcePlot.fs;
   const span = (points: PlotPoint[], fs: number) => Math.max(1/fs,(points[points.length-1]?.t ?? 0)-(points[0]?.t ?? 0));
   const markers = (result?.events ?? []).filter(e=>e.index!==null).map(e=>({t:e.index!/resultDivisor,label:String(e.seq)}));
   const shownState = session ? states[String(session.info.state)] ?? String(session.info.state) : '未开始';
@@ -143,9 +134,10 @@ export default function Live() {
     </section>
     {session && <section><div className="record-toolbar"><h2>波形与事件{!active?' · 历史数据':''}</h2><button className="secondary" onClick={()=>save(`/live/sessions/${id}/svg`,'ecg.svg')}>导出结果SVG</button></div>
       {session.info.state==='waiting' && <p className="notice">暂无新串口字节，数值为上次接收值；这不等于物理断连。</p>}
-      {session.source_samples.length>0 && <><div className="wave-toolbar"><strong>来源</strong>{!session.kind.startsWith('standard') && <select value={channel} onChange={e=>setChannel(e.target.value)}><option value="ecg">CH2 · ECG</option><option value="resp">CH1 · 呼吸</option></select>}
-        {!session.kind.startsWith('standard') && <label className="inline"><input type="checkbox" checked={filtered} onChange={e=>setFiltered(e.target.checked)}/>厂商滤波列（单位未确认）</label>}</div>
-        <Waveform points={sourcePoints} offset={sourcePoints[0]?.t ?? 0} duration={span(sourcePoints,sourceRate)} unit={filtered && !session.kind.startsWith('standard')?'厂商滤波值（单位未确认）':session.source_unit}/></>}
+      {session.source_samples.length>0 && <><div className="wave-toolbar"><strong>来源</strong>{!session.kind.startsWith('standard') && <select value={channel} onChange={e=>{setChannel(e.target.value);if(e.target.value!=='ecg' && sourceMode==='mv')setSourceMode('code');}}><option value="ecg">CH2 · ECG</option><option value="resp">CH1 · 呼吸</option></select>}
+        {!session.kind.startsWith('standard') && <select aria-label="来源幅值" value={sourceMode} onChange={e=>setSourceMode(e.target.value as SourceTrace)}><option value="code">ADC原码</option>{channel==='ecg' && <option value="mv">标称电压 · mV</option>}<option value="vendor">厂商滤波列（如有）</option></select>}</div>
+        <Waveform points={sourcePoints} offset={sourcePoints[0]?.t ?? 0} duration={span(sourcePoints,sourceRate)} unit={sourcePlot.unit}/>
+        {sourceMode==='mv' && !session.kind.startsWith('standard') && <p className="hint">电压由未额外数字滤波的CH2原码换算，保留直流；Zynq输入另有去直流和int16量化，两者幅值不必相同。历史记录若无电压字段则不绘制。</p>}</>}
       <div className="wave-toolbar"><strong>{needsBoard.has(session.kind)?'Zynq返回':'日志/演示'}</strong><select value={resultTrace} onChange={e=>setResultTrace(e.target.value)}><option value="raw">raw</option><option value="filt">filt（未提供不绘制）</option><option value="both">raw绿色 / filt蓝色</option></select><span>{result?.header?.detector ?? '尚无合法会话头'}</span></div>
       <Waveform points={waveform} secondary={secondary} offset={waveform[0]?.t ?? 0} duration={span(waveform,resultDivisor)} axisUnit={rate?'s':'样本号'} unit={scale?'mV（声明比例）':'码值（未标定）'} markers={markers}/>
       <div className="live-table"><table><thead><tr>{['事件号','源位置（样本号）','RR（点）','心率','类别'].map(title=><th key={title}>{title}</th>)}</tr></thead><tbody>{[...(result?.events ?? [])].reverse().map(event=><tr key={event.seq}><td>{event.seq}</td><td>{event.pos}{event.index===null?'（不在当前可见窗口）':''}</td><td>{event.rr ?? '未知'}</td><td>{number(event.hr,1)}</td><td>{result?.header && (result.header.caps & 16) ? event.cls==='?'?'未知':event.cls : '未提供'}</td></tr>)}</tbody></table></div>

@@ -1,0 +1,554 @@
+{
+  "build_id": "36e807fd28c440f5",
+  "device": {
+    "port": "COM23",
+    "label": "USB-SERIAL CH340 (COM23)",
+    "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+    "candidate": true
+  },
+  "warnings": [],
+  "phase": "qspi_resume_reset_20261101",
+  "reset_between_sessions": false,
+  "sessions": [
+    {
+      "name": "first",
+      "info": {
+        "state": "finished",
+        "reason": "completed",
+        "error": null,
+        "source": "REPLAY",
+        "sample_rate_hz": 500,
+        "profile": "runtime500",
+        "source_status": "标准CSV 500Hz/4096单位/mV",
+        "result_status": "软件运行时结果",
+        "source_samples": 5000,
+        "confirmed": 5000,
+        "echoed": 5000,
+        "zynq_device": {
+          "port": "COM23",
+          "label": "USB-SERIAL CH340 (COM23)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+          "candidate": true
+        },
+        "output_dir": "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\session_reuse_20261101_02\\qspi_resume_reset_20261101\\first",
+        "board_validated": false,
+        "queue_peak": 32,
+        "done": true,
+        "pending_bytes": 0,
+        "incomplete_rx_bytes": 0,
+        "upstream_source_drop": null,
+        "sample_age_s": 0.021629499999107793,
+        "timing": {
+          "init_roundtrip": {
+            "count": 1,
+            "total_s": 0.02747619998990558,
+            "min_s": 0.02747619998990558,
+            "max_s": 0.02747619998990558,
+            "mean_s": 0.02747619998990558
+          },
+          "batch_roundtrip": {
+            "count": 158,
+            "total_s": 5.615223800035892,
+            "min_s": 0.011501100001623854,
+            "max_s": 0.05416170001262799,
+            "mean_s": 0.03553939113946767
+          },
+          "finish_roundtrip": {
+            "count": 1,
+            "total_s": 0.01672750001307577,
+            "min_s": 0.01672750001307577,
+            "max_s": 0.01672750001307577,
+            "mean_s": 0.01672750001307577
+          },
+          "session_wall": {
+            "count": 1,
+            "total_s": 10.85078040001099,
+            "min_s": 10.85078040001099,
+            "max_s": 10.85078040001099,
+            "mean_s": 10.85078040001099
+          }
+        },
+        "timing_scope": "PC roundtrip includes write, transport, board work and read; not board compute"
+      },
+      "events": [
+        [
+          1,
+          250,
+          0,
+          "?"
+        ],
+        [
+          2,
+          750,
+          500,
+          "?"
+        ],
+        [
+          3,
+          1250,
+          500,
+          "?"
+        ],
+        [
+          4,
+          1750,
+          500,
+          "?"
+        ],
+        [
+          5,
+          2250,
+          500,
+          "?"
+        ],
+        [
+          6,
+          2750,
+          500,
+          "?"
+        ],
+        [
+          7,
+          3250,
+          500,
+          "?"
+        ],
+        [
+          8,
+          3750,
+          500,
+          "?"
+        ],
+        [
+          9,
+          4250,
+          500,
+          "?"
+        ]
+      ]
+    },
+    {
+      "name": "longer",
+      "info": {
+        "state": "finished",
+        "reason": "completed",
+        "error": null,
+        "source": "REPLAY",
+        "sample_rate_hz": 500,
+        "profile": "runtime500",
+        "source_status": "标准CSV 500Hz/4096单位/mV",
+        "result_status": "软件运行时结果",
+        "source_samples": 15000,
+        "confirmed": 15000,
+        "echoed": 15000,
+        "zynq_device": {
+          "port": "COM23",
+          "label": "USB-SERIAL CH340 (COM23)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+          "candidate": true
+        },
+        "output_dir": "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\session_reuse_20261101_02\\qspi_resume_reset_20261101\\longer",
+        "board_validated": false,
+        "queue_peak": 32,
+        "done": true,
+        "pending_bytes": 0,
+        "incomplete_rx_bytes": 0,
+        "upstream_source_drop": null,
+        "sample_age_s": 0.022850099980132654,
+        "timing": {
+          "init_roundtrip": {
+            "count": 1,
+            "total_s": 0.027306500007398427,
+            "min_s": 0.027306500007398427,
+            "max_s": 0.027306500007398427,
+            "mean_s": 0.027306500007398427
+          },
+          "batch_roundtrip": {
+            "count": 470,
+            "total_s": 16.898214700078825,
+            "min_s": 0.010189900000113994,
+            "max_s": 0.05524329998297617,
+            "mean_s": 0.03595364829804005
+          },
+          "finish_roundtrip": {
+            "count": 1,
+            "total_s": 0.01765619998332113,
+            "min_s": 0.01765619998332113,
+            "max_s": 0.01765619998332113,
+            "mean_s": 0.01765619998332113
+          },
+          "session_wall": {
+            "count": 1,
+            "total_s": 30.96340620002593,
+            "min_s": 30.96340620002593,
+            "max_s": 30.96340620002593,
+            "mean_s": 30.96340620002593
+          }
+        },
+        "timing_scope": "PC roundtrip includes write, transport, board work and read; not board compute"
+      },
+      "events": [
+        [
+          1,
+          250,
+          0,
+          "?"
+        ],
+        [
+          2,
+          750,
+          500,
+          "?"
+        ],
+        [
+          3,
+          1250,
+          500,
+          "?"
+        ],
+        [
+          4,
+          1750,
+          500,
+          "?"
+        ],
+        [
+          5,
+          2250,
+          500,
+          "?"
+        ],
+        [
+          6,
+          2750,
+          500,
+          "?"
+        ],
+        [
+          7,
+          3250,
+          500,
+          "?"
+        ],
+        [
+          8,
+          3750,
+          500,
+          "?"
+        ],
+        [
+          9,
+          4250,
+          500,
+          "?"
+        ],
+        [
+          10,
+          4750,
+          500,
+          "?"
+        ],
+        [
+          11,
+          5250,
+          500,
+          "?"
+        ],
+        [
+          12,
+          5750,
+          500,
+          "?"
+        ],
+        [
+          13,
+          6250,
+          500,
+          "?"
+        ],
+        [
+          14,
+          6750,
+          500,
+          "?"
+        ],
+        [
+          15,
+          7250,
+          500,
+          "?"
+        ],
+        [
+          16,
+          7750,
+          500,
+          "?"
+        ],
+        [
+          17,
+          8250,
+          500,
+          "?"
+        ],
+        [
+          18,
+          8750,
+          500,
+          "?"
+        ],
+        [
+          19,
+          9250,
+          500,
+          "?"
+        ],
+        [
+          20,
+          9750,
+          500,
+          "?"
+        ],
+        [
+          21,
+          10250,
+          500,
+          "?"
+        ],
+        [
+          22,
+          10750,
+          500,
+          "?"
+        ],
+        [
+          23,
+          11250,
+          500,
+          "?"
+        ],
+        [
+          24,
+          11750,
+          500,
+          "?"
+        ],
+        [
+          25,
+          12250,
+          500,
+          "?"
+        ],
+        [
+          26,
+          12750,
+          500,
+          "?"
+        ],
+        [
+          27,
+          13250,
+          500,
+          "?"
+        ],
+        [
+          28,
+          13750,
+          500,
+          "?"
+        ],
+        [
+          29,
+          14250,
+          500,
+          "?"
+        ]
+      ]
+    },
+    {
+      "name": "manual_stop",
+      "info": {
+        "state": "finished",
+        "reason": "stopped_by_user",
+        "error": null,
+        "source": "REPLAY",
+        "sample_rate_hz": 500,
+        "profile": "runtime500",
+        "source_status": "标准CSV 500Hz/4096单位/mV",
+        "result_status": "软件运行时结果",
+        "source_samples": 667,
+        "confirmed": 667,
+        "echoed": 667,
+        "zynq_device": {
+          "port": "COM23",
+          "label": "USB-SERIAL CH340 (COM23)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+          "candidate": true
+        },
+        "output_dir": "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\session_reuse_20261101_02\\qspi_resume_reset_20261101\\manual_stop",
+        "board_validated": false,
+        "queue_peak": 32,
+        "done": true,
+        "pending_bytes": 0,
+        "incomplete_rx_bytes": 0,
+        "upstream_source_drop": null,
+        "sample_age_s": 0.020876900001894683,
+        "timing": {
+          "init_roundtrip": {
+            "count": 1,
+            "total_s": 0.027352900011464953,
+            "min_s": 0.027352900011464953,
+            "max_s": 0.027352900011464953,
+            "mean_s": 0.027352900011464953
+          },
+          "batch_roundtrip": {
+            "count": 22,
+            "total_s": 0.7280303999432363,
+            "min_s": 0.011318499979097396,
+            "max_s": 0.051917699980549514,
+            "mean_s": 0.03309229090651074
+          },
+          "finish_roundtrip": {
+            "count": 1,
+            "total_s": 0.015714600012870505,
+            "min_s": 0.015714600012870505,
+            "max_s": 0.015714600012870505,
+            "mean_s": 0.015714600012870505
+          },
+          "session_wall": {
+            "count": 1,
+            "total_s": 2.30540809998638,
+            "min_s": 2.30540809998638,
+            "max_s": 2.30540809998638,
+            "mean_s": 2.30540809998638
+          }
+        },
+        "timing_scope": "PC roundtrip includes write, transport, board work and read; not board compute"
+      },
+      "events": [
+        [
+          1,
+          250,
+          0,
+          "?"
+        ]
+      ]
+    },
+    {
+      "name": "after_idle",
+      "info": {
+        "state": "finished",
+        "reason": "completed",
+        "error": null,
+        "source": "REPLAY",
+        "sample_rate_hz": 500,
+        "profile": "runtime500",
+        "source_status": "标准CSV 500Hz/4096单位/mV",
+        "result_status": "软件运行时结果",
+        "source_samples": 5000,
+        "confirmed": 5000,
+        "echoed": 5000,
+        "zynq_device": {
+          "port": "COM23",
+          "label": "USB-SERIAL CH340 (COM23)",
+          "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2",
+          "candidate": true
+        },
+        "output_dir": "C:\\Users\\23006\\Desktop\\ecg_edge\\tmp\\session_reuse_20261101_02\\qspi_resume_reset_20261101\\after_idle",
+        "board_validated": false,
+        "queue_peak": 32,
+        "done": true,
+        "pending_bytes": 0,
+        "incomplete_rx_bytes": 0,
+        "upstream_source_drop": null,
+        "sample_age_s": 0.02278850000584498,
+        "timing": {
+          "init_roundtrip": {
+            "count": 1,
+            "total_s": 0.027624199981801212,
+            "min_s": 0.027624199981801212,
+            "max_s": 0.027624199981801212,
+            "mean_s": 0.027624199981801212
+          },
+          "batch_roundtrip": {
+            "count": 158,
+            "total_s": 5.618355900252936,
+            "min_s": 0.010766000021249056,
+            "max_s": 0.05443410002044402,
+            "mean_s": 0.03555921455856289
+          },
+          "finish_roundtrip": {
+            "count": 1,
+            "total_s": 0.016742900013923645,
+            "min_s": 0.016742900013923645,
+            "max_s": 0.016742900013923645,
+            "mean_s": 0.016742900013923645
+          },
+          "session_wall": {
+            "count": 1,
+            "total_s": 10.626631299994187,
+            "min_s": 10.626631299994187,
+            "max_s": 10.626631299994187,
+            "mean_s": 10.626631299994187
+          }
+        },
+        "timing_scope": "PC roundtrip includes write, transport, board work and read; not board compute"
+      },
+      "events": [
+        [
+          1,
+          250,
+          0,
+          "?"
+        ],
+        [
+          2,
+          750,
+          500,
+          "?"
+        ],
+        [
+          3,
+          1250,
+          500,
+          "?"
+        ],
+        [
+          4,
+          1750,
+          500,
+          "?"
+        ],
+        [
+          5,
+          2250,
+          500,
+          "?"
+        ],
+        [
+          6,
+          2750,
+          500,
+          "?"
+        ],
+        [
+          7,
+          3250,
+          500,
+          "?"
+        ],
+        [
+          8,
+          3750,
+          500,
+          "?"
+        ],
+        [
+          9,
+          4250,
+          500,
+          "?"
+        ]
+      ]
+    }
+  ]
+}

@@ -15,7 +15,7 @@ PACKAGE=ROOT/'releases/latest'
 class QspiReleaseTests(unittest.TestCase):
     def test_boot_inputs_bind_to_actual_programming_receipt(self):
         meta=json.loads((PACKAGE/'qspi/manifest.json').read_text())
-        receipt=json.loads((ROOT/'data/results/qspi_20261025.json').read_text())
+        receipt=json.loads((ROOT/'data/results/session_reuse_release_20261101.json').read_text())
         for name,expected in meta['components'].items():
             path=PACKAGE/expected['path'];data=path.read_bytes()
             self.assertEqual(len(data),expected['bytes'])
@@ -26,7 +26,8 @@ class QspiReleaseTests(unittest.TestCase):
         self.assertTrue(receipt['cold_boot_user_confirmed'])
         self.assertEqual(receipt['boot_mode'],1)
         self.assertFalse(receipt['cold_boot_jtag_download_used'])
-        self.assertEqual(receipt['replay']['samples'],10412)
+        sessions=json.loads((ROOT/receipt['qspi_sessions']).read_text())
+        self.assertEqual(sessions['sessions'][-1]['info']['confirmed'],5000)
 
     def test_reset_does_not_download_or_reconfigure(self):
         script=(PACKAGE/'qspi/reset_qspi.tcl').read_text(encoding='utf-8')

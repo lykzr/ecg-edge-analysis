@@ -98,7 +98,7 @@ def _task_row(task_id: str, user: str):
 
 
 def submit_task(user: str, signal: dict, *, idempotency_key: str | None = None,
-                source_record_id: str | None = None):
+                source_record_id: str | None = None, raw_content: bytes | None = None):
     """写入任务与标准输入，返回 (task, created)。重复的幂等键返回原任务。"""
     key = (idempotency_key or "").strip() or None
     if key and len(key) > 64:
@@ -130,15 +130,23 @@ def submit_task(user: str, signal: dict, *, idempotency_key: str | None = None,
                 if existing:
                     return _task_dict(existing), False
             raise
+        if raw_content is not None:
+            # pending提交前完成原件保存和路径关联。后台会补取SQLite pending，
+            # 不能假设只有路由enqueue之后才会执行。保存失败让本事务回滚。
+            path = (settings.upload_dir / user / f"{task_id}.csv").resolve()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open('xb') as stream:
+                stream.write(raw_content)
+            db.execute("UPDATE analysis_tasks SET input_path=? WHERE id=?", (str(path), task_id))
         db.execute("INSERT INTO task_inputs(task_id, payload) VALUES (?,?)", (task_id, json.dumps(signal)))
         _event(db, task_id, "pending", "queued", None, "任务已提交")
     return task_status(user, task_id), True
 
 
 def submit(user: str, signal: dict, *, idempotency_key: str | None = None,
-           source_record_id: str | None = None) -> dict:
+           source_record_id: str | None = None, raw_content: bytes | None = None) -> dict:
     return submit_task(user, signal, idempotency_key=idempotency_key,
-                       source_record_id=source_record_id)[0]
+                       source_record_id=source_record_id, raw_content=raw_content)[0]
 
 
 def execute(task_id: str) -> bool:
@@ -781,18 +789,9 @@ def reanalyze(user: str, identifier: str) -> dict:
         _audit(db, identifier, user, "reanalyze")
     if not task or not task["payload"]:
         raise InputUnavailable("原始输入已清理，无法重分析")
-    new_task = submit(user, json.loads(task["payload"]), source_record_id=identifier)
     source_path = task["input_path"]
-    if source_path and Path(source_path).is_file():
-        target = (settings.upload_dir / user / f"{new_task['id']}.csv").resolve()
-        try:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(Path(source_path).read_bytes())
-            with connect() as db:
-                db.execute("UPDATE analysis_tasks SET input_path=? WHERE id=?", (str(target), new_task["id"]))
-        except OSError:
-            pass
-    return new_task
+    raw_content = Path(source_path).read_bytes() if source_path and Path(source_path).is_file() else None
+    return submit(user, json.loads(task["payload"]), source_record_id=identifier, raw_content=raw_content)
 
 
 def export_record(user: str, identifier: str, format: str = "csv"):

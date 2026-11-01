@@ -99,6 +99,16 @@ static void packet(RuntimeLink*s){char*star=strchr(s->line,'*'),*f[40];unsigned 
 void ecg_link_init(RuntimeLink*s,RuntimeIo io,EcgPipeline*p,unsigned trace){memset(s,0,sizeof(*s));s->io=io;s->pipeline=p;s->trace=trace;const float mean[3]={0},std[3]={1,1,1};const uint8_t sha[32]={0};
  if(ecg_pipeline_init(p,1,mean,std)||ecg_class_init(&s->classifier,1,sha,2000))fail(s,"INIT_FAILED");
  if(!s->failed)put(s,"H,ECG-UART-1,ps-runtime-ready,boot,UNKNOWN,QRS26-ARM,360,4096,0xD\n");}
+int ecg_link_rearm(RuntimeLink*s,uint64_t now){
+ if(!s->done||s->failed||s->used||now<s->now)return -1;
+ RuntimeIo io=s->io;EcgPipeline*p=s->pipeline;unsigned trace=s->trace;
+ ecg_link_init(s,io,p,trace);
+ if(s->failed)return -1;
+ /* DONE必须先物理发完；不在同一批DONE后附加启动H，兼容现有PC客户端。
+    下一整秒再广播就绪。所有样本、心拍、RR及算法状态均由init重新初始化。 */
+ s->head=0;s->used=0;s->now=now;s->last_rx=now;s->last_tx=now;s->periodic=now/1000000;
+ return 0;
+}
 void ecg_link_feed(RuntimeLink*s,unsigned char c,uint64_t now){if(s->failed)return;if(now<s->now){fail(s,"CLOCK_REVERSED");return;}s->now=now;s->last_rx=now;
  if(s->done){fail(s,"AFTER_END");return;}if(c=='\n'){s->line[s->len]=0;packet(s);s->len=0;}else if(c<32||c>126)fail(s,"BAD_ASCII");else if(s->len>=255)fail(s,"LINE_TOO_LONG");else s->line[s->len++]=(char)c;}
 int ecg_link_step(RuntimeLink*s,uint64_t now){if(now<s->now){fail(s,"CLOCK_REVERSED");return 1;}s->now=now;

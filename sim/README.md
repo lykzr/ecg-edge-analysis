@@ -126,7 +126,7 @@ python -B -m unittest discover -s sim -p test_ads1292.py -v
 
 
 
-仅需标准库；覆盖SPI状态/24位补码和显式版本的厂商偏移码帧，不打开设备或实现自动同步。格式、来源冲突和待核项见[ADS1292R说明](../docs/ads1292.md)。合成向量通过不代表真实ADC采集或PS流式程序已上板。
+仅需标准库；覆盖SPI状态/24位补码和显式版本的厂商偏移码帧，不打开设备或实现自动同步。格式、来源冲突和待核项见[ADS1292R说明](../docs/archive/materials/ads1292.md)。合成向量通过不代表真实ADC采集或PS流式程序已上板。
 
 
 
@@ -212,7 +212,7 @@ python -B sim/check_system_release.py --repository .核对latest文件、两套X
 
 ## 启动学习候选检查
 
-python -B -m unittest discover -s sim -p test_qrs_auto.py -v检查预热、幅值/极性、静默、复位/暂停、因果、定点界限和显式检测器身份。check_qrs_auto.py用现有XSim逐周期核对候选RTL/整数参考，并复跑已知开发记录；需要已有Vivado及本机输入，参数见脚本帮助。原检测器与smoke独立保留；离线/构建通过不等于上板或准确性通过，详见[候选说明](../docs/qrs_auto.md)。
+python -B -m unittest discover -s sim -p test_qrs_auto.py -v检查预热、幅值/极性、静默、复位/暂停、因果、定点界限和显式检测器身份。check_qrs_auto.py用现有XSim逐周期核对候选RTL/整数参考，并复跑已知开发记录；需要已有Vivado及本机输入，参数见脚本帮助。原检测器与smoke独立保留；离线/构建通过不等于上板或准确性通过，详见[候选说明](../docs/archive/qrs_auto.md)。
 
 
 精简发布由`check_system_release.py`校验当前latest的镜像、仓库来源及`docs/records/system_board_20261020/`原始实板证据。默认仓库根由脚本定位，`--repository`可替换为另一检出的源码根；不会到tmp选择历史候选。`test_system_release.py`只测发布物复制/损坏拒绝/入口路径与精确ignore，PC/UI测试仍从正式源码入口独立运行，不要求发布包重复携带源码。
@@ -220,17 +220,17 @@ python -B -m unittest discover -s sim -p test_qrs_auto.py -v检查预热、幅�
 
 ## 原波形确认候选
 
-python -B -m unittest discover -s sim -p test_qrs_peak.py -v检查360/500Hz、原波形位置/RR、宽波/双相/快速真心拍、暂停/复位、因果和尾部。data/evaluate_qrs_peak.py完整复跑19条已知开发记录并核对基线来源，参数见[说明](../docs/qrs_peak.md)。当前仅软件，不继承旧候选RTL/bit/实板成绩；失败滤波和平方核心已归档tmp，不能称准确性通过。
+python -B -m unittest discover -s sim -p test_qrs_peak.py -v检查360/500Hz、原波形位置/RR、宽波/双相/快速真心拍、暂停/复位、因果和尾部。data/evaluate_qrs_peak.py完整复跑19条已知开发记录并核对基线来源，参数见[说明](../docs/archive/qrs_peak.md)。当前仅软件，不继承旧候选RTL/bit/实板成绩；失败滤波和平方核心已归档tmp，不能称准确性通过。
 
 
 ## 成熟QRS独立候选
 
-在data/requirements_qrs.txt指定环境运行python -B -m unittest discover -s sim -p test_qrs_v5.py -v，检查原码平台、40Hz候选支路、正负/快速/弱尖/宽波/双相、暂停/复位、未来/过期读取和前缀/尾部。完整已知记录回归另由data/benchmark_qrs_v5.py执行；软件检查不代表500Hz、整数RTL或上板通过，见[说明](../docs/qrs_v5.md)。
+在data/requirements_qrs.txt指定环境运行python -B -m unittest discover -s sim -p test_qrs_v5.py -v，检查原码平台、40Hz候选支路、正负/快速/弱尖/宽波/双相、暂停/复位、未来/过期读取和前缀/尾部。完整已知记录回归另由data/benchmark_qrs_v5.py执行；软件检查不代表500Hz、整数RTL或上板通过，见[说明](../docs/archive/qrs_v5.md)。
 
 
 ## QRS噪声计分检查
 
-python -B -m unittest discover -s sim -p test_qrs_noise.py -v检查212/16解码、全段起尾、一次匹配分段归属和V召回。这里只校验计分；实际全长入口与依赖见[说明](../docs/qrs_noise.md)，不连接板卡。
+python -B -m unittest discover -s sim -p test_qrs_noise.py -v检查212/16解码、全段起尾、一次匹配分段归属和V召回。这里只校验计分；实际全长入口与依赖见[说明](../docs/archive/qrs_noise.md)，不连接板卡。
 
 ## 逐样本运行时与自动切拍
 
@@ -238,7 +238,7 @@ python -B -m unittest discover -s sim -p test_qrs_noise.py -v检查212/16解码�
 
 ## 分类输入及PS队列
 
-QRS/NumPy环境分别运行`test_classifier.py`（窗口适配、状态、超时、单发结果）和`test_classification_ps.py`（已有GCC编译实际C核心并对照）；PyTorch环境单独运行`test_classification_torch.py`，核对训练端RR变换和冻结开发权重直接推理。避免用同一通配模式在缺Torch的环境导入模型用例。以上均不训练、不给模型质量评分，不替代板卡或新QRS移植。协议和命令见[分类接口](../docs/classification_protocol.md)。
+QRS/NumPy环境分别运行`test_classifier.py`（窗口适配、状态、超时、单发结果）和`test_classification_ps.py`（已有GCC编译实际C核心并对照）；PyTorch环境单独运行`test_classification_torch.py`，核对训练端RR变换和冻结开发权重直接推理。避免用同一通配模式在缺Torch的环境导入模型用例。以上均不训练、不给模型质量评分，不替代板卡或新QRS移植。协议和命令见[分类接口](../docs/protocols.md#class)。
 
 ## 冻结360Hz C移植
 
@@ -256,7 +256,7 @@ QRS/NumPy环境分别运行`test_classifier.py`（窗口适配、状态、超时
 
 test_system_consistency.py回归匹配文件、显式采样率、结束残行和坐标脚注；test_runtime_link.py/test_pipeline500.py同时检查事件后的周期T保留已知心率/RR。check_rate500_load.py使用实际C加有界虚拟UART检查负载和明确失败边界；check_binary_licenses.py核对应用/FSBL实际链接成员。用法及限制见[系统构建与检查](../docs/system_checks.md)。
 
-新500Hz验板入口为board/verify_runtime500.py；test_runtime500_board.py只检查事件/窗口/状态解析，不接板。发布测试支持当前runtime500组件，原smoke和旧bridge证据不变。真实数字结果见[记录](../docs/records/runtime500_board_20261024.md)。
+新500Hz验板入口为board/verify_runtime500.py；test_runtime500_board.py只检查事件/窗口/状态解析，不接板。发布测试支持当前runtime500组件，原smoke和旧bridge证据不变。真实数字结果见[记录](../docs/archive/records/runtime500_board_20261024.md)。
 
 厂商500Hz回归：test_vendor500.py检查原码/单位/舍入/饱和、去直流常量偏置不变性与初态、CSV/分块34字节到实际C、手动停止/新会话及新UI路由。test_pc_bridge.py与test_ecg_bridge.py中的旧链路明确指定legacy500；不把它们当新ADC无线验收。board/verify_vendor500.py需显式实物参数，--simulate-radio仍是模拟来源。
 
@@ -264,4 +264,10 @@ test_system_consistency.py回归匹配文件、显式采样率、结束残行和
 
 ## 网页适配验证
 
+板端正常会话复用回归：`python -B -m unittest discover -s sim -p test_runtime_sessions.py`。使用已有NumPy/WFDB环境和GCC，编译实际360/500Hz C实现，检查多轮计数/RR/事件重置、零点/短会话、空闲等待、DONE队列与错误锁存，并覆盖厂商后台停止后重新开始；不打开设备串口，不代替实际板卡验收。
+
 使用独立环境运行 `python -B -m pytest sim/web -q -p no:cacheprovider`；波形几何用 `node --experimental-strip-types --test sim/web/waveform.test.mjs`。测试包括账户/记录、实时会话、HTTP/WebSocket与实际PS C核心的模拟串口，不连接板卡。C测试需要已有GCC，可用ECG_HOST_CC指定。实际浏览器视觉和设备验收仍单独进行，见[网页教程](../docs/web_monitor.md)。
+
+`sim/web/test_capture_chain.py`专门检查34字节任意分块/通道、来源电压和板端去直流的分离、坏帧停止与原文保留、原件关联先于任务执行、原件写盘失败回滚。`liveSource.ts`的Node测试检查原码/mV/厂商滤波视图不混用；没有电压字段时不补画。后台旧链路需要WFDB时使用已有QRS环境，不在网页环境自动安装。所有串口均为模拟；HTTP/WebSocket测试需要允许本机回环套接字。
+
+当前会话复用发布核验：sim/check_system_release.py按版本选择旧规则或check_session_release.py。新版核对匹配bit/XSA/ELF/FSBL/BOOT.BIN、正式源码哈希、JTAG与QSPI各四轮收据，严格区分此前冷启动前三轮和后续系统复位四轮。test_system_release.py与test_qspi_release.py检查便携路径、默认不连板、组件篡改和源码漂移拒绝；不产生新的实板验收。

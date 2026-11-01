@@ -8,4 +8,4 @@ model_eval_report.py读取真实预测列表，计算逐类precision/recall/F1�
 python -B src/web/ai_model/eval/model_eval_report.py tmp/predictions.json
 ```
 
-predictions.json为非空列表，每项含true_label与predicted_label。报告须保留来源、患者划分、预处理和模型版本。本目录不用于自动接通本项目模型分支，见[模型合并计划](../../../../report/model_merge.md)。
+predictions.json为非空列表，每项含true_label与predicted_label。报告须保留来源、患者划分、预处理和模型版本。本目录不用于自动接通本项目模型分支，见[模型合并计划](../../../../docs/archive/report/model_merge.md)。

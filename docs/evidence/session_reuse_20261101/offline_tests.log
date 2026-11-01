@@ -1,0 +1,35 @@
+不执行界面用例：test_pipeline500.PipelineTests.test_hidden_ui500_control, test_vendor500.Vendor500Tests.test_new_ui_routes_vendor_to_runtime500
+test_consecutive_sessions_reset_beats_rr_samples_and_waveforms (test_runtime_sessions.SessionTests.test_consecutive_sessions_reset_beats_rr_samples_and_waveforms) ... ok
+test_idle_wait_does_not_end_application_and_new_session_works (test_runtime_sessions.SessionTests.test_idle_wait_does_not_end_application_and_new_session_works) ... ok
+test_rearm_forbidden_during_active_or_faulted_session (test_runtime_sessions.SessionTests.test_rearm_forbidden_during_active_or_faulted_session) ... ok
+test_rearm_waits_until_done_has_left_transmit_queue (test_runtime_sessions.SessionTests.test_rearm_waits_until_done_has_left_transmit_queue) ... ok
+test_short_or_zero_session_then_longer_session (test_runtime_sessions.SessionTests.test_short_or_zero_session_then_longer_session) ... ok
+test_stop_and_restart_vendor_workers_reuse_same_device (test_runtime_sessions.SessionTests.test_stop_and_restart_vendor_workers_reuse_same_device) ... ok
+test_crc_partial_and_idle_faults (test_runtime_link.LinkTests.test_crc_partial_and_idle_faults) ... ok
+test_missing_boot_has_bounded_timeout (test_runtime_link.LinkTests.test_missing_boot_has_bounded_timeout) ... ok
+test_no_upload_before_boot_ready (test_runtime_link.LinkTests.test_no_upload_before_boot_ready) ... ok
+test_real_c_full_duplex_and_window_trace (test_runtime_link.LinkTests.test_real_c_full_duplex_and_window_trace) ... ok
+test_wrong_rate_contract_rejected (test_runtime_link.LinkTests.test_wrong_rate_contract_rejected) ... ok
+test_zero_and_new_session (test_runtime_link.LinkTests.test_zero_and_new_session) ... ok
+test_c_uart_pc_full_duplex (test_pipeline500.PipelineTests.test_c_uart_pc_full_duplex) ... ok
+test_prefix_no_future_no_tail_padding (test_pipeline500.PipelineTests.test_prefix_no_future_no_tail_padding) ... ok
+test_source_window_and_rr_match (test_pipeline500.PipelineTests.test_source_window_and_rr_match) ... ok
+test_worker500_csv_and_wrong_rate (test_pipeline500.PipelineTests.test_worker500_csv_and_wrong_rate) ... ok
+test_wrong360_crc_gap_timeout_rejected (test_pipeline500.PipelineTests.test_wrong360_crc_gap_timeout_rejected) ... ok
+test_zero_memory_gap_reset_and_finish (test_pipeline500.PipelineTests.test_zero_memory_gap_reset_and_finish) ... ok
+test_dc_constant_shift_invariance_and_fresh_session (test_vendor500.ConversionTests.test_dc_constant_shift_invariance_and_fresh_session) ... ok
+test_dc_independent_recurrence_and_saturation (test_vendor500.ConversionTests.test_dc_independent_recurrence_and_saturation) ... ok
+test_exact_rational_boundaries_sign_channel_and_saturation (test_vendor500.ConversionTests.test_exact_rational_boundaries_sign_channel_and_saturation) ... ok
+test_reject_wrong_types_and_double_offset (test_vendor500.ConversionTests.test_reject_wrong_types_and_double_offset) ... ok
+test_rounding_is_symmetric_within_half_unit (test_vendor500.ConversionTests.test_rounding_is_symmetric_within_half_unit) ... ok
+test_adc_34byte_fragmented_uses_same_converter (test_vendor500.Vendor500Tests.test_adc_34byte_fragmented_uses_same_converter) ... ok
+test_adc_requires_scale4096 (test_vendor500.Vendor500Tests.test_adc_requires_scale4096) ... ok
+test_cli_default_uses_integrated_vendor_path (test_vendor500.Vendor500Tests.test_cli_default_uses_integrated_vendor_path) ... ok
+test_no_first_byte_times_out_and_preserves_record (test_vendor500.Vendor500Tests.test_no_first_byte_times_out_and_preserves_record) ... ok
+test_stop_and_new_worker_reset_dc_and_session (test_vendor500.Vendor500Tests.test_stop_and_new_worker_reset_dc_and_session) ... ok
+test_vendor_csv_c_core_units_echo_saved_original (test_vendor500.Vendor500Tests.test_vendor_csv_c_core_units_echo_saved_original) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 24.118s
+
+OK

@@ -37,7 +37,7 @@ MIT 原始文件校验官方 SHA256 及 212 首值/长度/校验和，按 MLII �
 
 ## QRS运行时回归
 
-`benchmark_qrs_runtime.py`按`qrs_runtime_protocol.json`分别核对360Hz原重放事件和500Hz输入转换候选。输出必须指定不存在的新目录；不依赖旧tmp，不读取分类独立测试。运行方式见[运行时说明](../docs/qrs_runtime.md)，实验结果见[运行时记录](../docs/records/runtime_20261023.md)。冻结研究快照和原门槛入口保持独立，详见[研究26](../docs/qrs_research.md)。
+`benchmark_qrs_runtime.py`按`qrs_runtime_protocol.json`分别核对360Hz原重放事件和500Hz输入转换候选。输出必须指定不存在的新目录；不依赖旧tmp，不读取分类独立测试。运行方式见[运行时说明](../docs/qrs_runtime.md)，实验结果见[运行时记录](../docs/archive/records/runtime_20261023.md)。冻结研究快照和原门槛入口保持独立，详见[研究26](../docs/archive/analysis/qrs_research.md)。
 
 ## 实际 CSV 输入诊断
 
@@ -59,7 +59,7 @@ python -B data/analyze_capture.py --source <五列RawData.csv> --output tmp/capt
 python -B data/replay_classification.py --raw-dir <MIT原始数据目录> --record 100 --seconds 30 --output-dir tmp/class_replay_new --inference-python <已有PyTorch解释器>
 ```
 
-输出目录必须不存在。完整输入、来源/许可和有效性合同见[分类接口](../docs/classification_protocol.md)及[模型交接](../docs/model_training_handoff.md)。原始标注不用于补峰或生成窗口；本入口不评分、不访问独立6人，不能据此报告分类准确率或板上成功。
+输出目录必须不存在。完整输入、来源/许可和有效性合同见[分类接口](../docs/protocols.md#class)及[模型交接](../docs/model_training_handoff.md)。原始标注不用于补峰或生成窗口；本入口不评分、不访问独立6人，不能据此报告分类准确率或板上成功。
 
 ## C移植对照与标准回放数据
 

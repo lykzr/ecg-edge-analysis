@@ -1,73 +1,41 @@
-# ECG Edge
+# ECG Edge：Zynq 心电边缘分析工程
 
-基于 Zynq-7020 的单导联心电边缘分析原型，用于研究 ECG 数据的软硬件协同处理、QRS 检测与 RR 间期计算。
+面向正点原子领航者 V2（Zynq-7020）的心电边缘分析原型。当前交付以500Hz接收数字样本，在 ARM 端检测 QRS 波群中的 R 峰、计算相邻心拍间隔 RR 与心率，并在本机网页显示、保存波形和事件。正常结束后可以直接开启下一轮会话。
 
-项目以公开心电数据回放为起点，在软件侧建立参考算法，在 FPGA 侧实现采样处理和事件接口，通过 PS 读取与管理检测结果。目标平台为**正点原子领航者 V2**，器件为 `xc7z020clg400-2`。
+```text
+ADS1292R → STM32 → JDY18 → 配套USB接收器 → 电脑换算与去直流
+                                               ↓ USB_UART
+                                     Zynq ARM：QRS、RR、切拍
+                                               ↓
+                                     电脑网页：显示、保存
+```
 
-项目正在开发中：候选峰算法目前为软件原型，尚未移植到 RTL；**ECG smoke 尚未上板测试**。本项目用于教学与工程验证，不作为临床诊断设备。
-
-## 项目组成
-
-- **软件参考**：ECG 数据读取、整数幅值转换、启动校准、QRS 候选峰检测与标注评估；另保留与现有 RTL 对应的逐周期模型。
-- **PL 处理接口**：基础 QRS 候选检测、AXI-Lite 寄存器和事件 FIFO，提供检测位置、RR、队列及溢出状态。
-- **PS 自检应用**：发送受控样本，检查配置、事件读出与 FIFO 行为。
-- **开发工具**：工程生成脚本、软件/RTL 对照、接口仿真及数据评估工具。
-
-当前数据输入来自公开记录或 PS 生成的合成样本。真实 AFE/ADC 采集尚未接入。
-
-## 目录
+也可回放标准CSV或厂商CSV；采集与板卡使用两个独立串口，网页不调用厂商EXE。当前没有最终分类模型，未知类别 ? 不代表正常心拍。轻量卷积神经网络 CNN、8位整数 INT8 量化、FPGA整网推理及 ARM/FPGA 性能比较仍未完成，现有独立算子和 PL 回归不能替代这些目标。
 
 | 目录 | 内容 |
 | --- | --- |
-| `src/rtl/` | FPGA 检测器及 AXI-Lite 接口 |
-| `src/ps/` | PS 端应用 |
-| `src/reference/` | 软件参考模型与输入处理 |
-| `sim/` | testbench、自检和软件/RTL 对照 |
-| `build/` | Vivado 配置与工程生成脚本 |
-| `board/` | PS 构建、下载与串口操作说明 |
-| `data/` | 数据获取、评估脚本与参考结果 |
-| `skill/` | 可复用的开发与排错流程 |
-| `report/` | 项目计划与报告材料 |
-| `docs/` | 接口、教程、实验记录与报告素材 |
-| `releases/latest/` | 当前发布包及配套说明 |
-| `tmp/` | 本地构建工作区、日志和缓存，不纳入交付 |
+| src/ | 板端C、硬件描述、电脑客户端和第三方源码 |
+| build/、board/ | 网页构建、软硬件重建、下载及打包入口 |
+| sim/、data/、model/ | 必要回归、参考实现、冻结参数与精选结果 |
+| vivado/ | 可打开的文本工程及板级设计 |
+| releases/latest/ | 匹配的当前JTAG/QSPI镜像与完整性清单 |
+| docs/、report/ | 教程、协议、许可和实际实现报告 |
 
-## 快速开始
-
-所有命令均从项目根目录执行。
-
-### 运行软件参考算法
-
-当前入口为v4，需隔离Python环境及WFDB，完整安装/下载步骤见[数据使用说明](data/README.md)。已有环境和原始数据时：
+从项目根执行；既有验证环境为 Windows、Python 3.14、Node 24，硬件重建使用 Vivado/Vitis 2026.1。已有环境不必重复安装。
 
 ```powershell
-& './tmp/qrs_env/Scripts/python.exe' -B data/benchmark_qrs_v4.py --raw-dir tmp/qrs_current/raw --output-dir tmp/qrs_current/development --models v4
+python -m venv tmp/web_env
+& ./tmp/web_env/Scripts/python.exe -m pip install -r src/web/requirements-lock.txt
+./build/build_web.ps1
+& ./tmp/web_env/Scripts/python.exe -B src/web/run.py
 ```
 
-输出目录必须不存在。历史算法与实验入口归档于tmp/history/qrs_20261016，正式目录保留当前实现与必要公共依赖。
+打开启动终端显示的本机地址，注册本地账号，进入“实时与板卡”。启动、接线、回放、重建和故障处理统一见[使用教程](docs/download_guide.md)；报文及量纲见[接口协议](docs/protocols.md)；设计、证据及缺项见[实现报告](report/report.md)。自有许可见 [LICENSE](LICENSE)，第三方及网页来源的分发边界见 [third_party.md](third_party.md) 与[许可说明](docs/licenses.md)。
 
-### 创建硬件工程
-
-使用 Vivado 2026.1，在命令中替换工具安装路径：
+提交副本按明确清单生成，不复制本地归档、账号数据库、环境、原始数据或工具缓存：
 
 ```powershell
-& '<Vivado安装目录>/bin/vivado.bat' -mode batch -source build/create_rtl_project.tcl -tclargs xc7z020clg400-2
+python -B board/package_submission.py --output tmp/submission_new
 ```
 
-默认在 `tmp/vivado/ecg_edge` 创建工程，已有目录时停止。此步骤创建 PS7/AXI Block Design 并生成工程输出；后续综合、实现、导出与 PS 程序运行见 [构建入口](build/README.md) 和 [下载教程](docs/download_guide.md)。
-
-## 文档导航
-
-- [工程文档与报告素材](docs/README.md)
-
-- [项目计划与开发优先级](report/project_plan.md)
-- [板上运行、smoke 与串口教程](docs/download_guide.md#20-ps-读取配置与受控样本fifo-自检)
-- [寄存器接口](docs/register_map.md)
-- [仿真与软件测试](sim/README.md)
-- [数据、评估方法与结果](data/README.md)
-- [当前发布包说明](releases/latest/README.md)
-- [可复用流程](skill/README.md)
-
-## 许可证
-
-项目自有代码与文档采用 [MIT License](LICENSE)。第三方数据、工具生成内容及参考资料按各自许可使用，详见 [第三方来源说明](third_party.md)。
+输出目录必须不存在，检查收据写在输出目录旁。保留的参考实现是构建/回归依赖，不表示已部署功能。该副本供本地审阅；网页来源未带根许可，对外再分发仍需权利确认。操作不提交或上传代码。

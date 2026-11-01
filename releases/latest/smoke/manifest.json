@@ -4,7 +4,7 @@
   "purpose": "Navigator V2 Zynq-7020 ECG smoke JTAG programming artifacts",
   "tool_version": "Vivado/Vitis 2026.1",
   "board_execution": "USER_REPORTED_PASS",
-  "board_execution_scope": "evidence kept in repository docs/records/smoke_board_20261017; this package only carries JTAG programming artifacts",
+  "board_execution_scope": "evidence kept in repository docs/evidence/smoke_board_20261017; this package only carries JTAG programming artifacts",
   "flash_programming": "NOT_PERFORMED",
   "source_sha256": {
     "src/ps/ecg_smoke/main.c": "149fcf44ffff8f42f9d917a85f4b063803f2c87091b23e444fad284589e2216a"

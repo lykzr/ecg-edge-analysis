@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "build_id": "36e807fd28c440f5",
+  "sessions": [
+    {
+      "name": "first",
+      "samples": 5000,
+      "events": 9,
+      "reason": "completed"
+    },
+    {
+      "name": "longer",
+      "samples": 15000,
+      "events": 29,
+      "reason": "completed"
+    },
+    {
+      "name": "manual_stop",
+      "samples": 667,
+      "events": 1,
+      "reason": "stopped_by_user"
+    },
+    {
+      "name": "after_idle",
+      "samples": 5000,
+      "events": 9,
+      "reason": "completed"
+    }
+  ],
+  "all_samples_equal": true,
+  "identical_first_last_events": true,
+  "candidate_hashes_match": true,
+  "build_source_hashes_match": true,
+  "reset_before_test": true,
+  "reset_between_sessions": false
+}

@@ -28,6 +28,6 @@ python -B skill/trace-check/scripts/compare_csv.py --reference golden.csv --cand
 
 ## 验证与来源
 
-运行`python -B -m unittest discover -s sim -p test_skills.py`。测试只复制skill到独立含空格路径，使用另一个工程作工作目录，验证成功、篡改、缺失、换行、越界、序号、容差、NaN及大整数等行为；不安装或操作硬件。效果与旧案例见[验证记录](../docs/records/skill_20261025.md)。独立复制技能目录无需取得这些历史记录。
+运行`python -B -m unittest discover -s sim -p test_skills.py`。测试只复制skill到独立含空格路径，使用另一个工程作工作目录，验证成功、篡改、缺失、换行、越界、序号、容差、NaN及大整数等行为；不安装或操作硬件。效果与旧案例见[验证记录](../docs/archive/records/skill_20261025.md)。独立复制技能目录无需取得这些历史记录。
 
 已有ECG仿真、Flash及Git案例仅作为经验来源；新通用脚本不自动继承原硬件成绩。当前在Windows/Python实跑，尚未验证Linux/macOS、第二板卡或PYNQ。原始提示词、模型回答、自我纠错仍需另行整理，不能以技能总结替代。

@@ -69,12 +69,12 @@
   },
   "board_manifest_sha256": "92bbd5d76df7870db4809730f820b1a68d0999afd3148a871e317bc768d8b4cf",
   "evidence_sha256": {
-    "docs/records/runtime_board_20261024/bad_crc_uart.log": "ed8576413349854192c56c06eda07abae7b3d4a7b8b15687bdb98e5d66153494",
-    "docs/records/runtime_board_20261024/idle_uart.log": "1ad137ba39fdc1f25a116ce2aa03cf6fc5878f5b6d240d83211fa09ffa2444da",
-    "docs/records/runtime_board_20261024/partial_uart.log": "d3b649c2045e5555d44b835c2d5a34bc9c0ef82eff5c78ee1dcfe9c5dc46b481",
-    "docs/records/runtime_board_20261024/record100_uart.log": "e4aadf804092b9ef08268e7ee811cf9880ec5003cbc03e82f6034d6aa73a4ee3",
-    "docs/records/runtime_board_20261024/record105_uart.log": "f7de5059a88308a12c5cf1871f46ba5b3141902b515c33bd60ce6d456ea4a03c",
-    "docs/records/runtime_board_20261024/recovery_uart.log": "3f04d145c032668956e41cb1fcb57877502e8da0242c2aaf9df820739b85e2c0"
+    "docs/evidence/runtime_board_20261024/bad_crc_uart.log": "ed8576413349854192c56c06eda07abae7b3d4a7b8b15687bdb98e5d66153494",
+    "docs/evidence/runtime_board_20261024/idle_uart.log": "1ad137ba39fdc1f25a116ce2aa03cf6fc5878f5b6d240d83211fa09ffa2444da",
+    "docs/evidence/runtime_board_20261024/partial_uart.log": "d3b649c2045e5555d44b835c2d5a34bc9c0ef82eff5c78ee1dcfe9c5dc46b481",
+    "docs/evidence/runtime_board_20261024/record100_uart.log": "e4aadf804092b9ef08268e7ee811cf9880ec5003cbc03e82f6034d6aa73a4ee3",
+    "docs/evidence/runtime_board_20261024/record105_uart.log": "f7de5059a88308a12c5cf1871f46ba5b3141902b515c33bd60ce6d456ea4a03c",
+    "docs/evidence/runtime_board_20261024/recovery_uart.log": "3f04d145c032668956e41cb1fcb57877502e8da0242c2aaf9df820739b85e2c0"
   },
   "real_acquisition_available": false,
   "model_trained": false,

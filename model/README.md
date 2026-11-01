@@ -48,7 +48,7 @@ model/
 
 ## 依赖与入口检查
 
-数据准备需要`requirements_cnn_data.txt`列出的WFDB、NumPy、SciPy等；训练需要`requirements_cnn.txt`中的PyTorch等。环境应分别核对，不能因训练入口能导入Torch就认定数据准备依赖齐全。本机两个隔离环境的区别与实际检查见[迁移记录](../docs/records/model_structure_20261023.md)。不默认安装依赖。
+数据准备需要`requirements_cnn_data.txt`列出的WFDB、NumPy、SciPy等；训练需要`requirements_cnn.txt`中的PyTorch等。环境应分别核对，不能因训练入口能导入Torch就认定数据准备依赖齐全。本机两个隔离环境的区别与实际检查见[迁移记录](../docs/archive/records/model_structure_20261023.md)。不默认安装依赖。
 
 ```powershell
 python -B model/prepare/prepare_cnn_git.py --help

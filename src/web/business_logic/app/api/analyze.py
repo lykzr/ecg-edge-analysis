@@ -33,9 +33,8 @@ async def upload(response: Response, file: UploadFile = File(...),
     except UnicodeDecodeError:
         raise ValueError('CSV 请使用 UTF-8 编码')
     signal = parse_csv(text, sample_rate_hz)
-    task, created = records.submit_task(user, signal, idempotency_key=idempotency_key)
+    task, created = records.submit_task(user, signal, idempotency_key=idempotency_key, raw_content=content)
     if created:
-        records.store_raw_input(user, task['id'], content)
         runner.enqueue(task['id'])
     else:
         response.status_code = 200

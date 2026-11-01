@@ -47,7 +47,7 @@ def package(output,smoke,workspace,hardware):
     # 新交付说明可修复链接，历史latest会原字节归档；验收核心不改。
     p=output/'smoke/README.md';text=p.read_text(encoding='utf-8')
     text=text.replace('# 当前发布：ECG smoke / JTAG','# smoke独立回归组件 / JTAG')
-    text=text.replace('../../docs/records/','../docs/records/')
+    text=text.replace('../../docs/evidence/','../docs/evidence/')
     p.write_text(text,encoding='utf-8')
     # 只更新新副本中受修改的README与manifest摘要，不改历史源/验收哈希。
     old_manifest['files']['README.md'].update(row(p))
@@ -79,9 +79,9 @@ def package(output,smoke,workspace,hardware):
     # 精选证据，不含用户CSV/模型/下载盘；离线检查可独立核对。
     evidence=['smoke_board_validation_20261017.md','bridge_board_20261020.md','system_rounds_20261020.md',
               'uart_bridge_paced_20261020_pass.log','uart_bridge_csv_20261020_pass.log','uart_bridge_synth_20261020_pass.log']
-    for name in evidence:copy(ROOT/'docs/records'/name,'docs/records/'+name)
-    for p in sorted((ROOT/'docs/records/smoke_board_20261017').iterdir()):
-        if p.is_file():copy(p,'docs/records/smoke_board_20261017/'+p.name)
+    for name in evidence:copy(ROOT/'docs/records'/name,'docs/evidence/'+name)
+    for p in sorted((ROOT/'docs/evidence/smoke_board_20261017').iterdir()):
+        if p.is_file():copy(p,'docs/evidence/smoke_board_20261017/'+p.name)
     for n in ('board_verification.json','tests.json'):
         copy(ROOT/'tmp/system_rounds_20261020'/n,'evidence/'+n)
     for case in ('paced_01','bad-crc_02','partial_03','idle_03','paced_03'):
@@ -91,7 +91,7 @@ def package(output,smoke,workspace,hardware):
 
 仅使用本目录500Hz hardware与prebuilt/ecg_bridge.elf，不能混用smoke的360Hz硬件。板端接收ECG-IN-1、送原QRS检测器并返回ECG-UART-1；没有滤波、CNN或Flash功能。
 
-从系统包根目录按[总入口](../README.md)运行。board/run_bridge.ps1先核验本组件文件，实际JTAG必须显式指定下载器序列号；每个新会话重新配置PL和系统。正常结束/错误后程序停止，不自动重连或重传。运行脚本仅完成路径/离线验证，未重新操作板卡；交付ELF/硬件本身的数字验收见[记录](../docs/records/system_rounds_20261020.md)。真实无线、人工GUI及心电检测效果未验收。
+从系统包根目录按[总入口](../README.md)运行。board/run_bridge.ps1先核验本组件文件，实际JTAG必须显式指定下载器序列号；每个新会话重新配置PL和系统。正常结束/错误后程序停止，不自动重连或重传。运行脚本仅完成路径/离线验证，未重新操作板卡；交付ELF/硬件本身的数字验收见[记录](../docs/evidence/system_rounds_20261020.md)。真实无线、人工GUI及心电检测效果未验收。
 ''',encoding='utf-8')
     write_manifest(output/'bridge','20261020-bridge-clock-jtag-v1',sample_rate_hz=500,
                    build_id=build['build_id'],elf_sha256=build['elf_sha256'],flash_programming='NOT_PERFORMED')
@@ -109,7 +109,7 @@ def package(output,smoke,workspace,hardware):
 | bridge/ | 500Hz电脑送样→原检测器→结果回传的匹配硬件/ELF |
 | src/ui/、src/pc/ | PC窗口、采集/CSV及中转后台，无模型推理 |
 | src/ps/、board/ | bridge源码、构建及接收方工作区入口 |
-| docs/records/、evidence/ | 精选验收记录和核验摘要 |
+| docs/evidence/、evidence/ | 精选验收记录和核验摘要 |
 
 ## 使用客户端与中转
 
@@ -146,7 +146,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File bridge/board/run_bridge.ps1 
 
 ## 验证范围与许可
 
-数字回放、持续负载和故障拒绝依据[本轮记录](docs/records/system_rounds_20261020.md)，smoke依据[原证据](docs/records/smoke_board_validation_20261017.md)。真实无线、人工GUI、ADC节拍/幅值标定、心电准确率和CNN/INT8/PL分类未验收；新便携入口的离线检查不替代这些实测。无BOOT.BIN、FSBL或QSPI固化。文件与来源见manifest.json和artifacts.json，许可见[LICENSE](LICENSE)与[第三方边界](third_party.md)。本目录更新不等于Git提交或对外发布。
+数字回放、持续负载和故障拒绝依据[本轮记录](docs/evidence/system_rounds_20261020.md)，smoke依据[原证据](docs/evidence/smoke_board_validation_20261017.md)。真实无线、人工GUI、ADC节拍/幅值标定、心电准确率和CNN/INT8/PL分类未验收；新便携入口的离线检查不替代这些实测。无BOOT.BIN、FSBL或QSPI固化。文件与来源见manifest.json和artifacts.json，许可见[LICENSE](LICENSE)与[第三方边界](third_party.md)。本目录更新不等于Git提交或对外发布。
 ''',encoding='utf-8')
     artifacts=dict(version=VERSION,purpose='local system digital handoff, no public upload',
         smoke_core_unchanged=artifacts['validatedCoreFiles'],bridge_build=build,

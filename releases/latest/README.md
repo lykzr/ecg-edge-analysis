@@ -1,42 +1,51 @@
 # ECG系统JTAG与QSPI交付
 
-runtime500为当前500Hz ARM QRS/切拍程序，支持标准CSV及客户端内部处理后的厂商CSV/蓝牙采集输入。厂商CH2去直流/标称单位换算在仓库客户端内部完成，不是PC端QRS或CNN推理。
+本版为20261101-runtime500-session-reuse-v1，构建ID为36e807fd28c440f5。runtime500运行500Hz ARM端QRS检测、切拍及RR计算，支持正常完成或停止保存后重新等待下一轮握手。每轮重新初始化样本、心拍和RR状态；正常结束无需复位。协议错误、输入超时或硬件串口错误仍停止，保留现场后按对应启动方式恢复。
 
 | 目录 | 用途 | 输入 |
 | --- | --- | --- |
-| runtime500/ | 当前ARM检测/切拍与双向收发 | 500Hz、4096单位/mV、REPLAY/SYNTH/ADC；无最终模型时类别未知 |
-| smoke/ | 独立基础回归自检 | 板端合成样本 |
-| bridge/ | 旧PL检测器回归 | 旧500Hz、scale=-1，仅显式legacy500 |
+| runtime500/ | ARM检测、切拍与双向收发 | 500Hz、4096单位/mV，REPLAY/SYNTH/ADC |
+| qspi/ | 匹配的掉电启动镜像与编程入口 | FSBL→bit→应用 |
+| smoke/ | 独立基础自检 | 板端合成样本 |
+| bridge/ | 旧PL检测器回归 | 仅显式legacy500，scale=-1 |
 
-各组件使用自己的hardware、prebuilt和启动脚本，不交叉替换。正常运行关闭完整窗口跟踪。
+各组件只使用自己的匹配硬件、ELF和脚本。类别未知表示尚无最终分类模型，不是正常N；本应用不包含最终CNN、INT8或FPGA整网推理。
 
 ## 下载与运行
 
-Windows双击runtime500/download.cmd，按提示填写已安装的Vitis/bin/xsdb.bat路径及已核实的唯一JTAG序列号；也可在PowerShell指定参数：
+Windows双击runtime500/download.cmd，填写已有Vitis/bin/xsdb.bat路径和实际唯一JTAG序列号；或在工程根执行：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/runtime500/run_runtime500.ps1 -Xsdb '<Vitis>/bin/xsdb.bat' -CableSerial '<JTAG序列号>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/runtime500/run_runtime500.ps1 -CheckOnly
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/runtime500/run_runtime500.ps1 -Xsdb '<Vitis>/bin/xsdb.bat' -CableSerial '<唯一JTAG序列号>'
 ```
 
-仅验证本地文件、不操作板卡：给同一入口加-CheckOnly。入口核对包内所有字节/SHA256，随后Tcl再次核对唯一Zynq-7020、复位、配置匹配PL/PS并下载应用。不写Flash，掉电或会话结束后重新下载；不需要管理员权限。ExecutionPolicy参数只作用于这次进程，不修改系统策略。
+CheckOnly只校验文件。下载入口核对字节数/SHA256和目标身份，再初始化PS、配置匹配PL并下载应用，不写Flash。临时JTAG程序掉电后失效；正常结束后可直接新建会话，错误停止后按下载流程恢复。无需管理员权限，ExecutionPolicy仅对当前进程生效。
 
-从仓库运行python -B src/ui/main.py，主窗口串口保持未连接，在送样/双向中转子窗口选择板卡USB_UART。厂商CSV用五列RawData按钮；蓝牙选择另外一个采集USB接收器端口。CH2自动去直流并按2.42V/PGA6标称换算，无需手动右移；参考/增益未实测标定。标准CSV须index,sample,fs,scale、fs=500、scale=4096，不再二次换算。
+默认按[网页教程](../../docs/download_guide.md)启动客户端，进入“实时与板卡”选择中转模式及实际USB_UART；Tk只作备用诊断。标准CSV须index,sample,fs,scale，fs=500、scale=4096。厂商五列RawData和34字节蓝牙输入走厂商入口，CH2去直流、标称mV换算及int16量化由客户端完成；不是电脑端QRS或CNN。参考电压/增益尚未实测标定，采集与Zynq使用两个独立串口，避免同时被其他软件占用。
 
-## 重建、许可与范围
+## QSPI掉电运行
 
-正式源码/依赖和重建入口在仓库，见[下载教程](../../docs/download_guide.md)、[厂商输入](../../docs/vendor_input.md)和[构建说明](../../docs/system_checks.md)。本目录可单独用于JTAG，但客户端、许可原文、完整证据应随仓库查阅；没有作者tmp也能运行包内下载入口。
+qspi/BOOT.BIN、fsbl.elf、boot.bif与runtime500中的bit/ELF匹配。已固化本版的板卡可从Flash直接上电运行，正常完成或停止保存后直接开始下一轮。异常停止时先保存错误，再用PS复位恢复；不是PS_KEY1。
 
-本地数字验收与来源见artifacts.json。真实无线/实际ADC节拍与标定、物理拔插/长时运行、新厂商界面人工检查和最终CNN/INT8/FPGA推理仍单独验收。QRS105噪声风险保留，不把有限数字回放当独立准确率或整机通过。
+为另一块匹配的领航者V2编程前，核对具体修订、供电、唯一下载器与启动表；按[下载教程](../../docs/download_guide.md)切JTAG并彻底掉电上电。默认只检查，显式-Program才覆盖偏移0的镜像区域，不整片擦除：
 
-自有内容与第三方范围分别见LICENSE和third_party.md，原声明在仓库docs/licenses/，当前应用/配套FSBL实际组成见data/results/runtime500_components_20261025.json（FSBL未随JTAG包分发）。最终供应商工具链补丁/IP分发边界仍待核；本地更新不代表远端发布，QSPI固化及独立证据见下节。
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/program_qspi.ps1 -CheckOnly
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File releases/latest/qspi/program_qspi.ps1 -Program -Xsdb '<Vitis>/bin/xsdb.bat' -ProgramFlash '<Vitis>/bin/program_flash.bat' -CableSerial '<唯一JTAG序列号>'
+```
 
+匹配领航者启动表为JTAG：1=ON、2=ON；QSPI：1=ON、2=OFF，仍须按实物编号核实。编程后切QSPI，拔除全部供电和USB再上电；串口115200/8N1/无流控。写入校验、系统复位和彻底断电启动分别验收，不能互相替代。
 
-## QSPI掉电保存
+## 重建与证据
 
-qspi/包含匹配BOOT.BIN、FSBL、BIF和编程/复位脚本；与runtime500共享同版bit/ELF，不重复复制硬件。镜像顺序为FSBL→bit→应用。
+正式源码和构建入口在仓库src/、board/、build/；本包下载不依赖作者tmp。无需历史工作区的镜像重建：
 
-本版镜像已在本机板卡完成写入校验、用户彻底断电后QSPI启动及数字CSV回放；不代表接手者的板卡已写入。已经写好本版Flash的板卡，将BOOT_CFG设为1=ON、2=OFF后彻底断电上电即可运行。每轮结束后按PS复位键建立新会话，无需反复写Flash或JTAG下载。
+```powershell
+python -B board/prepare_qspi.py --release releases/latest --bootgen '<Vitis>/bin/bootgen.bat' --output tmp/boot_new
+python -B sim/check_system_release.py
+```
 
-给另一块匹配领航者板卡编程前，先核对具体硬件和唯一下载器，切为JTAG启动并彻底掉电上电；用qspi/program_qspi.ps1显式指定-Program、-Xsdb、-ProgramFlash和-CableSerial才写入。默认或-CheckOnly只验证本地文件，不连接板卡。该操作覆盖偏移0的旧启动镜像，只擦除镜像区域，不整片擦除。
+输出目录必须不存在。匹配文件、源码哈希、来源和分阶段证据见manifest.json、artifacts.json及[复用验收记录](../../report/report.md)。旧版原字节在作者本地保留，不作为本包运行依赖。有限数字回放不代表真实无线长时、拔插恢复、启动杂字节兼容、界面人工验收或分类准确率通过。
 
-无原构建工作区也能用board/prepare_qspi.py --release releases/latest --bootgen <Bootgen路径> --output tmp/boot_new重新打包；详见docs/download_guide.md和report/交接.md。QSPI编程、校验、系统复位和冷启动是分别验证的阶段，证据见artifacts.json，不继承为真实无线或CNN通过。
+自有许可见LICENSE，第三方声明见third_party.md和仓库[许可入口](../../docs/licenses.md)；原应用/FSBL组成参考仍作为历史材料保留，本次实际ELF、FSBL、bit身份以artifacts.json和收据为准。供应商工具链补丁/IP分发边界及最终模型另行核对。本地交付不代表Git提交、推送或远端上传。

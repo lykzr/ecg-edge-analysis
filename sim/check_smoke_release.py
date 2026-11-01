@@ -41,7 +41,7 @@ def check(directory, repository):
         assert source.is_file(), '仓库源码缺失：' + name
         assert digest(source) == expected, '仓库源码哈希不符：' + name
 
-    evidence = ['docs/records/smoke_board_20261017/uart_smoke_pass.log']
+    evidence = ['docs/evidence/smoke_board_20261017/uart_smoke_pass.log']
     for name in evidence:
         path = repository / name
         assert path.is_file(), '证据缺失：' + name

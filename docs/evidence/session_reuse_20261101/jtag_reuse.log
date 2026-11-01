@@ -1,0 +1,7 @@
+DEVICE {"port": "COM23", "label": "USB-SERIAL CH340 (COM23)", "device_id": "VID_1A86&PID_7523\\6&1ef5fd6f&0&2", "candidate": true}
+first {"reason": "completed", "error": null, "source": 5000, "confirmed": 5000, "echoed": 5000, "events": 9}
+longer {"reason": "completed", "error": null, "source": 15000, "confirmed": 15000, "echoed": 15000, "events": 29}
+manual_stop {"reason": "stopped_by_user", "error": null, "source": 670, "confirmed": 670, "echoed": 670, "events": 1}
+IDLE_WAIT_65_SECONDS
+after_idle {"reason": "completed", "error": null, "source": 5000, "confirmed": 5000, "echoed": 5000, "events": 9}
+PASS_REAL_USB_REUSE

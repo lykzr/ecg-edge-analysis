@@ -56,7 +56,7 @@
 
 ## 独立启动学习候选
 
-build_ecg_auto.tcl接受一个不存在的项目tmp输出目录，复制并冻结ecg_qrs_auto.sv，生成只替换检测器实例的AXI包装，沿用领航者板级配置并综合/实现/导出匹配bit/XSA/ps7_init。原检测器、正式共享工程和smoke不覆盖。PS工作区由board/build_ecg_auto.py通过Vitis Python生成；环境变量和预热/身份约定见[候选说明](../docs/qrs_auto.md)。待验产物留tmp，不能直接替换已验latest。
+build_ecg_auto.tcl接受一个不存在的项目tmp输出目录，复制并冻结ecg_qrs_auto.sv，生成只替换检测器实例的AXI包装，沿用领航者板级配置并综合/实现/导出匹配bit/XSA/ps7_init。原检测器、正式共享工程和smoke不覆盖。PS工作区由board/build_ecg_auto.py通过Vitis Python生成；环境变量和预热/身份约定见[候选说明](../docs/archive/qrs_auto.md)。待验产物留tmp，不能直接替换已验latest。
 
 ## 当前软硬件完整重建
 

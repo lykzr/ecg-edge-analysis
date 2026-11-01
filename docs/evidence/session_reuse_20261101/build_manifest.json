@@ -1,0 +1,53 @@
+{
+  "build_id": "36e807fd28c440f5",
+  "sampling_hz": 500,
+  "window_trace": false,
+  "sources": {
+    "src/ps/ecg_runtime/main.c": "3e3dcbce5c705f868c4d95c3f121a7e3468e8463f96cf613b022d7dfc482d683",
+    "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+    "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+    "src/ps/ecg_runtime/link.h": "03cba14ee4f25c9538a05617926d67c6fcfdbd565d14d4a455da710567859bba",
+    "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+    "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+    "src/ps/ecg_bridge/bridge_time.h": "2eeea32f7462eb79db89fa1ecb47d65b98cf3363d8a42c14c5190b35fed73606",
+    "tmp/session_reuse_20261101_02/vitis_workspace_generated500/runtime500_bridge.c": "e55ecc4f84122b9799813b82de72b1f9fb9b7872e45b2d16d86ecfa75be1ec7b",
+    "tmp/session_reuse_20261101_02/vitis_workspace_generated500/link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+    "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+    "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+    "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+    "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+    "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427"
+  },
+  "files": {
+    "releases/latest/smoke/hardware/ecg_system_candidate.bit": {
+      "bytes": 4045773,
+      "sha256": "d6471189437faa4dd3ffb402c4a8cff2f3b39a5349ba836a7a61f33273f50cfb"
+    },
+    "releases/latest/smoke/hardware/ecg_system_candidate.xsa": {
+      "bytes": 321430,
+      "sha256": "fea241041311c9b40b0db9806c66a6ada2175b84c84ff571f72de2efd7bc6248"
+    },
+    "releases/latest/smoke/hardware/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    },
+    "tmp/session_reuse_20261101_02/vitis_workspace/ecg_runtime500/build/ecg_runtime500.elf": {
+      "bytes": 458156,
+      "sha256": "e1f3e639cd4835d3006063380319d2516c1c9d62c82f0eae80899e68869e9020"
+    },
+    "tmp/session_reuse_20261101_02/vitis_workspace/ecg_runtime500/build/ecg_runtime.map": {
+      "bytes": 290946,
+      "sha256": "c1327fc91c023a60442d8f0567e307b26dc1537f610882fde1abb69ab11c5bb1"
+    },
+    "tmp/session_reuse_20261101_02/vitis_workspace/ecg_platform/zynq_fsbl/build/fsbl.elf": {
+      "bytes": 360652,
+      "sha256": "01d8de12ca69e534f68df611cfb5e288a85e4d0453f9325f3b93f87b2440a5ec"
+    },
+    "tmp/session_reuse_20261101_02/vitis_workspace/ecg_platform/zynq_fsbl/build/fsbl.map": {
+      "bytes": 216155,
+      "sha256": "a6cddfbf2ebd764b884eb18dafb963b845c5f9a844658099d216cd27fb082601"
+    }
+  },
+  "scope": "ARM source500 adapted QRS/window; no final CNN/real AFE/Flash; board pending",
+  "elf": "tmp/session_reuse_20261101_02/vitis_workspace/ecg_runtime500/build/ecg_runtime500.elf"
+}

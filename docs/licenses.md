@@ -53,7 +53,7 @@ FSBL最终符号中保留7个md5/MD5符号，Eric Young相关声明属于本候�
 - 当前保留的是匹配版本的上游声明与实际库身份，尚不能证明AMD供应商库相对上游没有补丁；逐选中成员的供应商源码/补丁对应关系继续列为待核项。
 - 硬件bit使用AMD IP，不能因bit可生成或项目自有源码为MIT，就认为可以把全部生成IP源码统一按MIT发布。IP及适用EULA独立核对，参照[AMD配置IP说明](https://docs.amd.com/r/2023.1-English/ug892-vivado-design-flows-overview/Configuring-IP)。
 
-以上完成当前候选的实际组成与声明整理，未声明最终分发法律全审通过，未公开上传、提交或替换latest。复核入口见[系统构建与检查](system_checks.md)。
+以上完成当前候选的实际组成与声明整理，未声明最终分发法律全审通过，未公开上传、提交或替换latest。复核入口见[系统构建与检查](download_guide.md)。
 
 
-当前2026-10-25 QSPI交付已加入上述匹配FSBL二进制，声明与实际组成仍以本页及runtime500_components_20261025.json为准。已完成本地固化，不表示最终分发许可全审或远端公开发布；详见[交接](../report/交接.md)。
+当前2026-10-25 QSPI交付已加入上述匹配FSBL二进制，声明与实际组成仍以本页及runtime500_components_20261025.json为准。已完成本地固化，不表示最终分发许可全审或远端公开发布；详见[交接](../report/report.md)。

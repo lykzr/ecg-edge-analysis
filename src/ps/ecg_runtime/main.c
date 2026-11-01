@@ -90,14 +90,21 @@ int main(void)
             unsigned char c = (unsigned char)XUartPs_ReadReg(config->BaseAddress, XUARTPS_FIFO_OFFSET);
             ecg_link_feed(&bridge, c, us);
         }
-        if (ecg_link_step(&bridge, us)) break;
+        if (ecg_link_step(&bridge, us)) {
+            /* 最后一个DONE/ERROR在队列清空后仍可能位于UART硬件FIFO。
+               等物理发完再复位会话状态，不清RX、不吞掉新输入或错误。 */
+            XTime end = now;
+            while (!XUartPs_IsTransmitEmpty(&uart) || XUartPs_IsSending(&uart)) {
+                XTime_GetTime(&now);
+                if (now - end > 2ULL * timer_frequency) { ecg_bridge_result = -4; return 1; }
+            }
+            if (bridge.failed) { ecg_bridge_result = -5; return 1; }
+            XTime_GetTime(&now);
+            us = ecg_bridge_time_us(now-start, timer_frequency);
+            if (ecg_link_rearm(&bridge, us)) { ecg_bridge_result = -9; return 1; }
+            /* 正常完成/停止保存后继续等待下一次I握手，不退出main。
+               协议故障和物理UART错误仍终止，绝不自动续接坏会话。 */
+            ecg_bridge_result = 0;
+        }
     }
-    /* 只在停止送样后等待物理发送结束，并设2秒上限。 */
-    XTime end = now;
-    while (!XUartPs_IsTransmitEmpty(&uart) || XUartPs_IsSending(&uart)) {
-        XTime_GetTime(&now);
-        if (now - end > 2ULL * timer_frequency) { ecg_bridge_result = -4; return 1; }
-    }
-    ecg_bridge_result = bridge.failed ? -5 : 1;
-    return bridge.failed ? 1 : 0;
 }
