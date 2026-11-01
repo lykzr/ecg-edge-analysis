@@ -31,6 +31,8 @@ def check(root=ROOT):
         if not path.is_file():
             raise FileNotFoundError('交接缺文件：' + name)
     modules = {Path(n).stem for n in required if n.endswith('.py')}
+    # 同时识别完整模型包，不能把ecg_model目录误判为缺失的单文件模块。
+    modules.update(Path(n).parent.name for n in required if n.endswith('/__init__.py'))
     parsed = 0
     for name in required:
         if not name.endswith('.py'):

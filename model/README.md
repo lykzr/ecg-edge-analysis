@@ -2,6 +2,15 @@
 
 本目录集中存放 CNN/模型相关的协议、数据准备、训练、基线和依赖；QRS 与共用数据读取仍在 `data/`。
 
+当前HGB（直方图梯度提升树）研究推理模块位于[inference/](inference/README.md)，包含500Hz单导联mV到自动检测、192维特征和N/S/VF逐拍分类的完整电脑端入口。联调固定配置见[integration_profile.json](inference/integration_profile.json)，正式部署尚未定版；原CNN资产继续用于历史追溯。
+
+```powershell
+python -X utf8 -B model/inference/check.py
+python -X utf8 -B model/inference/run.py --input model/inference/examples/synthetic500.csv --fold 0 --preprocess hp05 --output tmp/model_beats.csv
+```
+
+模型模块已验证环境为Python3.12、NumPy2.2.6、SciPy1.16.2，与网页使用的Python3.14环境分别管理，不要求替换网页依赖。先用匹配模型环境独立运行；网页默认分类配置及实时跨块状态不由本次代码合入自动变更。详见[merge接入说明](../docs/model_integration.md)。
+
 ## 结构
 
 ```text
