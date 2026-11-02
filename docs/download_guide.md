@@ -89,3 +89,7 @@ python -B -m unittest discover -s sim -p test_runtime_sessions.py
 来源CH2保留本地默认“原始采集”，有标称电压时以mV显示。“信号”可切换原始采集、基线校正（0.5Hz一阶高通）、节律显示滤波（基线校正后40Hz二阶Butterworth低通＋50Hz Q=30陷波）；“单位”另选ADC码或标称mV，缺失字段不补算。滤波均为500Hz因果PC处理，状态跨块保持，新会话/索引断点重置，前约5秒为启动过渡。滤波可能改变幅值和相位，不用于ST段或诊断幅度判定。各档ADC码与mV使用同一固定换算，沿用当前工程2^23−1分母；与2^23口径相差约0.000012%，不影响直流偏置问题。
 
 samples.csv新增ecg_baseline_code、ecg_baseline_mv（基线校正后的信号，非基线估计值）、ecg_display_code、ecg_display_mv；原始ADC和nominal.csv原始mV仍保留，summary.json记录ecg_display参数。典型生理幅值仅用于观察，不决定增益、裁剪阈值或归一化，不强行将峰值调成1mV。该显示链不替换模型输入或板端检测。旧会话无字段时不绘制，重新回放原始厂商CSV或新建采集即可生成。
+
+## 四分类CNN训练交接分支
+
+另一位队员接续训练使用 `training/cnn-fourclass-h27`，按[完整训练接手说明](cnn_training_handoff.md)克隆、核验权重、重建允许数据并先做0拟合预检。`model/cnn_fourclass/train.py`默认不训练，只有显式 `--train` 才进行有限续训；本次交接没有执行续训。三个fold分别对应固定留出患者，不能按各折成绩挑一个冒充正式部署模型。该候选未接入当前系统默认分类器，INT8/PL及真实输入验证另验。

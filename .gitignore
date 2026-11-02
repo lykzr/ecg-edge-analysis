@@ -347,3 +347,9 @@ logs/
 /vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/*
 
 !/vivado/ecg_edge/ecg_edge.srcs/sources_1/bd/ecg_system/ecg_system.bd
+
+!/docs/cnn_training_handoff.md
+!/docs/evidence/cnn_fourclass_handoff_20261102.json
+!/docs/evidence/cnn_fourclass_portable_check_20261102.json
+
+/model/cnn_fourclass/teacher/
