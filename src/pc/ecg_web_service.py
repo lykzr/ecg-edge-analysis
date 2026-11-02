@@ -210,11 +210,15 @@ class LiveManager:
             if type(realtime) is not bool:
                 raise ValueError('实时节拍须为布尔值')
             board_model=config.get('board_model',False)
+            classifier=config.get('board_classifier','hgb')
+            streaming=config.get('board_streaming',False)
+            if type(streaming) is not bool or (streaming and (not board_model or classifier!='cnn')):raise ValueError('流式分类目前须选择板端CNN')
+            if classifier not in ('hgb','cnn'):raise ValueError('板端分类器必须为hgb或cnn')
             if type(board_model) is not bool or (board_model and kind not in {'standard500','bridge_csv','bridge_serial'}):
                 raise ValueError('板端模型仅支持500Hz标准或厂商送样')
             if board_model and config.get('standard_preprocess') not in ('hp05','raw') and kind=='standard500':
                 raise ValueError('板端模型须声明标准500Hz预处理状态')
-            if board_model and kind=='bridge_serial' and limit>30000:raise ValueError('板端模型每段最多30000点')
+            if board_model and not streaming and kind=='bridge_serial' and limit>30000:raise ValueError('板端整段模型每段最多30000点')
             ports, _ = self.port_enumerator()
             zynq = capture = None
             if kind in {'result_serial', 'bridge_csv', 'bridge_serial', 'standard360', 'standard500'}:
@@ -227,9 +231,13 @@ class LiveManager:
             if self.worker_factory:
                 worker = self.worker_factory(kind, source, directory, config)
             elif board_model:
-                worker=HgbWorker(kind,capture['port'] if capture else source,zynq['port'],directory,
+                selected_worker=HgbWorker
+                if streaming:
+                    from ecg_cnn_live import CnnLiveWorker
+                    selected_worker=CnnLiveWorker
+                worker=selected_worker(kind,capture['port'] if capture else source,zynq['port'],directory,
                     preprocess=config.get('standard_preprocess'),sample_limit=limit,realtime=realtime,
-                    zynq_device=zynq,source_device=capture)
+                    zynq_device=zynq,source_device=capture,classifier=classifier)
             elif kind in {'demo', 'log', 'result_serial'}:
                 worker = MonitorWorker(kind, zynq['port'] if zynq else source, directory,
                                        seconds=seconds, realtime=realtime)

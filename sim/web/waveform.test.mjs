@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {envelope, segments, valuePoints, displayWaveforms} from '../../src/web/frontend/src/components/waveformGeometry.ts';
 import {beatConfidence} from '../../src/web/frontend/src/features/analyze/beatConfidence.ts';
 import {sourceTrace} from '../../src/web/frontend/src/components/liveSource.ts';
-import {categoryFor, hasFilteredResult, sourceAvailability, sourceSignals, selectSourceTrace, defaultSourceTrace} from '../../src/web/frontend/src/components/liveOptions.ts';
+import {categoryFor, identifyCsv, hasFilteredResult, sourceAvailability, sourceSignals, selectSourceTrace, defaultSourceTrace} from '../../src/web/frontend/src/components/liveOptions.ts';
 import {trendSegments, trendTicks} from '../../src/web/frontend/src/components/trendGeometry.ts';
 
 test('逐拍置信度仅统计有效且合法的概率，未知不补正常',()=>{
@@ -18,19 +18,20 @@ test('逐拍置信度仅统计有效且合法的概率，未知不补正常',()=
   assert.equal(beatConfidence(items.slice(2)),null);
 });
 
-test('显示归一化去除大直流偏置，叠加共用尺度，原值时轴和缺口保留',()=>{
+test('绘图保留原始幅值和偏置，叠加共用范围，时轴和缺口保留',()=>{
   const input=[{t:0,v:425000},{t:.004,v:427000,breakBefore:true}];
   const before=structuredClone(input);
-  const shown=displayWaveforms(input,[{t:0,v:426000}],true);
-  assert.deepEqual(shown.primary.map(p=>p.v),[-1,1]);
-  assert.equal(shown.secondary[0].v,0);
+  const shown=displayWaveforms(input,[{t:0,v:429000}]);
+  assert.deepEqual(shown.primary.map(p=>p.v),[425000,427000]);
+  assert.equal(shown.secondary[0].v,429000);
+  assert.equal(shown.max,429000);
   assert.deepEqual(shown.primary.map(p=>p.t),[0,.004]);
   assert.equal(segments(shown.primary).length,2);
   assert.deepEqual(input,before);
-  const original=displayWaveforms(input,[],false);
+  const original=displayWaveforms(input,[]);
   assert.equal(original.primary,input);assert.equal(original.min,425000);assert.equal(original.max,427000);
-  assert.equal(displayWaveforms([{t:0,v:123}],[],true).primary[0].v,0);
-  assert.deepEqual(displayWaveforms([],[],true),{primary:[],secondary:[],min:0,max:1});
+  assert.equal(displayWaveforms([{t:0,v:123}],[]).primary[0].v,123);
+  assert.deepEqual(displayWaveforms([],[]),{primary:[],secondary:[],min:0,max:1});
 });
 
 test('切换呼吸默认去基线滤波，缺字段的旧记录明确回退原码',()=>{
@@ -97,7 +98,7 @@ test('来源原码、电压与厂商滤波分开，电压缺失不猜测',()=>{
     {index:2,time_s:.004,resp_raw:8388628,ecg_raw:8388578,resp_filtered:null,ecg_filtered:null}];
   assert.deepEqual(sourceTrace(samples,'vendor_csv','ecg','code').points.map(p=>p.v),[-20,-30]);
   const voltage=sourceTrace(samples,'vendor_csv','ecg','mv');
-  assert.match(voltage.unit,/标称mV/);
+  assert.equal(voltage.unit,'mV');
   assert.deepEqual(voltage.points.map(p=>p.v),[-.001]);
   assert.equal(sourceTrace(samples,'vendor_serial','resp','mv').points.length,0);
   const resp = sourceTrace(samples,'vendor_serial','resp','resp');
@@ -107,6 +108,13 @@ test('来源原码、电压与厂商滤波分开，电压缺失不猜测',()=>{
   assert.deepEqual(sourceTrace(samples,'vendor_csv','ecg','vendor').points.map(p=>p.v),[9]);
   assert.equal(sourceTrace(samples,'vendor_csv','ecg','code').points[1].breakBefore,true);
   assert.deepEqual(sourceTrace(samples,'standard500','resp','mv').points.map(p=>p.v),[-20,-30]);
+});
+
+test('统一CSV入口区分ADC原码与标准采样格式，不推测单位或采样率',()=>{
+  assert.equal(identifyCsv('\uFEFFtimestamp(s),resp_raw,ecg_raw,resp_filtered,ecg_filtered\r\n0,8388608,8388608,0,0'),'bridge_csv');
+  assert.equal(identifyCsv('index,sample,fs,scale\n0,-3,500,4096\n'),'standard500');
+  assert.equal(identifyCsv('index,sample,fs,scale\n0,-3,360,4096\n'),'standard360');
+  for(const bad of ['index,sample,fs,scale\n0,1,250,4096','index,sample,fs,scale\n0,1,500,1','index,sample,fs,scale\n','heart_rate,rr\n60,1000'])assert.throws(()=>identifyCsv(bad));
 });
 
 test('抽稀保留尖峰原始时刻，不均匀重排',()=>{

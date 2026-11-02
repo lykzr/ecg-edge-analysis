@@ -1,0 +1,71 @@
+"""用已验领航者硬件构建H27浮点ARM应用；不下载，不训练。"""
+import hashlib,json,os,re,sys
+from pathlib import Path
+import vitis
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/'build'))
+from build_hgb_legacy import build as legacy_build
+from export_hgb import export as export_hgb
+workspace=Path(os.environ['ECG_CNN_WORKSPACE']).resolve();workspace.relative_to(ROOT/'tmp')
+kind='batch'
+
+fixture=None
+if workspace.exists():raise FileExistsError(workspace)
+hardware=Path(os.environ['ECG_CNN_HARDWARE']).resolve();hardware.relative_to(ROOT/'tmp')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+pl=os.environ.get('ECG_CNN_PL','0')=='1'
+bitname='cnn_pl' if pl else 'hgb_pl'
+artifacts=[hardware/(bitname+ext) for ext in ('.bit','.xsa')]
+assert all(p.is_file() for p in artifacts)
+params=json.loads((Path(os.environ['ECG_CNN_PARAMETERS'])/'export.json').read_text())
+core=ROOT/'src/ps/ecg_hgb';native=ROOT/'model/inference/native';cnn=ROOT/'src/ps/ecg_cnn'
+sources=[core/n for n in ('hgb.h','prepare.c','frozen.h','legacy.h')]
+sources += [cnn/n for n in ('cnn.h','network.c','features.c','main.c','stream.h','stream.c','stream_uart.h')]
+if pl:
+    sources += [cnn/'pl_forward.c']+[core/n for n in ('features.c','pl_tree.c','pl_main.c')]
+    export_hgb(workspace.parent/(workspace.name+'_hgb_parameters'))
+    sources += [workspace.parent/(workspace.name+'_hgb_parameters')/'hgb_parameters.c']
+    hgbrom=Path(os.environ['ECG_HGB_PL_ROM']).resolve();hgbrom.relative_to(ROOT/'tmp')
+    sources += [hgbrom/'hgb_pl_fixture.c',hgbrom/'hgb_pl_fixture.h']
+sources += [native/n for n in ('pipeline500.c','pipeline.h','rate500.c','rate500.h','window500.h','coefficients.h','classification.c','classification.h','runtime500_bridge.c','runtime.h')]
+rom=Path(os.environ['ECG_CNN_PARAMETERS']).resolve();rom.relative_to(ROOT/'tmp')
+sources += [rom/'cnn_weights.c',rom/'cnn_offsets.h']
+if pl:
+    generated=workspace.parent/(workspace.name+'_sources');generated.mkdir(exist_ok=False)
+    (generated/'cnn_features.c').write_bytes((cnn/'features.c').read_bytes())
+    sources=[generated/'cnn_features.c' if p==cnn/'features.c' else p for p in sources]
+hashes={p.as_posix():sha(p) for p in sources}
+if pl:hashes[(cnn/'features.c').as_posix()]=sha(cnn/'features.c')
+legacy_sources={};legacy_commands=[];archive=None
+if kind=='batch':
+    compiler=Path(os.environ['ECG_ARM_GCC'])
+    archive,legacy_sources,legacy_commands=legacy_build(workspace.parent/(workspace.name+'_legacy'),compiler)
+    sources.append(core/'legacy.h');hashes[(core/'legacy.h').as_posix()]=sha(core/'legacy.h')
+client=vitis.create_client()
+try:
+    client.set_workspace(str(workspace))
+    platform=client.create_platform_component(name='ecg_platform',hw_design=str(hardware/(bitname+'.xsa')),os='standalone',cpu='ps7_cortexa9_0',domain_name='standalone_ps7_cortexa9_0')
+    platform.build()
+    app=client.create_app_component(name='ecg_cnn_arm',platform=client.find_platform_in_repos('ecg_platform'),domain='standalone_ps7_cortexa9_0',template='empty_application')
+    for p in sources:app.import_files(from_loc=str(p.parent),files=[p.name])
+    component=workspace/'ecg_cnn_arm';config=component/'src/UserConfig.cmake'
+    text=config.read_text();text=text.replace('set(USER_COMPILE_OPTIMIZATION_LEVEL -O0)','set(USER_COMPILE_OPTIMIZATION_LEVEL -O2)')
+    flags=('-DECG_CNN_PL -DECG_HGB_PL -DECG_DUAL_MODEL ' if pl else '')+'-ffp-contract=off -fno-fast-math -fstack-usage -include '+(component/'frozen.h').as_posix()
+    text=text.replace('set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS )','set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS "'+flags+'")')
+    libraries='"hgb_legacy" "m"' if archive else '"m"'
+    text,n=re.subn(r'set\(USER_LINK_LIBRARIES\s*.*?\)','set(USER_LINK_LIBRARIES '+libraries+')',text,count=1,flags=re.S);assert n==1
+    if archive:
+        text,n=re.subn(r'set\(USER_LINK_DIRECTORIES\s*.*?\)','set(USER_LINK_DIRECTORIES "'+archive.parent.as_posix()+'")',text,count=1,flags=re.S);assert n==1
+    text,n=re.subn(r'set\(USER_LINK_OTHER_FLAGS\s*.*?\)','set(USER_LINK_OTHER_FLAGS "-Wl,-Map=ecg_cnn_arm.map")',text,count=1,flags=re.S);assert n==1
+    config.write_text(text)
+    linker=component/'src/lscript.ld';text=linker.read_text();text,n=re.subn(r'(_STACK_SIZE\s*=.*?:\s*)0x[0-9a-fA-F]+',r'\g<1>0x40000',text,count=1);assert n==1;linker.write_text(text)
+    app.build()
+    elf=component/'build/ecg_cnn_arm.elf';link_map=elf.with_name('ecg_cnn_arm.map')
+    assert elf.is_file() and link_map.is_file()
+    for p in sources:assert sha(component/p.name)==hashes[p.as_posix()],p.name
+    fsbl=workspace/'ecg_platform/zynq_fsbl/build/fsbl.elf';init=workspace/'ecg_platform/hw/sdt/ps7_init.tcl'
+    assert fsbl.is_file() and init.is_file()
+    result=dict(application='cnn_batch',protocol='ECG-DUAL-STREAM-1' if pl else 'CNN-BATCH-1',dual_protocol=True,model=params,elf=elf.relative_to(ROOT).as_posix(),bit=artifacts[0].relative_to(ROOT).as_posix(),init=init.relative_to(ROOT).as_posix(),files={p.relative_to(ROOT).as_posix():dict(bytes=p.stat().st_size,sha256=sha(p)) for p in artifacts+[elf,link_map,fsbl,init]},sources={**{p.relative_to(ROOT).as_posix():h for p,h in ((Path(k),v) for k,v in hashes.items())},**legacy_sources},legacy_commands=legacy_commands,stack_bytes=0x40000,scope='H27 FP32 CNN streaming and batch + HGB batch PL, with per-beat ARM comparison' if pl else 'H27 FP32 ARM CNN; not continuous scheduling or Flash')
+    (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
+    print('PASS CNN_ARM_BUILD '+str(elf),flush=True)
+finally:vitis.dispose()

@@ -99,3 +99,71 @@ P,<sid>,Q40,<beats>,<mismatches>,<arm_ticks>,<pl_call_ticks>,<pl_core_cycles>,<t
 beats仅计status=0的有效分类拍，须与完整R记录数量一致。两端采用相同float32比较及Q40分数；任何分数不一致或PL超时直接分类失败，不返回成功结果。P只能出现一次，缺P、重复P、非PL身份携带P、非法频率/计数均拒绝。零有效拍时累计计数为零、平均及加速比为null。PL_call包括192项写入、启动、轮询及3项64位分数读取，PL_core是100MHz核周期；ARM_ticks测同一输入的Q40软件树遍历。两者均不含softmax、检测/特征、串口等待；整段classify_us还包含特征生成、两端计算和概率换算，不能作为纯PL耗时。
 
 电脑result.json及网页info增加execution_location（zynq_pl/zynq_arm）、precision及performance原始计数与派生指标。网页必须以成功报文确定执行位置，尚无完整结果时显示等待；旧记录缺字段不伪造成PL。研究质量边界及VF合并含义不变。
+
+
+## H27四分类训练交接合同（独立候选）
+
+固定协议为[cnn_fourclass/protocol.json](../model/cnn_fourclass/protocol.json)，特征顺序为[feature_names.json](../model/cnn_fourclass/feature_names.json)。四输出N/S/V/F，N不代表健康，F不删除或合并；优先完整自动链N/S/V平均F1，同时报告四类、逐患者、漏失列及额外预测。26名INCART开发患者三折隔离，MIT-BIH辅助仅训练，201/202同人，六名封存患者不读。HGB三类概率仅作训练期蒸馏，不能当四类真标签。
+
+单次当前拍CNN及因果历史特征共269维，500Hz原始mV首选hp05，匹配0.5Hz因果高通才用raw；不接网页零相位显示列或其他未核滤波。128点切拍、已完成历史背景和RR8的精确定义见源码及接手说明。整段电脑参考每次重建状态，不代表实时跨块、INT8或FPGA实现。此合同不修改现有三类HGB接口及固件发布。
+
+## CNN-BATCH-1 ARM整段协议
+
+冻结H27 fold0 SHA256为16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7。独立候选每2秒就绪，拒绝与HGB身份混用：
+
+```text
+H,CNN-BATCH-1,READY,500,mV,<上述权重SHA256>
+I,CNN-BATCH-1,<sid>,500,mV,<hp05或raw>,<total>
+A,<sid>,READY,32
+B,<sid>,<offset>,<count>,<CRC32八位hex>\n<连续count个little-endian float64 mV>
+A,<sid>,NEXT,<累计样本数>
+D,<sid>,<total>
+R,<sid>,<beat_id>,<position>,<ready_at>,<status>,<class_id>,<pN>,<pS>,<pV>,<pF>
+D,<sid>,<total>,<events>,<clipped>,<input_us>,<prepare_us>,<classify_us>
+```
+
+sid非零uint32，total 1—30000，count 1—32，严格逐块确认/连续offset/CRC32；不重发、不跳块。记录结束才检测、切拍、组装122形态特征及8项RR历史、FP32 CNN，最多480事件。普通传输块保持hp05状态，记录间重置所有状态。预处理及检测与冻结500Hz实现一致，CNN不使用HGB后继RR特征。
+
+position/ready_at为500Hz零起点位置；status=0且class_id=0/1/2/3分别N/S/V/F，status=2首RR未知、4窗口不足时class_id=-1。四概率是float32位型的8位hex文本，高位在前；未知为NaN（电脑JSON转null）。F为融合拍，不是心室颤动，类别和编码均不同于HGB的VF/double协议。错误、10秒接收超时、4秒发送超时及X取消/S确认沿用整段协议约定；半包残留/物理重连恢复未验。报文无独立输出CRC，保留原始交互作复核。
+
+三项us为板上计时：mV转换/高通/量化、检测切拍、形态背景及CNN分类，排除串口传输和等待；不是PL周期、纯CNN算子时间或端到端持续延迟。独立ARM候选不含PL推理；下述双模型候选扩展了CNN执行位置和网页入口。ECG-IN-1原QRS入口保留，但本轮未重测。
+
+## CNN/HGB双模型PL候选（2026-11-02）
+
+空闲身份为 `H,ECG-DUAL-1,READY,500,mV,H27-FP32,HGB-Q40`。它表示同一镜像有两个独立入口，不表示模型融合。收到 `I,CNN-BATCH-1,...` 调用H27完整FP32网络PL，收到 `I,HGB-BATCH-1,...` 调用HGB Q40树PL；每轮结束重新广播双模型身份。两端仍须核对各自固定模型SHA。网页请求参数 `board_model=true, board_classifier=cnn|hgb` 选择入口，旧请求默认hgb。
+
+CNN也支持独立就绪头 `H,CNN-PL-1,READY,500,mV,<H27权重SHA256>`。成功结果前必须恰有一行：
+
+```text
+P,<sid>,FP32,<beats>,<mismatches>,<arm_ticks>,<pl_call_ticks>,<pl_core_ticks>,<timer_hz>,100000000
+```
+
+与HGB不同，CNN最后一个计算计数是ARM全局定时器ticks，不是PL硬件周期。`pl_core_ticks`记录启动后的轮询等待，包含轮询及起止误差；`pl_call_ticks`包含261个float32写入、启动、等待、4个logit读回。ARM同输入、同权重FP32运行完整网络，输出logit按 `abs(error)<=2e-4+2e-5*abs(ARM)` 且argmax相同验收；超差、非有限值、类别不同或超时均使会话失败。beats仅计有效拍，零拍时平均值与加速比为null。网页使用本次P计算指标，不内置演示性能值。
+
+CNN寄存器基址 `0x43C20000`：控制 `+0x000`（start位0、done位1读清、idle位2），输出4个float32 logit从 `+0x010` 起，261个输入float32从 `+0x800` 起。输入按wave128、RR3、hand122、history8顺序；内部拼接269维后执行全连接。HGB基址仍为 `0x43C10000`，QRS外设仍为 `0x43C00000`。仅使用AXI-Lite，无DMA。ARM保留高通、检测、切拍、手工/历史特征与softmax；CNN卷积、残差、池化、RR分支和全连接在PL。整段classify_us同时包含ARM对照与PL，不能据此称整条链路提速。
+
+N/S/V/F与N/S/VF分别保存，不自动合并、投票或将F解释为心室颤动。每段最多30000点，收齐后推理，记录间重置；实时逐拍调度、双模型融合与INT8尚未完成。
+
+
+## CNN-STREAM-1持续输入扩展（2026-11-02）
+
+新增模式不替换CNN-BATCH-1或HGB-BATCH-1；两个整段入口继续可用。网页默认整段，只有 `board_model=true, board_classifier=cnn, board_streaming=true` 启用流式；HGB或非板端传streaming直接拒绝。固定H27 fold0、500Hz、mV、hp05/raw、N/S/V/F、FP32及容差不变，不重训、不修改权重或PL电路。
+
+新固件空闲头 `H,ECG-DUAL-STREAM-1,READY,500,mV,H27-FP32,HGB-Q40`；客户端确认支持流式后发送 `I,CNN-STREAM-1,<sid>,500,mV,<hp05|raw>,<limit>`，limit为1—1800000最大容量，不必事先知道最终点数。板回复 `H,CNN-STREAM-1,READY,500,mV,<固定H27权重SHA>` 和 `A,<sid>,READY,32`。B块仍为连续序号、1—32个little-endian float64 mV及CRC32；每块结束等 `A,<sid>,NEXT,<已处理点数>` 才发下一块，形成背压。输入转换/高通、检测、能量重定位、重切拍、RR和因果历史持续跨块；不对不断增长的前缀重算，不做每块重置，不等后继RR。
+
+满足心拍条件即返回T和R，在块确认之前可出现多组；未收到结束指令也能分类：
+
+```text
+T,<sid>,<beat>,<received_through>,<arm_ticks>,<pl_call_ticks>,<pl_core_ticks>,<feature_ticks>,<arm_class_id>,<pl_class_id>
+R,<sid>,<beat>,<position>,<ready_at>,<status>,<class_id>,<pN>,<pS>,<pV>,<pF>
+P,<sid>,FP32,<beats>,<mismatches>,<arm_ticks累计>,<pl_call_ticks累计>,<pl_core_ticks累计>,<timer_hz>,100000000
+A,<sid>,NEXT,<已处理点数>
+```
+
+R格式沿用CNN；T必须与随后R一一对应，beat连续、两侧类别相同，未知class=-1且网络耗时0；received_through为实际处理到的零起点源样本号，至少ready_at。每个有新有效分类的块返回累计P，结束再返回P。PC校验P累计与逐拍tick和及有效拍数完全一致。ARM和PL在同一拍依次运行，保留输出容差及argmax拒绝；不是并行吞吐测量。feature_ticks包含形态/背景、softmax和核对等非网络开销，不计入网络加速比。
+
+R峰后的445点窗口需到position+266才完整；检测自身也有因果确认等待。`algorithm_wait_ms=(received_through-position)*2` 是算法可用数据等待，不是网络耗时。CNN网络均值/累计从ticks÷timer_hz得到；累计倍数为ΣARM_ticks÷ΣPL_call_ticks，FPGA调用包含261float写、启动/轮询及4logit读取，计算等待仍是ARM计时而非PL硬件cycle。网页“收样至结果”以同一PC单调时钟测量received_through样本进入本地队列至收到R，包含队列/UART/检测/ARM+PL/回传；不包含之前窗口等待、ADS到PC无线时间或浏览器绘制，不是单独ARM或PL端到端延迟。两者不要相加后称精准器件延迟。尚无电脑CPU网络实测，不显示估算数。
+
+正常完成或用户停止先停来源、送完已保留队列，再 `D,<sid>,<实际已确认点数>`，板flush将尾部不足窗输出status4，不补零/插值，返回最终P与原CNN D完成报文。停止保留已有有效结果，reason=stopped_by_user；错误/CRC/坏序号/超时失败，不称成功，不自动续接。来源5秒无新字节视为故障，新连接须新会话；正常串口块仍延续状态。队列4096点，实时来源积压满直接报错、不偷偷丢点；回放来源允许背压。源无每样本序号/CRC，不能证明无线无丢样。
+
+输入环形缓存4096、有限待处理32、背景8及RR历史均有界，无malloc；固件单会话上限1小时仍需长时实测。网页显示4096点/256事件，完整输入和逐拍结果保留文件。自动电脑HGB分析另受200000点上限，不把超限记录截短后分析。

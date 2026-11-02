@@ -252,3 +252,107 @@ $env:ECG_ARM_GCC = '<Vitis>/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-g
 ```
 
 运行前确认目标板、JTAG启动设置、电缆唯一及COM口释放，并启动hw_server。这里的尖括号为需要替换的参数，不能原样执行。加载器仅操作唯一匹配Zynq-7020；日志中的STARTED不能代替实际分类验收。构建产物留tmp，不随源码提交；最新正式QSPI镜像仍在releases/latest，未被候选替换。
+
+## 四分类CNN训练交接分支
+
+另一位队员接续训练使用 `training/cnn-fourclass-h27`，按[完整训练接手说明](cnn_training_handoff.md)克隆、核验权重、重建允许数据并先做0拟合预检。`model/cnn_fourclass/train.py`默认不训练，只有显式 `--train` 才进行有限续训；本次交接没有执行续训。三个fold分别对应固定留出患者，不能按各折成绩挑一个冒充正式部署模型。ARM独立运行见下节；CNN/HGB双模型PL与网页操作见本页末节。INT8仍未完成。
+
+## H27 CNN在Zynq ARM临时运行
+
+H27不要求先量化：使用fold0、FP32，C实现包含卷积/残差/池化/全连接、122项因果形态特征和RR历史；板上不需要Python/PyTorch。fold0仅作固定联调选择，不是正式合格模型。本节保留独立ARM候选教程；新版PL的独立实测见下节，既有HGB PL成绩不能沿用到CNN。
+
+在仓库根目录执行以下命令。尖括号均需替换；新输出目录必须尚不存在。主机Python需NumPy、SciPy、PyTorch；本机Python3.13使用独立tmp/cnn_env（torch2.15.0+cpu）已通过原包36个黄金样例，不改原训练依赖、不训练。HOST_GCC为已有Windows GCC，VITIS为安装根下Vitis目录。
+
+```powershell
+$py = '.\tmp\cnn_env\Scripts\python.exe'
+$vitis = '<Vitis绝对路径>'
+$hostcc = '<已有主机gcc.exe绝对路径>'
+& $py model/cnn_fourclass/check.py
+& $py sim/check_cnn_arm.py --cc $hostcc --output tmp/cnn_arm_verify_new
+& $py build/export_cnn_arm.py --output tmp/cnn_parameters_new
+$env:ECG_CNN_PARAMETERS = "$PWD/tmp/cnn_parameters_new"
+$env:ECG_CNN_HARDWARE = "$PWD/tmp/hgb_pl_build_02"
+$env:ECG_CNN_WORKSPACE = "$PWD/tmp/cnn_arm_new"
+$env:ECG_ARM_GCC = "$vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe"
+& "$vitis/bin/vitis.bat" -s board/build_cnn_arm.py
+```
+
+ECG_CNN_HARDWARE必须包含匹配领航者V2配置的hgb_pl.bit/xsa。本机复用已验tmp/hgb_pl_build_02；新克隆先按上文HGB PL硬件重建命令生成，再把该变量改为实际目录。这里PL仍装载既有HGB硬件，但CNN程序完全在ARM执行，不调用HGB PL。
+
+板卡供电、JTAG与USB_UART接好，按上文核实JTAG启动，关闭所有串口监视器/网页采集。先启动匹配工具的hw_server（3121），枚举USB身份，再临时下载。Vitis2026.1使用xsdb.bat，xsct已禁用。
+
+```powershell
+& $py -c "import sys,json;sys.path.insert(0,'src/pc');from ecg_ports import enumerate_ports;print(json.dumps(enumerate_ports()))"
+& $py board/load_cnn.py --manifest tmp/cnn_arm_new/build_manifest.json --xsdb "$vitis/bin/xsdb.bat" --cable '<实物JTAG序列号>' --port '<实际COM口>' --device-id '<枚举的device_id>' --output tmp/cnn_load_new
+& $py src/pc/ecg_cnn.py --input-mv tmp/cnn_arm_verify_new/synthetic500_mv.csv --port '<实际COM口>' --device-id '<枚举的device_id>' --preprocess hp05 --output tmp/cnn_run_new
+& $py sim/check_cnn_board.py --directory tmp/cnn_run_new --input-mv tmp/cnn_arm_verify_new/synthetic500_mv.csv
+```
+
+真实ADS CSV先对ecg_raw按 `(ecg_raw-8388608)*2420/(6*8388608)` 生成无表头单列mV文件；已是mV的文件不重复换算，不用ecg_filtered。也可给check_cnn_arm.py追加 `--real-csv '<厂商原始CSV>'`，该脚本在本地输出ads1292r_mv.csv及对照数据。健康原始数据和完整串口原文留tmp，不上传。
+
+当前本机最终候选为tmp/cnn_arm_build_02，ELF在ecg_cnn_arm/build/ecg_cnn_arm.elf。每条完整记录最多30000点/60秒，记录间重建状态；输入传完才开始检测与分类，不能称连续实时逐拍。结果N/S/V/F的F为融合拍；首RR未知或窗口不足保留未分类。rx.log/tx.bin/result.json/comparison.json为运行及对照证据；classify耗时包含背景/形态特征与CNN，不含串口，不是纯卷积耗时。此处独立ARM候选使用上述命令；新版双模型PL网页入口见下一节。恢复网页HGB须重新临时加载匹配HGB ELF，或按原有QSPI流程断电启动。未写Flash、未替换latest。
+
+
+## CNN与HGB在同一PL镜像中演示
+
+2026-11-02候选同时保留H27 fold0 FP32全网络和HGB v92 fold0 Q40分类树，由网页分别选择，不是模型投票。当前本机匹配组合为tmp/cnn_pl_build_01/cnn_pl.bit/xsa、tmp/cnn_dual_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf和该Vitis目录的ecg_platform/hw/sdt/ps7_init.tcl。完整哈希与实测范围见[候选证据](evidence/cnn_pl_20261102/summary.json)。JTAG临时运行断电丢失，未替换latest或写Flash。
+
+板卡已加载此候选时不用再次烧录。在仓库根运行 `& build/build_web.ps1 -SkipInstall`，再运行 `& tmp/web_env/Scripts/python.exe src/web/run.py --port 8000`。浏览器打开http://127.0.0.1:8000，登录原本地账号，进入“检测与加速”，选择“文件回放→厂商CSV · 板卡处理（500Hz）”，上传ECGRawData原始CSV，选择实际Zynq USB_UART（本机COM4），保留“板端心拍分类”，先选CNN。关闭其他串口终端。
+
+点击“开始并记录”，收齐后显示N/S/V/F数量、R峰、心率、逐拍概率及本次ARM/FPGA对比。同一文件再选HGB可查看N/S/VF，轮间不需要复位。取消“按采样节拍回放”可更快传完文件，不改变采样率或时间轴。实时采集也按指定点数收齐后分类，每段最多60秒，不是无限连续逐拍推理。高级区保留电脑HGB分析，来源独立。
+
+3分钟演示可依次展示板卡和连接、真实采集文件回放、CNN分类与本次同板ARM/FPGA含传输对比，最后切HGB证明两模型均保留。受控合成数据可展示S/V事件，但须明确标记为合成。模型概率未校准，不是诊断可靠性。真实HTTP和串口已验，浏览器视觉效果仍需人工确认。
+
+### 从源码重建双模型候选
+
+先按前文导出HGB PL参数，含mem与hgb_pl_fixture.c/h。Python环境需NumPy、SciPy、PyTorch，工具使用本轮已验2026.1。new输出必须不存在，尖括号须替换实际路径。HLS使用现代配置入口，避免2026.1旧Tcl的add_files布尔参数识别问题。
+
+```powershell
+$py = '.\tmp\cnn_env\Scripts\python.exe'
+$vitis = '<Vitis绝对路径>'
+$vivado = '<Vivado绝对路径>'
+& build/run_cnn_hls.ps1 -VitisBin "$vitis/bin" -Python $py -Parameters tmp/cnn_hls_params_new -Output tmp/cnn_hls_new -Cosim
+& "$vivado/bin/vivado.bat" -mode batch -source build/build_cnn_pl.tcl -tclargs tmp/cnn_pl_new tmp/hgb_pl_parameters_new tmp/cnn_hls_new/hls/impl/ip
+$env:ECG_CNN_PL = '1'
+$env:ECG_CNN_PARAMETERS = "$PWD/tmp/cnn_hls_params_new/arm"
+$env:ECG_CNN_HARDWARE = "$PWD/tmp/cnn_pl_new"
+$env:ECG_CNN_WORKSPACE = "$PWD/tmp/cnn_dual_new"
+$env:ECG_HGB_PL_ROM = "$PWD/tmp/hgb_pl_parameters_new"
+$env:ECG_ARM_GCC = "$vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe"
+& "$vitis/bin/vitis.bat" -s board/build_cnn_arm.py
+```
+
+检查12组HLS黄金样例、RTL cosim与实现时序通过，再核实实物、电缆唯一、USB身份及临时运行授权；按前节启动hw_server：
+
+```powershell
+& $py board/load_cnn.py --manifest tmp/cnn_dual_new/build_manifest.json --xsdb "$vitis/bin/xsdb.bat" --cable '<实物JTAG序列号>' --port '<实际COM口>' --device-id '<实际device_id>' --output tmp/cnn_dual_load_new
+& tmp/web_env/Scripts/python.exe board/check_cnn_web.py --port '<实际COM口>' --device-id '<实际device_id>' --source '<厂商原始CSV>' --output tmp/cnn_web_check_new
+```
+
+第二条用隔离本地账号/数据库执行CNN→HGB→CNN真实HTTP与串口检查，完整快照只留tmp，不修改现有账号或上传数据。也可沿用前节CLI送样及check_cnn_board.py复算。改HLS或权重需重生成IP/bit/XSA/ELF；仅改网页重构网页；改ARM重建匹配ELF。当前实际HLS工程为tmp/cnn_hls_07，参数tmp/cnn_hls_parameters_01，HGB参数tmp/hgb_pl_sim_02。
+
+CNN四路输出通道并行、空间交错累加，保持FP32点积次序。100MHz、CNN AXI 0x43C20000，原HGB/QRS地址与PS7/DDR/MIO配置保留。ARM负责高通、QRS/切拍、形态及历史特征、softmax；PL负责整个CNN网络或HGB分类树。CNN“计算等待”包含ARM轮询误差；“含传输”包含寄存器读写，两者不含检测/特征/UART/网页。调试固件每拍先ARM后PL核对，因此整段等待时间不能称部署后的最短延迟。INT8、持续调度、模型融合与Flash冷启动仍待完成。
+
+
+## 新增CNN实时模式，保留两种整段模式
+
+本轮新增CNN流式功能，不替换原CNN/HGB整段功能。网页板端模型选择CNN后，“分析模式”可选“CNN整段分析 · 原功能”或“CNN实时分析 · 边采边测”；默认整段。HGB继续整段分析。不要把“按采样节拍回放”（控制文件送入速度）与“实时分析”（板卡是否逐拍输出）混为一项。
+
+当前本机已临时加载流式ARM固件tmp/cnn_stream_vitis_01，沿用上一版tmp/cnn_pl_build_01的bit/XSA，无需重新综合PL。重新上电后需按前节load_cnn.py使用 `--manifest tmp/cnn_stream_vitis_01/build_manifest.json` 再临时加载。组员从源码重建仍用前节HLS/硬件及Vitis入口，ECG_CNN_WORKSPACE换新目录；构建器自动加入stream.c/h与stream_uart.h。没有Flash更新，也未替换latest。
+
+1. 关闭Vitis串口终端，打开http://127.0.0.1:8000，在“检测与加速”选择Zynq实际串口（本机COM4）。
+2. 用文件验证：选择“文件回放→厂商CSV · 板卡处理（500Hz）”，上传ECGRawData，模型选CNN、模式选实时；勾选按节拍回放可观察结果边传边出。不需要等待文件结束。
+3. 用实际ADS采集：选择“实时采集→板卡处理”，分别选择Zynq USB_UART和采集USB接收器两个不同串口，填写点数上限，选择CNN实时。保持采集模块和接收器按原工程配置。本轮实测为已有ADS文件回放，真实无线同时采集需使用者在场验证。
+4. 逐拍表显示ARM/FPGA各自类别、网络耗时、算法等待和PC收到结果的延迟。性能区持续更新平均值、累计总时间及倍数；点击停止后送完已采队列，保存已有分类，末窗不足保持未分类。
+5. 选择CNN整段、或切HGB整段，仍可完成原分析；三种模式需不同会话，不能在同一会话中途换模型。
+
+性能是同拍先ARM再FPGA，网络输入和FP32相同；无需两者同时执行才能比较。累计FPGA时间包含AXI寄存器传输，但不含PC到板UART。采集时长、算法等待、串口回传和浏览器刷新不计为网络加速。当前不显示电脑CPU对比，因为尚未接入同输入/同精度/统一计时的CPU基准；不拿PyTorch初始化或整段Python时间与纯PL混比。
+
+已授权板测时可运行下列复核，尖括号需替换；新输出目录必须不存在：
+
+```powershell
+& tmp/cnn_env/Scripts/python.exe board/check_cnn_stream.py --source '<无表头单列500Hz原始mV.csv>' --port '<COM口>' --device-id '<USB身份>' --output tmp/cnn_stream_check_new --realtime
+& tmp/web_env/Scripts/python.exe board/check_cnn_web.py --source '<厂商ECGRawData.csv>' --port '<COM口>' --device-id '<USB身份>' --output tmp/cnn_stream_web_new --streaming
+```
+
+第一条逐拍与冻结PyTorch对照，验证结束前有结果；第二条隔离账号做CNN实时→HGB整段→CNN实时HTTP实板切换。再追加 `--stop-after 2000` 验证第一轮主动停止及后续复用；不加--streaming则复测原CNN整段→HGB整段→CNN整段。原始健康数据及交互只留tmp。证据见[流式实测](evidence/cnn_stream_20261102.json)。真实无线、满1小时、物理断线恢复、INT8与双模型融合不在此次已验范围。

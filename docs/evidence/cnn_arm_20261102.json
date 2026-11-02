@@ -1,0 +1,187 @@
+{
+  "passed": true,
+  "date": "2026-11-02",
+  "board": "ALIENTEK Navigator V2 xc7z020clg400-2",
+  "vitis": "2026.1",
+  "execution_location": "zynq_arm",
+  "precision": "FP32",
+  "fold": 0,
+  "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+  "torch_version": "2.15.0+cpu",
+  "training": false,
+  "flash_written": false,
+  "cnn_pl": false,
+  "web_cnn": false,
+  "continuous_scheduling": false,
+  "accuracy_measured": false,
+  "model_qualified": false,
+  "portable_golden_vectors": 36,
+  "host_tests": [
+    {
+      "name": "golden_fold0",
+      "beats": 12,
+      "max_logit_error": 2.86102294921875e-06
+    },
+    {
+      "name": "random_inputs",
+      "beats": 100,
+      "max_logit_error": 6.198883056640625e-06
+    },
+    {
+      "name": "synthetic500",
+      "samples": 30000,
+      "events": 73,
+      "valid": 72,
+      "max_logit_error": 5.245208740234375e-06
+    },
+    {
+      "name": "ads1292r",
+      "samples": 5148,
+      "events": 13,
+      "valid": 12,
+      "max_logit_error": 5.7220458984375e-06
+    }
+  ],
+  "host_tolerance": {
+    "atol": 0.0002,
+    "rtol": 2e-05
+  },
+  "hardware_tests": {
+    "ads": {
+      "passed": true,
+      "source": "actual board UART result versus frozen PyTorch",
+      "samples": 5148,
+      "events": 13,
+      "valid": 12,
+      "classes_exact": true,
+      "max_probability_error": 8.731149137020111e-10,
+      "compute_us": {
+        "input": 805,
+        "prepare": 56527,
+        "classify": 103180
+      },
+      "classify_mean_us": 8598.333333333334,
+      "counts": {
+        "N": 12,
+        "S": 0,
+        "V": 0,
+        "F": 0,
+        "UNCLASSIFIED": 1
+      },
+      "input_sha256": "2393decd3a1448e1b3f6abcc4489ef3c5a7d94628b6dc29b5a96617105e097ed",
+      "result_sha256": "7dea309bb911d9421075bb76b73d22899ad45cf24683b280a8ffffdfea090265",
+      "tx_sha256": "cfd75814f16afbd2d519ae3bf47641d6212d4cea146b2442c6708060e0d63685",
+      "rx_sha256": "88fe5e7d5aa26a1a009e8cf298537bb204a3df5941b410ba3090c0add5acc0ca",
+      "flash_written": false,
+      "accuracy_measured": false
+    },
+    "synthetic": {
+      "passed": true,
+      "source": "actual board UART result versus frozen PyTorch",
+      "samples": 30000,
+      "events": 73,
+      "valid": 72,
+      "classes_exact": true,
+      "max_probability_error": 1.1920928955078125e-06,
+      "compute_us": {
+        "input": 4688,
+        "prepare": 326053,
+        "classify": 625365
+      },
+      "classify_mean_us": 8685.625,
+      "counts": {
+        "N": 55,
+        "S": 1,
+        "V": 16,
+        "F": 0,
+        "UNCLASSIFIED": 1
+      },
+      "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+      "result_sha256": "a8359bbd9092f69d5636422ce19c9091b6c4f7bb5447679668ee809a2e3562fd",
+      "tx_sha256": "82423cc83b0c8c002b72526bd116a04259dcb309e21bb2e573c6e2d939953196",
+      "rx_sha256": "7eb9aa89bbde3f2d9ece5cfd0e02006049ddc305051e1f97cafef597385ee56d",
+      "flash_written": false,
+      "accuracy_measured": false
+    }
+  },
+  "artifacts": {
+    "tmp/hgb_pl_build_02/hgb_pl.bit": {
+      "bytes": 4045773,
+      "sha256": "c0766e95c83c8e6ed68a082ea08371ff7e382960cf86e712c9bb4cb0f4d0fd91"
+    },
+    "tmp/hgb_pl_build_02/hgb_pl.xsa": {
+      "bytes": 543610,
+      "sha256": "d6421d5ada36fa9f0badd9cf084433ffa8eb44bbe6f92cd68f6430045654bb14"
+    },
+    "tmp/cnn_arm_build_02/ecg_cnn_arm/build/ecg_cnn_arm.elf": {
+      "bytes": 710592,
+      "sha256": "ce822aaaa6ba5ad558df1db45bd46c09547b8239219c3b9f586b01a3f9323236"
+    },
+    "tmp/cnn_arm_build_02/ecg_cnn_arm/build/ecg_cnn_arm.map": {
+      "bytes": 324217,
+      "sha256": "cc3a5049529ee33f24bb090c0db90d5ccba6d8064848143057b6d6fbcbfc32cb"
+    },
+    "tmp/cnn_arm_build_02/ecg_platform/zynq_fsbl/build/fsbl.elf": {
+      "bytes": 358888,
+      "sha256": "7e7510aa7725fc28ff3e793480588655931aeaa652ecfa2fc36cffb05284b04c"
+    },
+    "tmp/cnn_arm_build_02/ecg_platform/hw/sdt/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+    }
+  },
+  "sources": {
+    "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+    "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+    "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+    "src/ps/ecg_hgb/legacy.h": "90d25a61ba58981d46089126703340355d161ed9cc3662877e5871beef564798",
+    "src/ps/ecg_cnn/cnn.h": "c6164ea4e37f81338930fd5fa11a55c442d2db4f312f3f173d44d73ec4688e3a",
+    "src/ps/ecg_cnn/network.c": "599a3b1b3b074b592472af43add9cd97a1425d899ee1fd2c248bc1776197a122",
+    "src/ps/ecg_cnn/features.c": "363946b602c6860e70a3250b8e467a4bc13f81c80653b1b089295bcf5ca706a1",
+    "src/ps/ecg_cnn/main.c": "aecbd23ed60a712aa2dae0cb45456b8735b38b898fa5a96ab75e2de4d001740c",
+    "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+    "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+    "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+    "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+    "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+    "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+    "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+    "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+    "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+    "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+    "tmp/cnn_arm_parameters_01/cnn_weights.c": "ebfa9ef83973af75a6c4825562253d1c142f7b3444235cfb0fd5b6e91b0e6978",
+    "tmp/cnn_arm_parameters_01/cnn_offsets.h": "3cce6af265388d0bc5a636201ae6ced798869a8bea4939626808bf480ea645fe",
+    "src/ps/ecg_hgb/legacy.c": "72922ab5a0adbd48b4339a9c2ba7f3d54a87e82f0bcb0425da82bc57c2c0abe0",
+    "tmp/cnn_arm_build_02_legacy/generated/link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+    "tmp/cnn_arm_build_02_legacy/generated/runtime500_bridge.c": "a5a736dcdc3c67b7c90ecb8e8614b935a016241ce2f14686aa4eceb12c3bcda1",
+    "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+    "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+    "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+    "src/ps/ecg_runtime/link.h": "03cba14ee4f25c9538a05617926d67c6fcfdbd565d14d4a455da710567859bba",
+    "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+    "src/ps/ecg_runtime/resample360.h": "cc933fe63074a6082503e6c8fc4abcfbc0b1e9b87bcb1cc3cbb30a201e900b0d",
+    "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+    "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+    "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+    "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+    "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+    "build/generate_rate500_runtime.py": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5",
+    "build/build_hgb_legacy.py": "e04c2f4bae4f5ca718d1478fd5959ffd68e563d3aa909856594ae0aef5177697"
+  },
+  "build_manifest": "tmp/cnn_arm_build_02/build_manifest.json",
+  "raw_evidence_local": [
+    "tmp/cnn_load_02",
+    "tmp/cnn_board_ads_02",
+    "tmp/cnn_board_synthetic_02",
+    "tmp/cnn_arm_check_03"
+  ],
+  "timer_scope": "classify includes morphology/background and CNN; excludes UART; not pure CNN or PL timing",
+  "stack_bytes": 262144,
+  "compiler_cnn_forward_stack_bytes": 27056,
+  "limitations": [
+    "fold0 is fixed integration candidate, not final approved model",
+    "no measured F example on board",
+    "no INT8, PL CNN, real-time cross-block scheduler or CNN web integration",
+    "raw input and complete UART logs remain local; hashes included"
+  ]
+}

@@ -2,6 +2,21 @@ import type {SourceSample, SourceTrace} from './liveSource';
 
 export type LiveCategory = 'capture' | 'file' | 'demo' | 'advanced';
 
+/** 统一CSV入口仅识别路由；完整内容仍由后端按各自合同校验。 */
+export function identifyCsv(prefix: string): 'bridge_csv' | 'standard360' | 'standard500' {
+  const [header, first] = prefix.replace(/^\uFEFF/, '').split(/\r?\n/);
+  if (header === 'timestamp(s),resp_raw,ecg_raw,resp_filtered,ecg_filtered') return 'bridge_csv';
+  if (header === 'index,sample,fs,scale') {
+    const row = first?.split(',');
+    if (row?.length === 4 && row[3] === '4096') {
+      if (row[2] === '500') return 'standard500';
+      if (row[2] === '360') return 'standard360';
+    }
+    throw new Error('CSV 须声明 360 或 500 Hz，比例为 4096，且包含数据。');
+  }
+  throw new Error('无法识别波形CSV；请选择含 ecg_raw 的五列数据，或 index,sample,fs,scale 格式。');
+}
+
 export function categoryFor(kind: string): LiveCategory {
   if (['bridge_serial', 'vendor_serial'].includes(kind)) return 'capture';
   if (['bridge_csv', 'vendor_csv', 'standard360', 'standard500'].includes(kind)) return 'file';

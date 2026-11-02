@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {AnalysisTask, post, request} from '../services/api';
 interface Measurement {id:string; kind:string; created:number; active:boolean; info:Record<string,unknown>; analysis_count:number; owner_username:string; owned:boolean;}
 interface Version {id:string; status:string; record_id:string|null;}
-const names:Record<string,string> = {demo:'合成演示',log:'日志回放',result_serial:'板卡结果',vendor_csv:'厂商CSV',vendor_serial:'蓝牙采集',bridge_csv:'CSV与板卡',bridge_serial:'蓝牙与板卡',standard360:'标准360Hz',standard500:'标准500Hz'};
+const names:Record<string,string> = {demo:'合成演示',log:'日志回放',result_serial:'板卡结果',vendor_csv:'CSV回放',vendor_serial:'蓝牙采集',bridge_csv:'CSV与板卡',bridge_serial:'蓝牙与板卡',standard360:'CSV与板卡 · 360Hz',standard500:'CSV与板卡 · 500Hz'};
 export default function Measurements({days=0,shared=false}:{days?:number;shared?:boolean}) {
   const [rows,setRows]=useState<Measurement[]>([]), [error,setError]=useState(''), [busy,setBusy]=useState('');
   const [versions,setVersions]=useState<Record<string,Version[]>>({});

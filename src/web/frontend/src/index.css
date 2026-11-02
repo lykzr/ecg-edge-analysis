@@ -89,6 +89,23 @@
 @media(max-width:760px){.measurement-row{grid-template-columns:1fr auto}.measurement-actions{grid-column:1/-1;justify-content:flex-start}}
 .live-configuration{border:0;padding:0;margin:0;min-width:0}
 
+/* 心电台：青白仪器面板，信号链与本次硬件计时是视觉中心。 */
+:root{--edge-ink:#173846;--edge-teal:#087f8c;--edge-blue:#3167b0;--edge-bg:#edf4f7;--edge-line:#d3e2e8;--edge-orange:#b96820}
+body{background:var(--edge-bg);color:var(--edge-ink)}
+.app-header{background:#173846;border-bottom:4px solid #087f8c}.app-header strong{letter-spacing:.12em}.app-header span{font-size:14px;color:#cae1eb}
+main{max-width:1240px}nav{border-bottom:1px solid var(--edge-line);padding-bottom:16px}nav a.active{background:var(--edge-ink);color:#fff}
+.edge-console h1{font-family:'Bahnschrift','Microsoft YaHei',sans-serif;font-size:38px;letter-spacing:.04em;margin-bottom:8px}.console-intro{font-size:16px;color:#527080}
+.signal-path{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 0;margin:12px 0 20px;border-top:1px solid var(--edge-line);border-bottom:1px solid var(--edge-line)}
+.signal-path>span{font-weight:650;font-size:15px}.signal-path span span{display:block;font-weight:400;font-size:12px;color:#5b7786;margin-top:5px}.signal-path b{font-size:20px;color:var(--edge-teal)}
+.model-selector{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:24px;align-items:center;padding:16px 20px;background:#eef6fa;border-left:4px solid var(--edge-blue);border-radius:4px;margin:16px 0}
+.model-selector select{display:block;width:100%;padding:10px;border:1px solid #bbd1dd;border-radius:6px;margin-top:6px;background:white;color:var(--edge-ink)}.model-selector p{font-size:13px;line-height:1.8;color:#476777;margin:0}
+.host-analysis{background:#f7fafb;padding:14px 20px;border:1px solid var(--edge-line);border-radius:10px;margin:18px 0}.host-analysis>section{margin:14px 0 0;padding:10px;box-shadow:none}
+.accelerator-panel{background:#f0f7fb;border:1px solid #bcd7e5;box-shadow:none;margin:20px 0;padding:24px}.accelerator-panel h3{font-size:24px;margin:5px 0}.accelerator-panel .stat-grid strong{font-family:'Bahnschrift',Consolas,monospace;font-variant-numeric:tabular-nums;font-size:30px}.accelerator-panel .stat-grid>div{background:white;border-top:3px solid var(--edge-teal);border-radius:4px}.accelerator-panel .eyebrow{font-size:11px;letter-spacing:.08em;color:#476b80}
+.latency-bars{display:grid;gap:12px;padding:16px 0}.latency-bars>div{display:grid;grid-template-columns:55px 1fr 120px;gap:14px;align-items:center;font-size:12px}.latency-bars i{display:block;min-width:3px;height:12px;background:var(--edge-blue);border-radius:2px}.latency-bars>div+div i{background:var(--edge-teal)}.latency-bars b{font-family:Consolas,monospace;font-weight:500;text-align:right}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #df9e41;outline-offset:3px}
+@media(max-width:760px){.signal-path{display:grid;grid-template-columns:1fr 25px 1fr;gap:14px}.signal-path>b:nth-of-type(2){display:none}.model-selector{grid-template-columns:1fr;gap:10px}.edge-console h1{font-size:29px}.latency-bars>div{grid-template-columns:40px 1fr 90px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
 /* 统一全站链接、表单与记录操作。 */
 a{color:#147b74;text-underline-offset:3px}
 input,select,textarea{font:inherit;color:inherit}
@@ -101,3 +118,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
 .dropzone:focus-within{border-color:#147b74;outline:2px solid #147b74;outline-offset:3px}
 .dropzone input:disabled{cursor:not-allowed}
 @media(max-width:640px){.pager{gap:10px;flex-wrap:wrap}.record-toolbar{align-items:center}.record-toolbar h2{margin:0}}
+
+/* 演示时突出心拍类别和真实计时，控件与标签分列避免重叠。 */
+.analysis-mode{display:grid;grid-template-columns:110px minmax(0,400px);align-items:center;gap:24px;margin:18px 0}
+.analysis-mode label{margin:0;font-weight:650}.analysis-mode select{width:100%;min-width:0}
+.beat-counts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:20px 0}
+.beat-count{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px;background:#edf7f8;border:1px solid #c7dfe5;border-top:4px solid var(--edge-teal);border-radius:10px}
+.beat-count .beat-class{font-family:'Bahnschrift','Microsoft YaHei',sans-serif;font-size:34px;font-weight:750;color:var(--edge-teal)}
+.beat-count strong{font-size:32px;font-variant-numeric:tabular-nums;color:var(--edge-ink)}.beat-count small{display:inline;margin-left:6px;font-size:13px;font-weight:500}
+.beat-count.unclassified{background:#f4f6f7;border-top-color:#91a4ae}.beat-count.unclassified .beat-class{font-size:18px;color:#526e74}
+.comparison-summary strong{font-size:20px;color:var(--edge-ink);font-variant-numeric:tabular-nums}
+.accelerator-panel .stat-grid .speedup-metric{background:#dff1f3;border-color:var(--edge-blue)}
+.stat-grid strong,.live-table td{font-variant-numeric:tabular-nums}.stat-grid>div{min-width:0}.stat-grid strong{overflow-wrap:anywhere}
+.live-table td{font-weight:650}.live-table td:nth-child(5),.live-table td:nth-child(7),.live-table td:nth-child(8){font-size:20px;color:var(--edge-teal);font-weight:750}
+.latency-bars b{font-weight:700}
+@media(max-width:640px){.analysis-mode{grid-template-columns:1fr;gap:10px}.beat-counts{grid-template-columns:repeat(2,minmax(0,1fr))}.beat-count{padding:12px}.beat-count .beat-class{font-size:28px}.beat-count strong{font-size:28px}}

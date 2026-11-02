@@ -1,0 +1,1102 @@
+{
+  "passed": true,
+  "date": "2026-11-02",
+  "device": "Navigator V2 xc7z020clg400-2",
+  "tool_version": "Vivado/Vitis 2026.1",
+  "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+  "precision": "FP32",
+  "fold": 0,
+  "trainable_parameters": 25476,
+  "rr_buffers": 6,
+  "training_performed": false,
+  "classifier": "H27 full CNN PL + independent HGB Q40 PL; no ensemble",
+  "native_golden": {
+    "vectors": 12,
+    "max_logit_abs_error": 2.86102295e-06,
+    "atol": 0.0002,
+    "rtol": 2e-05,
+    "argmax_exact": true
+  },
+  "host_regression": {
+    "passed": true,
+    "hardware": false,
+    "training": false,
+    "precision": "FP32",
+    "atol": 0.0002,
+    "rtol": 2e-05,
+    "classes_exact": true,
+    "model": {
+      "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+      "fold": 0,
+      "precision": "FP32",
+      "weights": 25482,
+      "offsets": {
+        "rr_mean": {
+          "offset": 0,
+          "shape": [
+            3
+          ]
+        },
+        "rr_std": {
+          "offset": 3,
+          "shape": [
+            3
+          ]
+        },
+        "wave.0.weight": {
+          "offset": 6,
+          "shape": [
+            16,
+            2,
+            7
+          ]
+        },
+        "wave.3.body.0.weight": {
+          "offset": 230,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.3.body.3.weight": {
+          "offset": 1510,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.0.weight": {
+          "offset": 2790,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.3.weight": {
+          "offset": 4070,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.0.weight": {
+          "offset": 5350,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.3.weight": {
+          "offset": 6630,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "rr.0.weight": {
+          "offset": 7910,
+          "shape": [
+            8,
+            3
+          ]
+        },
+        "rr.0.bias": {
+          "offset": 7934,
+          "shape": [
+            8
+          ]
+        },
+        "head.0.weight": {
+          "offset": 7942,
+          "shape": [
+            64,
+            269
+          ]
+        },
+        "head.0.bias": {
+          "offset": 25158,
+          "shape": [
+            64
+          ]
+        },
+        "head.3.weight": {
+          "offset": 25222,
+          "shape": [
+            4,
+            64
+          ]
+        },
+        "head.3.bias": {
+          "offset": 25478,
+          "shape": [
+            4
+          ]
+        }
+      },
+      "vectors": 12,
+      "torch_version": "2.15.0+cpu",
+      "fits": 0
+    },
+    "tests": [
+      {
+        "name": "golden_fold0",
+        "beats": 12,
+        "max_logit_error": 2.86102294921875e-06
+      },
+      {
+        "name": "random_inputs",
+        "beats": 100,
+        "max_logit_error": 6.198883056640625e-06
+      },
+      {
+        "name": "synthetic500",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "max_logit_error": 5.245208740234375e-06
+      }
+    ],
+    "commands": [
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn\\network.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part0.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn\\features.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part1.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\prepare.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part2.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters\\cnn_weights.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part3.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\pipeline500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part4.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\rate500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part5.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\classification.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part6.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\runtime500_bridge.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part7.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-shared",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part0.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part1.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part2.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part3.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part4.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part5.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part6.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\part7.o",
+        "-lm",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_host_verify_01\\cnn.dll"
+      ]
+    ]
+  },
+  "hardware": {
+    "clock_hz": 100000000,
+    "lut": 8972,
+    "ff": 8866,
+    "bram36": 100.5,
+    "dsp": 38,
+    "wns_ns": 0.27,
+    "whs_ns": 0.036,
+    "scope": "whole routed design including QRS/HGB/PS interconnect; not CNN only"
+  },
+  "timing_scope": "same device/input/weights FP32 network only; ARM softmax/features/detection/UART excluded; PL compute is ARM-polled ticks, call includes AXI-Lite writes/reads; debug runs ARM then PL",
+  "board_checks": [
+    {
+      "comparison": {
+        "passed": true,
+        "source": "actual board UART result versus frozen PyTorch",
+        "samples": 5148,
+        "events": 13,
+        "valid": 12,
+        "classes_exact": true,
+        "max_probability_error": 8.731149137020111e-10,
+        "compute_us": {
+          "input": 806,
+          "prepare": 56510,
+          "classify": 136355
+        },
+        "classify_mean_us": 11362.916666666666,
+        "counts": {
+          "N": 12,
+          "S": 0,
+          "V": 0,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "2393decd3a1448e1b3f6abcc4489ef3c5a7d94628b6dc29b5a96617105e097ed",
+        "result_sha256": "2fd6453f405de13a343935d349d6e603b9ebf008ab3f278e13b562ed95351f14",
+        "tx_sha256": "0e3436a96e01386e300f4642506ea60a0401fb30c94494faf4052d870357d482",
+        "rx_sha256": "6e74e511c0db8a0116f74cac394761781411b2a026dfdc1c144973a1b74e16e8",
+        "flash_written": false,
+        "accuracy_measured": false
+      },
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 12,
+        "mismatches": 0,
+        "arm_ticks": 33100774,
+        "pl_call_ticks": 11053114,
+        "pl_core_ticks": 10820268,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8275.193260019396,
+        "pl_call_mean_us": 2763.2784198649256,
+        "pl_core_mean_us": 2705.0669215530593,
+        "call_speedup": 2.994701221755245,
+        "core_speedup": 3.059145485121071
+      },
+      "directory": "tmp/cnn_pl_ads_01"
+    },
+    {
+      "comparison": {
+        "passed": true,
+        "source": "actual board UART result versus frozen PyTorch",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "classes_exact": true,
+        "max_probability_error": 1.1920928955078125e-06,
+        "compute_us": {
+          "input": 4689,
+          "prepare": 325697,
+          "classify": 824360
+        },
+        "classify_mean_us": 11449.444444444445,
+        "counts": {
+          "N": 55,
+          "S": 1,
+          "V": 16,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+        "result_sha256": "203726dfe0973c8d4adeac66dad04229a29e8593fe91fb14922bceae5fb3a9cc",
+        "tx_sha256": "d3180cbd1e6f5b4993fc99d355aa4fa49e95ac3c289e4fe85cd8f1d07543d74e",
+        "rx_sha256": "b222b57b04492e58bff77b54758328d083e7b8fe5df4f7bb871553022d535711",
+        "flash_written": false,
+        "accuracy_measured": false
+      },
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 72,
+        "mismatches": 0,
+        "arm_ticks": 198472012,
+        "pl_call_ticks": 66315906,
+        "pl_core_ticks": 64920850,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8269.666926846327,
+        "pl_call_mean_us": 2763.162669868283,
+        "pl_core_mean_us": 2705.035338220642,
+        "call_speedup": 2.9928266681601245,
+        "core_speedup": 3.057138222928381
+      },
+      "directory": "tmp/cnn_pl_synthetic_01"
+    }
+  ],
+  "hgb_real_comparison": {
+    "passed": true,
+    "physical_arm_uart": true,
+    "samples": 5148,
+    "events": 13,
+    "valid": 12,
+    "probability_max_abs": 3.774758283725532e-15,
+    "positions_status_classes_decisions_equal": true,
+    "compute_us": {
+      "input": 806,
+      "prepare": 56475,
+      "classify": 6465
+    },
+    "scope": "controlled full-record ARM UART; not wireless, patient accuracy or rolling inference",
+    "files": {
+      "input.json": "c7da50ee6dc11105085287d1c370b7f64e4d47cb17e929e56b0a01ed6f421628",
+      "result.json": "c2a2de2215a3e63668bf3ff7f5cb76cd43fafc09208528f9703ac4f6abc44955",
+      "rx.log": "25e871848ba24d3a8a25be637b2cb03cfde02eca13f0682ef78fcd2e95ee16e5",
+      "tx.bin": "1cfd45d33cf9555fcb213802b4408c00140f5f66859a481dd182b8f04f26b453"
+    }
+  },
+  "web_http": {
+    "passed": true,
+    "source_sha256": "f8ebf5613389f50cbec9a93f42bec5afedd08821cf82b7c7715581d9a33633e7",
+    "checks": [
+      {
+        "classifier": "cnn",
+        "samples": 5148,
+        "counts": {
+          "N": 12,
+          "S": 0,
+          "V": 0,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "performance": {
+          "precision": "FP32",
+          "scope": "full_cnn_network",
+          "beats": 12,
+          "mismatches": 0,
+          "arm_ticks": 33078760,
+          "pl_call_ticks": 11053054,
+          "pl_core_ticks": 10820320,
+          "timer_hz": 333333343,
+          "pl_clock_hz": 100000000,
+          "arm_mean_us": 8269.689760178997,
+          "pl_call_mean_us": 2763.263419865361,
+          "pl_core_mean_us": 2705.079921552682,
+          "call_speedup": 2.992725811345896,
+          "core_speedup": 3.057096278113771
+        },
+        "directory": "tmp\\cnn_dual_web_01\\users\\board-check--f52423c54b75238b198650e0\\sessions\\6eaaa01c43ae459d9458680935595bac",
+        "result_sha256": "cc4d1662fe578060e42d6739ef220dedd3cf386ac4e43dc3b2ddc718cf9f43c9",
+        "rx_sha256": "83f00349d8953e97e0fc98a2db9d6408e654ed0c4d0c11018741d5a661b1b3c7",
+        "tx_sha256": "e576daed3f2aa9188864bfe3c1070acd07c4615f1a9b822b616e581aaf14fd1e"
+      },
+      {
+        "classifier": "hgb",
+        "samples": 5148,
+        "counts": {
+          "N": 12,
+          "S": 0,
+          "VF": 0,
+          "UNCLASSIFIED": 1
+        },
+        "performance": {
+          "precision": "Q40",
+          "beats": 12,
+          "mismatches": 0,
+          "arm_ticks": 379315,
+          "pl_call_ticks": 198148,
+          "pl_core_cycles": 9150,
+          "timer_hz": 333333343,
+          "pl_clock_hz": 100000000,
+          "arm_mean_us": 94.82874724996633,
+          "pl_call_mean_us": 49.53699856342704,
+          "pl_core_mean_us": 7.625,
+          "call_speedup": 1.9143014312534066,
+          "core_speedup": 12.436557016389026
+        },
+        "directory": "tmp\\cnn_dual_web_01\\users\\board-check--f52423c54b75238b198650e0\\sessions\\529122128d174a89b0230b6fbd65f44e",
+        "result_sha256": "31f6a81848d71189ec83db1632b6a4e97d399fada89edb4d91d0531a195bb7f5",
+        "rx_sha256": "f30661d8e023802abe6047422808568931751899e955fbee3628f225ba696c47",
+        "tx_sha256": "3f4a029bba655b37e9c9e2bfec80ef5336861c18bb3e2b4e93f7a4b7ed615804"
+      },
+      {
+        "classifier": "cnn",
+        "samples": 5148,
+        "counts": {
+          "N": 12,
+          "S": 0,
+          "V": 0,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "performance": {
+          "precision": "FP32",
+          "scope": "full_cnn_network",
+          "beats": 12,
+          "mismatches": 0,
+          "arm_ticks": 33088408,
+          "pl_call_ticks": 11052791,
+          "pl_core_ticks": 10820097,
+          "timer_hz": 333333343,
+          "pl_clock_hz": 100000000,
+          "arm_mean_us": 8272.101760109048,
+          "pl_call_mean_us": 2763.197669867268,
+          "pl_core_mean_us": 2705.024171554299,
+          "call_speedup": 2.9936699246371345,
+          "core_speedup": 3.058050958323202
+        },
+        "directory": "tmp\\cnn_dual_web_01\\users\\board-check--f52423c54b75238b198650e0\\sessions\\6968ddf8b5eb4fdc845c72b280eeeb30",
+        "result_sha256": "9afc665e177c4948b45592d28373a259c347d60c3ac35eb0a54533719edfbcd3",
+        "rx_sha256": "772a297f0d83f1d34eb7fbe5e7e9e4279ee8f70d7c01e30169c0280feba6e813",
+        "tx_sha256": "0e554f1a0868575b89f5e41047bc128e39ab37b4907b6e0c02d74c49ef59ddf2"
+      }
+    ],
+    "no_reset_between_sessions": true,
+    "flash_written": false,
+    "scope": "真实HTTP接口及USB_UART；不代替浏览器人工验收或持续采样验证"
+  },
+  "build_manifest": {
+    "application": "cnn_batch",
+    "protocol": "ECG-DUAL-1",
+    "dual_protocol": true,
+    "model": {
+      "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+      "fold": 0,
+      "precision": "FP32",
+      "weights": 25482,
+      "offsets": {
+        "rr_mean": {
+          "offset": 0,
+          "shape": [
+            3
+          ]
+        },
+        "rr_std": {
+          "offset": 3,
+          "shape": [
+            3
+          ]
+        },
+        "wave.0.weight": {
+          "offset": 6,
+          "shape": [
+            16,
+            2,
+            7
+          ]
+        },
+        "wave.3.body.0.weight": {
+          "offset": 230,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.3.body.3.weight": {
+          "offset": 1510,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.0.weight": {
+          "offset": 2790,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.3.weight": {
+          "offset": 4070,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.0.weight": {
+          "offset": 5350,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.3.weight": {
+          "offset": 6630,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "rr.0.weight": {
+          "offset": 7910,
+          "shape": [
+            8,
+            3
+          ]
+        },
+        "rr.0.bias": {
+          "offset": 7934,
+          "shape": [
+            8
+          ]
+        },
+        "head.0.weight": {
+          "offset": 7942,
+          "shape": [
+            64,
+            269
+          ]
+        },
+        "head.0.bias": {
+          "offset": 25158,
+          "shape": [
+            64
+          ]
+        },
+        "head.3.weight": {
+          "offset": 25222,
+          "shape": [
+            4,
+            64
+          ]
+        },
+        "head.3.bias": {
+          "offset": 25478,
+          "shape": [
+            4
+          ]
+        }
+      },
+      "vectors": 12,
+      "torch_version": "2.15.0+cpu",
+      "fits": 0
+    },
+    "elf": "tmp/cnn_dual_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf",
+    "bit": "tmp/cnn_pl_build_01/cnn_pl.bit",
+    "init": "tmp/cnn_dual_vitis_01/ecg_platform/hw/sdt/ps7_init.tcl",
+    "files": {
+      "tmp/cnn_pl_build_01/cnn_pl.bit": {
+        "bytes": 4045773,
+        "sha256": "99a808b518a41357fc90ac91adeee96fac11fc22a915cdd9b749a5a163c55da9"
+      },
+      "tmp/cnn_pl_build_01/cnn_pl.xsa": {
+        "bytes": 889869,
+        "sha256": "b03a324fad5b18939d5ae4fbeeb523e4e28bd8f616a0571f275edb20d535b9e3"
+      },
+      "tmp/cnn_dual_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf": {
+        "bytes": 1500648,
+        "sha256": "05417d18929dfe349009637c8522dd45854a3c251cf7a9df33d5ffb68c1a28e8"
+      },
+      "tmp/cnn_dual_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.map": {
+        "bytes": 400643,
+        "sha256": "5ade44be6b1b207f8bc812f3dafb401e6572322fba3fabf58c394336421c9657"
+      },
+      "tmp/cnn_dual_vitis_01/ecg_platform/zynq_fsbl/build/fsbl.elf": {
+        "bytes": 359288,
+        "sha256": "64580a76a30795a6a1c7fdb6fe48ea1fba6f20240a45f998991b50cf9410625d"
+      },
+      "tmp/cnn_dual_vitis_01/ecg_platform/hw/sdt/ps7_init.tcl": {
+        "bytes": 27602,
+        "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+      }
+    },
+    "sources": {
+      "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+      "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+      "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+      "src/ps/ecg_hgb/legacy.h": "90d25a61ba58981d46089126703340355d161ed9cc3662877e5871beef564798",
+      "src/ps/ecg_cnn/cnn.h": "c6164ea4e37f81338930fd5fa11a55c442d2db4f312f3f173d44d73ec4688e3a",
+      "src/ps/ecg_cnn/network.c": "121efdfaacd0d2c8080e2c5862000ed647a43dca62e866893a355787e5bd667c",
+      "tmp/cnn_dual_vitis_01_sources/cnn_features.c": "363946b602c6860e70a3250b8e467a4bc13f81c80653b1b089295bcf5ca706a1",
+      "src/ps/ecg_cnn/main.c": "d2cc3ee405827f9545869e5112ded7ef87ca33104cee90a30fbe5d42f8fb0beb",
+      "src/ps/ecg_cnn/pl_forward.c": "609701f161abdb96a9ccd8de5a0d7ed45bae5132916f4b84b8ce01fc002b37de",
+      "src/ps/ecg_hgb/features.c": "3877247b12437a2204b8e7fac49772ba4501adb2ccc45bcaf9ce069fea5f77ef",
+      "src/ps/ecg_hgb/pl_tree.c": "67f89c3e7f33b235a26aa6e378892e8e199abf4a4c71087b8060055a985b8ed5",
+      "src/ps/ecg_hgb/pl_main.c": "b936011934efe3e85672f10ba7a768980235a24adc8ea630e433022bdcde4c45",
+      "tmp/cnn_dual_vitis_01_hgb_parameters/hgb_parameters.c": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29",
+      "tmp/hgb_pl_sim_02/hgb_pl_fixture.c": "a3bec61171eb9bc03e3e066ed90ffe678f716c223bc6ef552d032304e38ee17f",
+      "tmp/hgb_pl_sim_02/hgb_pl_fixture.h": "331cde5b7a317373925ba2816399ead62538fadb97d50f8a36c2cb2b1a9a23ff",
+      "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+      "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "tmp/cnn_arm_parameters_01/cnn_weights.c": "ebfa9ef83973af75a6c4825562253d1c142f7b3444235cfb0fd5b6e91b0e6978",
+      "tmp/cnn_arm_parameters_01/cnn_offsets.h": "3cce6af265388d0bc5a636201ae6ced798869a8bea4939626808bf480ea645fe",
+      "src/ps/ecg_hgb/legacy.c": "72922ab5a0adbd48b4339a9c2ba7f3d54a87e82f0bcb0425da82bc57c2c0abe0",
+      "tmp/cnn_dual_vitis_01_legacy/generated/link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+      "tmp/cnn_dual_vitis_01_legacy/generated/runtime500_bridge.c": "a5a736dcdc3c67b7c90ecb8e8614b935a016241ce2f14686aa4eceb12c3bcda1",
+      "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "src/ps/ecg_runtime/link.h": "03cba14ee4f25c9538a05617926d67c6fcfdbd565d14d4a455da710567859bba",
+      "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "src/ps/ecg_runtime/resample360.h": "cc933fe63074a6082503e6c8fc4abcfbc0b1e9b87bcb1cc3cbb30a201e900b0d",
+      "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "build/generate_rate500_runtime.py": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5",
+      "build/build_hgb_legacy.py": "e04c2f4bae4f5ca718d1478fd5959ffd68e563d3aa909856594ae0aef5177697"
+    },
+    "legacy_commands": [
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\legacy.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\legacy0.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\generated\\link500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\legacy1.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\generated\\runtime500_bridge.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\legacy2.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500\\rate500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\legacy3.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500\\pipeline500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\legacy4.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification\\classification.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_dual_vitis_01_legacy\\legacy5.o"
+      ]
+    ],
+    "stack_bytes": 262144,
+    "scope": "H27 FP32 full PL CNN with ARM comparison"
+  },
+  "additional_sources": {
+    "src/hls/ecg_cnn/cnn_hls.cpp": {
+      "bytes": 3942,
+      "sha256": "6215d135ce54e91ec735dd2344af7da25fcfa55d7e79650ba501a0ce6b28fb1d"
+    },
+    "sim/cnn_hls_tb.cpp": {
+      "bytes": 781,
+      "sha256": "a5e277746855d72ebc4ee57463fffe2f5a59f9b571ab070c48c5be8882129318"
+    },
+    "build/build_cnn_pl.tcl": {
+      "bytes": 2565,
+      "sha256": "57a992a6d2d1cd409ef86c16673a10b5faf426833ac9084d1bafaa1695f29cf6"
+    },
+    "build/build_navigator_ecg_system.tcl": {
+      "bytes": 8520,
+      "sha256": "8ef5603bd34c5b052e094db989cb862e787be5a6815ecb056da838de3505b3e4"
+    },
+    "build/export_cnn_hls.py": {
+      "bytes": 2173,
+      "sha256": "bc93b1b0a4fa34522d043046d057c713acff35a84594a6fa0fd5235862258680"
+    },
+    "build/run_cnn_hls.ps1": {
+      "bytes": 1451,
+      "sha256": "4f6dbee1be0ec104091be80b7bbe951de178095fe712db13ad6d386249fdda21"
+    },
+    "board/build_cnn_arm.py": {
+      "bytes": 5528,
+      "sha256": "5473f1c41d23b45f2ecc60aeffe49791c2791e221b473dc671bc7ae652c3bccd"
+    },
+    "board/load_cnn.py": {
+      "bytes": 2816,
+      "sha256": "11577f5b35f29f99da74654d99c4e47a3296fe49f8a7911652a84341e1397533"
+    },
+    "board/check_cnn_web.py": {
+      "bytes": 4333,
+      "sha256": "a502f052498bf1e8cbce9df3a64822920553d3c4a52d0c020d51aec5bf1dfa75"
+    },
+    "src/ps/ecg_cnn/features.c": {
+      "bytes": 4846,
+      "sha256": "363946b602c6860e70a3250b8e467a4bc13f81c80653b1b089295bcf5ca706a1"
+    },
+    "tmp/cnn_hls_parameters_01/cnn_hls_weights.h": {
+      "bytes": 445842,
+      "sha256": "8a02c4cf965bd9dde87979f8ced0c33fa715e7527c57e6046bcb5ac1d31cd5c2"
+    },
+    "tmp/cnn_hls_parameters_01/cnn_hls_vectors.h": {
+      "bytes": 55391,
+      "sha256": "be50858b0f0c588a137df785cd7daee875159b0280f09270c8f139727ecb319c"
+    },
+    "tmp/cnn_pl_reference/hls_config.cfg": {
+      "bytes": 398,
+      "sha256": "001ec54c202cc353166611025d2e716c2a6f311b094aa9c1fca98d89d25ff1ca"
+    },
+    "tmp/cnn_hls_07/hls/impl/ip/component.xml": {
+      "bytes": 102622,
+      "sha256": "f91dbb35d954c93e5f6276c7723b58ed537725d738c7399a74b5206d6f301baf"
+    },
+    "tmp/cnn_hls_07/hls/impl/ip/xilinx_com_hls_cnn_hls_1_0.zip": {
+      "bytes": 626211,
+      "sha256": "d669bf673433e164f9f44158d1a61fa4bae9685c617150bf4971ea34b9ce6919"
+    },
+    "tmp/cnn_dual_load_01/jtag.log": {
+      "bytes": 29,
+      "sha256": "7157360120b29512319cb3b0808badf1d6136c4232a5d55d90e05f2aacd550a9"
+    },
+    "tmp/hgb_pl_sim_02/features.mem": {
+      "bytes": 944640,
+      "sha256": "a462adfed4d205b2f2ed25294e6834fa8b92c0b1ab35e3f8880120d0b8927733"
+    },
+    "tmp/hgb_pl_sim_02/nodes_0.mem": {
+      "bytes": 139264,
+      "sha256": "049bde00451690d3c224a8b21446d5753e3d57a65a9a13230b9c0582752d9c4c"
+    },
+    "tmp/hgb_pl_sim_02/nodes_1.mem": {
+      "bytes": 139264,
+      "sha256": "b0c6171c7ba116ff037b4f6c054e6446ac0ac1253f93bcd69c9af599cd93ae18"
+    },
+    "tmp/hgb_pl_sim_02/nodes_2.mem": {
+      "bytes": 139264,
+      "sha256": "31f959244094a93f6d4a471cbdb4f7a24a9a32b04df8e9d1bc413e8a8fa5f962"
+    },
+    "tmp/hgb_pl_sim_02/roots_0.mem": {
+      "bytes": 320,
+      "sha256": "00024711bd46f84175e3271fca0ddbfd160796f32b8a68e75e65468a2102f08b"
+    },
+    "tmp/hgb_pl_sim_02/roots_1.mem": {
+      "bytes": 320,
+      "sha256": "6d53bba1b423caf08c56b39f00e798e3dff0a365ac0b068a8c06468f1db7da58"
+    },
+    "tmp/hgb_pl_sim_02/roots_2.mem": {
+      "bytes": 320,
+      "sha256": "00024711bd46f84175e3271fca0ddbfd160796f32b8a68e75e65468a2102f08b"
+    },
+    "tmp/hgb_pl_sim_02/scores.mem": {
+      "bytes": 26568,
+      "sha256": "4465310ddd97e092b7b6688a0fb4e330283b947c21bf4ebcf34b27db3ff0799a"
+    },
+    "src/pc/ecg_cnn.py": {
+      "bytes": 7797,
+      "sha256": "c02ed7e1897f73a9983c8751591178de265f20e7d0031a3cc161a8041434c1ef"
+    },
+    "src/pc/ecg_hgb.py": {
+      "bytes": 9817,
+      "sha256": "87d665cafdf09cd6df0a7f7063451d121b6a87bca5c6719805c777bf64e3c6cc"
+    },
+    "src/pc/ecg_hgb_worker.py": {
+      "bytes": 9438,
+      "sha256": "21168d04d234cab59041f1fcbc137af411f766ff5f26cbc2b6bf52401bf315bf"
+    },
+    "src/pc/ecg_web_service.py": {
+      "bytes": 23905,
+      "sha256": "ef6f2d4117061132590f7f4e26d6c113509c06f5a45ddfa2a6e96b0df83d8c56"
+    },
+    "src/web/business_logic/app/api/live.py": {
+      "bytes": 10491,
+      "sha256": "c0340334b6fa8b611f231e345d26fdd6f2ad36dcda1166c1998f275ee5dacf33"
+    },
+    "src/web/frontend/src/pages/Live.tsx": {
+      "bytes": 27028,
+      "sha256": "1c9587c4de6c52e19bd26e09a624e7e3cbfe8a9f0039f4c7de24645737f4c6cd"
+    },
+    "src/web/frontend/src/pages/Login.tsx": {
+      "bytes": 1622,
+      "sha256": "460c546b7447106d83e35448a5d556c0a1ff1f93b6f9cea1f481366a3c313113"
+    },
+    "src/web/frontend/src/index.css": {
+      "bytes": 15673,
+      "sha256": "c5cd8cf0563b85abf38a916dc8abef8651216d3a74925a3b3666b8da3bbc0f23"
+    },
+    "src/web/frontend/src/components/layout/Layout.tsx": {
+      "bytes": 755,
+      "sha256": "fde1aee4fb27c92843881ee6b916a90a8e0de0f7cecec8ba2f1b21eedaf7a5ee"
+    }
+  },
+  "load_receipt": {
+    "started": true,
+    "execution_verified": false,
+    "flash_written": false,
+    "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+    "manifest_sha256": "1fcc2a19a5943879f56ab1d7fcb0cd3cfddc1fd88c35539b9ca219485f635ded",
+    "cable": "210512180081",
+    "port": "COM4",
+    "device_id": "VID_1A86&PID_7523\\7&27c58f36&0&2",
+    "scope": "temporary JTAG start; UART inference separately verified"
+  },
+  "checks": {
+    "web_tests": 101,
+    "protocol_tests": 18,
+    "frontend_typecheck_and_build": true
+  },
+  "flash_written": false,
+  "latest_replaced": false,
+  "accuracy_measured": false,
+  "limitations": [
+    "60-second full-record entry, not continuous streaming",
+    "INT8 not implemented",
+    "no model fusion",
+    "no fresh F board example",
+    "no browser visual acceptance",
+    "no new cold boot or Flash test",
+    "no clinical qualification",
+    "ARM reference run retained in debug firmware"
+  ],
+  "rtl_cosim": {
+    "passed": true,
+    "vectors": 12,
+    "report": "hls_cosim.rpt",
+    "log": "hls_cosim.log"
+  },
+  "reports": {
+    "hls_cosim.log": {
+      "bytes": 68624,
+      "sha256": "72015ca2e7195b91defeee2d682cf0b85d8e1c635c1114b71beb1ce6844068b1"
+    },
+    "hls_cosim.rpt": {
+      "bytes": 1246,
+      "sha256": "3ba44879fb33e17dc0c5c1570e206dd8111dc8233b03e0e3acc864c39acd7231"
+    },
+    "hls_synthesis.rpt": {
+      "bytes": 19806,
+      "sha256": "5ea63223d33b87b0b4d32d8452d32cbad3f0d72ade98a8ebd2ab5c14b610384d"
+    },
+    "synthetic_rx.log": {
+      "bytes": 26325,
+      "sha256": "b222b57b04492e58bff77b54758328d083e7b8fe5df4f7bb871553022d535711"
+    },
+    "timing.rpt": {
+      "bytes": 21985,
+      "sha256": "e613150e1424c797853846070471158a385f78e12329156efe49e192adfc4714"
+    },
+    "utilization.rpt": {
+      "bytes": 11999,
+      "sha256": "6a7e9ebb721dde31c25732b139a39b21a5de864c05556995d58989442ef8da64"
+    }
+  },
+  "report_originals": {
+    "utilization.rpt": {
+      "source": "tmp/cnn_pl_build_01/utilization.rpt",
+      "sha256": "a57db78d0101351f2ce841a59fc6be2c3e493b5e90c22ef643d96f47d3167c31"
+    },
+    "timing.rpt": {
+      "source": "tmp/cnn_pl_build_01/timing.rpt",
+      "sha256": "ea5e3a6163f8751af83b42a442e517170a98f2c688d1444021d3b50992f46e67"
+    },
+    "hls_synthesis.rpt": {
+      "source": "tmp/cnn_hls_07/hls/syn/report/cnn_hls_csynth.rpt",
+      "sha256": "30bb8a6ff7fa8b0685c4675611657ad24be661ad39de1e02d22e9ec53e0d4b6d"
+    },
+    "hls_cosim.rpt": {
+      "source": "tmp\\cnn_hls_07\\hls\\sim\\report\\cnn_hls_cosim.rpt",
+      "sha256": "da4ed0a2950c48f25962ecf6bea335df27eecbaf35886cc164d8ae4582c9d458"
+    },
+    "hls_cosim.log": {
+      "source": "tmp\\cnn_hls_cosim_02.log",
+      "sha256": "feb521cd553a24ffe1456e2ffe54e16e6751c326fcbcf3b168d7f90e075379cf"
+    }
+  },
+  "report_normalization": "公开报告仅统一LF并移除行尾空白及多余末尾空行；工具原始字节保留本地source，原始SHA256另列；无数值修改"
+}

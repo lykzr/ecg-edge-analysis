@@ -12,7 +12,7 @@ ADS1292R → STM32 → JDY18 → 配套USB接收器 → 电脑换算与去直流
                                      电脑网页：显示、保存
 ```
 
-也可回放标准CSV或厂商CSV；采集与板卡使用两个独立串口，网页不调用厂商EXE。当前没有最终分类模型，未知类别 ? 不代表正常心拍。轻量卷积神经网络 CNN、8位整数 INT8 量化、FPGA整网推理及 ARM/FPGA 性能比较仍未完成，现有独立算子和 PL 回归不能替代这些目标。
+也可回放标准CSV或厂商CSV；采集与板卡使用两个独立串口，网页不调用厂商EXE。未知类别 ? 不代表正常心拍。另有[双模型PL候选](docs/download_guide.md#cnn与hgb在同一pl镜像中演示)：H27 FP32完整CNN及HGB Q40分类树可在同一镜像由网页选择，并显示同板ARM/FPGA实测计时。ARM执行高通、检测与形态/历史特征，PL执行分类核心。候选保留CNN/HGB最多60秒整段，另新增[CNN流式模式](docs/download_guide.md#新增cnn实时模式保留两种整段模式)，支持边采边测及累计计时；未替换latest。INT8、完整长时/无线验收与最终模型质量验收仍未完成。
 
 | 目录 | 内容 |
 | --- | --- |
@@ -55,7 +55,7 @@ python -m venv tmp/web_env
 & ./tmp/web_env/Scripts/python.exe -B src/web/run.py
 ```
 
-打开启动终端显示的本机地址，注册本地账号，进入“实时与板卡”。启动、接线、回放、重建和故障处理统一见[使用教程](docs/download_guide.md)；报文及量纲见[接口协议](docs/protocols.md)；设计、证据及缺项见[当前实现与缺项](report/report.md)。自有许可见 [LICENSE](LICENSE)，第三方及网页来源的分发边界见 [third_party.md](third_party.md) 与[许可说明](docs/licenses.md)。
+打开启动终端显示的本机地址，注册本地账号，进入“检测与加速”。启动、接线、回放、重建和故障处理统一见[使用教程](docs/download_guide.md)；报文及量纲见[接口协议](docs/protocols.md)；设计、证据及缺项见[当前实现与缺项](report/report.md)。自有许可见 [LICENSE](LICENSE)，第三方及网页来源的分发边界见 [third_party.md](third_party.md) 与[许可说明](docs/licenses.md)。
 
 本工程直接通过 Git 仓库交付，不生成提交副本或压缩包。tmp/、本地资料、开发记录及历史发布由Git忽略；源码、依赖锁文件、当前发布、许可及必要证据保留。
 

@@ -51,6 +51,8 @@
 
 上述结论分别见[实现报告](report.md)、[ARM核心说明](../src/ps/ecg_hgb/README.md)、[ARM实板证据](../docs/evidence/hgb_arm_board_20261101.json)、[双协议实板与启动证据](../docs/evidence/hgb_web_board_20261101.json)和[技能包](../skill/README.md)。
 
+2026-11-02增量：H27 FP32完整CNN与HGB Q40现已在同一PL候选及网页切换实测，ARM/FPGA计时与原始报告见[当前报告](report.md#cnnhgb双模型pl候选实测2026-11-02)及[本轮证据](../docs/evidence/cnn_pl_20261102/summary.json)。下列整项任务仍含未验条件，不因某个子项完成而整体打勾；不要重复开发已完成的FP32 PL核心。本日晚新增CNN流式、保留CNN/HGB整段并实板验证；操作与本次范围见报告末节。INT8、HGB流式、长时/无线完整验收、质量验收及Flash候选固化仍缺。
+
 ## 3. 剩余30项主线任务
 
 ### 3.1 真实采集、单位和滤波（01—07）

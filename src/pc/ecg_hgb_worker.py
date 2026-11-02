@@ -12,19 +12,24 @@ from ecg_bridge_capture import NominalConverter
 
 class HgbWorker(threading.Thread):
     def __init__(self,kind,source,port,directory,*,preprocess=None,sample_limit=5000,
-                 realtime=True,zynq_device=None,source_device=None,port_factory=DuplexSerial):
+                 realtime=True,zynq_device=None,source_device=None,port_factory=DuplexSerial,classifier='hgb'):
         super().__init__(name='ecg-hgb-arm',daemon=False)
         if kind not in ('standard500','bridge_csv','bridge_serial'):raise ValueError('板端模型只接标准500Hz或厂商500Hz')
         if kind=='standard500' and preprocess not in ('hp05','raw'):raise ValueError('必须声明标准500Hz的hp05/raw状态')
         if kind=='bridge_serial' and not 1<=sample_limit<=30000:raise ValueError('板端整段模型采集上限须为1—30000点')
         self.kind,self.source,self.port,self.directory=kind,source,port,Path(directory)
+        if classifier not in ('hgb','cnn'):raise ValueError('板端分类器必须为hgb或cnn')
+        self.classifier=classifier
+        if classifier=='cnn':
+            from ecg_cnn import MODEL as selected_model
+        else:selected_model=MODEL
         self.mode=preprocess if kind=='standard500' else 'hp05'
         self.realtime,self.factory=realtime,port_factory
         self.cancel=threading.Event();self.lock=threading.RLock()
         self.samples=deque(maxlen=4096);self.values=[];self.capture=None
         self.info=dict(state='starting',reason=None,error=None,source_samples=0,confirmed=0,done=False,
-                       execution_location='pending_board_identity',model_sha256=MODEL,qualified=False,
-                       protocol='HGB-BATCH-1',sampling_hz=500,preprocess=self.mode,
+                       execution_location='pending_board_identity',model_sha256=selected_model,qualified=False,classifier=classifier,
+                       protocol='CNN-BATCH-1' if classifier=='cnn' else 'HGB-BATCH-1',sampling_hz=500,preprocess=self.mode,
                        zynq_device=zynq_device,source_device=source_device,upstream_source_drop=None)
         self.view=dict(header=None,samples=[],events=[],hr=None,rr_ms=None,cls='未提供',waveform_origin='host_input')
         self.capture_info={}
@@ -90,23 +95,27 @@ class HgbWorker(threading.Thread):
             serial=self.factory(self.port,115200)
             def progress(n,total):
                 with self.lock:self.info.update(confirmed=n,total=total)
-            result=transfer(self.values,serial,self.directory,self.mode,cancel=self.cancel,progress=progress)
+            selected_transfer=transfer
+            if self.classifier=='cnn':
+                from ecg_cnn import transfer as selected_transfer
+            result=selected_transfer(self.values,serial,self.directory,self.mode,cancel=self.cancel,progress=progress)
             rows=[];previous=None
             for event in result['events']:
                 rr=event['position']-previous if previous is not None else 0
                 previous=event['position']
                 rows.append(dict(seq=event['beat_id'],pos=event['position'],index=event['position'],rr=rr or None,
                     hr=30000/rr if rr else None,cls=event['label'],conf=max(event['probability']) if event['status']==0 else None,
-                    status=event['status'],probability=event['probability'],decision_at=event['decision_at']))
+                    status=event['status'],probability=event['probability'],decision_at=event.get('decision_at',event['ready_at'])))
             last=rows[-1] if rows else None
             with self.lock:
-                self.view=dict(header=dict(firmware='hgb-batch-1',session=str(result['session']),source='REPLAY' if self.kind!='bridge_serial' else 'ADC',
-                    detector='HGB-v92-fold0-'+('PL-Q40' if result['execution_location']=='zynq_pl' else 'ARM'),fs=500,scale=1,caps=20),
+                self.view=dict(header=dict(firmware='cnn-batch-1' if self.classifier=='cnn' else 'hgb-batch-1',session=str(result['session']),source='REPLAY' if self.kind!='bridge_serial' else 'ADC',
+                    detector=('CNN-H27-fold0-' if self.classifier=='cnn' else 'HGB-v92-fold0-')+('PL-'+result['precision'] if result['execution_location']=='zynq_pl' else 'ARM'),fs=500,scale=1,caps=20),
                     samples=[dict(seq=i,index=i,raw=self.values[i],filt=None) for i in range(max(0,len(self.values)-4096),len(self.values))],
                     events=rows[-256:],hr=last['hr'] if last else None,rr_ms=last['rr']*2 if last and last['rr'] else None,
                     cls=last['cls'] if last else '未提供',waveform_origin='host_input')
                 self.info.update(state='stopped',reason='completed',done=True,compute_us=result['compute_us'],clipped=result['clipped'],
-                    execution_location=result['execution_location'],performance=result['performance'],precision=result['precision'])
+                    execution_location=result['execution_location'],performance=result['performance'],precision=result['precision'],
+                    event_count=len(result['events']),class_counts={label:sum(e['label']==label for e in result['events']) for label in (('N','S','V','F','UNCLASSIFIED') if self.classifier=='cnn' else ('N','S','VF','UNCLASSIFIED'))})
         except InterruptedError as exc:self.info.update(state='stopped',reason='stopped_by_user',error=None,note=str(exc))
         except Exception as exc:self.info.update(state='error',reason='failed',error=type(exc).__name__+': '+str(exc))
         finally:

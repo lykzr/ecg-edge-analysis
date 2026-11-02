@@ -1,16 +1,13 @@
 /** 保留原始时刻，缺口断线；抽稀只影响绘图，不影响计数、保存或事件位置。 */
 export interface PlotPoint {t: number; v: number; breakBefore?: boolean;}
 
-/** 仅变换绘图副本；共享叠加曲线的尺度，保留时刻、缺口和原数组。 */
-export function displayWaveforms(primary: PlotPoint[], secondary: PlotPoint[], normalized: boolean) {
+/** 叠加曲线共用原值范围；保留幅值、时刻、缺口和原数组。 */
+export function displayWaveforms(primary: PlotPoint[], secondary: PlotPoint[]) {
   const values=[...primary,...secondary].map(p=>p.v).filter(Number.isFinite);
   let low=Infinity,high=-Infinity;
   for(const value of values){low=Math.min(low,value);high=Math.max(high,value);}
   if(!values.length)return {primary,secondary,min:0,max:1};
-  if(!normalized)return {primary,secondary,min:low,max:high};
-  const center=low/2+high/2,half=high/2-low/2;
-  const transform=(points: PlotPoint[])=>points.map(p=>({...p,v:half ? (p.v-center)/half : 0}));
-  return {primary:transform(primary),secondary:transform(secondary),min:-1,max:1};
+  return {primary,secondary,min:low,max:high};
 }
 
 export function envelope(points: PlotPoint[], buckets = 600): PlotPoint[] {

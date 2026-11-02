@@ -134,6 +134,10 @@ static int session(char *v[8],unsigned fields_count){
     }
     return tx("D,%u,%u,%u,%u,%u,%u,%u\n",sid,total,events,input.clipped,input_us,prepare_us,classify_us);
 }
+#ifdef ECG_DUAL_MODEL
+void hgb_batch_init(uint32_t base,uint64_t hz){uart_base=base;frequency=hz;}
+int hgb_batch_session(char *v[8],unsigned n){return session(v,n);}
+#else
 int main(void){
 #ifdef ECG_HGB_PL
     Xil_ICacheEnable();Xil_DCacheEnable();
@@ -157,3 +161,4 @@ int main(void){
         (void)session(f,fields(text,f));
     }
 }
+#endif

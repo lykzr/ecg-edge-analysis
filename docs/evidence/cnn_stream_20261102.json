@@ -1,0 +1,1711 @@
+{
+  "passed": true,
+  "date": "2026-11-02",
+  "mode": "new CNN stream; original CNN/HGB batch retained; no fusion",
+  "host_comparison": {
+    "passed": true,
+    "hardware": false,
+    "training": false,
+    "precision": "FP32",
+    "atol": 0.0002,
+    "rtol": 2e-05,
+    "classes_exact": true,
+    "model": {
+      "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+      "fold": 0,
+      "precision": "FP32",
+      "weights": 25482,
+      "offsets": {
+        "rr_mean": {
+          "offset": 0,
+          "shape": [
+            3
+          ]
+        },
+        "rr_std": {
+          "offset": 3,
+          "shape": [
+            3
+          ]
+        },
+        "wave.0.weight": {
+          "offset": 6,
+          "shape": [
+            16,
+            2,
+            7
+          ]
+        },
+        "wave.3.body.0.weight": {
+          "offset": 230,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.3.body.3.weight": {
+          "offset": 1510,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.0.weight": {
+          "offset": 2790,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.3.weight": {
+          "offset": 4070,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.0.weight": {
+          "offset": 5350,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.3.weight": {
+          "offset": 6630,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "rr.0.weight": {
+          "offset": 7910,
+          "shape": [
+            8,
+            3
+          ]
+        },
+        "rr.0.bias": {
+          "offset": 7934,
+          "shape": [
+            8
+          ]
+        },
+        "head.0.weight": {
+          "offset": 7942,
+          "shape": [
+            64,
+            269
+          ]
+        },
+        "head.0.bias": {
+          "offset": 25158,
+          "shape": [
+            64
+          ]
+        },
+        "head.3.weight": {
+          "offset": 25222,
+          "shape": [
+            4,
+            64
+          ]
+        },
+        "head.3.bias": {
+          "offset": 25478,
+          "shape": [
+            4
+          ]
+        }
+      },
+      "vectors": 12,
+      "torch_version": "2.15.0+cpu",
+      "fits": 0
+    },
+    "tests": [
+      {
+        "name": "golden_fold0",
+        "beats": 12,
+        "max_logit_error": 2.86102294921875e-06
+      },
+      {
+        "name": "random_inputs",
+        "beats": 100,
+        "max_logit_error": 6.198883056640625e-06
+      },
+      {
+        "name": "synthetic500",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "online_requests_bytes_exact": true,
+        "online_history_results_bytes_exact": true,
+        "sequence_and_reset_rejections": true,
+        "max_logit_error": 5.245208740234375e-06
+      },
+      {
+        "name": "ads1292r",
+        "samples": 5148,
+        "events": 13,
+        "valid": 12,
+        "online_requests_bytes_exact": true,
+        "online_history_results_bytes_exact": true,
+        "sequence_and_reset_rejections": true,
+        "max_logit_error": 5.7220458984375e-06
+      }
+    ],
+    "commands": [
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn\\network.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part0.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn\\features.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part1.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn\\stream.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part2.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\prepare.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part3.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters\\cnn_weights.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part4.o"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\pipeline500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part5.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\rate500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part6.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\classification.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part7.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_cnn",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\parameters",
+        "-include",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\frozen.h",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\model\\inference\\native\\runtime500_bridge.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part8.o",
+        "-Wno-error=misleading-indentation"
+      ],
+      [
+        "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/gcc.exe",
+        "-shared",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part0.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part1.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part2.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part3.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part4.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part5.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part6.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part7.o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\part8.o",
+        "-lm",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_host_05\\cnn.dll"
+      ]
+    ]
+  },
+  "board_checks": [
+    {
+      "directory": "tmp/cnn_stream_ads_01",
+      "comparison": {
+        "passed": true,
+        "source": "actual board UART result versus frozen PyTorch",
+        "samples": 5148,
+        "events": 13,
+        "valid": 12,
+        "classes_exact": true,
+        "max_probability_error": 8.731149137020111e-10,
+        "compute_us": {
+          "input": 887,
+          "prepare": 59288,
+          "classify": 133510
+        },
+        "classify_mean_us": 11125.833333333334,
+        "counts": {
+          "N": 12,
+          "S": 0,
+          "V": 0,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "2393decd3a1448e1b3f6abcc4489ef3c5a7d94628b6dc29b5a96617105e097ed",
+        "result_sha256": "96d6cc1c42ee6a2447a71e7662d9c9876c7cac455807ef7b4be85fdcfefed321",
+        "tx_sha256": "43f2197f330ab2925d0ce3cb94fd1ec6884716d35fde37186312b84fef303bcb",
+        "rx_sha256": "c821b1b905a5abd98e159e406897ee107a0db4be50ddac967c8aea2227d66d55",
+        "flash_written": false,
+        "accuracy_measured": false
+      },
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 12,
+        "mismatches": 0,
+        "arm_ticks": 33023561,
+        "pl_call_ticks": 11053588,
+        "pl_core_ticks": 10820026,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8255.890010579189,
+        "pl_call_mean_us": 2763.396919861489,
+        "pl_core_mean_us": 2705.0064215548136,
+        "call_speedup": 2.987587469335749,
+        "core_speedup": 3.05207778613471
+      },
+      "arm_total_ms": 99.07068012695028,
+      "pl_call_total_ms": 33.16076303833787,
+      "max_algorithm_wait_ms": 618,
+      "realtime_paced": true,
+      "early_results": true
+    },
+    {
+      "directory": "tmp/cnn_stream_synthetic_01",
+      "comparison": {
+        "passed": true,
+        "source": "actual board UART result versus frozen PyTorch",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "classes_exact": true,
+        "max_probability_error": 1.1920928955078125e-06,
+        "compute_us": {
+          "input": 5150,
+          "prepare": 342119,
+          "classify": 801814
+        },
+        "classify_mean_us": 11136.305555555555,
+        "counts": {
+          "N": 55,
+          "S": 1,
+          "V": 16,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+        "result_sha256": "1bbca4e686e5c39bbf35e647cdc596f56c267db91aa8935c03ba17ed7a04f976",
+        "tx_sha256": "7a4fc307fc289115b48349cafb76c1629c7ff5892b7c8e664e5975e3a5ca58e6",
+        "rx_sha256": "7693ded249348ab4f4ca2f158eb93b889570b3620396b8a185985c386f67b6e3",
+        "flash_written": false,
+        "accuracy_measured": false
+      },
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 72,
+        "mismatches": 0,
+        "arm_ticks": 197951509,
+        "pl_call_ticks": 66320031,
+        "pl_core_ticks": 64920290,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8247.979302475265,
+        "pl_call_mean_us": 2763.3345448632986,
+        "pl_core_mean_us": 2705.0120048879853,
+        "call_speedup": 2.984792166336593,
+        "core_speedup": 3.049147023218781
+      },
+      "arm_total_ms": 593.8545097782192,
+      "pl_call_total_ms": 198.96008723015748,
+      "max_algorithm_wait_ms": 608,
+      "realtime_paced": true,
+      "early_results": true
+    },
+    {
+      "directory": "tmp/cnn_stream_long_01",
+      "comparison": {
+        "passed": true,
+        "source": "actual board UART result versus frozen PyTorch",
+        "samples": 32768,
+        "events": 79,
+        "valid": 78,
+        "classes_exact": true,
+        "max_probability_error": 1.1920928955078125e-06,
+        "compute_us": {
+          "input": 5579,
+          "prepare": 372604,
+          "classify": 868622
+        },
+        "classify_mean_us": 11136.179487179486,
+        "counts": {
+          "N": 60,
+          "S": 1,
+          "V": 17,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "cab0b2a0d8b6647c1079b7e254b8265e3d35ae3b506b12b837fc051f05b269b7",
+        "result_sha256": "25a3bb89a5ab67443763646b0a91ab3d7817b40a3cd3aab7b8caf4f09c509b73",
+        "tx_sha256": "43a05583b05e81b083e24c87388d66cb42a6c9cbc17f7253708d4b947c90b8bf",
+        "rx_sha256": "ceca0606f271896736f2c570baa67ca0e9956f0ed6deae5040d41bc731392cd4",
+        "flash_written": false,
+        "accuracy_measured": false
+      },
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 78,
+        "mismatches": 0,
+        "arm_ticks": 214443860,
+        "pl_call_ticks": 71847852,
+        "pl_core_ticks": 70330694,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8247.840530043395,
+        "pl_call_mean_us": 2763.3788429389365,
+        "pl_core_mean_us": 2705.0266138619204,
+        "call_speedup": 2.9846941005278764,
+        "core_speedup": 3.04907925407362
+      },
+      "arm_total_ms": 643.3315613433848,
+      "pl_call_total_ms": 215.54354974923706,
+      "max_algorithm_wait_ms": 608,
+      "realtime_paced": false,
+      "early_results": true
+    }
+  ],
+  "web_checks": [
+    {
+      "case": "cnn_stream_web_01",
+      "passed": true,
+      "source_sha256": "f8ebf5613389f50cbec9a93f42bec5afedd08821cf82b7c7715581d9a33633e7",
+      "checks": [
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "live_results": [
+            832,
+            960,
+            1120,
+            1248,
+            1408,
+            1536,
+            1696,
+            1849,
+            1998,
+            2158,
+            2318,
+            2478,
+            2638,
+            2796,
+            2956,
+            3148,
+            3308,
+            3468,
+            3660,
+            3820,
+            4012,
+            4193,
+            4385,
+            4577,
+            4769,
+            4961,
+            5121
+          ],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 32995890,
+            "pl_call_ticks": 11053391,
+            "pl_core_ticks": 10820062,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8248.972260779805,
+            "pl_call_mean_us": 2763.347669862917,
+            "pl_core_mean_us": 2705.0154215545526,
+            "call_speedup": 2.9851373212075822,
+            "core_speedup": 3.04951025234421
+          },
+          "directory": "tmp\\cnn_stream_web_01\\users\\board-check--4981a7130228c974c2e5f59e\\sessions\\fd879187132f4a919c4249b64c3ff071",
+          "files": {
+            "rx.log": "57d28162c91974c6621d71bf8deb6d41d9f0954865ee95450adcd2f88fa85b5e",
+            "tx.bin": "f0ada1a44fec9e7b2ff78169f102e9ac2e153694df5c96f8f87b326222a813cc",
+            "input_mv.csv": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result.json": "41fa1da9bff626b9a1055f858314cab4a28c48c1fd2dac0c16cf6daf8ae867fb"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 883,
+              "prepare": 59168,
+              "classify": 133424
+            },
+            "classify_mean_us": 11118.666666666666,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "41fa1da9bff626b9a1055f858314cab4a28c48c1fd2dac0c16cf6daf8ae867fb",
+            "tx_sha256": "f0ada1a44fec9e7b2ff78169f102e9ac2e153694df5c96f8f87b326222a813cc",
+            "rx_sha256": "57d28162c91974c6621d71bf8deb6d41d9f0954865ee95450adcd2f88fa85b5e",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "live_results": [],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 381920,
+            "pl_call_ticks": 197685,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 95.47999723108008,
+            "pl_call_mean_us": 49.42124856678379,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.9319624655386094,
+            "core_speedup": 12.521966849977716
+          },
+          "directory": "tmp\\cnn_stream_web_01\\users\\board-check--4981a7130228c974c2e5f59e\\sessions\\8f4acfa8e87a4b818f0845e2bdf23383",
+          "files": {
+            "rx.log": "c799070e5672473e8d34b8292a46fe338808635ed4ce7ba8c2621030a8309b80",
+            "tx.bin": "b7158040df32f0dda489b77c2f924725854978da5f1de25215e54fad0e941188",
+            "input_mv.csv": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result.json": "ffdcf9492d5f0c1f23d3e2d8c332ecd5d6a21619519e8e9854c92beb71fb3860"
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "live_results": [
+            704,
+            832,
+            992,
+            1120,
+            1280,
+            1408,
+            1568,
+            1728,
+            1888,
+            2048,
+            2176,
+            2336,
+            2496,
+            2688,
+            2848,
+            3006,
+            3198,
+            3358,
+            3550,
+            3710,
+            3902,
+            4086,
+            4278,
+            4459,
+            4645,
+            4833,
+            4993
+          ],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 33012123,
+            "pl_call_ticks": 11053545,
+            "pl_core_ticks": 10820068,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8253.030510662114,
+            "pl_call_mean_us": 2763.3861698618016,
+            "pl_core_mean_us": 2705.016921554509,
+            "call_speedup": 2.986564310363779,
+            "core_speedup": 3.0510088291496875
+          },
+          "directory": "tmp\\cnn_stream_web_01\\users\\board-check--4981a7130228c974c2e5f59e\\sessions\\91639b21808f4542a70458bc54466b21",
+          "files": {
+            "rx.log": "cada90ffc76d9498eb2a489a36a06e73883fb18a900f9853ad1840d1d8044657",
+            "tx.bin": "03ec0d4d1f42696c7f0e45c07120cd13056d429284002d04b6cf17034d2ae583",
+            "input_mv.csv": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result.json": "df271efac0c8a7a10299908e3d745dd2439295c7c4c7087723a425ded4430382"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 884,
+              "prepare": 59213,
+              "classify": 133479
+            },
+            "classify_mean_us": 11123.25,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "df271efac0c8a7a10299908e3d745dd2439295c7c4c7087723a425ded4430382",
+            "tx_sha256": "03ec0d4d1f42696c7f0e45c07120cd13056d429284002d04b6cf17034d2ae583",
+            "rx_sha256": "cada90ffc76d9498eb2a489a36a06e73883fb18a900f9853ad1840d1d8044657",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ],
+      "no_reset_between_sessions": true,
+      "flash_written": false,
+      "scope": "真实HTTP接口及USB_UART；不代替浏览器人工验收或持续采样验证"
+    },
+    {
+      "case": "cnn_stream_batch_regression_01",
+      "passed": true,
+      "source_sha256": "f8ebf5613389f50cbec9a93f42bec5afedd08821cf82b7c7715581d9a33633e7",
+      "checks": [
+        {
+          "classifier": "cnn",
+          "streaming": false,
+          "live_results": [],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 32966772,
+            "pl_call_ticks": 11053045,
+            "pl_core_ticks": 10820223,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8241.692760990909,
+            "pl_call_mean_us": 2763.261169865426,
+            "pl_core_mean_us": 2705.0556715533853,
+            "call_speedup": 2.9825963795497077,
+            "core_speedup": 3.04677380493914
+          },
+          "directory": "tmp\\cnn_stream_batch_regression_01\\users\\board-check--107e7fab2ef11f95caa84933\\sessions\\118e2d9cb9c74f678015a259f1435d38",
+          "files": {
+            "rx.log": "eacbd9397a08b7e68943ca34b6285aef5a2bb8a240277ba128cae4d2965c6b32",
+            "tx.bin": "4e9844351b22a6f5aa3eaf239ec998dbc752d96a4b8cc20f86af61e135cf3461",
+            "input_mv.csv": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result.json": "942c43d237503ab0f3add44efbbc5c12b201f6b20bf9f69141d3deb74b5def6f"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 804,
+              "prepare": 56442,
+              "classify": 135921
+            },
+            "classify_mean_us": 11326.75,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result_sha256": "942c43d237503ab0f3add44efbbc5c12b201f6b20bf9f69141d3deb74b5def6f",
+            "tx_sha256": "4e9844351b22a6f5aa3eaf239ec998dbc752d96a4b8cc20f86af61e135cf3461",
+            "rx_sha256": "eacbd9397a08b7e68943ca34b6285aef5a2bb8a240277ba128cae4d2965c6b32",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "live_results": [],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 376342,
+            "pl_call_ticks": 197657,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 94.08549727152058,
+            "pl_call_mean_us": 49.41424856698679,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.9040155420754135,
+            "core_speedup": 12.339081609379747
+          },
+          "directory": "tmp\\cnn_stream_batch_regression_01\\users\\board-check--107e7fab2ef11f95caa84933\\sessions\\3b78fd880f36419581b0a966cb53be44",
+          "files": {
+            "rx.log": "5b851abcc960c673b7ef16a1a24d51fa0e0bbdac5358e30858432c430d954099",
+            "tx.bin": "4614c541467ef9efedb32937aa7ce10139e8ce16f3ad186a8204bf2e19af92d9",
+            "input_mv.csv": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result.json": "6216b52a34d5db697be1c318ea82d603af22d2814acee04ed96db26651d95b5e"
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": false,
+          "live_results": [],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 32980053,
+            "pl_call_ticks": 11053169,
+            "pl_core_ticks": 10820351,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8245.013010894623,
+            "pl_call_mean_us": 2763.2921698645273,
+            "pl_core_mean_us": 2705.0876715524573,
+            "call_speedup": 2.9837644751473538,
+            "core_speedup": 3.0479651722943184
+          },
+          "directory": "tmp\\cnn_stream_batch_regression_01\\users\\board-check--107e7fab2ef11f95caa84933\\sessions\\0735cdc890c949e09596c35a43091571",
+          "files": {
+            "rx.log": "b95aa64673266e2dc1fa337d6d927f399e247bcfbf8dd9a51cd6d9e0ecf51cb5",
+            "tx.bin": "a0994053899db0253172f4010e8a5420f791e21275d2624fe471b158dc09b4f9",
+            "input_mv.csv": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result.json": "0604ca712ff5a097a54195743725282af7c17eed3599ff8968c43675a5c2e457"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 804,
+              "prepare": 56459,
+              "classify": 135971
+            },
+            "classify_mean_us": 11330.916666666666,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result_sha256": "0604ca712ff5a097a54195743725282af7c17eed3599ff8968c43675a5c2e457",
+            "tx_sha256": "a0994053899db0253172f4010e8a5420f791e21275d2624fe471b158dc09b4f9",
+            "rx_sha256": "b95aa64673266e2dc1fa337d6d927f399e247bcfbf8dd9a51cd6d9e0ecf51cb5",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ],
+      "no_reset_between_sessions": true,
+      "flash_written": false,
+      "scope": "真实HTTP接口及USB_UART；不代替浏览器人工验收或持续采样验证"
+    },
+    {
+      "case": "cnn_stream_stop_web_01",
+      "passed": true,
+      "source_sha256": "f8ebf5613389f50cbec9a93f42bec5afedd08821cf82b7c7715581d9a33633e7",
+      "checks": [
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "live_results": [
+            832,
+            960,
+            1120,
+            1248,
+            1408,
+            1566,
+            1713,
+            1873,
+            2016
+          ],
+          "samples": 2084,
+          "counts": {
+            "N": 3,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 3,
+            "mismatches": 0,
+            "arm_ticks": 8256320,
+            "pl_call_ticks": 2763359,
+            "pl_core_ticks": 2704964,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8256.319760566726,
+            "pl_call_mean_us": 2763.358919862591,
+            "pl_core_mean_us": 2704.963921556046,
+            "call_speedup": 2.987784070039398,
+            "core_speedup": 3.052284614508733
+          },
+          "directory": "tmp\\cnn_stream_stop_web_01\\users\\board-check--722c186bc8493b25c22bf103\\sessions\\576e83be3e0a4be5bcb9f44319014c3e",
+          "files": {
+            "rx.log": "b5fce3d5194b04dd26538b2eeb2e3d571268a410ee25487db8a66e70f2ed224f",
+            "tx.bin": "eff1bd09f130858e54d32f5380602a24e3349e1e17dddd89fba82d69d108549d",
+            "input_mv.csv": "eb52b65acd7e3275bc4d4685e591926da69084b29ae4717ffb0273be8a6af063",
+            "result.json": "97ed9172ad2532929ad46b68cfb3a9f47d29e4c6ef9d1679469d4f7407b49166"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 2084,
+            "events": 4,
+            "valid": 3,
+            "classes_exact": true,
+            "max_probability_error": 1.4915713109076023e-10,
+            "compute_us": {
+              "input": 359,
+              "prepare": 21693,
+              "classify": 33281
+            },
+            "classify_mean_us": 11093.666666666666,
+            "counts": {
+              "N": 3,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "eb52b65acd7e3275bc4d4685e591926da69084b29ae4717ffb0273be8a6af063",
+            "result_sha256": "97ed9172ad2532929ad46b68cfb3a9f47d29e4c6ef9d1679469d4f7407b49166",
+            "tx_sha256": "eff1bd09f130858e54d32f5380602a24e3349e1e17dddd89fba82d69d108549d",
+            "rx_sha256": "b5fce3d5194b04dd26538b2eeb2e3d571268a410ee25487db8a66e70f2ed224f",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "live_results": [],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 374398,
+            "pl_call_ticks": 197710,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 93.59949728561458,
+            "pl_call_mean_us": 49.427498566602544,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.893672550705579,
+            "core_speedup": 12.275343906310109
+          },
+          "directory": "tmp\\cnn_stream_stop_web_01\\users\\board-check--722c186bc8493b25c22bf103\\sessions\\fc4ddeec35534b8e904717ad49dd4788",
+          "files": {
+            "rx.log": "e99185885f213d290019167114a6ee589dad0f47c2e71d4413c4df6f9e0947c1",
+            "tx.bin": "5e538417698c7640bdb30280413aad6c54e0747130f79349561aaa63d281408c",
+            "input_mv.csv": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result.json": "9ed19d80d1101b137ce715d3eaf8ec819a512ea385f26da8935b299cf68b6f9c"
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "live_results": [
+            800,
+            960,
+            1088,
+            1242,
+            1389,
+            1536,
+            1664,
+            1824,
+            1984,
+            2112,
+            2304,
+            2452,
+            2612,
+            2772,
+            2932,
+            3120,
+            3280,
+            3472,
+            3656,
+            3809,
+            4001,
+            4193,
+            4385,
+            4577,
+            4757,
+            4944,
+            5136
+          ],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 33009049,
+            "pl_call_ticks": 11053552,
+            "pl_core_ticks": 10820117,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8252.262010684402,
+            "pl_call_mean_us": 2763.38791986175,
+            "pl_core_mean_us": 2705.029171554154,
+            "call_speedup": 2.9862843183801915,
+            "core_speedup": 3.0507109119060356
+          },
+          "directory": "tmp\\cnn_stream_stop_web_01\\users\\board-check--722c186bc8493b25c22bf103\\sessions\\fe352f0e68d24325982db8d944cd26cc",
+          "files": {
+            "rx.log": "0ff325834c0891267e58f80bb11bf9e8ce54d0a2b8c083a05a5f307e08f97810",
+            "tx.bin": "aeabc9c6f7d420dd149126341f86e63df06905b23e05316e5665605fdb8a21ad",
+            "input_mv.csv": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result.json": "2880c9a1654b48568623e54b261cc46d62a0f524d5afbd326310d1dd0d94b6a0"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 887,
+              "prepare": 59221,
+              "classify": 133465
+            },
+            "classify_mean_us": 11122.083333333334,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "2880c9a1654b48568623e54b261cc46d62a0f524d5afbd326310d1dd0d94b6a0",
+            "tx_sha256": "aeabc9c6f7d420dd149126341f86e63df06905b23e05316e5665605fdb8a21ad",
+            "rx_sha256": "0ff325834c0891267e58f80bb11bf9e8ce54d0a2b8c083a05a5f307e08f97810",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ],
+      "no_reset_between_sessions": true,
+      "flash_written": false,
+      "scope": "真实HTTP接口及USB_UART；不代替浏览器人工验收或持续采样验证"
+    },
+    {
+      "case": "cnn_stream_final_web_01",
+      "passed": true,
+      "source_sha256": "f8ebf5613389f50cbec9a93f42bec5afedd08821cf82b7c7715581d9a33633e7",
+      "checks": [
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "live_results": [
+            832,
+            960,
+            1120,
+            1248,
+            1408,
+            1568,
+            1696,
+            1856,
+            2013
+          ],
+          "samples": 2073,
+          "counts": {
+            "N": 3,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 3,
+            "mismatches": 0,
+            "arm_ticks": 8247114,
+            "pl_call_ticks": 2763382,
+            "pl_core_ticks": 2705122,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8247.113760833701,
+            "pl_call_mean_us": 2763.3819198619244,
+            "pl_core_mean_us": 2705.1219215514643,
+            "call_speedup": 2.9844277772671313,
+            "core_speedup": 3.0487031638499116
+          },
+          "directory": "tmp\\cnn_stream_final_web_01\\users\\board-check--32ed515b6f5921a731ae9793\\sessions\\e6f24230430a4eff95b4b3c2dd455eb4",
+          "files": {
+            "rx.log": "5a28364dd9c558861968e2450fc0edd78c7614aaed41cc776b3a9ab6c47f4f6e",
+            "tx.bin": "b4d04c3fbf66d7708bbd16752c530515fbe82a248b2406c024ea0563f44cfe58",
+            "input_mv.csv": "e90a556fd8caadd6a76a12ae296bd7c4927316bbc304c60372a2503edc495276",
+            "result.json": "cccb0580a1a1787a5dba9684a9063ad955c4245b4e5c9b31bf484e4737fdeeba"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 2073,
+            "events": 4,
+            "valid": 3,
+            "classes_exact": true,
+            "max_probability_error": 1.4915713109076023e-10,
+            "compute_us": {
+              "input": 354,
+              "prepare": 21573,
+              "classify": 33251
+            },
+            "classify_mean_us": 11083.666666666666,
+            "counts": {
+              "N": 3,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "e90a556fd8caadd6a76a12ae296bd7c4927316bbc304c60372a2503edc495276",
+            "result_sha256": "cccb0580a1a1787a5dba9684a9063ad955c4245b4e5c9b31bf484e4737fdeeba",
+            "tx_sha256": "b4d04c3fbf66d7708bbd16752c530515fbe82a248b2406c024ea0563f44cfe58",
+            "rx_sha256": "5a28364dd9c558861968e2450fc0edd78c7614aaed41cc776b3a9ab6c47f4f6e",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "live_results": [],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 376646,
+            "pl_call_ticks": 197716,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 94.16149726931657,
+            "pl_call_mean_us": 49.428998566559045,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.904984927876348,
+            "core_speedup": 12.349048822205452
+          },
+          "directory": "tmp\\cnn_stream_final_web_01\\users\\board-check--32ed515b6f5921a731ae9793\\sessions\\91c8a38dac894b37bf146a1277dcadc7",
+          "files": {
+            "rx.log": "747ffa9467aef951dcbdf6a853a1163557d000b5e9701a080145085a6c0e3222",
+            "tx.bin": "529be1c8d205bef9948f134f887a1c7d1669d66b5bd30e61309405a7702ea9bb",
+            "input_mv.csv": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result.json": "04bbaeb3e4b5e767861cba403dd5ee1bd9b65f79f19fd6558c14b7411e2ff015"
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "live_results": [
+            704,
+            832,
+            992,
+            1120,
+            1280,
+            1408,
+            1568,
+            1728,
+            1878,
+            2038,
+            2182,
+            2342,
+            2502,
+            2661,
+            2821,
+            3013,
+            3158,
+            3350,
+            3510,
+            3702,
+            3885,
+            4045,
+            4237,
+            4429,
+            4621,
+            4813,
+            5001
+          ],
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 33008945,
+            "pl_call_ticks": 11053538,
+            "pl_core_ticks": 10820040,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8252.236010685156,
+            "pl_call_mean_us": 2763.3844198618517,
+            "pl_core_mean_us": 2705.009921554712,
+            "call_speedup": 2.9862786919446065,
+            "core_speedup": 3.050723010266136
+          },
+          "directory": "tmp\\cnn_stream_final_web_01\\users\\board-check--32ed515b6f5921a731ae9793\\sessions\\25ec6bcaaf6642af8a2cfdfd4b364358",
+          "files": {
+            "rx.log": "4d4448b52994f8f5dde2322353b1cedd6e82c908171235c1d6adc7a050de84f2",
+            "tx.bin": "27b177f04705eb388886cca3bf1a0daf5ad91b239bad51d26daad73b3f7eaa6e",
+            "input_mv.csv": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result.json": "f965ab0c0322ea6ee8b4f1d6cdd109a3bbca4f7dd15459c4fa03408be6d8eb7f"
+          },
+          "comparison": {
+            "passed": true,
+            "source": "actual board UART result versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 888,
+              "prepare": 59225,
+              "classify": 133467
+            },
+            "classify_mean_us": 11122.25,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "f965ab0c0322ea6ee8b4f1d6cdd109a3bbca4f7dd15459c4fa03408be6d8eb7f",
+            "tx_sha256": "27b177f04705eb388886cca3bf1a0daf5ad91b239bad51d26daad73b3f7eaa6e",
+            "rx_sha256": "4d4448b52994f8f5dde2322353b1cedd6e82c908171235c1d6adc7a050de84f2",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ],
+      "no_reset_between_sessions": true,
+      "flash_written": false,
+      "scope": "真实HTTP接口及USB_UART；不代替浏览器人工验收或持续采样验证"
+    }
+  ],
+  "build_manifest": {
+    "application": "cnn_batch",
+    "protocol": "ECG-DUAL-1",
+    "dual_protocol": true,
+    "model": {
+      "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+      "fold": 0,
+      "precision": "FP32",
+      "weights": 25482,
+      "offsets": {
+        "rr_mean": {
+          "offset": 0,
+          "shape": [
+            3
+          ]
+        },
+        "rr_std": {
+          "offset": 3,
+          "shape": [
+            3
+          ]
+        },
+        "wave.0.weight": {
+          "offset": 6,
+          "shape": [
+            16,
+            2,
+            7
+          ]
+        },
+        "wave.3.body.0.weight": {
+          "offset": 230,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.3.body.3.weight": {
+          "offset": 1510,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.0.weight": {
+          "offset": 2790,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.4.body.3.weight": {
+          "offset": 4070,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.0.weight": {
+          "offset": 5350,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "wave.5.body.3.weight": {
+          "offset": 6630,
+          "shape": [
+            16,
+            16,
+            5
+          ]
+        },
+        "rr.0.weight": {
+          "offset": 7910,
+          "shape": [
+            8,
+            3
+          ]
+        },
+        "rr.0.bias": {
+          "offset": 7934,
+          "shape": [
+            8
+          ]
+        },
+        "head.0.weight": {
+          "offset": 7942,
+          "shape": [
+            64,
+            269
+          ]
+        },
+        "head.0.bias": {
+          "offset": 25158,
+          "shape": [
+            64
+          ]
+        },
+        "head.3.weight": {
+          "offset": 25222,
+          "shape": [
+            4,
+            64
+          ]
+        },
+        "head.3.bias": {
+          "offset": 25478,
+          "shape": [
+            4
+          ]
+        }
+      },
+      "vectors": 12,
+      "torch_version": "2.15.0+cpu",
+      "fits": 0
+    },
+    "elf": "tmp/cnn_stream_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf",
+    "bit": "tmp/cnn_pl_build_01/cnn_pl.bit",
+    "init": "tmp/cnn_stream_vitis_01/ecg_platform/hw/sdt/ps7_init.tcl",
+    "files": {
+      "tmp/cnn_pl_build_01/cnn_pl.bit": {
+        "bytes": 4045773,
+        "sha256": "99a808b518a41357fc90ac91adeee96fac11fc22a915cdd9b749a5a163c55da9"
+      },
+      "tmp/cnn_pl_build_01/cnn_pl.xsa": {
+        "bytes": 889869,
+        "sha256": "b03a324fad5b18939d5ae4fbeeb523e4e28bd8f616a0571f275edb20d535b9e3"
+      },
+      "tmp/cnn_stream_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf": {
+        "bytes": 1550172,
+        "sha256": "bfa0f293d255a21379034b9e6d7d3b89beb7ad8208ffdf2f245fda5bdfa6b870"
+      },
+      "tmp/cnn_stream_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.map": {
+        "bytes": 414560,
+        "sha256": "2fa3898992f3190a58183219197e655ed29b2669450372d94a06baf398c00c35"
+      },
+      "tmp/cnn_stream_vitis_01/ecg_platform/zynq_fsbl/build/fsbl.elf": {
+        "bytes": 359452,
+        "sha256": "464ebb3c1be21321e38d1b1ae78b0c32dd3639122c5083a5dc5446d64b2fb511"
+      },
+      "tmp/cnn_stream_vitis_01/ecg_platform/hw/sdt/ps7_init.tcl": {
+        "bytes": 27602,
+        "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+      }
+    },
+    "sources": {
+      "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+      "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+      "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+      "src/ps/ecg_hgb/legacy.h": "90d25a61ba58981d46089126703340355d161ed9cc3662877e5871beef564798",
+      "src/ps/ecg_cnn/cnn.h": "c6164ea4e37f81338930fd5fa11a55c442d2db4f312f3f173d44d73ec4688e3a",
+      "src/ps/ecg_cnn/network.c": "121efdfaacd0d2c8080e2c5862000ed647a43dca62e866893a355787e5bd667c",
+      "tmp/cnn_stream_vitis_01_sources/cnn_features.c": "94ddbda1ea723cb0b7aa3c3836b7533a9f0a6adc5db92a565f4fcf9f79b8539e",
+      "src/ps/ecg_cnn/main.c": "20b220bb245156aec8cf2a87ec0e374cb34066e204b0ab1457d9d7e6fa5dbb09",
+      "src/ps/ecg_cnn/stream.h": "fc1469c0f84dbaecee8fe17045f6da0e08fa2bdfff524068c7eab03c1533cd0d",
+      "src/ps/ecg_cnn/stream.c": "0a63b7c1d5e57e893f5f436b5ea8ac861ef5004cb77dfee9f1fc5f1260b00811",
+      "src/ps/ecg_cnn/stream_uart.h": "e984e8b0ac24f94f5815267b2660573a6440955214d3fc9170dad89a5e5e8dcf",
+      "src/ps/ecg_cnn/pl_forward.c": "bf118a921df658ab1bfc0fd3e02292d704450904b533e5bdc126048756df9f06",
+      "src/ps/ecg_hgb/features.c": "3877247b12437a2204b8e7fac49772ba4501adb2ccc45bcaf9ce069fea5f77ef",
+      "src/ps/ecg_hgb/pl_tree.c": "67f89c3e7f33b235a26aa6e378892e8e199abf4a4c71087b8060055a985b8ed5",
+      "src/ps/ecg_hgb/pl_main.c": "b936011934efe3e85672f10ba7a768980235a24adc8ea630e433022bdcde4c45",
+      "tmp/cnn_stream_vitis_01_hgb_parameters/hgb_parameters.c": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29",
+      "tmp/hgb_pl_sim_02/hgb_pl_fixture.c": "a3bec61171eb9bc03e3e066ed90ffe678f716c223bc6ef552d032304e38ee17f",
+      "tmp/hgb_pl_sim_02/hgb_pl_fixture.h": "331cde5b7a317373925ba2816399ead62538fadb97d50f8a36c2cb2b1a9a23ff",
+      "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+      "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "tmp/cnn_hls_parameters_01/arm/cnn_weights.c": "ebfa9ef83973af75a6c4825562253d1c142f7b3444235cfb0fd5b6e91b0e6978",
+      "tmp/cnn_hls_parameters_01/arm/cnn_offsets.h": "3cce6af265388d0bc5a636201ae6ced798869a8bea4939626808bf480ea645fe",
+      "src/ps/ecg_cnn/features.c": "94ddbda1ea723cb0b7aa3c3836b7533a9f0a6adc5db92a565f4fcf9f79b8539e",
+      "src/ps/ecg_hgb/legacy.c": "72922ab5a0adbd48b4339a9c2ba7f3d54a87e82f0bcb0425da82bc57c2c0abe0",
+      "tmp/cnn_stream_vitis_01_legacy/generated/link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+      "tmp/cnn_stream_vitis_01_legacy/generated/runtime500_bridge.c": "a5a736dcdc3c67b7c90ecb8e8614b935a016241ce2f14686aa4eceb12c3bcda1",
+      "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "src/ps/ecg_runtime/link.h": "03cba14ee4f25c9538a05617926d67c6fcfdbd565d14d4a455da710567859bba",
+      "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "src/ps/ecg_runtime/resample360.h": "cc933fe63074a6082503e6c8fc4abcfbc0b1e9b87bcb1cc3cbb30a201e900b0d",
+      "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "build/generate_rate500_runtime.py": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5",
+      "build/build_hgb_legacy.py": "e04c2f4bae4f5ca718d1478fd5959ffd68e563d3aa909856594ae0aef5177697"
+    },
+    "legacy_commands": [
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb\\legacy.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\legacy0.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\generated\\link500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\legacy1.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\generated\\runtime500_bridge.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\legacy2.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500\\rate500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\legacy3.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500\\pipeline500.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\legacy4.o"
+      ],
+      [
+        "E:\\Tool\\FPGA\\2026.1\\Vitis\\gnu\\aarch32\\nt\\gcc-arm-none-eabi\\bin\\arm-none-eabi-gcc.exe",
+        "-O2",
+        "-mcpu=cortex-a9",
+        "-mfpu=vfpv3",
+        "-mfloat-abi=hard",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-fstack-usage",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_hgb",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_runtime",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_rate500",
+        "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification",
+        "-c",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\ps\\ecg_classification\\classification.c",
+        "-o",
+        "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_stream_vitis_01_legacy\\legacy5.o"
+      ]
+    ],
+    "stack_bytes": 262144,
+    "scope": "H27 FP32 full PL CNN with ARM comparison"
+  },
+  "load_receipt": {
+    "started": true,
+    "execution_verified": false,
+    "flash_written": false,
+    "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+    "manifest_sha256": "3ed181895a30df6742f691d738951c47045023cc45eb8428d33d3140230ff39a",
+    "cable": "210512180081",
+    "port": "COM4",
+    "device_id": "VID_1A86&PID_7523\\7&27c58f36&0&2",
+    "scope": "temporary JTAG start; UART inference separately verified"
+  },
+  "current_sources": {
+    "src/ps/ecg_cnn/stream.c": "0a63b7c1d5e57e893f5f436b5ea8ac861ef5004cb77dfee9f1fc5f1260b00811",
+    "src/ps/ecg_cnn/stream.h": "fc1469c0f84dbaecee8fe17045f6da0e08fa2bdfff524068c7eab03c1533cd0d",
+    "src/ps/ecg_cnn/stream_uart.h": "e984e8b0ac24f94f5815267b2660573a6440955214d3fc9170dad89a5e5e8dcf",
+    "src/pc/ecg_cnn_stream.py": "8405cc2faccf2e74364fe29aa7884d42d0535deb2b51ba9a0f3ee8c2b63a4546",
+    "src/pc/ecg_cnn_live.py": "3e04e4b4bb1e99c56d3cb233ab9554d079d79eab838e9eebe19fd2cd4c93375f",
+    "src/pc/ecg_cnn.py": "d13c27e24309de1004995aca8bc8840237a4ab2bea203ea1ff41959e327a1f1a",
+    "src/pc/ecg_hgb.py": "2555766699e9eeaeaa0f41f2ed35a2045954d58914a1d202fd88ee19fd236289",
+    "src/pc/ecg_web_service.py": "692fcd1b6c6799002d41faa7c4f925a39a67a20c22cd438cd8bb0699f6414e94",
+    "src/web/business_logic/app/api/live.py": "b78a48ba3cc44d4b01a80d0173b2f1385123e833274359ef0ce9797614225384",
+    "src/web/frontend/src/pages/Live.tsx": "06e5b510c4a3bb5d30f71d3cba1a25bb2cb93f713fec9761d5a9bfd66ea34931",
+    "board/check_cnn_stream.py": "799c60af04f95e6706ec2538182d72c86001c7725b66bf7354fb53729ba09777",
+    "board/check_cnn_web.py": "5c9ff3e717474c3beeca29170adbc2f8324fbdfcc27147add64818aeb49f6434",
+    "sim/check_cnn_arm.py": "7e9bc8d893955321ec21c9b4a7c197e9028cd1febcdaef650f173be4506d3972",
+    "sim/test_cnn_stream_protocol.py": "35e46dd95c940d5e10adf40b31dbeee93c3d1e733b40c20d859b2058ee5be47c",
+    "sim/web/test_cnn_board.py": "3af002bd0141f01288926e8a2b17af1f53a44a15068780d8919ce61a1dda7fcf"
+  },
+  "checks": {
+    "web_tests": 103,
+    "protocol_tests": 21,
+    "frontend_build": true
+  },
+  "shared_hardware": {
+    "bitstream_unchanged": true,
+    "previous_evidence": "docs/evidence/cnn_pl_20261102/summary.json",
+    "bit_sha256": "99a808b518a41357fc90ac91adeee96fac11fc22a915cdd9b749a5a163c55da9"
+  },
+  "timing_scope": "same input and FP32 network, sequential ARM then PL per beat; cumulative speedup=sum ARM ticks/sum PL call ticks; no CPU estimate; window wait and PC receive delay reported separately",
+  "flash_written": false,
+  "latest_replaced": false,
+  "training_performed": false,
+  "accuracy_measured": false,
+  "limitations": [
+    "actual ADS data is paced CSV replay, not a fresh concurrent wireless capture",
+    "maximum 1 hour is configured, not tested for 1 hour",
+    "PC CPU not benchmarked",
+    "HGB remains batch",
+    "no physical disconnect recovery validation",
+    "no INT8, clinical validation or model fusion",
+    "no browser visual acceptance"
+  ]
+}

@@ -16,9 +16,9 @@ export function sourceTrace(samples: SourceSample[], kind: string, channel: stri
   const fs = kind === 'standard360' ? 360 : 500;
   const processed = trace.startsWith('baseline_') || trace.startsWith('display_');
   const unit = standard ? 'int16 / 4096单位每mV' : processed
-    ? `${trace.startsWith('baseline_') ? '基线校正' : 'PC节律显示滤波'} · ${trace.endsWith('_mv') ? '标称mV' : 'ADC码'}（未标定）` : trace === 'mv'
-    ? 'CH2标称mV（2.42V / 增益6，未标定）' : trace === 'vendor'
-      ? '厂商滤波值（单位未确认）' : '有符号24位ADC码（未标定）';
+    ? (trace.endsWith('_mv') ? 'mV' : 'ADC码') : trace === 'mv'
+    ? 'mV' : trace === 'vendor'
+      ? '设备滤波值（单位未确认）' : '有符号24位ADC码（未标定）';
   const points: PlotPoint[] = [];
   if (channel === 'resp' && trace === 'resp') {
     let previous: number | null = null;

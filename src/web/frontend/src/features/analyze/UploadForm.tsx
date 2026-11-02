@@ -63,7 +63,7 @@ export default function UploadForm({onSubmit, onReplay, busy, progress, error}: 
       <input type="number" disabled={busy} min={50} max={2000} value={rate} required
              onChange={event => setRate(Number(event.target.value))} />
     </label>
-    <small className="hint">单列CSV用于离线分析；实时Zynq送样请使用“实时与板卡”页，选择匹配的标准或厂商格式。</small>
+    <small className="hint">单列CSV用于离线分析；Zynq送样请使用“实时”页的CSV板卡处理入口。</small>
     {progress > 0 && progress < 100 && <div className="progress" role="progressbar" aria-valuenow={progress}
           aria-valuemin={0} aria-valuemax={100}><span style={{width: `${progress}%`}} /></div>}
     {(localError || error) && <p className="notice notice-error" role="alert">{localError || error}</p>}
