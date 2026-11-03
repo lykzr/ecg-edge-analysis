@@ -115,6 +115,7 @@ test('来源原码、电压与厂商滤波分开，电压缺失不猜测',()=>{
 });
 
 test('统一CSV入口区分ADC原码与标准采样格式，不推测单位或采样率',()=>{
+  assert.equal(identifyCsv('index,time_s,resp_raw,ecg_raw,resp_code24,ecg_code24,resp_filtered,ecg_filtered,resp_display_code,ecg_baseline_code,ecg_baseline_mv,ecg_display_code,ecg_display_mv\n0,0,8388608,8388608,0,0,,,0,0,0,0,0'),'bridge_csv');
   assert.equal(identifyCsv('\uFEFFtimestamp(s),resp_raw,ecg_raw,resp_filtered,ecg_filtered\r\n0,8388608,8388608,0,0'),'bridge_csv');
   assert.equal(identifyCsv('index,sample,fs,scale\n0,-3,500,4096\n'),'standard500');
   assert.equal(identifyCsv('index,sample,fs,scale\n0,-3,360,4096\n'),'standard360');

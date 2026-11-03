@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "validated_on": "2026-11-04",
+  "platform": "Windows",
+  "python_version": "3.13.15",
+  "self_test": {
+    "passed": true,
+    "tests": 25,
+    "command": "python -B -m unittest discover -s skill/tests -p test_*.py",
+    "copied_package": true,
+    "independent_cwd": true,
+    "path_with_spaces": true,
+    "dependencies": "Python standard library only",
+    "default_windows_encoding": true
+  },
+  "real_reports": {
+    "passed": false,
+    "errors": [
+      "约束检查需核查：no_output_delay=1"
+    ],
+    "identities": [
+      {
+        "tool": "Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026",
+        "design": "ecg_system_wrapper",
+        "device": "xc7z020clg400-2",
+        "state": "Routed"
+      },
+      {
+        "tool": "Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026",
+        "design": "ecg_system_wrapper",
+        "device": "7z020-clg400",
+        "state": "Routed"
+      }
+    ],
+    "resources": {
+      "lut": {
+        "used": 28626.0,
+        "available": 53200.0,
+        "percent": 53.80827067669173
+      },
+      "ff": {
+        "used": 20458.0,
+        "available": 106400.0,
+        "percent": 19.227443609022558
+      },
+      "bram36": {
+        "used": 122.5,
+        "available": 140.0,
+        "percent": 87.5
+      },
+      "dsp": {
+        "used": 105.0,
+        "available": 220.0,
+        "percent": 47.72727272727273
+      }
+    },
+    "timing": {
+      "setup": {
+        "worst_ns": 0.102,
+        "total_negative_ns": 0.0,
+        "failing": 0,
+        "endpoints": 71728
+      },
+      "hold": {
+        "worst_ns": 0.036,
+        "total_negative_ns": 0.0,
+        "failing": 0,
+        "endpoints": 71728
+      },
+      "pulse": {
+        "worst_ns": 3.87,
+        "total_negative_ns": 0.0,
+        "failing": 0,
+        "endpoints": 24685
+      }
+    },
+    "checks": {
+      "no_clock": 0,
+      "constant_clock": 0,
+      "pulse_width_clock": 0,
+      "unconstrained_internal_endpoints": 0,
+      "no_input_delay": 0,
+      "no_output_delay": 1,
+      "multiple_clock": 0,
+      "generated_clocks": 0,
+      "loops": 0,
+      "partial_input_delay": 0,
+      "partial_output_delay": 0,
+      "latch_loops": 0
+    },
+    "constraints_clean": false,
+    "reviewed_checks": {},
+    "review_note": "",
+    "clocks": {
+      "clk_fpga_0": {
+        "period_ns": 10.0,
+        "frequency_mhz": 100.0
+      }
+    },
+    "budget": {
+      "max_percent": {
+        "lut": 80,
+        "ff": 80,
+        "bram36": 90,
+        "dsp": 80
+      }
+    },
+    "inputs": {
+      "utilization": {
+        "name": "utilization.rpt",
+        "sha256": "ec9412b9c60c72aa04d52fb106481c0f8b53c1c312a304b107ef5d666a22c6d3",
+        "bytes": 12436
+      },
+      "timing": {
+        "name": "timing.rpt",
+        "sha256": "498c70ac924b4bd9b86d81862e5b6b4c3fd91493d3650a04304706f6094aa013",
+        "bytes": 22165
+      }
+    },
+    "scope": "report parsing only; no DRC, synthesis, hardware access or runtime load measurement"
+  },
+  "stream_timing_recalculation": {
+    "passed": true,
+    "tasks": 72,
+    "mismatches": 0,
+    "reference_total_ticks": 184804276,
+    "accelerator_total_ticks": 20489325,
+    "reference_total_ms": 554.4128119220284,
+    "accelerator_total_ms": 61.46797321742878,
+    "reference_mean_ms": 7.700177943361505,
+    "accelerator_mean_ms": 0.8537218502420664,
+    "speedup": 9.01953949190615,
+    "contract": {
+      "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+      "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+      "precision": "W8A8",
+      "reference_label": "zynq_arm",
+      "accelerator_label": "zynq_pl",
+      "reference_timer_hz": 333333343,
+      "accelerator_timer_hz": 333333343,
+      "scope": "full_cnn_network"
+    },
+    "paired_sha256": "329a3ca694144ed1872d810d799a813edb7598e245ae3d9826768a7e4717e7ba",
+    "metadata_sha256": "5520b665aaa9e654e460427d766a083993465363275175a174bc241f1f815e19",
+    "scope": "supplied paired timings only; no inference or independent correctness verification"
+  },
+  "batch_aggregate_recalculation": {
+    "tasks": 72,
+    "reference_total_ticks": 184669606,
+    "accelerator_total_ticks": 20485342,
+    "speedup": 9.01471920751921,
+    "scope": "existing aggregate ticks; no per-beat batch timings asserted"
+  },
+  "scripts": {
+    "skill/acceleration-review/scripts/summarize_pairs.py": {
+      "bytes": 3681,
+      "sha256": "d54e81dcda47d3f5b59f4930527818ae05428b25c6d6bbd17b5a5c87c3bad4fc"
+    },
+    "skill/artifact-check/scripts/check_files.py": {
+      "bytes": 2134,
+      "sha256": "218507249755937e4ccd22a7e078b5cd0393d7aa399b2bf5f9340b1cd7e6411b"
+    },
+    "skill/tests/test_portable.py": {
+      "bytes": 10905,
+      "sha256": "f0282dcb0a8713ab206b18c8cc0c9189186659919f81ae802b2a62129960b5c2"
+    },
+    "skill/trace-check/scripts/compare_csv.py": {
+      "bytes": 2909,
+      "sha256": "8a52cdb478f168b8ce43e055c77cb26c2c104ed1bb03ebeb539b43bfa599e6e6"
+    },
+    "skill/vivado-report-check/scripts/check_reports.py": {
+      "bytes": 8744,
+      "sha256": "7abff6e2cd79d79029da6ad96f1f57ddf297bc625417ac7814ad2c280d982ecb"
+    }
+  },
+  "source_evidence": {
+    "docs/evidence/cnn_int8_fast_20261103/utilization.rpt": {
+      "bytes": 12436,
+      "sha256": "ec9412b9c60c72aa04d52fb106481c0f8b53c1c312a304b107ef5d666a22c6d3"
+    },
+    "docs/evidence/cnn_int8_fast_20261103/timing.rpt": {
+      "bytes": 22165,
+      "sha256": "498c70ac924b4bd9b86d81862e5b6b4c3fd91493d3650a04304706f6094aa013"
+    },
+    "docs/evidence/cnn_int8_fast_20261103/int8_batch_result.json": {
+      "bytes": 24101,
+      "sha256": "d89ff0683e213aac58499806e9e58d8ebe630ea4ca0560a8af452b50a6dda79a"
+    },
+    "docs/evidence/cnn_int8_fast_20261103/int8_batch_comparison.json": {
+      "bytes": 885,
+      "sha256": "e8100187a0bc1d43887f14b097ce910c9315b7c810bd3627c3daa36e3e707719"
+    },
+    "docs/evidence/cnn_int8_fast_20261103/int8_stream_result.json": {
+      "bytes": 49800,
+      "sha256": "8081d4a3c7fdc7d33e3075cbe4682ddfb429e0f3d36366e21e25fcae0d5d72c9"
+    },
+    "docs/evidence/cnn_int8_fast_20261103/int8_stream_comparison.json": {
+      "bytes": 885,
+      "sha256": "c3f3e3b22621ed05e3239e74eb30fb2e5ae3a227d939d9bb964a4ec313ff4ed7"
+    },
+    "docs/evidence/cnn_int8_fast_20261103/summary.json": {
+      "bytes": 156795,
+      "sha256": "ed616369ad890821bc9ba5e0546fc1a1266d2e12b01e3623b63c4716dce2869f"
+    }
+  },
+  "limitations": [
+    "No new board test, training, synthesis, implementation, Flash operation or serial access.",
+    "No PYNQ, Linux/macOS, second-board or cross-version validation.",
+    "export_reports.tcl is a template and was not executed in Vivado this turn.",
+    "Existing report has one no_output_delay warning; strict check rejects it; no review override used.",
+    "Counter summary trusts supplied identities, timing scope and output-match declarations.",
+    "Synthetic board input does not establish clinical classification accuracy."
+  ],
+  "frontmatter_validation": {
+    "passed": true,
+    "method": "standard-library validation of exact two-scalar frontmatter used by these five skills",
+    "skills": [
+      "skill/acceleration-review/SKILL.md",
+      "skill/artifact-check/SKILL.md",
+      "skill/download-diagnose/SKILL.md",
+      "skill/trace-check/SKILL.md",
+      "skill/vivado-report-check/SKILL.md"
+    ],
+    "official_quick_validate": "not completed: PyYAML missing in available Python environments; no dependencies installed"
+  },
+  "package_links": {
+    "passed": true,
+    "checked": 13
+  },
+  "repository_validation": {
+    "checkout_passed": true,
+    "required_files": 737,
+    "release_strict_passed": true,
+    "candidate_paths_preview_passed": true,
+    "actual_git_index_passed": false,
+    "reason": "New skill files are not staged; this request does not authorize a Git commit or push."
+  }
+}

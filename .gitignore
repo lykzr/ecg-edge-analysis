@@ -454,3 +454,4 @@ logs/
 !/board/cnn_fast_20261103/build_manifest_original.json
 
 !/report/competition_brief.md
+!/report/video_script.md

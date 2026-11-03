@@ -1,0 +1,10 @@
+{
+  "input_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "model_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "precision": "fp32",
+  "reference_label": "synthetic_reference",
+  "accelerator_label": "synthetic_accelerator",
+  "reference_timer_hz": 1000,
+  "accelerator_timer_hz": 1000,
+  "scope": "synthetic_example_not_hardware"
+}

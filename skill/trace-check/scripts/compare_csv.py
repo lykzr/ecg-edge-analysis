@@ -53,4 +53,4 @@ if __name__=='__main__':
     args=p.parse_args()
     try:result=compare(args.reference,args.candidate,args.key,args.atol,args.rtol)
     except (OSError,ValueError,TypeError,OverflowError,csv.Error) as error:result=dict(passed=False,error=str(error))
-    print(json.dumps(result,ensure_ascii=False));sys.exit(0 if result['passed'] else 1)
+    print(json.dumps(result,ensure_ascii=True));sys.exit(0 if result['passed'] else 1)

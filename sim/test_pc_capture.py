@@ -13,7 +13,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'src'))
 sys.path.insert(0, str(ROOT/'src/pc'))
-from ecg_capture_core import CaptureSample, CaptureWorker, VendorCsv, InitialFrames, FIELDS
+from ecg_capture_core import CaptureSample, CaptureWorker, VendorCsv, InitialFrames, FIELDS, CAPTURE_FIELDS
 from ui.capture import trace_geometry, CapturePanel
 from ecg_ports import candidate_port
 
@@ -88,6 +88,30 @@ class CaptureTests(unittest.TestCase):
             self.assertIsNotNone(w.snapshot()[0]['error'])
             self.assertTrue((w.directory/'source.csv').stat().st_size)
             self.assertTrue((w.directory/'summary.json').exists())
+
+    def test_saved_capture_roundtrip_preserves_raw_and_missing_filter(self):
+        first = self.run_serial([frame(i) for i in range(20)], normalization='nominal500')
+        replay = self.run_csv(first.directory/'samples.csv', normalization='nominal500')
+        info, values = replay.snapshot()
+        self.assertIsNone(info['error'])
+        self.assertEqual(info['total'], 80)
+        self.assertEqual(values, first.snapshot()[1])
+        self.assertTrue(all(v.ecg_filtered is None and v.resp_filtered is None for v in values))
+        self.assertEqual((replay.directory/'normalized.csv').read_bytes(),
+                         (first.directory/'normalized.csv').read_bytes())
+        self.assertEqual((replay.directory/'source.csv').read_bytes(),
+                         (first.directory/'samples.csv').read_bytes())
+
+    def test_saved_capture_rejects_gap_bad_codes_and_nonfinite_filter(self):
+        for row in [
+            [1, 0, 8388608, 8388608, 0, 0, '', '', 0, 0, 0, 0, 0],
+            [0, 0, 8388608, 8388608, 0, 1, '', '', 0, 0, 0, 0, 0],
+            [0, 0, 8388608, 8388608, 0, 0, '', 'nan', 0, 0, 0, 0, 0],
+        ]:
+            path = self.destination('bad_saved').with_suffix('.csv')
+            with path.open('w', encoding='utf-8', newline='') as stream:
+                writer = csv.writer(stream); writer.writerow(CAPTURE_FIELDS); writer.writerow(row)
+            self.assertIsNotNone(self.run_csv(path).snapshot()[0]['error'])
 
     def test_overlong_or_malformed_line_is_rejected(self):
         for line in ['x'*4097, '"unclosed']:

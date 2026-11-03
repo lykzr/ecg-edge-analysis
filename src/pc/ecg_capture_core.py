@@ -18,6 +18,9 @@ from ecg_respiration import RespirationFilter
 from ecg_display import EcgDisplayFilter
 
 FIELDS = ['timestamp(s)', 'resp_raw', 'ecg_raw', 'resp_filtered', 'ecg_filtered']
+CAPTURE_FIELDS = ['index', 'time_s', 'resp_raw', 'ecg_raw', 'resp_code24',
+                  'ecg_code24', 'resp_filtered', 'ecg_filtered', 'resp_display_code',
+                  'ecg_baseline_code', 'ecg_baseline_mv', 'ecg_display_code', 'ecg_display_mv']
 RATE = 500
 
 
@@ -41,7 +44,7 @@ class CaptureSample:
 
 
 class VendorCsv:
-    """严格读取五列RawData，时间连续性仅代表文件；逐行保留原始字节。"""
+    """读取五列RawData或本程序的采集记录；仅以原始ADC重新处理。"""
     def __init__(self, path, retain=lambda data: None):
         self.path = Path(path)
         self.stream = self.path.open('rb')
@@ -51,8 +54,10 @@ class VendorCsv:
         self.digest = hashlib.sha256()
         self.eof = False
         try:
-            if self._row() != FIELDS:
-                raise ValueError('须选择五列RawData波形CSV；HeatData参数摘要不是波形')
+            self.fields = self._row()
+            self.saved_capture = self.fields == CAPTURE_FIELDS
+            if self.fields != FIELDS and not self.saved_capture:
+                raise ValueError('须选择五列RawData或本程序保存的samples.csv；HeatData参数摘要不是波形')
         except BaseException:
             self.close()
             raise
@@ -79,14 +84,23 @@ class VendorCsv:
             if not self.index:
                 raise ValueError('CSV没有波形数据')
             return None
-        if len(row) != 5:
-            raise ValueError(f'CSV第{self.index + 2}行须有五列')
+        if len(row) != len(self.fields):
+            raise ValueError(f'CSV第{self.index + 2}行列数与表头不符')
         try:
-            t, resp_f, ecg_f = float(row[0]), float(row[3]), float(row[4])
-            resp, ecg = int(row[1]), int(row[2])
+            if self.saved_capture:
+                if row[0] != str(self.index):
+                    raise ValueError('采集序号必须从0连续')
+                t, resp, ecg = float(row[1]), int(row[2]), int(row[3])
+                if int(row[4]) != resp - 8388608 or int(row[5]) != ecg - 8388608:
+                    raise ValueError('采集原码与有符号计数不一致')
+                # 无厂商滤波时保留缺失；网页显示滤波重新计算，不替代模型原始输入。
+                resp_f, ecg_f = (float(v) if v else None for v in row[6:8])
+            else:
+                t, resp_f, ecg_f = float(row[0]), float(row[3]), float(row[4])
+                resp, ecg = int(row[1]), int(row[2])
         except ValueError as error:
             raise ValueError(f'CSV第{self.index + 2}行数值错误') from error
-        if not all(math.isfinite(v) for v in (t, resp_f, ecg_f)) or t < 0:
+        if not all(math.isfinite(v) for v in (t, resp_f, ecg_f) if v is not None) or t < 0:
             raise ValueError('CSV存在非有限数值或负时间')
         if not 0 <= resp <= 0xFFFFFF or not 0 <= ecg <= 0xFFFFFF:
             raise ValueError('CSV原始列须为24位偏移码')
@@ -160,9 +174,7 @@ class CaptureRecorder:
         try:
             for n in ('source.csv', 'capture.bin', 'samples.csv', 'normalized.csv', 'nominal.csv'):
                 self.files[n] = (self.directory / n).open('xb')
-            self.row('samples.csv', ['index', 'time_s', 'resp_raw', 'ecg_raw', 'resp_code24',
-                                    'ecg_code24', 'resp_filtered', 'ecg_filtered', 'resp_display_code',
-                                    'ecg_baseline_code', 'ecg_baseline_mv', 'ecg_display_code', 'ecg_display_mv'])
+            self.row('samples.csv', CAPTURE_FIELDS)
             self.row('normalized.csv', ['index', 'sample'])
             self.row('nominal.csv', ['index', 'ecg_code24', 'ecg_nominal_mv', 'conditioned_mv', 'sample_int16', 'clipped'])
         except BaseException:

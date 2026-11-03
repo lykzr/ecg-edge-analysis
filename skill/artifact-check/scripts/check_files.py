@@ -40,5 +40,5 @@ if __name__=='__main__':
     args=p.parse_args()
     try:result=check(args.root,args.manifest)
     except (OSError,ValueError,KeyError,TypeError) as error:
-        print(json.dumps(dict(passed=False,error=str(error)),ensure_ascii=False));sys.exit(1)
-    print(json.dumps(result,ensure_ascii=False))
+        print(json.dumps(dict(passed=False,error=str(error)),ensure_ascii=True));sys.exit(1)
+    print(json.dumps(result,ensure_ascii=True))

@@ -26,7 +26,7 @@ python scripts/compare_csv.py --reference golden.csv --candidate actual.csv --ke
 
 ## 效果与来源
 
-原ECG逐周期对照覆盖有效拍、复位、负数右移与状态更新顺序，项目模板为`sim/check_ecg_reference.py`和`sim/tb_ecg_reference.sv`。它是原检测器验证，不是当前ARM研究26准确率。通用CSV脚本另验证整数一致、错误周期、单字段差异、容差、行数/表头/非有限值拒绝；记录在仓库`docs/records/skill_20261025.md`，无需依赖原工程即可使用脚本。没有宣称新脚本重新跑过所有ECG RTL/XSim。
+原ECG逐周期对照覆盖有效拍、复位、负数右移与状态更新顺序，项目模板为`sim/check_ecg_reference.py`和`sim/tb_ecg_reference.sv`。它是原检测器验证，不是当前ARM研究26准确率。通用CSV脚本另验证整数一致、错误周期、单字段差异、容差、行数/表头/非有限值拒绝；本轮用例见仓库 `skill/tests/test_portable.py`、结果见 `skill/validation.json`，无需依赖原工程即可使用脚本。没有宣称新脚本重新跑过所有ECG RTL/XSim。
 
 ## 失效条件
 

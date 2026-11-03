@@ -28,7 +28,7 @@ python scripts/check_files.py --root <文件根目录> --manifest <清单JSON>
 
 ## 效果与失败来源
 
-本项目最初从工作区复制通过，Git索引副本却因自动换行改变源码/证据/模型记录而失败。恢复原字节并固定属性后，真实Git克隆的发布与冻结检查通过。具体旧案例见仓库`docs/records/qspi_20261025.md`、`data/results/handoff_20261025.json`；新通用脚本的成功/篡改/缺失/路径逃逸用例见`sim/test_skills.py`及`docs/records/skill_20261025.md`。这些案例路径只用于追溯，独立复制此技能无需它们。
+本项目最初从工作区复制通过，Git索引副本却因自动换行改变源码/证据/模型记录而失败。恢复原字节并固定属性后，真实Git克隆的发布与冻结检查通过。历史过程已提炼为本段，不依赖未随包交付的本地记录。当前仓库可查 `releases/latest/manifest.json`、`sim/check_system_release.py` 和 `.gitattributes`。本轮独立脚本成功/篡改/缺失/路径逃逸测试见 `skill/tests/test_portable.py`，包级结果见 `skill/validation.json`；这些仓库路径是来源索引，独立复制本子目录即可运行。
 
 ## 失效条件
 

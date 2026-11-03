@@ -250,10 +250,10 @@ source {<仓库绝对路径>/board/cnn_fast_20261103/open_routed.tcl}
 | 创新性与应用价值 | 30 | 连续状态管理、同拍软硬件核对、可观察计时、三核共存与资源取舍 | 补公开相关工作比较与引用；不要宣称首创算法或临床设备 |
 | 性能与资源优化 | 20 | 第 4/5 节优化前后表、原始时序资源、同输入计时 | 实录匹配镜像的 Vivado 页面，明确 AXI 计时范围 |
 | 功能正确性与完整性 | 20 | 仿真→参考→板测→网页切换证据 | 增加真实接收器现场演示；标明未完成长时/断流异常恢复/分类验收 |
-| 大模型协作与技能包 | 15 | 已有 `skill/` 三项通用流程、失败分析素材 | **导出真实提示词/回答/纠错轨迹并脱敏**，不要伪造历史对话 |
+| 大模型协作与技能包 | 15 | 已有 `skill/` 五项通用流程与独立测试、失败分析素材 | **导出真实提示词/回答/纠错轨迹并脱敏**，不要伪造历史对话 |
 | 文档与可复现性 | 15 | 源码、参数、依赖、匹配镜像、DCP、构建/加载/校验脚本 | **队友异机全新克隆验收**；保存环境版本、运行结果及差异 |
 
-已有[技能包说明](../skill/README.md)包括产物 SHA/大小校验、冻结容差轨迹比对、下载失败分层诊断，均有适用范围/使用与边界。Windows 下先设置 `$env:PYTHONUTF8='1'`，再执行 `python -B -m unittest discover -s sim -p test_skills.py`，避免子进程中文 JSON 被默认 GBK 编码，测试端却按 UTF-8 读取。它们不是 PYNQ Overlay/DMA Skill；未经 PYNQ 实测，不主张 PYNQ 专项加分。
+已有[技能包说明](../skill/README.md)包括文件 SHA/大小校验、冻结容差轨迹比对、下载分层诊断、Vivado 资源/时序核查、公平计时与优化评估。复制 `skill/` 后运行 `python -B -m unittest discover -s tests -p "test_*.py"`；原仓库兼容入口为 `sim/test_skills.py`。2026-11-04 扩展版采用 ASCII 转义 JSON，已修复默认 GBK 解码问题，无需额外设置 PYTHONUTF8。真实报告仍有 1 项输出延迟未约束告警，工具默认阻断；验证范围见 [validation.json](../skill/validation.json)。这些是离线通用工具，未实测 PYNQ，不主张 PYNQ 专项加分；提示词模板不替代原始对话。
 
 目录映射：指南 `src/` 对应仓库 `src/`，`sim/` 对应 `sim/` 和 `docs/evidence/`，`hardware/` 对应 `board/`、`vivado/`，`testdata/` 对应 `data/`、`model/` 的公开/合成输入和参考，`docs/` 设计报告对应 `report/`。文件名保持英文，正文中文；仓库既有 `README.md`、`AGENTS.md`、`SKILL.md` 等约定文件不为整理而批量改名。提交前应按比赛平台对大小写的最终解释复核。
 
