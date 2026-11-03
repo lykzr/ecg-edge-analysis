@@ -1,0 +1,22 @@
+{
+  "version": "H27-DYNAMIC-W8A8-v1",
+  "fold": 0,
+  "source_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+  "precision": "W8A8-INT32-MAC-FP32-glue",
+  "calibration": "none: per-input dynamic power-of-two scales",
+  "weight_scale": "per output channel",
+  "rounding": "nearest ties away from zero",
+  "range": [
+    -127,
+    127
+  ],
+  "accumulator": "int32",
+  "max_accumulator_bound": 4338701,
+  "weight_bytes": 25400,
+  "training": false,
+  "test_loaded": false,
+  "golden_class_agreement": 1.0,
+  "golden_max_logit_error": 0.5084724426269531,
+  "header_sha256": "6df82bba151695c0bc7f55b099fc72027408c8f16fcd397faafbf71138b63ef2",
+  "qualified": false
+}

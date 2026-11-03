@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "hardware": false,
+  "training": false,
+  "patient_data_loaded": false,
+  "quality_qualified": false,
+  "cases": [
+    {
+      "name": "golden",
+      "beats": 12,
+      "integer_c_matches_python_exact": true,
+      "fp32_class_agreement": 1.0,
+      "max_logit_error": 0.5084724426269531
+    },
+    {
+      "name": "random",
+      "beats": 200,
+      "integer_c_matches_python_exact": true,
+      "fp32_class_agreement": 0.995,
+      "max_logit_error": 0.8470120429992676
+    },
+    {
+      "name": "zero",
+      "beats": 1,
+      "integer_c_matches_python_exact": true,
+      "fp32_class_agreement": 1.0,
+      "max_logit_error": 0.028346508741378784
+    },
+    {
+      "name": "constant",
+      "beats": 1,
+      "integer_c_matches_python_exact": true,
+      "fp32_class_agreement": 1.0,
+      "max_logit_error": 0.10496187210083008
+    }
+  ],
+  "precision": "W8A8 INT32 MAC; FP32 residual/scaling/bias",
+  "commands": [
+    [
+      "E:/Tool/FPGA/2026.1/tps/mingw/10.0.0/win64.o/nt/bin/g++.exe",
+      "-shared",
+      "-O2",
+      "-ffp-contract=off",
+      "-Wno-unknown-pragmas",
+      "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_int8_parameters_01",
+      "-IE:\\Tool\\FPGA\\ecg-edge-analysis-review\\src\\hls\\ecg_cnn_int8",
+      "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_int8_host_01\\bridge.cpp",
+      "-o",
+      "E:\\Tool\\FPGA\\ecg-edge-analysis-review\\tmp\\cnn_int8_host_01\\int8.dll"
+    ]
+  ],
+  "weights_sha256": "6df82bba151695c0bc7f55b099fc72027408c8f16fcd397faafbf71138b63ef2"
+}

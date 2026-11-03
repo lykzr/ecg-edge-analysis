@@ -1,2 +1,6 @@
 # 本工程清单使用原始字节SHA256；克隆不得自动转换换行或工具产物。
 * -text
+
+# 交接封印保存原字节；工具生成的镜像/收据/参数作为产物，不做文本差异。
+/board/cnn_demo_20261103/fp32/* -diff
+/board/cnn_demo_20261103/int8_candidate/* -diff

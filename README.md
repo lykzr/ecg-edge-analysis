@@ -57,6 +57,6 @@ python -m venv tmp/web_env
 
 打开启动终端显示的本机地址，注册本地账号，进入“检测与加速”。启动、接线、回放、重建和故障处理统一见[使用教程](docs/download_guide.md)；报文及量纲见[接口协议](docs/protocols.md)；设计、证据及缺项见[当前实现与缺项](report/report.md)。自有许可见 [LICENSE](LICENSE)，第三方及网页来源的分发边界见 [third_party.md](third_party.md) 与[许可说明](docs/licenses.md)。
 
-本工程直接通过 Git 仓库交付，不生成提交副本或压缩包。tmp/、本地资料、开发记录及历史发布由Git忽略；源码、依赖锁文件、当前发布、许可及必要证据保留。
+本工程直接通过 Git 仓库交付，不生成提交副本或压缩包。tmp/、本地资料、开发记录及历史发布由Git忽略；源码、依赖锁文件、当前发布、许可及必要证据保留。最后一版CNN候选的匹配镜像、离线校验和重建入口见[独立交接目录](board/cnn_demo_20261103/README.md)；该目录与正式latest分开。
 
 提交前运行 python -B sim/check_repository.py、python -B sim/check_checkout.py 和 python -B sim/check_system_release.py，分别核对Git跟踪边界与文档链接、源码结构和发布身份，不替代构建或实板验收。提交及推送由负责人单独执行。

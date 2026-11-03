@@ -1,0 +1,90 @@
+{
+  "version": "cnn-demo-20261103",
+  "board": "Navigator V2 xc7z020clg400-2",
+  "tool_version": "2026.1",
+  "fp32": {
+    "source_commit": "7d80ecf9a3ab7262db51c2a59bfec74ad48706cc",
+    "bit": "fp32/cnn_pl.bit",
+    "xsa": "fp32/cnn_pl.xsa",
+    "elf": "fp32/ecg_cnn_arm.elf",
+    "init": "fp32/ps7_init.tcl",
+    "declared_protocol_original": "ECG-DUAL-1",
+    "verified_protocol": "ECG-DUAL-STREAM-1",
+    "evidence": "docs/evidence/cnn_stream_20261102.json",
+    "flash_updated": false
+  },
+  "int8": {
+    "status": "candidate_not_board_validated",
+    "precision": "W8A8 INT32 MAC with FP32 scaling/residual/bias",
+    "board_image_included": false,
+    "frontend_integrated": false,
+    "patient_quality_qualified": false
+  },
+  "files": {
+    "fp32/cnn_pl.bit": {
+      "bytes": 4045773,
+      "sha256": "99a808b518a41357fc90ac91adeee96fac11fc22a915cdd9b749a5a163c55da9",
+      "source": "tmp/cnn_pl_build_01/cnn_pl.bit"
+    },
+    "fp32/cnn_pl.xsa": {
+      "bytes": 889869,
+      "sha256": "b03a324fad5b18939d5ae4fbeeb523e4e28bd8f616a0571f275edb20d535b9e3",
+      "source": "tmp/cnn_pl_build_01/cnn_pl.xsa"
+    },
+    "fp32/ecg_cnn_arm.elf": {
+      "bytes": 1550172,
+      "sha256": "bfa0f293d255a21379034b9e6d7d3b89beb7ad8208ffdf2f245fda5bdfa6b870",
+      "source": "tmp/cnn_stream_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf"
+    },
+    "fp32/ecg_cnn_arm.map": {
+      "bytes": 414560,
+      "sha256": "2fa3898992f3190a58183219197e655ed29b2669450372d94a06baf398c00c35",
+      "source": "tmp/cnn_stream_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.map"
+    },
+    "fp32/fsbl.elf": {
+      "bytes": 359452,
+      "sha256": "464ebb3c1be21321e38d1b1ae78b0c32dd3639122c5083a5dc5446d64b2fb511",
+      "source": "tmp/cnn_stream_vitis_01/ecg_platform/zynq_fsbl/build/fsbl.elf"
+    },
+    "fp32/ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9",
+      "source": "tmp/cnn_stream_vitis_01/ecg_platform/hw/sdt/ps7_init.tcl"
+    },
+    "fp32/build_manifest_original.json": {
+      "bytes": 13544,
+      "sha256": "3ed181895a30df6742f691d738951c47045023cc45eb8428d33d3140230ff39a",
+      "source": "tmp/cnn_stream_vitis_01/build_manifest.json"
+    },
+    "int8_candidate/cnn_int8_weights.h": {
+      "bytes": 85935,
+      "sha256": "6df82bba151695c0bc7f55b099fc72027408c8f16fcd397faafbf71138b63ef2",
+      "source": "tmp/cnn_int8_parameters_01/cnn_int8_weights.h"
+    },
+    "int8_candidate/cnn_int8_vectors.h": {
+      "bytes": 55396,
+      "sha256": "19c7a884129519ba349e19c8b334a59b6826276a2642faebf596064623386780",
+      "source": "tmp/cnn_int8_parameters_01/cnn_int8_vectors.h"
+    },
+    "int8_candidate/input.bin": {
+      "bytes": 12528,
+      "sha256": "ebdf9d190e9b2a640968c671937f1757d7c2f1875db6747eec3be8456af99d8f",
+      "source": "tmp/cnn_int8_parameters_01/input.bin"
+    },
+    "int8_candidate/expected.bin": {
+      "bytes": 192,
+      "sha256": "cb354dfe8862ea6d35511c0290635b2198f9e3741dea0c51594765f4a6d7e38e",
+      "source": "tmp/cnn_int8_parameters_01/expected.bin"
+    },
+    "int8_candidate/export.json": {
+      "bytes": 711,
+      "sha256": "1f53a33656a42a8b5be59214f6999405482c6402d0edcebab75f43472c5c8f46",
+      "source": "tmp/cnn_int8_parameters_01/export.json"
+    },
+    "int8_candidate/host_check_original.json": {
+      "bytes": 1597,
+      "sha256": "d4f2a492052d41a61e474bb10f4196075cdc7886e6fd35f70dedad1526ee5d82",
+      "source": "tmp/cnn_int8_host_01/result.json"
+    }
+  }
+}

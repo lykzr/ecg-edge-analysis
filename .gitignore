@@ -377,3 +377,11 @@ logs/
 !/docs/evidence/cnn_pl_20261102/hls_cosim.log
 !/docs/evidence/cnn_pl_20261102/synthetic_rx.log
 !/docs/evidence/cnn_stream_20261102.json
+
+# 用户要求独立交接最后CNN候选；只放行匹配镜像及合成向量。
+!/board/cnn_demo_20261103/fp32/cnn_pl.bit
+!/board/cnn_demo_20261103/fp32/cnn_pl.xsa
+!/board/cnn_demo_20261103/fp32/ecg_cnn_arm.elf
+!/board/cnn_demo_20261103/fp32/fsbl.elf
+!/board/cnn_demo_20261103/int8_candidate/input.bin
+!/board/cnn_demo_20261103/int8_candidate/expected.bin
