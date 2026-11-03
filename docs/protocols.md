@@ -142,7 +142,7 @@ P,<sid>,FP32,<beats>,<mismatches>,<arm_ticks>,<pl_call_ticks>,<pl_core_ticks>,<t
 
 CNN寄存器基址 `0x43C20000`：控制 `+0x000`（start位0、done位1读清、idle位2），输出4个float32 logit从 `+0x010` 起，261个输入float32从 `+0x800` 起。输入按wave128、RR3、hand122、history8顺序；内部拼接269维后执行全连接。HGB基址仍为 `0x43C10000`，QRS外设仍为 `0x43C00000`。仅使用AXI-Lite，无DMA。ARM保留高通、检测、切拍、手工/历史特征与softmax；CNN卷积、残差、池化、RR分支和全连接在PL。整段classify_us同时包含ARM对照与PL，不能据此称整条链路提速。
 
-N/S/V/F与N/S/VF分别保存，不自动合并、投票或将F解释为心室颤动。每段最多30000点，收齐后推理，记录间重置；实时逐拍调度、双模型融合与INT8尚未完成。
+N/S/V/F与N/S/VF分别保存，不自动合并、投票或将F解释为心室颤动。本节初版整段入口每段最多30000点，收齐后推理，记录间重置；后续CNN逐拍与INT8扩展见下文，HGB保留整段分析，模型融合未实现。
 
 
 ## CNN-STREAM-1持续输入扩展（2026-11-02）
@@ -168,7 +168,9 @@ R峰后的445点窗口需到position+266才完整；检测自身也有因果确�
 
 输入环形缓存4096、有限待处理32、背景8及RR历史均有界，无malloc；固件单会话上限1小时仍需长时实测。网页显示4096点/256事件，完整输入和逐拍结果保留文件。自动电脑HGB分析另受200000点上限，不把超限记录截短后分析。
 
-## 动态 W8A8 候选协议（开发中，尚未板测）
+## 动态 W8A8 三核协议（2026-11-03已完成对应JTAG板测）
+
+对应匹配交付为 `board/cnn_fast_20261103/`，整段及流式实测见 `docs/evidence/cnn_int8_fast_20261103/summary.json`；以下报文格式保留，不将该JTAG证据扩大为新版QSPI启动验收。
 
 三核身份：`H,ECG-TRIPLE-1,READY,500,mV,H27-FP32,H27-W8A8,HGB-Q40`。原 CNN-BATCH-1、CNN-STREAM-1、HGB 请求保留。量化请求仅将 CNN 请求名换为 `CNN-INT8-BATCH-1` 或 `CNN-INT8-STREAM-1`，其余样本/CRC/背压合同不变；PC选择 W8A8 必须先见三核身份，否则不送样。
 

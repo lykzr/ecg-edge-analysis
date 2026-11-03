@@ -458,15 +458,21 @@ logs/
 
 # 当前报告、海报及可编辑源；本地手册、模板和历史摘录不上传。
 !/report/report.pdf
-!/report/poster_bilingual.pptx
+!/report/poster.pptx
+!/report/poster.pdf
 !/report/writing.md
 !/report/source/
+/report/source/*
+!/report/report.tex
+!/report/source/figures/
+/report/source/figures/*
+!/report/source/figures/competition_header.png
+!/report/source/figures/system.png
+!/report/source/figures/partition.png
+!/report/source/figures/vivado_block_design.jpg
+!/report/source/figures/capture_hardware_original_20261103.jpg
+!/report/source/figures/zynq_hardware_original_20261103.jpg
 !/report/tools/
-!/report/attachments/
-/report/attachments/*
-!/report/attachments/figures/
-/report/attachments/figures/*
-!/report/attachments/figures/capture_hardware_original_20261103.jpg
-!/report/attachments/figures/zynq_hardware_original_20261103.jpg
-!/report/attachments/figures/system_hardware_original_20261103.jpg
-!/report/attachments/figures/bupt_emblem_20261103.png
+/report/tools/*
+!/report/tools/build_report.ps1
+/report/attachments/
