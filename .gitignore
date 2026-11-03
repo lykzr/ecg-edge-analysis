@@ -455,3 +455,18 @@ logs/
 
 !/report/competition_brief.md
 !/report/video_script.md
+
+# 当前报告、海报及可编辑源；本地手册、模板和历史摘录不上传。
+!/report/report.pdf
+!/report/poster_bilingual.pptx
+!/report/writing.md
+!/report/source/
+!/report/tools/
+!/report/attachments/
+/report/attachments/*
+!/report/attachments/figures/
+/report/attachments/figures/*
+!/report/attachments/figures/capture_hardware_original_20261103.jpg
+!/report/attachments/figures/zynq_hardware_original_20261103.jpg
+!/report/attachments/figures/system_hardware_original_20261103.jpg
+!/report/attachments/figures/bupt_emblem_20261103.png

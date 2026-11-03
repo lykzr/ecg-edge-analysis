@@ -4,6 +4,8 @@
 
 队友接手先看[Git接手与外部资料获取](docs/download_guide.md)，再看[剩余任务及最高优先级](report/handoff.md)。固定模型、参考结果及重建代码随Git；工具与数据按教程另取，不依赖原作者tmp。
 
+比赛材料集中在 `report/`：[技术报告PDF](report/report.pdf)、[中英双页海报PPT](report/poster_bilingual.pptx)及[编辑源文件与材料说明](report/writing.md)。最新实测素材见上方比赛报告素材入口。
+
 面向正点原子领航者 V2（Zynq-7020）的心电边缘分析原型。当前交付以500Hz接收数字样本，在 ARM 端检测 QRS 波群中的 R 峰、计算相邻心拍间隔 RR 与心率，并在本机网页显示、保存波形和事件。正常结束后可以直接开启下一轮会话。
 
 ```text
