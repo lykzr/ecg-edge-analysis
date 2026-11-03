@@ -5,7 +5,9 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 
 def resources():
-    evidence=ROOT/'docs/evidence/cnn_int8_20261103/resources.json'
+    evidence=ROOT/'docs/evidence/cnn_int8_fast_20261103/resources.json'
+    if not evidence.is_file():evidence=ROOT/'docs/evidence/cnn_fast_20261103/resources.json'
+    if not evidence.is_file():evidence=ROOT/'docs/evidence/cnn_int8_20261103/resources.json'
     if evidence.is_file():
         result=json.loads(evidence.read_text(encoding='utf-8'))
         if result.get('device')!='xc7z020clg400-2' or result.get('stage')!='routed':raise ValueError('资源证据身份不符')

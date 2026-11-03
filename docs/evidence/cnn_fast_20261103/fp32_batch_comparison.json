@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "precision": "FP32",
+  "source": "actual board UART versus frozen PyTorch",
+  "samples": 30000,
+  "events": 73,
+  "valid": 72,
+  "classes_exact": true,
+  "max_probability_error": 1.1920928955078125e-06,
+  "compute_us": {
+    "input": 4691,
+    "prepare": 336950,
+    "classify": 766109
+  },
+  "classify_mean_us": 10640.402777777777,
+  "counts": {
+    "N": 55,
+    "S": 1,
+    "V": 16,
+    "F": 0,
+    "UNCLASSIFIED": 1
+  },
+  "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+  "result_sha256": "ac9ac5db63d3b1cfd5424df6e0f4cc26d3f54d17a97a9667b559cff2ff356630",
+  "tx_sha256": "324eca30401338923c95d784742089016b63d63bbfdbf87b82c4a2419ad7c338",
+  "rx_sha256": "2696f897e543bdd70d4c4558e32a28f1f250a6ad36023d311fc13913595b7faa",
+  "flash_written": false,
+  "accuracy_measured": false
+}

@@ -1,0 +1,44 @@
+{
+  "device": "xc7z020clg400-2",
+  "stage": "routed",
+  "board_verified": true,
+  "capacity": {
+    "lut": 53200,
+    "ff": 106400,
+    "bram36": 140,
+    "dsp": 220
+  },
+  "rows": [
+    {
+      "name": "FP32 CNN",
+      "scope": "四路全连接候选CNN核",
+      "lut": 6666,
+      "ff": 7415,
+      "bram36": 66.5,
+      "dsp": 35
+    },
+    {
+      "name": "INT8 CNN",
+      "scope": "CNN核",
+      "lut": 14362,
+      "ff": 9554,
+      "bram36": 20.5,
+      "dsp": 54
+    },
+    {
+      "name": "三核系统总量",
+      "scope": "QRS / HGB / 两种CNN / AXI / 工作灯",
+      "lut": 24147,
+      "ff": 19789,
+      "bram36": 130.5,
+      "dsp": 89
+    }
+  ],
+  "note": "FP32全连接并行与工作灯镜像的Vivado布局布线资源，非运行时负载。",
+  "bit_sha256": "9e3c4a1d37c513cda2232d47c5adc8d0ac3be20cd7bf050aec2cc817547a2250",
+  "timing": {
+    "clock_hz": 100000000,
+    "wns_ns": 0.212,
+    "whs_ns": 0.036
+  }
+}

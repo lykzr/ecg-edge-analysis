@@ -15,6 +15,11 @@ hardware=Path(os.environ['ECG_CNN_HARDWARE']).resolve();hardware.relative_to(ROO
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 pl=os.environ.get('ECG_CNN_PL','0')=='1'
 int8=os.environ.get('ECG_CNN_INT8','0')=='1'
+activity=os.environ.get('ECG_ACTIVITY_LED','0')=='1'
+int8_fast=os.environ.get('ECG_CNN_INT8_FAST','0')
+if int8_fast not in ('0','4','16'):raise ValueError('INT8_FAST仅允许0/4/16')
+if int8_fast!='0' and not (int8 and activity):raise ValueError('INT8快核需要三核工作灯候选')
+if activity and not pl:raise ValueError('工作灯仅用于带AXI GPIO的PL候选')
 if int8 and not pl:raise ValueError('INT8候选需要保留FP32/HGB的PL镜像')
 bitname='cnn_pl' if pl else 'hgb_pl'
 artifacts=[hardware/(bitname+ext) for ext in ('.bit','.xsa')]
@@ -39,8 +44,41 @@ if pl:
     generated=workspace.parent/(workspace.name+'_sources');generated.mkdir(exist_ok=False)
     (generated/'cnn_features.c').write_bytes((cnn/'features.c').read_bytes())
     sources=[generated/'cnn_features.c' if p==cnn/'features.c' else p for p in sources]
+    if activity:
+        # 原main.c保持封印；候选将全部会话入口统一包裹，返回即熄灭。
+        main_text=(cnn/'main.c').read_text(encoding='utf-8')
+        old='    ready();\n    for(;;)'
+        assert main_text.count(old)==1
+        main_text=main_text.replace(old,'    activity_init();\n'+old)
+        old='            if(hgb_legacy_run(text,NULL,legacy_clock,legacy_receive,legacy_ready,legacy_send))return 4;'
+        assert main_text.count(old)==1
+        main_text=main_text.replace(old,'            activity_set(1);\n            int legacy_rc=hgb_legacy_run(text,NULL,legacy_clock,legacy_receive,legacy_ready,legacy_send);\n            activity_set(0);\n            if(legacy_rc)return 4;')
+        for call in ('stream_session(f,nf)','hgb_batch_session(f,nf)','session(f,nf)'):
+            old='(void)'+call+';'
+            assert old in main_text
+            main_text=main_text.replace(old,'activity_set(1);'+old+'activity_set(0);')
+        (generated/'cnn_activity_main.c').write_text('#include "activity_led.h"\n'+main_text,encoding='utf-8')
+        sources=[generated/'cnn_activity_main.c' if p==cnn/'main.c' else p for p in sources]
+        sources += [cnn/'activity_led.h']
 hashes={p.as_posix():sha(p) for p in sources}
 if pl:hashes[(cnn/'features.c').as_posix()]=sha(cnn/'features.c')
+if activity:hashes[(cnn/'main.c').as_posix()]=sha(cnn/'main.c')
+if activity:
+    # 下载前同时核对候选硬件源码与导出ROM，旧交付封印不改。
+    inputs=[ROOT/n for n in ('build/build_cnn_fast_pl.tcl','build/export_cnn_fast.py',
+        'build/build_navigator_ecg_system.tcl','src/hls/ecg_cnn_fast/cnn_hls.cpp',
+        'src/hls/ecg_cnn_int8/cnn_int8_hls.cpp','src/rtl/ecg_activity_led.sv',
+        'src/constraints/activity_led_navigator_v2.xdc')]
+    inputs += [rom.parent/n for n in ('cnn_hls_weights.h','cnn_dense_fast_weights.h')]
+    hashes.update({p.as_posix():sha(p) for p in inputs})
+if int8_fast!='0':
+    inputs=[ROOT/n for n in ('build/build_cnn_int8_fast_pl.tcl','build/export_cnn_int8_fast.py',
+        'src/hls/ecg_cnn_int8_fast/int8_fast_core.h','src/hls/ecg_cnn_int8_fast/cnn_int8_hls.cpp')]
+    inputs += [qrom/'cnn_int8_fast_weights.h']
+    if int8_fast=='16':
+        inputs += [ROOT/'src/hls/ecg_cnn_int8_fast/cnn_int8_conv16.cpp',
+            ROOT/'src/hls/ecg_cnn_int8_fast/int8_conv16.h',qrom/'cnn_int8_conv16_weights.h']
+    hashes.update({p.as_posix():sha(p) for p in inputs})
 legacy_sources={};legacy_commands=[];archive=None
 if kind=='batch':
     compiler=Path(os.environ['ECG_ARM_GCC'])
@@ -82,6 +120,13 @@ try:
     if int8:
         result['protocol']='ECG-TRIPLE-1';result['quantization']=json.loads((qrom/'export.json').read_text())
         result['scope']='FP32 CNN + W8A8 CNN + HGB; each integer result checked against same-device integer ARM reference'
+        (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
+    if activity:
+        result['activity_led']=dict(pin='H15',active_high=True,gpio_base='0x43C40000',meaning='active board session, not per-cycle CNN busy')
+        (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
+    if int8_fast!='0':
+        result['int8_acceleration']=dict(dense_output_lanes=4,conv_output_lanes=16 if int8_fast=='16' else 8,
+            same_integer_model=True,arm_reference_unchanged=True)
         (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
     print('PASS CNN_ARM_BUILD '+str(elf),flush=True)
 finally:vitis.dispose()

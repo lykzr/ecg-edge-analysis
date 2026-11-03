@@ -18,3 +18,19 @@
 /docs/evidence/cnn_int8_20261103/*.rpt -diff
 
 /docs/evidence/cnn_int8_20261103/*.json -diff
+
+/docs/evidence/cnn_fast_20261103/*.rpt -diff
+/docs/evidence/cnn_int8_fast_20261103/*.rpt -diff
+
+/board/cnn_fast_20261103/cnn_pl.bit -diff
+/board/cnn_fast_20261103/cnn_pl.xsa -diff
+/board/cnn_fast_20261103/ecg_cnn_arm.elf -diff
+/board/cnn_fast_20261103/ecg_cnn_arm.map -diff
+/board/cnn_fast_20261103/fsbl.elf -diff
+/board/cnn_fast_20261103/ps7_init.tcl -diff
+/board/cnn_fast_20261103/routed.dcp -diff
+/board/cnn_fast_20261103/build_manifest_original.json -diff
+/board/cnn_fast_20261103/generated/* -diff
+
+# CRLF is valid source whitespace; preserve sealed source bytes.
+* whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "precision": "W8A8",
+  "source": "actual board UART versus Python W8A8 integer reference",
+  "samples": 30000,
+  "events": 73,
+  "valid": 72,
+  "classes_exact": true,
+  "max_probability_error": 5.960464477539063e-08,
+  "compute_us": {
+    "input": 4687,
+    "prepare": 336708,
+    "classify": 1418758
+  },
+  "classify_mean_us": 19704.972222222223,
+  "counts": {
+    "N": 56,
+    "S": 0,
+    "V": 16,
+    "F": 0,
+    "UNCLASSIFIED": 1
+  },
+  "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+  "result_sha256": "51a8ba62f9b66882aceb6592aa4c36714267cf3e61efd74eaadfd65484e0cfa8",
+  "tx_sha256": "0bc1274d1df5d873846153bcaa2296365d1126e58388b078786a2ee1f46ddc65",
+  "rx_sha256": "91a65b48e7664a129df704c6f5738984642ab5a1361a442dbfefa0608093c05e",
+  "flash_written": false,
+  "accuracy_measured": false
+}

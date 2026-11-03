@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "source": "synthetic",
+      "beats": 72,
+      "bit_exact_previous_int8": true,
+      "accuracy_measured": false
+    },
+    {
+      "source": "ads1292r",
+      "beats": 12,
+      "bit_exact_previous_int8": true,
+      "accuracy_measured": false
+    }
+  ]
+}

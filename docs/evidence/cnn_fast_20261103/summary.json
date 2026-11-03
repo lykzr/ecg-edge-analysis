@@ -1,0 +1,781 @@
+{
+  "passed": true,
+  "device": "xc7z020clg400-2",
+  "tools": "Vivado/Vitis 2026.1",
+  "training": false,
+  "weights_changed": false,
+  "precision": "FP32",
+  "change": "four output lanes for FP32 dense layers, unchanged per-output FP32 accumulation; session LED on baseboard H15",
+  "measurement_scope": "full CNN network + AXI register transfer, excludes acquisition/UART/filter/features/softmax/browser; same Cortex-A9 ARM reference",
+  "board": {
+    "jtag": {
+      "started": true,
+      "execution_verified": false,
+      "flash_written": false,
+      "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+      "manifest_sha256": "2c67683190f5f04c908736678ba1ba18910c82be25d36e042fe5b65708ed6379",
+      "cable": "210512180081",
+      "port": "COM9",
+      "device_id": "VID_1A86&PID_7523\\7&f78b727&0&4",
+      "scope": "temporary JTAG start; UART inference separately verified"
+    },
+    "manifest": "tmp/cnn_fast_vitis_01/build_manifest.json",
+    "files": {
+      "tmp/cnn_fast_pl_02/cnn_pl.bit": {
+        "bytes": 4045773,
+        "sha256": "9e3c4a1d37c513cda2232d47c5adc8d0ac3be20cd7bf050aec2cc817547a2250"
+      },
+      "tmp/cnn_fast_pl_02/cnn_pl.xsa": {
+        "bytes": 1399290,
+        "sha256": "79d828688028a90bed017ef64703a610893b38108c795a6f1a16b61571c2d897"
+      },
+      "tmp/cnn_fast_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.elf": {
+        "bytes": 1647080,
+        "sha256": "6b141c106161723a14dfd0bac7770384ba3989a1ca8c02588c4eb3ac1599d100"
+      },
+      "tmp/cnn_fast_vitis_01/ecg_cnn_arm/build/ecg_cnn_arm.map": {
+        "bytes": 434624,
+        "sha256": "6363f7f52171ba628218783d138896e952fcbdcdf6bdd8dd5933d2327601e5ef"
+      },
+      "tmp/cnn_fast_vitis_01/ecg_platform/zynq_fsbl/build/fsbl.elf": {
+        "bytes": 360220,
+        "sha256": "a0d598396e8207b6ab9f51e280d52b523a61babbaff59c7a9a494c5ebaec34a0"
+      },
+      "tmp/cnn_fast_vitis_01/ecg_platform/hw/sdt/ps7_init.tcl": {
+        "bytes": 27602,
+        "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9"
+      }
+    },
+    "sources": {
+      "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+      "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+      "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+      "src/ps/ecg_hgb/legacy.h": "90d25a61ba58981d46089126703340355d161ed9cc3662877e5871beef564798",
+      "src/ps/ecg_cnn/cnn.h": "c6164ea4e37f81338930fd5fa11a55c442d2db4f312f3f173d44d73ec4688e3a",
+      "src/ps/ecg_cnn/network.c": "121efdfaacd0d2c8080e2c5862000ed647a43dca62e866893a355787e5bd667c",
+      "tmp/cnn_fast_vitis_01_sources/cnn_features.c": "94ddbda1ea723cb0b7aa3c3836b7533a9f0a6adc5db92a565f4fcf9f79b8539e",
+      "tmp/cnn_fast_vitis_01_sources/cnn_activity_main.c": "a9dce970b4b1a1da6c4f7a1bd65c1a6e5b46da2d6418902a9fbb24988a5d4324",
+      "src/ps/ecg_cnn/stream.h": "fc1469c0f84dbaecee8fe17045f6da0e08fa2bdfff524068c7eab03c1533cd0d",
+      "src/ps/ecg_cnn/stream.c": "0a63b7c1d5e57e893f5f436b5ea8ac861ef5004cb77dfee9f1fc5f1260b00811",
+      "src/ps/ecg_cnn/stream_uart.h": "27f89bdb78f57d024da630d71915ad216941eac6e95e15a9b9970325c039b41f",
+      "src/ps/ecg_cnn/pl_forward.c": "88465c063f7bc412d528c8ea6eb1454ed56d32a5752daacc8cd959f53b23845b",
+      "src/ps/ecg_hgb/features.c": "3877247b12437a2204b8e7fac49772ba4501adb2ccc45bcaf9ce069fea5f77ef",
+      "src/ps/ecg_hgb/pl_tree.c": "67f89c3e7f33b235a26aa6e378892e8e199abf4a4c71087b8060055a985b8ed5",
+      "src/ps/ecg_hgb/pl_main.c": "b936011934efe3e85672f10ba7a768980235a24adc8ea630e433022bdcde4c45",
+      "tmp/cnn_fast_vitis_01_hgb_parameters/hgb_parameters.c": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29",
+      "tmp/hgb_pl_sim_02/hgb_pl_fixture.c": "a3bec61171eb9bc03e3e066ed90ffe678f716c223bc6ef552d032304e38ee17f",
+      "tmp/hgb_pl_sim_02/hgb_pl_fixture.h": "331cde5b7a317373925ba2816399ead62538fadb97d50f8a36c2cb2b1a9a23ff",
+      "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+      "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "tmp/cnn_fast_params_02/arm/cnn_weights.c": "ebfa9ef83973af75a6c4825562253d1c142f7b3444235cfb0fd5b6e91b0e6978",
+      "tmp/cnn_fast_params_02/arm/cnn_offsets.h": "3cce6af265388d0bc5a636201ae6ced798869a8bea4939626808bf480ea645fe",
+      "src/ps/ecg_cnn/int8_arm.cpp": "cb1dab52adcf1707dc36003113e7ff928c0453d08a309b038eb5530174863c92",
+      "src/hls/ecg_cnn_int8/int8_core.h": "3090f64e494de82587a0c1afcc958005559a8222d0731b10b9dc513cebc8f47c",
+      "tmp/cnn_int8_parameters_01/cnn_int8_weights.h": "6df82bba151695c0bc7f55b099fc72027408c8f16fcd397faafbf71138b63ef2",
+      "src/ps/ecg_cnn/activity_led.h": "f974853052399df1ffe111e79a84d8711ea0b6f6446c812bf9f32ec14a63a535",
+      "src/ps/ecg_cnn/features.c": "94ddbda1ea723cb0b7aa3c3836b7533a9f0a6adc5db92a565f4fcf9f79b8539e",
+      "src/ps/ecg_cnn/main.c": "8d6fb08f458add2e249f57086c0eeae54584eb1e77f39eaa8ac8fa25f6088434",
+      "build/build_cnn_fast_pl.tcl": "a35f8d4a0bf1ff4d7c7e28d6764c4e1f44e77df0ab8f24692e8375252a182ca1",
+      "build/export_cnn_fast.py": "20980eeda4b9cfed5a29580fe9c7fa7eead3da2f87c9c4ac8462d534eecb39ad",
+      "build/build_navigator_ecg_system.tcl": "8ef5603bd34c5b052e094db989cb862e787be5a6815ecb056da838de3505b3e4",
+      "src/hls/ecg_cnn_fast/cnn_hls.cpp": "94f37169f486df907a46e2552ca7523f53d05035279708c46c10ec4b1735af34",
+      "src/hls/ecg_cnn_int8/cnn_int8_hls.cpp": "d7bdb0a66de38e5082281dc4774753337a18e6a1aad66e9a008437f860e56079",
+      "src/rtl/ecg_activity_led.sv": "6087a8056579eb06d31cb5f7460689f1aaf8564def359551cc1e0fd562c73553",
+      "src/constraints/activity_led_navigator_v2.xdc": "aa2e31674331b420f532f39629e0f356780ab2ff254a55b1e4efee889047c08b",
+      "tmp/cnn_fast_params_02/cnn_hls_weights.h": "8a02c4cf965bd9dde87979f8ced0c33fa715e7527c57e6046bcb5ac1d31cd5c2",
+      "tmp/cnn_fast_params_02/cnn_dense_fast_weights.h": "50d8be392847041f84eda2bda5ae21685049d95ac0d21c62e1b28c347bb74827",
+      "src/ps/ecg_hgb/legacy.c": "72922ab5a0adbd48b4339a9c2ba7f3d54a87e82f0bcb0425da82bc57c2c0abe0",
+      "tmp/cnn_fast_vitis_01_legacy/generated/link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+      "tmp/cnn_fast_vitis_01_legacy/generated/runtime500_bridge.c": "a5a736dcdc3c67b7c90ecb8e8614b935a016241ce2f14686aa4eceb12c3bcda1",
+      "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+      "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+      "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+      "src/ps/ecg_runtime/link.h": "03cba14ee4f25c9538a05617926d67c6fcfdbd565d14d4a455da710567859bba",
+      "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+      "src/ps/ecg_runtime/resample360.h": "cc933fe63074a6082503e6c8fc4abcfbc0b1e9b87bcb1cc3cbb30a201e900b0d",
+      "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+      "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+      "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+      "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+      "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+      "build/generate_rate500_runtime.py": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5",
+      "build/build_hgb_legacy.py": "e04c2f4bae4f5ca718d1478fd5959ffd68e563d3aa909856594ae0aef5177697"
+    }
+  },
+  "cases": {
+    "baseline": {
+      "directory": "tmp/cnn_fast_baseline_batch_01",
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 72,
+        "mismatches": 0,
+        "arm_ticks": 197945662,
+        "pl_call_ticks": 66316444,
+        "pl_core_ticks": 64921471,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8247.735677482333,
+        "pl_call_mean_us": 2763.185086534299,
+        "pl_core_mean_us": 2705.061213219891,
+        "call_speedup": 2.9848654430264685,
+        "core_speedup": 3.0490014928959326
+      },
+      "comparison": {
+        "passed": true,
+        "precision": "FP32",
+        "source": "actual board UART versus frozen PyTorch",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "classes_exact": true,
+        "max_probability_error": 1.1920928955078125e-06,
+        "compute_us": {
+          "input": 4687,
+          "prepare": 336748,
+          "classify": 822762
+        },
+        "classify_mean_us": 11427.25,
+        "counts": {
+          "N": 55,
+          "S": 1,
+          "V": 16,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+        "result_sha256": "da011b97c70deb9e97b7d45d2bcada9fd42182201e16e0d387b0778a8dd57f25",
+        "tx_sha256": "72262a9f498c0829d47c7271f774dd684df037d2f921ee5a753ba0111c6f34c7",
+        "rx_sha256": "4158f2fd0160980714a0f1490ac305bc213a7b2288dbfa4708a1335b0c63b81e",
+        "flash_written": false,
+        "accuracy_measured": false
+      }
+    },
+    "fp32_batch": {
+      "directory": "tmp/cnn_fast_board_batch_01",
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 72,
+        "mismatches": 0,
+        "arm_ticks": 197951887,
+        "pl_call_ticks": 47424224,
+        "pl_core_ticks": 46028969,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8247.99505247481,
+        "pl_call_mean_us": 1976.009276029064,
+        "pl_core_mean_us": 1917.8736527149974,
+        "call_speedup": 4.17406697050014,
+        "core_speedup": 4.300593545773315
+      },
+      "comparison": {
+        "passed": true,
+        "precision": "FP32",
+        "source": "actual board UART versus frozen PyTorch",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "classes_exact": true,
+        "max_probability_error": 1.1920928955078125e-06,
+        "compute_us": {
+          "input": 4691,
+          "prepare": 336950,
+          "classify": 766109
+        },
+        "classify_mean_us": 10640.402777777777,
+        "counts": {
+          "N": 55,
+          "S": 1,
+          "V": 16,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+        "result_sha256": "ac9ac5db63d3b1cfd5424df6e0f4cc26d3f54d17a97a9667b559cff2ff356630",
+        "tx_sha256": "324eca30401338923c95d784742089016b63d63bbfdbf87b82c4a2419ad7c338",
+        "rx_sha256": "2696f897e543bdd70d4c4558e32a28f1f250a6ad36023d311fc13913595b7faa",
+        "flash_written": false,
+        "accuracy_measured": false
+      }
+    },
+    "fp32_stream": {
+      "directory": "tmp/cnn_fast_board_stream_01",
+      "performance": {
+        "precision": "FP32",
+        "scope": "full_cnn_network",
+        "beats": 72,
+        "mismatches": 0,
+        "arm_ticks": 198063965,
+        "pl_call_ticks": 47431908,
+        "pl_core_ticks": 46028022,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 8252.66496900605,
+        "pl_call_mean_us": 1976.329442686446,
+        "pl_core_mean_us": 1917.8341943828082,
+        "call_speedup": 4.175753693062484,
+        "core_speedup": 4.303117022930075
+      },
+      "comparison": {
+        "passed": true,
+        "precision": "FP32",
+        "source": "actual board UART versus frozen PyTorch",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "classes_exact": true,
+        "max_probability_error": 1.1920928955078125e-06,
+        "compute_us": {
+          "input": 5185,
+          "prepare": 353558,
+          "classify": 745552
+        },
+        "classify_mean_us": 10354.888888888889,
+        "counts": {
+          "N": 55,
+          "S": 1,
+          "V": 16,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+        "result_sha256": "32737d1dc34d82c97be995dfc0dea181fe012902d99e405f5bc32ee21d4ed3d5",
+        "tx_sha256": "7d1efcbcc35e7319a3f6f1d0502a35b9e139c73232ea4e2d2d117557b10450d3",
+        "rx_sha256": "a4ed71b834ce442b3877b339ac6853be9942414ee54e2147b871ed9b48644d42",
+        "flash_written": false,
+        "accuracy_measured": false
+      }
+    },
+    "int8_batch": {
+      "directory": "tmp/cnn_fast_int8_batch_01",
+      "performance": {
+        "precision": "W8A8",
+        "scope": "full_cnn_network",
+        "beats": 72,
+        "mismatches": 0,
+        "arm_ticks": 184656308,
+        "pl_call_ticks": 32834949,
+        "pl_core_ticks": 31445294,
+        "timer_hz": 333333343,
+        "pl_clock_hz": 100000000,
+        "arm_mean_us": 7694.012610206969,
+        "pl_call_mean_us": 1368.1228353244378,
+        "pl_core_mean_us": 1310.2205453369377,
+        "call_speedup": 5.6237732545282775,
+        "core_speedup": 5.872303435929077
+      },
+      "comparison": {
+        "passed": true,
+        "precision": "W8A8",
+        "source": "actual board UART versus Python W8A8 integer reference",
+        "samples": 30000,
+        "events": 73,
+        "valid": 72,
+        "classes_exact": true,
+        "max_probability_error": 5.960464477539063e-08,
+        "compute_us": {
+          "input": 4687,
+          "prepare": 336708,
+          "classify": 1418758
+        },
+        "classify_mean_us": 19704.972222222223,
+        "counts": {
+          "N": 56,
+          "S": 0,
+          "V": 16,
+          "F": 0,
+          "UNCLASSIFIED": 1
+        },
+        "input_sha256": "fc28998e2e9eca3edba9f88cd5dfe597fec429d900ef5141ea2f1c8604156733",
+        "result_sha256": "51a8ba62f9b66882aceb6592aa4c36714267cf3e61efd74eaadfd65484e0cfa8",
+        "tx_sha256": "0bc1274d1df5d873846153bcaa2296365d1126e58388b078786a2ee1f46ddc65",
+        "rx_sha256": "91a65b48e7664a129df704c6f5738984642ab5a1361a442dbfefa0608093c05e",
+        "flash_written": false,
+        "accuracy_measured": false
+      }
+    }
+  },
+  "web_regression": [
+    {
+      "local_directory": "tmp/cnn_fast_web_stream_01",
+      "passed": true,
+      "no_reset_between_sessions": true,
+      "cases": [
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 33017595,
+            "pl_call_ticks": 7905483,
+            "pl_core_ticks": 7671360,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8254.398510622443,
+            "pl_call_mean_us": 1976.3706926852499,
+            "pl_core_mean_us": 1917.8399443826418,
+            "call_speedup": 4.1765436722841605,
+            "core_speedup": 4.304008024652735
+          },
+          "comparison": {
+            "passed": true,
+            "precision": "FP32",
+            "source": "actual board UART versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 896,
+              "prepare": 61265,
+              "classify": 124057
+            },
+            "classify_mean_us": 10338.083333333334,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "4477504d4efdfcaaa385f3a4390b1bab7fbc3fe3d329d43a555606d998e8b7d3",
+            "tx_sha256": "047386f2701561ab434a60d9a021a62c84486c627b2485ebd438bdc8fbabf0d4",
+            "rx_sha256": "4c879db16f05d1e773125e7b3a8951cbf259e69ec0b3669acbfb277ca5d10f3a",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 380329,
+            "pl_call_ticks": 197770,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 95.08224724261483,
+            "pl_call_mean_us": 49.44249856616755,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.923087424786368,
+            "core_speedup": 12.46980291706424
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 33030456,
+            "pl_call_ticks": 7905615,
+            "pl_core_ticks": 7671254,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8257.6137605292,
+            "pl_call_mean_us": 1976.4036926842928,
+            "pl_core_mean_us": 1917.81344438341,
+            "call_speedup": 4.178100754969727,
+            "core_speedup": 4.305744015254873
+          },
+          "comparison": {
+            "passed": true,
+            "precision": "FP32",
+            "source": "actual board UART versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 897,
+              "prepare": 61295,
+              "classify": 124100
+            },
+            "classify_mean_us": 10341.666666666666,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "9524720a184af5a4be29db1707cbf0a144f2aeddedb3236ba8972529423a3886",
+            "tx_sha256": "36201dfc46d81ca5b14eefe09eca6ed01150ad73a709d51e263b463edd069468",
+            "rx_sha256": "e150b2809c7322c7edeb08eb870b5508d1fdaa44697cdb5facbd1887a3251a55",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "local_directory": "tmp/cnn_fast_web_int8_01",
+      "passed": true,
+      "no_reset_between_sessions": true,
+      "cases": [
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "W8A8",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 30790491,
+            "pl_call_ticks": 5473224,
+            "pl_core_ticks": 5240973,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 7697.622526768947,
+            "pl_call_mean_us": 1368.305960319127,
+            "pl_core_mean_us": 1310.2432120029468,
+            "call_speedup": 5.625658843855103,
+            "core_speedup": 5.874956997488825
+          },
+          "comparison": {
+            "passed": true,
+            "precision": "W8A8",
+            "source": "actual board UART versus Python W8A8 integer reference",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 2.9103830456733704e-11,
+            "compute_us": {
+              "input": 892,
+              "prepare": 61231,
+              "classify": 232863
+            },
+            "classify_mean_us": 19405.25,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "ce73290c1ad2ebaff826cb4d88d588860279b1027daf2294d314472c57e26198",
+            "tx_sha256": "2223394042a16a73a1d5b6ab671a6dd4270dfc19fbc326dc2ef46c8a8c387ee7",
+            "rx_sha256": "50434a2a8c0177d94bd1b5468ada44779264dc817e050298c5ece0550a13e2d4",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 374510,
+            "pl_call_ticks": 197925,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 93.62749728480257,
+            "pl_call_mean_us": 49.48124856504379,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.8921813818365543,
+            "core_speedup": 12.279016037351157
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": true,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "W8A8",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 30793183,
+            "pl_call_ticks": 5473513,
+            "pl_core_ticks": 5240936,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 7698.29552674943,
+            "pl_call_mean_us": 1368.3782103170322,
+            "pl_core_mean_us": 1310.233962003215,
+            "call_speedup": 5.62585363367183,
+            "core_speedup": 5.875512122262131
+          },
+          "comparison": {
+            "passed": true,
+            "precision": "W8A8",
+            "source": "actual board UART versus Python W8A8 integer reference",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 2.9103830456733704e-11,
+            "compute_us": {
+              "input": 894,
+              "prepare": 61263,
+              "classify": 232916
+            },
+            "classify_mean_us": 19409.666666666668,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "3e7331fdb285323b0678f4c3df13cdd463a360945cf3e5b1a6be26d93d56037a",
+            "result_sha256": "be9ac4946cbde69e67ef1bd916fe2ff9b156dee56137709365598c40f8dc6fce",
+            "tx_sha256": "f58daa4183cc483352659a945508ca23867b3d0b8b1e46352a21d794a077f84c",
+            "rx_sha256": "1c026033fa89c14bbc9abea56e8d4e999baee1faf985d9ce1385e61db4569cc8",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "local_directory": "tmp/cnn_fast_web_batch_01",
+      "passed": true,
+      "no_reset_between_sessions": true,
+      "cases": [
+        {
+          "classifier": "cnn",
+          "streaming": false,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 32990293,
+            "pl_call_ticks": 7903783,
+            "pl_core_ticks": 7671339,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8247.573010820382,
+            "pl_call_mean_us": 1975.9456926975752,
+            "pl_core_mean_us": 1917.834694382794,
+            "call_speedup": 4.173987696777607,
+            "core_speedup": 4.300460845231843
+          },
+          "comparison": {
+            "passed": true,
+            "precision": "FP32",
+            "source": "actual board UART versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 804,
+              "prepare": 58406,
+              "classify": 126565
+            },
+            "classify_mean_us": 10547.083333333334,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result_sha256": "8056fb4b24e2d3a2dd46229b8b204c64e8a2d70e3e12643c15248cefef41e654",
+            "tx_sha256": "ba6c965f160a8822fc04cbb96ac1c0f3f333910ac38e03478b81e77c4536bb0d",
+            "rx_sha256": "0da275a9573656d819ea0ad0a26c2aaea03108e9cf7cb65ed72e495c6dab980f",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        },
+        {
+          "classifier": "hgb",
+          "streaming": false,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "VF": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "Q40",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 374715,
+            "pl_call_ticks": 197859,
+            "pl_core_cycles": 9150,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 93.67874728331634,
+            "pl_call_mean_us": 49.464748565522285,
+            "pl_core_mean_us": 7.625,
+            "call_speedup": 1.893848649796067,
+            "core_speedup": 12.28573734863165
+          }
+        },
+        {
+          "classifier": "cnn",
+          "streaming": false,
+          "samples": 5148,
+          "counts": {
+            "N": 12,
+            "S": 0,
+            "V": 0,
+            "F": 0,
+            "UNCLASSIFIED": 1
+          },
+          "performance": {
+            "precision": "FP32",
+            "scope": "full_cnn_network",
+            "beats": 12,
+            "mismatches": 0,
+            "arm_ticks": 33002867,
+            "pl_call_ticks": 7904294,
+            "pl_core_ticks": 7671515,
+            "timer_hz": 333333343,
+            "pl_clock_hz": 100000000,
+            "arm_mean_us": 8250.716510729222,
+            "pl_call_mean_us": 1976.07344269387,
+            "pl_core_mean_us": 1917.8786943815178,
+            "call_speedup": 4.175308636040107,
+            "core_speedup": 4.302001234436744
+          },
+          "comparison": {
+            "passed": true,
+            "precision": "FP32",
+            "source": "actual board UART versus frozen PyTorch",
+            "samples": 5148,
+            "events": 13,
+            "valid": 12,
+            "classes_exact": true,
+            "max_probability_error": 9.89530235528946e-10,
+            "compute_us": {
+              "input": 805,
+              "prepare": 58389,
+              "classify": 126611
+            },
+            "classify_mean_us": 10550.916666666666,
+            "counts": {
+              "N": 12,
+              "S": 0,
+              "V": 0,
+              "F": 0,
+              "UNCLASSIFIED": 1
+            },
+            "input_sha256": "6808e70059bd52089606822c8ef137d111da4628ac5034d9826d91c7903df145",
+            "result_sha256": "ca0f4f0b57cde58d8214eb43fc375b1fddcdf0b6d635982b7848e693e47340c6",
+            "tx_sha256": "53353d1a8791681bdf2fd0c96660f18e930a17703b9932c72a2628a224b1c34f",
+            "rx_sha256": "de2cfa15304f66b1153ebe6f47ab26851ac61511e6e738cadf85687b2a8a40cb",
+            "flash_written": false,
+            "accuracy_measured": false
+          }
+        }
+      ]
+    }
+  ],
+  "arithmetic": {
+    "passed": true,
+    "vectors": 113,
+    "max_error": 0.0,
+    "seed": 20261103,
+    "scope": "native arithmetic equivalence only; no timing or board claim",
+    "sources": {
+      "src/hls/ecg_cnn/cnn_hls.cpp": "6215d135ce54e91ec735dd2344af7da25fcfa55d7e79650ba501a0ce6b28fb1d",
+      "src/hls/ecg_cnn_fast/cnn_hls.cpp": "94f37169f486df907a46e2552ca7523f53d05035279708c46c10ec4b1735af34"
+    }
+  },
+  "rtl_cosim": {
+    "passed": true,
+    "vectors": 12,
+    "cycles": 191772,
+    "max_error": 2.86102295e-06
+  },
+  "led": {
+    "simulation_passed": true,
+    "user_visual_confirmation": "分析时闪烁，结束后熄灭",
+    "confirmed": true,
+    "meaning": "session activity, not individual CNN busy cycles"
+  },
+  "known_limits": [
+    "No new training or annotated clinical accuracy evaluation",
+    "No Flash write or cold boot qualification",
+    "Resource BRAM36 130.5/140; further parallelism needs memory optimization",
+    "CSV replay and HTTP integration; no new live wireless capture qualification"
+  ],
+  "flash_written": false,
+  "committed": false
+}

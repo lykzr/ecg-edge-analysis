@@ -1,16 +1,18 @@
 # ECG Edge：Zynq 心电边缘分析工程
 
-**当前CNN/INT8演示接手入口：[三核匹配镜像、Vivado实现设计和源码重建](board/cnn_triple_20261103/README.md)。** 克隆后可校验原字节BIT/ELF，直接临时JTAG运行；硬件源码及重建脚本随仓库提供。`releases/latest`仍为独立的旧QSPI交付，不能混用。
+**当前CNN/INT8演示接手入口：[优化版三核匹配镜像、Vivado实现设计和源码重建](board/cnn_fast_20261103/README.md)。** 克隆后可校验原字节BIT/ELF，直接临时JTAG运行；硬件源码及重建脚本随仓库提供。旧三核目录和 `releases/latest` 保留，不能混用。队友写设计报告见[比赛报告素材与实测数据](report/competition_brief.md)。
 
 队友接手先看[Git接手与外部资料获取](docs/download_guide.md)，再看[剩余任务及最高优先级](report/handoff.md)。固定模型、参考结果及重建代码随Git；工具与数据按教程另取，不依赖原作者tmp。
 
 面向正点原子领航者 V2（Zynq-7020）的心电边缘分析原型。当前交付以500Hz接收数字样本，在 ARM 端检测 QRS 波群中的 R 峰、计算相邻心拍间隔 RR 与心率，并在本机网页显示、保存波形和事件。正常结束后可以直接开启下一轮会话。
 
 ```text
-ADS1292R → STM32 → JDY18 → 配套USB接收器 → 电脑换算与去直流
+ADS1292R → STM32 → JDY18 → 配套USB接收器 → 电脑解析与电压换算
                                                ↓ USB_UART
-                                     Zynq ARM：QRS、RR、切拍
-                                               ↓
+                              Zynq ARM：高通、QRS、RR、切拍和特征
+                                               ↕ AXI
+                                  PL：FP32 CNN / INT8 CNN / HGB
+                                               ↓ ARM 汇总、UART
                                      电脑网页：显示、保存
 ```
 
@@ -24,10 +26,11 @@ ADS1292R → STM32 → JDY18 → 配套USB接收器 → 电脑换算与去直流
 | vivado/ | 可打开的文本工程及板级设计 |
 | releases/latest/ | 匹配的当前JTAG/QSPI镜像与完整性清单 |
 | docs/、report/ | 教程、协议、许可和实际实现报告 |
+| skill/ | 产物校验、轨迹比对与下载诊断的可复用流程 |
 
 ## 板卡下载与烧录
 
-从项目根操作，使用 `releases/latest/` 中的匹配镜像。先运行 `python -B sim/check_system_release.py` 校验发布文件；下列 `<Vitis>` 和 `<唯一JTAG序列号>` 替换为本机工具路径与实际下载器序列号。
+当前 CNN 演示使用上方优化版三核入口。以下命令专用于旧 `releases/latest/` 的匹配运行时，不会启用新 CNN 三核。先运行 `python -B sim/check_system_release.py` 校验旧发布文件；下列 `<Vitis>` 和 `<唯一JTAG序列号>` 替换为本机工具路径与实际下载器序列号。
 
 **JTAG临时运行（掉电失效）：** 断电并拔除所有可能供电的USB，将启动拨码设为JTAG（1=ON、2=ON，按实物编号复核），连接JTAG下载器并重新上电，执行：
 

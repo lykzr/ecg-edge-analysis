@@ -40,7 +40,7 @@ export default function Live() {
   const [session, setSession] = useState<Session | null>(null);
   const [history, setHistory] = useState<Session[]>([]), [channel, setChannel] = useState('ecg'), [sourceMode, setSourceMode] = useState<SourceTrace>('display_mv');
   const [resultTrace, setResultTrace] = useState('raw');
-  const [autoAnalyze, setAutoAnalyze] = useState(false), [standardPreprocess, setStandardPreprocess] = useState('');
+  const [autoAnalyze, setAutoAnalyze] = useState(false), [standardPreprocess, setStandardPreprocess] = useState('hp05');
   const [boardModel, setBoardModel] = useState(true);
   const [boardClassifier, setBoardClassifier] = useState('cnn');
   const [boardPrecision, setBoardPrecision] = useState('FP32');
@@ -54,7 +54,7 @@ export default function Live() {
     setBusy(true);
     try {
       const detected=identifyCsv(await selected.slice(0,8192).text());
-      setKind(detected);setBoardModel(detected!=='standard360');setStandardPreprocess('');
+      setKind(detected);setBoardModel(detected!=='standard360');setStandardPreprocess('hp05');
     } catch(error) {setFile(null);setMessage((error as Error).message);}
     finally {setBusy(false);}
   }
@@ -189,8 +189,8 @@ export default function Live() {
       {['bridge_csv','bridge_serial','standard500'].includes(kind) && <label className="inline"><input type="checkbox" checked={boardModel} disabled={active || busy} onChange={e=>setBoardModel(e.target.checked)}/>板端心拍分类</label>}
       {boardModel && <div className="model-selector"><label>板端模型<select value={boardClassifier} disabled={active||busy} onChange={e=>setBoardClassifier(e.target.value)}><option value="cnn">CNN · H27 · N / S / V / F</option><option value="hgb">HGB · v92 · N / S / VF</option></select></label><p>{boardClassifier==='cnn'?'CNN 是神经网络，根据心拍波形识别 N、S、V、F 四类心拍。':'HGB 是树模型分类器，识别 N、S、VF 三类心拍。VF 为 V/E/F 合并类别。'}</p></div>}
       {boardModel&&boardClassifier==='cnn'&&<><div className="analysis-mode"><label htmlFor="cnn-precision">计算精度</label><select id="cnn-precision" value={boardPrecision} disabled={active||busy} onChange={e=>setBoardPrecision(e.target.value)}><option value="FP32">FP32 · 原版 CNN</option><option value="W8A8">INT8 · 量化 CNN 对比</option></select></div><div className="analysis-mode"><label htmlFor="analysis-mode">分析模式</label><select id="analysis-mode" value={boardStreaming?'stream':'batch'} disabled={active||busy} onChange={e=>setBoardStreaming(e.target.value==='stream')}><option value="batch">CNN 整段分析</option><option value="stream">CNN 实时分析 · 边采边测</option></select></div></>}
-      {kind==='standard500' && <label>输入预处理<select value={standardPreprocess} disabled={active||busy} onChange={e=>setStandardPreprocess(e.target.value)}><option value="">请选择输入状态</option><option value="hp05">未滤波 mV → 板端 0.5 Hz 高通</option><option value="raw">已匹配因果高通 → 直接输入</option></select></label>}
-      <details className="live-advanced" open={category==='advanced' || undefined}><summary>高级工具</summary><div className="actions">
+      {kind==='standard500' && <PreprocessSettings value={standardPreprocess} disabled={active||busy} onChange={setStandardPreprocess}/>}
+      <details className="advanced-disclosure live-advanced" open={category==='advanced' || undefined}><summary>高级工具</summary><div className="actions">
         <button className="secondary" disabled={active || busy} onClick={()=>selectKind('result_serial')}>仅接收板卡结果</button>
         <button className="secondary" disabled={active || busy} onClick={()=>selectKind('log')}>原始日志回放</button>
       </div>{category==='advanced' && <p className="hint">当前：{kind==='log'?'原始日志回放':'仅接收板卡结果'}。可从“使用方式”返回采集、文件或演示。</p>}</details>
@@ -205,7 +205,7 @@ export default function Live() {
     </section>
     {session?.owned!==false && <details className="host-analysis"><summary>电脑端 HGB 对照分析</summary><section><h2>电脑端 HGB</h2>
       <label className="inline"><input type="checkbox" checked={autoAnalyze} disabled={active || busy} onChange={e=>setAutoAnalyze(e.target.checked)}/>采集结束后自动分析完整记录</label>
-      {(kind==='standard500' || session?.kind==='standard500') && <label>标准500Hz预处理<select value={standardPreprocess} disabled={active || busy} onChange={e=>setStandardPreprocess(e.target.value)}><option value="">请选择，不猜测处理状态</option><option value="hp05">未额外滤波 → 模型hp05</option><option value="raw">已匹配因果高通 → 模型raw</option></select></label>}
+      {(kind==='standard500' || session?.kind==='standard500') && <PreprocessSettings value={standardPreprocess} disabled={active||busy} onChange={setStandardPreprocess}/>}
       <p className="hint">电脑端HGB研究模型，使用完整保存记录；不读取设备或网页显示滤波结果。不代表板端分类、最终合格模型或临床诊断。</p>
       {session?.analysis?.status==='waiting' && <p role="status">正在关闭文件并提交分析…</p>}
       {session?.analysis?.error && <p className="notice notice-error">{session.analysis.error}</p>}
@@ -252,7 +252,7 @@ function FpgaPerformance({info}:{info:Record<string,unknown>}) {
       <div className="speedup-metric"><span>累计含传输加速比</span><strong>{number(p.call_speedup,4)} 倍</strong></div>
     </div>
     <p className="comparison-summary">已对比 <strong>{number(p.beats)}</strong> 拍 · 超出容差或类别不一致 <strong>{number(p.mismatches)}</strong> 拍 · 累计计算阶段加速 <strong>{number(p.core_speedup,4)} 倍</strong></p>
-    {Boolean(info.streaming)&&<><div className="stat-grid"><div><span>累计 ARM 网络时间 · ms</span><strong>{number(Number(p.arm_ticks)/Number(p.timer_hz)*1000,3)}</strong></div><div><span>累计 FPGA 含传输 · ms</span><strong>{number(Number(p.pl_call_ticks)/Number(p.timer_hz)*1000,3)}</strong></div><div><span>最近有效一拍含传输加速比</span><strong>{number(latest?.call_speedup,4)} 倍</strong></div><div><span>待送队列 · 点</span><strong>{number(info.queue_depth)}</strong></div></div><p className="hint">每拍更新，累计加速比 = ARM 总时间 ÷ FPGA 调用总时间。固定网络运算量接近，比值可能保持稳定。每拍依次运行 ARM 和 FPGA；含传输指板内寄存器传输，不含串口。算法等待及收样至结果延迟见逐拍表；电脑 CPU 尚未计时。</p></>}
+    {Boolean(info.streaming)&&<><div className="stat-grid"><div><span>累计 ARM 网络时间 · ms</span><strong>{number(Number(p.arm_ticks)/Number(p.timer_hz)*1000,3)}</strong></div><div><span>累计 FPGA 含传输 · ms</span><strong>{number(Number(p.pl_call_ticks)/Number(p.timer_hz)*1000,3)}</strong></div><div><span>最近有效一拍含传输加速比</span><strong>{number(latest?.call_speedup,4)} 倍</strong></div><div><span>待送队列 · 点</span><strong>{number(info.queue_depth)}</strong></div></div><p className="hint">每拍更新，累计加速比 = ARM 总时间 ÷ FPGA 调用总时间。固定网络运算量接近，比值可能保持稳定。每拍依次运行 ARM 和 FPGA；含传输指板内寄存器传输，不含串口。算法等待及收样至结果延迟见逐拍表。</p></>}
     {Number(p.arm_mean_us)>0 && <div className="latency-bars"><div><span>ARM</span><i style={{width:'100%'}}/><b>{number(p.arm_mean_us,2)} µs</b></div><div><span>FPGA</span><i style={{width:`${Math.min(100,100*Number(p.pl_call_mean_us)/Number(p.arm_mean_us))}%`}}/><b>{number(p.pl_call_mean_us,2)} µs</b></div></div>}<p className="hint">{cnn?'同一Zynq、相同模型与所选精度的网络。ARM负责信号预处理与历史特征；PL执行卷积、残差、池化及全连接。计算等待由ARM轮询计时，包含启动及轮询误差。':'同一Zynq、相同Q40分类树；ARM负责预处理与特征，PL执行树分类。'} 比较不含前后处理和串口；含传输指寄存器写入与读回。数值来自本次板端计数。</p>
   </section>{quantized&&<QuantizationPanel info={info}/>}</>;
 }
@@ -280,10 +280,14 @@ function QuantizationPanel({info}:{info:Record<string,unknown>}) {
 }
 
 function ResourcePanel({resources}:{resources:Resources|null}) {
-  return <section className="resource-panel" aria-label="FPGA资源占用"><div className="benchmark-heading"><div><span className="panel-kicker">硬件资源</span><h3>FPGA 资源占用 · Zynq-7020</h3></div><span className="measurement-tag static">Vivado · 实现报告</span></div>
+  return <details className="resource-panel hardware-details"><summary>硬件信息<span>资源占用 · Vivado 实现报告</span></summary><div className="hardware-content"><div className="benchmark-heading"><div><span className="panel-kicker">Zynq-7020</span><h3>当前硬件设计资源占用</h3></div><span className="measurement-tag static">静态资源 · Vivado</span></div><p className="hint">资源由硬件设计决定，采集和切换推理精度时保持不变；当前设计同时保留 FP32、INT8 与 HGB 核心。</p>
     {resources?.stage==='routed'?<div className="resource-cards">{resources.rows.map(row=><article className="resource-card" key={row.name}><h4>{row.name}</h4><div className="resource-meters">{(['lut','ff','bram36','dsp'] as const).map(k=>{
       const percent=row[k]/resources.capacity[k]*100;
       return <div className="resource-meter" key={k}><div><span>{k==='bram36'?'BRAM':k.toUpperCase()}</span><strong>{number(percent,1)}<small>%</small></strong></div><div className="resource-track"><i style={{width:`${percent}%`}}/></div><span className="resource-capacity">{number(row[k],k==='bram36'?1:0)} / {number(resources.capacity[k])}{k==='bram36'?' 块':''}</span></div>;
     })}</div></article>)}</div>:<p className="resource-empty">资源报告待生成</p>}
-  </section>;
+  </div></details>;
+}
+
+function PreprocessSettings({value,disabled,onChange}:{value:string;disabled:boolean;onChange:(value:string)=>void}) {
+  return <details className="advanced-disclosure preprocess-settings"><summary>高级设置</summary><label>输入预处理<select value={value} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="hp05">默认：模型进行 0.5 Hz 高通</option><option value="raw">已匹配高通：跳过模型高通</option></select></label><p className="hint">默认适用于未额外滤波的 mV。只有确认输入已使用匹配的因果高通时才选择跳过；网上数据需核实原始滤波状态。</p></details>;
 }

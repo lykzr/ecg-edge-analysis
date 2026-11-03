@@ -396,3 +396,49 @@ INT8 对比模式同一拍依次执行 FP32 ARM→FP32 PL→INT8 ARM→INT8 PL�
 本机已临时运行组合：tmp/cnn_int8_pl_build_01/cnn_pl.bit/xsa + tmp/cnn_int8_vitis_02/build_manifest.json，前后端地址 http://127.0.0.1:8000。保持板卡供电，在网页选择板卡COM9（以当前枚举为准）→CNN→计算精度INT8→整段或实时→选择CSV回放或ADS采集。CSV整段和节拍回放已板测，真实蓝牙并发尚未本轮验证。JTAG断电丢失，下次上电使用此manifest按前文load_cnn.py重载，未写Flash。
 
 同拍72有效拍实测：FP32 ARM/PL 8.250/2.763ms，INT8 ARM/PL 7.694/1.368ms；PL均含板内寄存器传输，INT8较FP32约2.020倍，同精度INT8 ARM/PL约5.624倍。网页会依据本次累计tick更新。两核并行度不同，不把全部增益归因于位宽。真实CSV12有效拍类别无变化、合成72拍5拍变化，非准确率验收。资源与测试范围见[候选证据](evidence/cnn_int8_20261103/summary.json)。
+
+## 带mV导联列的360Hz CSV转换
+
+对于表头sample_index,time_s,MLII_mV,V1_mV且时间连续的数据，使用网页环境的NumPy/SciPy执行以下命令。源单位必须已是mV，不做ADS ADC换算。
+
+```powershell
+& tmp/web_env/Scripts/python.exe build/convert_ecg_mv_csv.py --input "<源CSV绝对路径>" --output tmp/patient_csv_new --lead MLII_mV --source-hz 360
+```
+
+输出必须是新目录；脚本校验序号/时间轴，正规重采样至500Hz，按4096单位/mV取整成int16，超范围拒绝，分成最多60秒的标准CSV。网页文件回放选择其中一份，CNN/HGB均使用500Hz；每份独立会话，不跨段计算RR。转换未加高通，源数据若确认未做额外数字滤波，选“未额外滤波→模型hp05”；来源处理未知时不能声称与模型预处理合同完全匹配，不要随意选raw。conversion.json保留来源哈希、分段位置和方法；未转换心拍标注，不可直接拿原标注索引计分。
+
+## FP32全连接并行与工作灯候选
+
+在原三核重建命令末尾增加 `-FastWorkLed`，并使用新的 `-Name`。默认不带此参数仍构建原三核设计。候选保留FP32/INT8 CNN整段和实时、HGB整段及原有计时协议，只将FP32全连接改为四输出并行，不重训、不改权重、各输出的累加次序不变。
+
+```powershell
+& build/rebuild_cnn_triple.ps1 -Python '<含PyTorch的python.exe>' -Vitis '<Vitis目录>' -Vivado '<Vivado目录>' -Name cnn_fast_led_new -FastWorkLed
+```
+
+该入口依次导出参数、HLS综合和RTL联合仿真、Vivado三核实现、Vitis裸机程序，不下载。独立核对新旧数值可执行 `sim/check_cnn_fast.py --parameters <候选fp32_params> --output tmp/cnn_fast_native_new --cxx <已有g++.exe>`；工作灯仿真入口为 `sim/run_activity_led.ps1 -VivadoBin <Vivado/bin> -Output tmp/activity_led_new`。只有时序通过和匹配manifest生成后，才按原 `board/load_cnn.py` 流程临时加载；旧 `board/cnn_triple_20261103` 和 `releases/latest` 保留。
+
+工作灯采用领航者V2底板的 `PL_LED0`：H15、LVCMOS33、高有效，与资料盘官方 `1_led` 例程一致。核心板2V5原理图第3、7页确认BANK35及默认3.3V供电；J16是核心板另一颗PL灯，本候选不使用。AXI GPIO地址 `0x43C40000`，PL使用原100MHz时钟生成2Hz闪烁，PS在分析会话开始/退出时开关；空闲、取消、错误返回或复位熄灭。它表示板端会话运行，包括收样/等待，不是逐周期CNN运算忙信号。资料修订或BANK35供电被改动时须重新核对约束。
+
+手动构建匹配Vitis程序时，除原三核环境变量外设置 `ECG_ACTIVITY_LED=1`；该开关只与含工作灯GPIO的XSA配套，禁止对旧镜像开启。候选在独立生成的main副本中包裹会话入口，原封印main、ARM网络和计时函数保持原字节。网页仍按本次P/T/Q报文计算加速比，不能由HLS周期直接宣称实板速度；资源须使用该候选的routed报告，不能沿用旧镜像数字。
+
+本机已验匹配清单是 `tmp/cnn_fast_vitis_01/build_manifest.json`，硬件工程为 `tmp/cnn_fast_pl_02/cnn_pl.xpr`。断电后需重新临时加载，在核对本次目标与授权后用前文 `board/load_cnn.py --manifest tmp/cnn_fast_vitis_01/build_manifest.json`，其他参数仍填实际电缆号、端口、USB身份及全新output。板上含传输FP32实测约4.17倍，INT8约5.62倍；资源与限制见 `docs/evidence/cnn_fast_20261103/summary.json`。前端“硬件信息”改用该候选静态报告；如切回旧镜像，资源入口也须对应切回旧证据。不要同时运行板测脚本、串口监视器与网页采集，Windows错误码5通常表示端口被占用；先结束占用方后重试，不需要重复烧录。
+
+## INT8并行候选的独立验证
+
+**Git 克隆后的当前匹配镜像和 Vivado 实现快照入口：[优化版三核交付](../board/cnn_fast_20261103/README.md)。** 下文 tmp 路径是本机历史构建位置；组员直接加载应使用该目录的 `check.py` 和 `load.py`，不需要索取原作者 tmp。
+
+进一步候选使用 `-FastWorkLed -Int8Fast -Conv16`。`-Int8Fast` 将INT8的269→64全连接层改为四输出并行，`-Conv16` 进一步将卷积输出通道从8路改为16路、权重ROM请求使用LUTRAM；不改变原量化规则、权重、INT32累加及FP32缩放/偏置。原FP32快核、HGB、工作灯和接口保留。省略这两个新参数仍走已存在流程。
+
+```powershell
+& build/rebuild_cnn_triple.ps1 -Python '<含PyTorch的python.exe>' -Vitis '<Vitis目录>' -Vivado '<Vivado目录>' -Name cnn_int8_fast_new -FastWorkLed -Int8Fast -Conv16
+```
+
+新构建在综合后检查全系统BRAM36等效总量不超过130.5块；超过即停止，不替换原镜像。HLS估算与布局布线资源分开，综合/仿真未通过的候选不可下载。软件逐位对照入口如下，覆盖原INT8、全连接四路和卷积16路三个核及独立Python整数参考：
+
+```powershell
+& '<含PyTorch的python.exe>' sim/check_cnn_int8_fast.py --parameters tmp/cnn_int8_fast_new/int8_params --output tmp/cnn_int8_fast_check_new --cxx '<已有g++.exe>'
+```
+
+单独生成Vitis匹配程序时，额外设置 `ECG_CNN_INT8_FAST=16`（仅全连接候选填4），使manifest封印实际候选源码和ROM；ARM仍使用原整数参考核。候选的离线数值一致性不代表消除了原INT8与FP32之间的量化偏差，也不能代替专家标注准确率或实板提速验证。
+
+本机已通过候选的匹配清单为 `tmp/cnn_int8_fast_vitis_01/build_manifest.json`，硬件工程为 `tmp/cnn_int8_fast_pl_01/cnn_pl.xpr`；临时JTAG及60秒整段/流式板测通过，未写Flash。网页选择CNN、INT8与原有整段或边采边测即可，原FP32/HGB保留。60秒合成72有效拍INT8含寄存器传输约0.854ms、同精度ARM约7.695ms（约9.01倍）；相对FP32 PL约2.315倍。报告静态资源使用本镜像122.5/140块BRAM36，不再套用前一镜像的130.5块；切回旧镜像须同步切资源证据入口。该倍数不含采集、UART、滤波、特征及浏览器。新旧INT8的73条事件位置/状态/类别/概率完全一致，原量化相对FP32的5拍类别变化保留，不能称分类准确率提升。
