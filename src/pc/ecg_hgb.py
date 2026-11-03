@@ -18,6 +18,7 @@ PL_READY='H,HGB-PL-1,READY,500,mV,'+MODEL
 LEGACY_READY='H,ECG-UART-1,ps-runtime500-ready,boot,UNKNOWN,QRS26-500-ARM,500,4096,0xD'
 DUAL_READY='H,ECG-DUAL-1,READY,500,mV,H27-FP32,HGB-Q40'
 STREAM_READY='H,ECG-DUAL-STREAM-1,READY,500,mV,H27-FP32,HGB-Q40'
+TRIPLE_READY='H,ECG-TRIPLE-1,READY,500,mV,H27-FP32,H27-W8A8,HGB-Q40'
 
 class Channel:
     def __init__(self,serial,directory):
@@ -34,7 +35,7 @@ class Channel:
     def wait_ready(self,timeout=10):
         """仅握手前允许有界启动同步；原始字节留证，活动会话不跳过错误。"""
         deadline=time.monotonic()+timeout
-        headers=[(value+'\n').encode() for value in (READY,PL_READY,LEGACY_READY,DUAL_READY,STREAM_READY)]
+        headers=[(value+'\n').encode() for value in (READY,PL_READY,LEGACY_READY,DUAL_READY,STREAM_READY,TRIPLE_READY)]
         while True:
             matches=[(self.buffer.find(header),header) for header in headers if header in self.buffer]
             if matches:
@@ -67,7 +68,7 @@ class Channel:
         for _ in range(10):
             value=self.line()
             if value==expected:return
-            if value in (READY,PL_READY,LEGACY_READY,DUAL_READY,STREAM_READY):continue
+            if value in (READY,PL_READY,LEGACY_READY,DUAL_READY,STREAM_READY,TRIPLE_READY):continue
             raise ValueError('板端响应不符合当前阶段：'+value)
         raise ValueError('没有收到当前阶段确认')
 
@@ -104,7 +105,7 @@ def transfer(signal,serial,directory,preprocess,sid=None,*,cancel=None,progress=
     sid=sid or secrets.randbelow(0x7ffffffe)+1
     channel=Channel(serial,directory)
     try:
-        identity=channel.wait_ready();pl=identity in (PL_READY,DUAL_READY,STREAM_READY);performance=None
+        identity=channel.wait_ready();pl=identity in (PL_READY,DUAL_READY,STREAM_READY,TRIPLE_READY);performance=None
         channel.write(f'I,HGB-BATCH-1,{sid},500,mV,{preprocess},{len(signal)}\n'.encode())
         channel.expect(f'A,{sid},READY,32')
         for start in range(0,len(signal),32):

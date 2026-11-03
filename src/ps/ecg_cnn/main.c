@@ -22,6 +22,7 @@ static CnnResult results[EVENTS];
 static union {double align;unsigned char data[512*1024];} workspace;
 static uint32_t uart_base;
 static uint64_t frequency;
+static int tx(const char*,...);
 #ifdef ECG_DUAL_MODEL
 void hgb_batch_init(uint32_t,uint64_t);
 int hgb_batch_session(char *v[8],unsigned n);
@@ -30,6 +31,17 @@ int hgb_batch_session(char *v[8],unsigned n);
 extern uint64_t cnn_arm_ticks,cnn_pl_call_ticks,cnn_pl_core_ticks;
 extern uint32_t cnn_pl_beats,cnn_pl_mismatches;
 void cnn_pl_clear(void);
+#ifdef ECG_CNN_INT8
+extern int cnn_int8_mode;
+extern uint64_t cnn_fp32_arm_ticks,cnn_fp32_call_ticks,cnn_int8_arm_ticks,cnn_int8_call_ticks;
+extern uint32_t cnn_quant_changed;
+void cnn_set_int8(int);
+static int quant_performance(uint32_t sid){
+    return tx("Q,%u,%u,%u,%llu,%llu,%llu,%llu,%llu\n",sid,cnn_pl_beats,cnn_quant_changed,
+        (unsigned long long)cnn_fp32_arm_ticks,(unsigned long long)cnn_fp32_call_ticks,
+        (unsigned long long)cnn_int8_arm_ticks,(unsigned long long)cnn_int8_call_ticks,(unsigned long long)frequency);
+}
+#endif
 #define CNN_IDENTITY "CNN-PL-1"
 #else
 #define CNN_IDENTITY "CNN-BATCH-1"
@@ -82,7 +94,11 @@ static uint32_t crc32(const unsigned char *p,unsigned n){
 static void model_ready(void){tx("H,%s,READY,500,mV,%s\n",CNN_IDENTITY,"16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7");}
 static void ready(void){
 #ifdef ECG_DUAL_MODEL
+#ifdef ECG_CNN_INT8
+    tx("H,ECG-TRIPLE-1,READY,500,mV,H27-FP32,H27-W8A8,HGB-Q40\n");
+#else
     tx("H,ECG-DUAL-STREAM-1,READY,500,mV,H27-FP32,HGB-Q40\n");
+#endif
 #else
     model_ready();
 #endif
@@ -98,9 +114,16 @@ static int legacy_ready(void *ctx){(void)ctx;return !XUartPs_IsTransmitFull(uart
 static void legacy_send(void *ctx,unsigned char c){(void)ctx;XUartPs_WriteReg(uart_base,XUARTPS_FIFO_OFFSET,c);}
 static int session(char *v[8],unsigned fields_count){
     uint32_t sid,total,fs;
+#ifdef ECG_CNN_INT8
+    cnn_set_int8(fields_count>1&&!strcmp(v[1],"CNN-INT8-BATCH-1"));
+    if(cnn_int8_mode)v[1]="CNN-BATCH-1";
+#endif
     if(fields_count!=7||strcmp(v[0],"I")||strcmp(v[1],"CNN-BATCH-1")||number(v[2],10,&sid)||!sid||number(v[3],10,&fs)||fs!=500||strcmp(v[4],"mV")||(strcmp(v[5],"hp05")&&strcmp(v[5],"raw"))||number(v[6],10,&total)||!total||total>LIMIT){tx("F,0,BAD_HEADER\n");return -1;}
     int highpass=!strcmp(v[5],"hp05");HgbInput input={0};uint32_t index=0,input_us=0;
     model_ready();
+#ifdef ECG_CNN_INT8
+    if(cnn_int8_mode)tx("H,CNN-INT8-1,READY,500,mV,16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7\n");
+#endif
     if(tx("A,%u,READY,32\n",sid))return -1;
     while(index<total){
         char text[192],*f[8];uint32_t got_sid,start,n,crc;
@@ -127,8 +150,17 @@ static int session(char *v[8],unsigned fields_count){
     if(cnn_record(requests,events,results)){tx("F,%u,CLASSIFY\n",sid);return -1;}
     uint32_t classify_us=micros(begin);
 #ifdef ECG_CNN_PL
-    if(tx("P,%u,FP32,%u,%u,%llu,%llu,%llu,%llu,100000000\n",sid,cnn_pl_beats,cnn_pl_mismatches,
+    if(tx("P,%u,%s,%u,%u,%llu,%llu,%llu,%llu,100000000\n",sid,
+#ifdef ECG_CNN_INT8
+        cnn_int8_mode?"W8A8":"FP32",
+#else
+        "FP32",
+#endif
+        cnn_pl_beats,cnn_pl_mismatches,
         (unsigned long long)cnn_arm_ticks,(unsigned long long)cnn_pl_call_ticks,(unsigned long long)cnn_pl_core_ticks,(unsigned long long)frequency))return -1;
+#ifdef ECG_CNN_INT8
+    if(cnn_int8_mode&&quant_performance(sid))return -1;
+#endif
 #endif
     for(uint32_t i=0;i<events;i++){
         CnnResult*r=results+i;uint32_t p[4];memcpy(p,r->probability,sizeof(p));
@@ -160,7 +192,15 @@ int main(void){
         }
         unsigned nf=fields(text,f);
 #ifdef ECG_CNN_PL
-        if(nf>1&&!strcmp(f[1],"CNN-STREAM-1")){(void)stream_session(f,nf);continue;}
+        if(nf>1&&!strcmp(f[1],"CNN-STREAM-1")){
+#ifdef ECG_CNN_INT8
+            cnn_set_int8(0);
+#endif
+            (void)stream_session(f,nf);continue;
+        }
+#ifdef ECG_CNN_INT8
+        if(nf>1&&!strcmp(f[1],"CNN-INT8-STREAM-1")){cnn_set_int8(1);f[1]="CNN-STREAM-1";(void)stream_session(f,nf);continue;}
+#endif
 #endif
 #ifdef ECG_DUAL_MODEL
         if(nf>1&&!strcmp(f[1],"HGB-BATCH-1")){(void)hgb_batch_session(f,nf);continue;}

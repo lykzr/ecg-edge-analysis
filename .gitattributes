@@ -4,3 +4,17 @@
 # 交接封印保存原字节；工具生成的镜像/收据/参数作为产物，不做文本差异。
 /board/cnn_demo_20261103/fp32/* -diff
 /board/cnn_demo_20261103/int8_candidate/* -diff
+
+/board/cnn_triple_20261103/*.bit -diff
+/board/cnn_triple_20261103/*.xsa -diff
+/board/cnn_triple_20261103/*.elf -diff
+/board/cnn_triple_20261103/*.dcp -diff
+
+# 原始工具报告与封印源码保持字节，不作为手工文本做空白检查。
+/board/cnn_triple_20261103/generated/* -diff
+/board/cnn_triple_20261103/build_manifest_original.json -diff
+/board/cnn_triple_20261103/ecg_cnn_arm.map -diff
+/board/cnn_triple_20261103/ps7_init.tcl -diff
+/docs/evidence/cnn_int8_20261103/*.rpt -diff
+
+/docs/evidence/cnn_int8_20261103/*.json -diff

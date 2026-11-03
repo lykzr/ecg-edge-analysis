@@ -2,7 +2,7 @@
 
 ## 队友只拿Git时，从这里开始
 
-先读[交接任务](../report/handoff.md)。正式源码、三份HGB权重、192特征代码、常量、合成输入/黄金结果、ARM实现、PL现有源码、构建脚本、许可和精选实板证据都随Git。必要入口列在[接手依赖表](../model/handoff_requirements.json)，不是让队友另外索取作者的tmp。**完整分类PL尚待开发；原HGB训练来源也未完整交付，不能称这些已经完成。**
+先读[交接任务](../report/handoff.md)。正式源码、三份HGB权重、192特征代码、常量、合成输入/黄金结果、ARM实现、PL现有源码、构建脚本、许可和精选实板证据都随Git。必要入口列在[接手依赖表](../model/handoff_requirements.json)，不是让队友另外索取作者的tmp。**当前CNN/INT8/HGB PL推理交付见三核教程；原HGB训练来源仍未完整交付，不能称原训练复现已经完成。**
 
 拿到仓库后，先不连板，执行：
 
@@ -356,3 +356,43 @@ CNN四路输出通道并行、空间交错累加，保持FP32点积次序。100M
 ```
 
 第一条逐拍与冻结PyTorch对照，验证结束前有结果；第二条隔离账号做CNN实时→HGB整段→CNN实时HTTP实板切换。再追加 `--stop-after 2000` 验证第一轮主动停止及后续复用；不加--streaming则复测原CNN整段→HGB整段→CNN整段。原始健康数据及交互只留tmp。证据见[流式实测](evidence/cnn_stream_20261102.json)。真实无线、满1小时、物理断线恢复、INT8与双模型融合不在此次已验范围。
+
+## INT8 独立候选与量化对比（2026-11-03 候选实测通过）
+
+**组员从Git克隆后优先使用[三核交付教程](../board/cnn_triple_20261103/README.md)**：配套镜像、离线哈希检查、可移植JTAG加载、合成回放文件、Vivado原始布局布线DCP及统一源码重建入口均在仓库。下文tmp路径仅记录原本机验证来源，不能作为组员已有文件的前提。
+
+原 CNN FP32 整段/实时及 HGB 整段保留，默认精度仍为 FP32。网页新增“计算精度 → INT8 · 量化 CNN 对比”，只接受 `ECG-TRIPLE-1` 候选固件，旧固件会在送样前拒绝。当前前后端、RTL联合仿真、布局布线时序、JTAG与网页CSV回放板测均已通过；没有修改 `releases/latest`。
+
+量化采用动态 W8A8：每输出通道 INT8 权重、每层每拍动态 INT8 激活、INT32 累加；FP32 缩放/偏置/残差保留。不是全整数实现，不使用患者校准，不重训。并行度也与原 FP32 核不同，性能变化不能全部归因于位宽。
+
+在仓库根使用已有 PyTorch 环境及本机工具，输出目录必须是全新 tmp 子目录：
+
+```powershell
+$py = '<含PyTorch及numpy的Python>'
+$vitis = '<Vitis绝对路径>'
+$vivado = '<Vivado绝对路径>'
+& $py build/export_cnn_int8.py --output tmp/cnn_int8_params_new
+& $py sim/check_cnn_int8.py --parameters tmp/cnn_int8_params_new --output tmp/cnn_int8_host_new --cc '<本机g++.exe>'
+& build/run_cnn_int8_hls.ps1 -VitisBin "$vitis/bin" -Parameters tmp/cnn_int8_params_new -Output tmp/cnn_int8_hls_new -Cosim
+& "$vivado/bin/vivado.bat" -mode batch -source build/build_cnn_int8_pl.tcl -tclargs tmp/cnn_int8_pl_new tmp/hgb_rom_new tmp/cnn_hls_new/hls/impl/ip tmp/cnn_int8_hls_new/hls/impl/ip
+```
+
+FP32 IP 与 HGB ROM 先按上一节生成。系统构建沿用原 PS7、DDR、MIO 与 100MHz AXI 时钟，仅新增 `0x43C30000` INT8 IP；需要 RTL 联合仿真和 routed 时序均通过后才使用镜像。受限内存主机的综合采用 jobs=1；主机失败保留日志，`build/resume_cnn_int8_pl.tcl` 仅用于恢复 tmp 候选。
+
+生成 XSA 后按原双模型构建命令设置 `ECG_CNN_PL=1`、`ECG_CNN_HARDWARE`、`ECG_CNN_PARAMETERS`、`ECG_HGB_PL_ROM`、`ECG_CNN_WORKSPACE`、`ECG_ARM_GCC`，额外设置：
+
+```powershell
+$env:ECG_CNN_INT8 = '1'
+$env:ECG_CNN_INT8_PARAMETERS = '<新INT8参数绝对目录>'
+& "$vitis/bin/vitis.bat" -s board/build_cnn_arm.py
+```
+
+构建成功不等于板测通过。临时 JTAG 加载须确认实物、串口释放及本次下载授权，仍用 `board/load_cnn.py`，不写 Flash。网页构建用 `build/build_web.ps1 -SkipInstall`；不要在正式 src 下安装依赖或生成 dist。
+
+INT8 对比模式同一拍依次执行 FP32 ARM→FP32 PL→INT8 ARM→INT8 PL，Q 报文记录四项网络累计时间。网页显示每拍均值及 FP32时间/INT8时间，小于1表示量化后更慢；这不是四路并行吞吐。原 P/T 性能字段在 INT8 模式代表同精度 INT8 ARM/PL，量化类别变化另计，不等于硬件错误。算法窗口等待、采集与串口不混入网络加速比。
+
+资源 API `/live/accelerators` 使用固定证据 `docs/evidence/cnn_int8_20261103/resources.json`，无证据返回 pending。表中区分同一镜像内各 CNN 核与系统总量，BRAM36 为36Kb tile单位；不能把 HLS BRAM18K 与 routed BRAM36直接相比。FP32、INT8同时保留会增加系统总占用，不能要求总量比旧双核镜像更低。
+
+本机已临时运行组合：tmp/cnn_int8_pl_build_01/cnn_pl.bit/xsa + tmp/cnn_int8_vitis_02/build_manifest.json，前后端地址 http://127.0.0.1:8000。保持板卡供电，在网页选择板卡COM9（以当前枚举为准）→CNN→计算精度INT8→整段或实时→选择CSV回放或ADS采集。CSV整段和节拍回放已板测，真实蓝牙并发尚未本轮验证。JTAG断电丢失，下次上电使用此manifest按前文load_cnn.py重载，未写Flash。
+
+同拍72有效拍实测：FP32 ARM/PL 8.250/2.763ms，INT8 ARM/PL 7.694/1.368ms；PL均含板内寄存器传输，INT8较FP32约2.020倍，同精度INT8 ARM/PL约5.624倍。网页会依据本次累计tick更新。两核并行度不同，不把全部增益归因于位宽。真实CSV12有效拍类别无变化、合成72拍5拍变化，非准确率验收。资源与测试范围见[候选证据](evidence/cnn_int8_20261103/summary.json)。

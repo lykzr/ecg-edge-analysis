@@ -1,0 +1,143 @@
+
+
+================================================================
+== Vitis HLS Report for 'cnn_int8_hls'
+================================================================
+* Date:           Tue Nov  3 16:25:08 2026
+
+* Version:        2026.1 (Build 6493734 on Jun 16 2026)
+* Project:        cnn_int8_hls_05
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynq
+* Target device:  xc7z020-clg400-2
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+-----------+------------+
+    |  Clock |  Target  | Estimated | Uncertainty|
+    +--------+----------+-----------+------------+
+    |ap_clk  |  10.00 ns|  11.199 ns|     2.70 ns|
+    +--------+----------+-----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |        ?|        ?|         ?|         ?|    ?|    ?|       no|
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        +-------------------------+---------------+---------+---------+----------+----------+-----+-----+---------+
+        |                         |               |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+        |         Instance        |     Module    |   min   |   max   |    min   |    max   | min | max |   Type  |
+        +-------------------------+---------------+---------+---------+----------+----------+-----+-----+---------+
+        |grp_cnn_int8_core_fu_66  |cnn_int8_core  |        ?|        ?|         ?|         ?|    ?|    ?|       no|
+        +-------------------------+---------------+---------+---------+----------+----------+-----+-----+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-----+--------+-------+-----+
+|       Name      | BRAM_18K| DSP |   FF   |  LUT  | URAM|
++-----------------+---------+-----+--------+-------+-----+
+|DSP              |        -|    -|       -|      -|    -|
+|Expression       |        -|    -|       -|      -|    -|
+|FIFO             |        -|    -|       -|      -|    -|
+|Instance         |       41|   56|   12793|  28577|    0|
+|Memory           |        -|    -|       -|      -|    -|
+|Multiplexer      |        -|    -|       0|     13|    -|
+|Register         |        -|    -|       3|      -|    -|
++-----------------+---------+-----+--------+-------+-----+
+|Total            |       41|   56|   12796|  28590|    0|
++-----------------+---------+-----+--------+-------+-----+
+|Available        |      280|  220|  106400|  53200|    0|
++-----------------+---------+-----+--------+-------+-----+
+|Utilization (%)  |       14|   25|      12|     53|    0|
++-----------------+---------+-----+--------+-------+-----+
+
++ Detail: 
+    * Instance: 
+    +-------------------------+---------------+---------+----+-------+-------+-----+
+    |         Instance        |     Module    | BRAM_18K| DSP|   FF  |  LUT  | URAM|
+    +-------------------------+---------------+---------+----+-------+-------+-----+
+    |grp_cnn_int8_core_fu_66  |cnn_int8_core  |       39|  56|  12533|  28395|    0|
+    |control_s_axi_U          |control_s_axi  |        2|   0|    260|    182|    0|
+    +-------------------------+---------------+---------+----+-------+-------+-----+
+    |Total                    |               |       41|  56|  12793|  28577|    0|
+    +-------------------------+---------------+---------+----+-------+-------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    N/A
+
+    * Multiplexer: 
+    +-----------+----+-----------+-----+-----------+
+    |    Name   | LUT| Input Size| Bits| Total Bits|
+    +-----------+----+-----------+-----+-----------+
+    |ap_NS_fsm  |  13|          3|    1|          3|
+    +-----------+----+-----------+-----+-----------+
+    |Total      |  13|          3|    1|          3|
+    +-----------+----+-----------+-----+-----------+
+
+    * Register: 
+    +--------------------------------------+---+----+-----+-----------+
+    |                 Name                 | FF| LUT| Bits| Const Bits|
+    +--------------------------------------+---+----+-----+-----------+
+    |ap_CS_fsm                             |  2|   0|    2|          0|
+    |grp_cnn_int8_core_fu_66_ap_start_reg  |  1|   0|    1|          0|
+    +--------------------------------------+---+----+-----+-----------+
+    |Total                                 |  3|   0|    3|          0|
+    +--------------------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-----------------------+-----+-----+------------+--------------+--------------+
+|       RTL Ports       | Dir | Bits|  Protocol  | Source Object|    C Type    |
++-----------------------+-----+-----+------------+--------------+--------------+
+|s_axi_control_AWVALID  |   in|    1|       s_axi|       control|         array|
+|s_axi_control_AWREADY  |  out|    1|       s_axi|       control|         array|
+|s_axi_control_AWADDR   |   in|   12|       s_axi|       control|         array|
+|s_axi_control_WVALID   |   in|    1|       s_axi|       control|         array|
+|s_axi_control_WREADY   |  out|    1|       s_axi|       control|         array|
+|s_axi_control_WDATA    |   in|   32|       s_axi|       control|         array|
+|s_axi_control_WSTRB    |   in|    4|       s_axi|       control|         array|
+|s_axi_control_ARVALID  |   in|    1|       s_axi|       control|         array|
+|s_axi_control_ARREADY  |  out|    1|       s_axi|       control|         array|
+|s_axi_control_ARADDR   |   in|   12|       s_axi|       control|         array|
+|s_axi_control_RVALID   |  out|    1|       s_axi|       control|         array|
+|s_axi_control_RREADY   |   in|    1|       s_axi|       control|         array|
+|s_axi_control_RDATA    |  out|   32|       s_axi|       control|         array|
+|s_axi_control_RRESP    |  out|    2|       s_axi|       control|         array|
+|s_axi_control_BVALID   |  out|    1|       s_axi|       control|         array|
+|s_axi_control_BREADY   |   in|    1|       s_axi|       control|         array|
+|s_axi_control_BRESP    |  out|    2|       s_axi|       control|         array|
+|ap_clk                 |   in|    1|  ap_ctrl_hs|  cnn_int8_hls|  return value|
+|ap_rst_n               |   in|    1|  ap_ctrl_hs|  cnn_int8_hls|  return value|
+|interrupt              |  out|    1|  ap_ctrl_hs|  cnn_int8_hls|  return value|
++-----------------------+-----+-----+------------+--------------+--------------+
+

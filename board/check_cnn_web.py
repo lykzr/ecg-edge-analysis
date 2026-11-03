@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def run(port, device_id, source, output, streaming=False,stop_after=0):
+def run(port, device_id, source, output, streaming=False,stop_after=0,precision='FP32'):
     output = Path(output).resolve()
     output.relative_to(ROOT / 'tmp')
     output.mkdir(parents=True, exist_ok=False)
@@ -32,7 +32,7 @@ def run(port, device_id, source, output, streaming=False,stop_after=0):
             response = client.post('/api/v1/live/sessions', headers=headers, json=dict(
                 kind='bridge_csv', upload_id=upload.json()['id'], zynq_port=port,
                 zynq_port_identity=device_id, realtime=stream_mode, board_model=True,
-                board_classifier=classifier, board_streaming=stream_mode, analyze_when_complete=False))
+                board_classifier=classifier, board_precision=precision if classifier=='cnn' else 'FP32', board_streaming=stream_mode, analyze_when_complete=False))
             assert response.status_code==201, response.text
             identifier = response.json()['id']
             endpoint = '/api/v1/live/sessions/'+identifier
@@ -58,6 +58,9 @@ def run(port, device_id, source, output, streaming=False,stop_after=0):
             assert info['execution_location']=='zynq_pl' and info['classifier']==classifier
             assert info['source_samples']==info['confirmed']
             assert info['performance']['mismatches']==0
+            if classifier=='cnn':
+                assert info['precision']==precision
+                if precision=='W8A8':assert info['quantization_comparison']['beats']==info['performance']['beats']
             if stream_mode:
                 assert live_results and min(live_results)<info['confirmed'], '结束前网页没有分类结果'
                 assert info['streaming'] and snapshot['result']['events'][-1]['arm_us']>0
@@ -80,4 +83,5 @@ if __name__=='__main__':
     for name in ('port','device-id','source','output'): p.add_argument('--'+name,required=True)
     p.add_argument('--streaming',action='store_true')
     p.add_argument('--stop-after',type=int,default=0)
-    a=p.parse_args(); run(a.port,a.device_id,a.source,a.output,a.streaming,a.stop_after)
+    p.add_argument('--precision',choices=('FP32','W8A8'),default='FP32')
+    a=p.parse_args(); run(a.port,a.device_id,a.source,a.output,a.streaming,a.stop_after,a.precision)

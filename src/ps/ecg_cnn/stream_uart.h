@@ -5,18 +5,35 @@ static uint64_t live_input_ticks,live_prepare_ticks,live_classify_ticks;
 static uint32_t live_events;
 extern int32_t cnn_last_arm_class,cnn_last_pl_class;
 static int stream_performance(uint32_t sid){
-    return tx("P,%u,FP32,%u,%u,%llu,%llu,%llu,%llu,100000000\n",sid,cnn_pl_beats,cnn_pl_mismatches,
+    int rc=tx("P,%u,%s,%u,%u,%llu,%llu,%llu,%llu,100000000\n",sid,
+#ifdef ECG_CNN_INT8
+        cnn_int8_mode?"W8A8":"FP32",
+#else
+        "FP32",
+#endif
+        cnn_pl_beats,cnn_pl_mismatches,
         (unsigned long long)cnn_arm_ticks,(unsigned long long)cnn_pl_call_ticks,
         (unsigned long long)cnn_pl_core_ticks,(unsigned long long)frequency);
+#ifdef ECG_CNN_INT8
+    if(!rc&&cnn_int8_mode)return quant_performance(sid);
+#endif
+    return rc;
 }
 static int stream_emit(uint32_t sid,HgbRequest*r,int count,uint32_t received){
     for(int i=0;i<count;i++){
         uint64_t a=cnn_arm_ticks,b=cnn_pl_call_ticks,c=cnn_pl_core_ticks;CnnResult result;
+#ifdef ECG_CNN_INT8
+        uint64_t fa=cnn_fp32_arm_ticks,fp=cnn_fp32_call_ticks;
+#endif
         XTime begin=now();
         if(cnn_history_push(&live_history,r+i,&result)){tx("F,%u,STREAM_CLASSIFY\n",sid);return -1;}
         uint64_t elapsed=now()-begin;live_classify_ticks+=elapsed;
         uint64_t arm=cnn_arm_ticks-a,call=cnn_pl_call_ticks-b,core=cnn_pl_core_ticks-c;
-        uint64_t feature=elapsed>=arm+call?elapsed-arm-call:0;
+        uint64_t network=arm+call;
+#ifdef ECG_CNN_INT8
+        network+=cnn_fp32_arm_ticks-fa+cnn_fp32_call_ticks-fp;
+#endif
+        uint64_t feature=elapsed>=network?elapsed-network:0;
         int arm_class=result.status?-1:cnn_last_arm_class,pl_class=result.status?-1:cnn_last_pl_class;
         if(tx("T,%u,%u,%u,%llu,%llu,%llu,%llu,%d,%d\n",sid,result.beat_id,received,
             (unsigned long long)arm,(unsigned long long)call,(unsigned long long)core,(unsigned long long)feature,

@@ -7,7 +7,7 @@ from ecg_cnn_stream import transfer_stream
 from ecg_bridge_serial import DuplexSerial
 from ecg_ports import enumerate_ports
 
-def run(source,port,device_id,output,realtime=False):
+def run(source,port,device_id,output,realtime=False,precision='FP32'):
     ports,_=enumerate_ports();assert sum(p['port']==port and p['device_id']==device_id for p in ports)==1
     output=Path(output).resolve();output.relative_to(ROOT/'tmp');output.mkdir(exist_ok=False)
     signal=np.loadtxt(source,delimiter=',');updates=[];start=time.perf_counter()
@@ -18,7 +18,7 @@ def run(source,port,device_id,output,realtime=False):
     def update(r):
         if r['events']:updates.append(dict(samples=r['samples'],events=len(r['events']),seconds=time.perf_counter()-start))
     serial=DuplexSerial(port)
-    try:r=transfer_stream(blocks(),serial,output,'hp05',len(signal),on_update=update)
+    try:r=transfer_stream(blocks(),serial,output,'hp05',len(signal),on_update=update,precision=precision)
     finally:serial.close()
     assert any(u['samples']<len(signal) for u in updates),'结束前没有分类结果'
     from check_cnn_board import verify
@@ -30,4 +30,4 @@ def run(source,port,device_id,output,realtime=False):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for n in ('source','port','device-id','output'):p.add_argument('--'+n,required=True)
-    p.add_argument('--realtime',action='store_true');a=p.parse_args();run(a.source,a.port,a.device_id,a.output,a.realtime)
+    p.add_argument('--precision',choices=('FP32','W8A8'),default='FP32');p.add_argument('--realtime',action='store_true');a=p.parse_args();run(a.source,a.port,a.device_id,a.output,a.realtime,a.precision)

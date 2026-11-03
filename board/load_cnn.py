@@ -7,7 +7,7 @@ from ecg_ports import enumerate_ports
 from ecg_bridge_serial import DuplexSerial
 def load(manifest,xsdb,cable,port,device_id,output):
     manifest=Path(manifest).resolve();manifest.relative_to(ROOT/'tmp');data=json.loads(manifest.read_text())
-    if data.get('application')!='cnn_batch' or data.get('protocol') not in ('CNN-BATCH-1','CNN-PL-1','ECG-DUAL-1','ECG-DUAL-STREAM-1') or data['model']['model_sha256']!=MODEL:raise ValueError('不是匹配的H27应用')
+    if data.get('application')!='cnn_batch' or data.get('protocol') not in ('CNN-BATCH-1','CNN-PL-1','ECG-DUAL-1','ECG-DUAL-STREAM-1','ECG-TRIPLE-1') or data['model']['model_sha256']!=MODEL:raise ValueError('不是匹配的H27应用')
     for name,row in data['files'].items():
         p=(ROOT/name).resolve();p.relative_to(ROOT)
         if p.stat().st_size!=row['bytes'] or hashlib.sha256(p.read_bytes()).hexdigest()!=row['sha256']:raise ValueError('镜像不匹配：'+name)

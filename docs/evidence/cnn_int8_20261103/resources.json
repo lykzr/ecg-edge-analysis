@@ -1,0 +1,44 @@
+{
+  "device": "xc7z020clg400-2",
+  "stage": "routed",
+  "board_verified": true,
+  "capacity": {
+    "lut": 53200,
+    "ff": 106400,
+    "bram36": 140,
+    "dsp": 220
+  },
+  "rows": [
+    {
+      "name": "FP32 CNN",
+      "scope": "CNN核",
+      "lut": 5992,
+      "ff": 6112,
+      "bram36": 57,
+      "dsp": 38
+    },
+    {
+      "name": "INT8 CNN",
+      "scope": "CNN核",
+      "lut": 14359,
+      "ff": 9554,
+      "bram36": 20.5,
+      "dsp": 54
+    },
+    {
+      "name": "三核系统总量",
+      "scope": "QRS / HGB / 两种CNN / AXI",
+      "lut": 23386,
+      "ff": 18426,
+      "bram36": 121,
+      "dsp": 92
+    }
+  ],
+  "note": "同一三核镜像的Vivado布局布线报告；FP32与INT8并行度不同。已通过合成输入整段板测，真实分类质量未验收。",
+  "bit_sha256": "e86fa2e5152ef2855c4f4283e1b528d20b0f9e04d4ab96b168a0d61681290cc8",
+  "timing": {
+    "clock_hz": 100000000,
+    "wns_ns": 0.1,
+    "whs_ns": 0.06
+  }
+}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {envelope, segments, valuePoints, displayWaveforms} from '../../src/web/frontend/src/components/waveformGeometry.ts';
 import {beatConfidence} from '../../src/web/frontend/src/features/analyze/beatConfidence.ts';
 import {sourceTrace} from '../../src/web/frontend/src/components/liveSource.ts';
-import {categoryFor, identifyCsv, hasFilteredResult, sourceAvailability, sourceSignals, selectSourceTrace, defaultSourceTrace} from '../../src/web/frontend/src/components/liveOptions.ts';
+import {categoryFor, identifyCsv, hasFilteredResult, sourceAvailability, sourceSignals, sourceSignal, selectSourceTrace, defaultSourceTrace} from '../../src/web/frontend/src/components/liveOptions.ts';
 import {trendSegments, trendTicks} from '../../src/web/frontend/src/components/trendGeometry.ts';
 
 test('逐拍置信度仅统计有效且合法的概率，未知不补正常',()=>{
@@ -34,9 +34,13 @@ test('绘图保留原始幅值和偏置，叠加共用范围，时轴和缺口�
   assert.deepEqual(displayWaveforms([],[]),{primary:[],secondary:[],min:0,max:1});
 });
 
-test('切换呼吸默认去基线滤波，缺字段的旧记录明确回退原码',()=>{
-  assert.equal(defaultSourceTrace('resp'),'resp');assert.equal(defaultSourceTrace('ecg'),'mv');
+test('心电默认节律显示滤波，呼吸默认去基线滤波，旧记录明确回退原码',()=>{
+  assert.equal(defaultSourceTrace('resp'),'resp');assert.equal(defaultSourceTrace('ecg'),'display_mv');
   const sample={index:0,resp_raw:8388609,ecg_raw:8388610,resp_filtered:null,ecg_filtered:null};
+  const ecgSignal=sourceSignal(defaultSourceTrace('ecg'));
+  assert.equal(selectSourceTrace([sample],'ecg',ecgSignal,true),'code');
+  assert.equal(selectSourceTrace([{...sample,ecg_nominal_mv:.01}],'ecg',ecgSignal,true),'mv');
+  assert.equal(selectSourceTrace([{...sample,ecg_nominal_mv:.01,ecg_display_mv:.002}],'ecg',ecgSignal,true),'display_mv');
   assert.equal(selectSourceTrace([sample],'resp',defaultSourceTrace('resp'),false),'code');
   const filtered={...sample,resp_display_code:3};
   assert.equal(selectSourceTrace([filtered],'resp',defaultSourceTrace('resp'),false),'resp');

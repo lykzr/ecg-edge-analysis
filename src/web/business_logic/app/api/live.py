@@ -51,12 +51,19 @@ class Start(BaseModel):
     standard_preprocess: Literal['hp05', 'raw'] | None = None
     board_model: StrictBool = False
     board_classifier: Literal['hgb','cnn'] = 'hgb'
+    board_precision: Literal['FP32','W8A8'] = 'FP32'
     board_streaming: StrictBool = False
 
 
 @router.get('/ports')
 def ports(user: str = Depends(current_user)):
     return manager.ports()
+
+
+@router.get('/accelerators')
+def accelerators(user: str = Depends(current_user)):
+    from ecg_accelerator_resources import resources
+    return resources()
 
 
 @router.post('/uploads')

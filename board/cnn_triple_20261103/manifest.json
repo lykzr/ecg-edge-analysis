@@ -1,0 +1,112 @@
+{
+  "protocol": "ECG-TRIPLE-1",
+  "tool_version": "2026.1",
+  "device": "xc7z020clg400-2",
+  "files": {
+    "cnn_pl.bit": {
+      "bytes": 4045773,
+      "sha256": "e86fa2e5152ef2855c4f4283e1b528d20b0f9e04d4ab96b168a0d61681290cc8",
+      "source": "tmp/cnn_int8_pl_build_01/cnn_pl.bit"
+    },
+    "cnn_pl.xsa": {
+      "bytes": 1330230,
+      "sha256": "94b56f3ad89abe643e52610062ef7c58cf94214a723c81eaa6aae829b7415704",
+      "source": "tmp/cnn_int8_pl_build_01/cnn_pl.xsa"
+    },
+    "ecg_cnn_arm.elf": {
+      "bytes": 1643704,
+      "sha256": "ab132b6f58b4fdd242ea9eebbbe8d641d61014768e66d99ebd1e6f282b85d7af",
+      "source": "tmp/cnn_int8_vitis_02/ecg_cnn_arm/build/ecg_cnn_arm.elf"
+    },
+    "ecg_cnn_arm.map": {
+      "bytes": 432882,
+      "sha256": "9fc85a507fe11471c2ace4a07129a291f1b823b43f4344b8cd3b54cb85eabe60",
+      "source": "tmp/cnn_int8_vitis_02/ecg_cnn_arm/build/ecg_cnn_arm.map"
+    },
+    "fsbl.elf": {
+      "bytes": 359648,
+      "sha256": "20be2ba37ed987e5ca9de8e4ccafd23ac739c200a13ba4df05b126e350cad786",
+      "source": "tmp/cnn_int8_vitis_02/ecg_platform/zynq_fsbl/build/fsbl.elf"
+    },
+    "ps7_init.tcl": {
+      "bytes": 27602,
+      "sha256": "02fa20dccd77fc2e5517a57d810289b2003afd3b82884a96723a7f9e968657f9",
+      "source": "tmp/cnn_int8_vitis_02/ecg_platform/hw/sdt/ps7_init.tcl"
+    },
+    "routed.dcp": {
+      "bytes": 21192610,
+      "sha256": "928f0c235f44e729e46544e428058de285c296a34c5dd11e3a81804072930a30",
+      "source": "tmp/cnn_int8_pl_build_01/cnn_pl.runs/impl_1/ecg_system_wrapper_routed.dcp"
+    },
+    "build_manifest_original.json": {
+      "bytes": 14711,
+      "sha256": "a23d53511b668d4763877d18902f878161bd6d9c4b70c475551573165228a0f0",
+      "source": "tmp\\cnn_int8_vitis_02\\build_manifest.json"
+    }
+  },
+  "sources": {
+    "src/ps/ecg_hgb/hgb.h": "343c5b9be13eff2348fe1c7aa4f534d1c3f273121f5f86e06672f558a0f0d40d",
+    "src/ps/ecg_hgb/prepare.c": "c2c531e8401a65040006a6480b124203002eb3dc653da049f9c5fae1737e49d8",
+    "src/ps/ecg_hgb/frozen.h": "4f0a1a2c65e9007fa6147e0ea1a20c3e67ad7707bfe244ee394babd3b544d202",
+    "src/ps/ecg_hgb/legacy.h": "90d25a61ba58981d46089126703340355d161ed9cc3662877e5871beef564798",
+    "src/ps/ecg_cnn/cnn.h": "c6164ea4e37f81338930fd5fa11a55c442d2db4f312f3f173d44d73ec4688e3a",
+    "src/ps/ecg_cnn/network.c": "121efdfaacd0d2c8080e2c5862000ed647a43dca62e866893a355787e5bd667c",
+    "board/cnn_triple_20261103/generated/cnn_features.c": "94ddbda1ea723cb0b7aa3c3836b7533a9f0a6adc5db92a565f4fcf9f79b8539e",
+    "src/ps/ecg_cnn/main.c": "8d6fb08f458add2e249f57086c0eeae54584eb1e77f39eaa8ac8fa25f6088434",
+    "src/ps/ecg_cnn/stream.h": "fc1469c0f84dbaecee8fe17045f6da0e08fa2bdfff524068c7eab03c1533cd0d",
+    "src/ps/ecg_cnn/stream.c": "0a63b7c1d5e57e893f5f436b5ea8ac861ef5004cb77dfee9f1fc5f1260b00811",
+    "src/ps/ecg_cnn/stream_uart.h": "27f89bdb78f57d024da630d71915ad216941eac6e95e15a9b9970325c039b41f",
+    "src/ps/ecg_cnn/pl_forward.c": "88465c063f7bc412d528c8ea6eb1454ed56d32a5752daacc8cd959f53b23845b",
+    "src/ps/ecg_hgb/features.c": "3877247b12437a2204b8e7fac49772ba4501adb2ccc45bcaf9ce069fea5f77ef",
+    "src/ps/ecg_hgb/pl_tree.c": "67f89c3e7f33b235a26aa6e378892e8e199abf4a4c71087b8060055a985b8ed5",
+    "src/ps/ecg_hgb/pl_main.c": "b936011934efe3e85672f10ba7a768980235a24adc8ea630e433022bdcde4c45",
+    "board/cnn_triple_20261103/generated/hgb_parameters.c": "f34793c2f5bcaee312721a60f04d9d0a28c980ada637251ed3323e492e47bc29",
+    "board/cnn_triple_20261103/generated/hgb_pl_fixture.c": "a3bec61171eb9bc03e3e066ed90ffe678f716c223bc6ef552d032304e38ee17f",
+    "board/cnn_triple_20261103/generated/hgb_pl_fixture.h": "331cde5b7a317373925ba2816399ead62538fadb97d50f8a36c2cb2b1a9a23ff",
+    "model/inference/native/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+    "model/inference/native/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+    "model/inference/native/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+    "model/inference/native/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+    "model/inference/native/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+    "model/inference/native/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+    "model/inference/native/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+    "model/inference/native/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+    "model/inference/native/runtime500_bridge.c": "315f998ddfb5711ab8421542d3fc62a484ff4b11674b87069f173718582f1296",
+    "model/inference/native/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+    "board/cnn_triple_20261103/generated/cnn_weights.c": "ebfa9ef83973af75a6c4825562253d1c142f7b3444235cfb0fd5b6e91b0e6978",
+    "board/cnn_triple_20261103/generated/cnn_offsets.h": "3cce6af265388d0bc5a636201ae6ced798869a8bea4939626808bf480ea645fe",
+    "src/ps/ecg_cnn/int8_arm.cpp": "cb1dab52adcf1707dc36003113e7ff928c0453d08a309b038eb5530174863c92",
+    "src/hls/ecg_cnn_int8/int8_core.h": "3090f64e494de82587a0c1afcc958005559a8222d0731b10b9dc513cebc8f47c",
+    "board/cnn_triple_20261103/generated/cnn_int8_weights.h": "6df82bba151695c0bc7f55b099fc72027408c8f16fcd397faafbf71138b63ef2",
+    "src/ps/ecg_cnn/features.c": "94ddbda1ea723cb0b7aa3c3836b7533a9f0a6adc5db92a565f4fcf9f79b8539e",
+    "src/ps/ecg_hgb/legacy.c": "72922ab5a0adbd48b4339a9c2ba7f3d54a87e82f0bcb0425da82bc57c2c0abe0",
+    "board/cnn_triple_20261103/generated/link500.c": "f23be0377372e5bfa356d06337d5c204c34a91872b8f41813f03a248a3db4656",
+    "board/cnn_triple_20261103/generated/runtime500_bridge.c": "a5a736dcdc3c67b7c90ecb8e8614b935a016241ce2f14686aa4eceb12c3bcda1",
+    "src/ps/ecg_rate500/rate500.c": "e0232500d8a9ecd651692f61632943f2dffb2cbfb0d7f8d4bcb6e5ee72a7af80",
+    "src/ps/ecg_rate500/pipeline500.c": "6e6073e3ab1fbaf3da91ba06ed747267ea8d69873b589ace3d7ce03bac88d7f8",
+    "src/ps/ecg_classification/classification.c": "74119c8bc56a38d2e4ab6c4c2bb439a23f0d39f8d366c977f220f961a58fa501",
+    "src/ps/ecg_runtime/link.h": "03cba14ee4f25c9538a05617926d67c6fcfdbd565d14d4a455da710567859bba",
+    "src/ps/ecg_runtime/pipeline.h": "96fcb0ce69798e07349e4cd2338c284ab82cffdf6fd4db4c92fcf329bb8d3e94",
+    "src/ps/ecg_runtime/resample360.h": "cc933fe63074a6082503e6c8fc4abcfbc0b1e9b87bcb1cc3cbb30a201e900b0d",
+    "src/ps/ecg_runtime/runtime.h": "b89e8f000c1e582d913ca7cc3e34213664e34e664584ad8eda1b73d9196ba092",
+    "src/ps/ecg_rate500/coefficients.h": "af7643fe7d3ef0ff8f5ed075163eff67ba40bb08a7190ab2942968e48867daae",
+    "src/ps/ecg_rate500/rate500.h": "8e4b179fac24a8b5af2e84a69409b910f87278194b737b4ef2ab6dbec4a4ac0b",
+    "src/ps/ecg_rate500/window500.h": "641e7585dca77c44b2cf1bcf6a61083276cded2dc48295e247015450b398e427",
+    "src/ps/ecg_classification/classification.h": "2d3ca8c4397c785178cc65650824131d6234230aa2bb746a2c66f475f5417f7e",
+    "build/generate_rate500_runtime.py": "11821a0ca1378cc555eccd5ff71184a036943b5090a83baf641c880393aa58a5",
+    "build/build_hgb_legacy.py": "e04c2f4bae4f5ca718d1478fd5959ffd68e563d3aa909856594ae0aef5177697"
+  },
+  "model_sha256": "16d56a6b1065df35f3e11c4cc285055b421978bd451d5da1b72df8f1744fcfc7",
+  "scope": "已板测三核JTAG组合；不含QSPI启动镜像；资源与时序使用原routed检查点；重新构建不保证逐字节相同",
+  "source_path_mapping": {
+    "tmp/cnn_int8_vitis_02_sources/cnn_features.c": "board/cnn_triple_20261103/generated/cnn_features.c",
+    "tmp/cnn_int8_vitis_02_hgb_parameters/hgb_parameters.c": "board/cnn_triple_20261103/generated/hgb_parameters.c",
+    "tmp/hgb_pl_sim_02/hgb_pl_fixture.c": "board/cnn_triple_20261103/generated/hgb_pl_fixture.c",
+    "tmp/hgb_pl_sim_02/hgb_pl_fixture.h": "board/cnn_triple_20261103/generated/hgb_pl_fixture.h",
+    "tmp/cnn_int8_preserve_fp32_01/parameters/cnn_weights.c": "board/cnn_triple_20261103/generated/cnn_weights.c",
+    "tmp/cnn_int8_preserve_fp32_01/parameters/cnn_offsets.h": "board/cnn_triple_20261103/generated/cnn_offsets.h",
+    "tmp/cnn_int8_parameters_01/cnn_int8_weights.h": "board/cnn_triple_20261103/generated/cnn_int8_weights.h",
+    "tmp/cnn_int8_vitis_02_legacy/generated/link500.c": "board/cnn_triple_20261103/generated/link500.c",
+    "tmp/cnn_int8_vitis_02_legacy/generated/runtime500_bridge.c": "board/cnn_triple_20261103/generated/runtime500_bridge.c"
+  }
+}

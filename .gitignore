@@ -385,3 +385,21 @@ logs/
 !/board/cnn_demo_20261103/fp32/fsbl.elf
 !/board/cnn_demo_20261103/int8_candidate/input.bin
 !/board/cnn_demo_20261103/int8_candidate/expected.bin
+!/docs/evidence/cnn_int8_20261103/
+!/docs/evidence/cnn_int8_20261103/resources.json
+!/docs/evidence/cnn_int8_20261103/summary.json
+!/docs/evidence/cnn_int8_20261103/hls_synthesis.rpt
+!/docs/evidence/cnn_int8_20261103/hls_cosim.rpt
+!/docs/evidence/cnn_int8_20261103/utilization.rpt
+!/docs/evidence/cnn_int8_20261103/utilization_hierarchy.rpt
+!/docs/evidence/cnn_int8_20261103/timing.rpt
+
+# 三核实测交付：只放行配套产物。
+!/board/cnn_triple_20261103/cnn_pl.bit
+!/board/cnn_triple_20261103/cnn_pl.xsa
+!/board/cnn_triple_20261103/ecg_cnn_arm.elf
+!/board/cnn_triple_20261103/ecg_cnn_arm.map
+!/board/cnn_triple_20261103/fsbl.elf
+!/board/cnn_triple_20261103/ps7_init.tcl
+!/board/cnn_triple_20261103/routed.dcp
+!/board/cnn_triple_20261103/build_manifest_original.json

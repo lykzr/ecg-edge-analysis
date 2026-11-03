@@ -14,6 +14,8 @@ if workspace.exists():raise FileExistsError(workspace)
 hardware=Path(os.environ['ECG_CNN_HARDWARE']).resolve();hardware.relative_to(ROOT/'tmp')
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 pl=os.environ.get('ECG_CNN_PL','0')=='1'
+int8=os.environ.get('ECG_CNN_INT8','0')=='1'
+if int8 and not pl:raise ValueError('INT8候选需要保留FP32/HGB的PL镜像')
 bitname='cnn_pl' if pl else 'hgb_pl'
 artifacts=[hardware/(bitname+ext) for ext in ('.bit','.xsa')]
 assert all(p.is_file() for p in artifacts)
@@ -30,6 +32,9 @@ if pl:
 sources += [native/n for n in ('pipeline500.c','pipeline.h','rate500.c','rate500.h','window500.h','coefficients.h','classification.c','classification.h','runtime500_bridge.c','runtime.h')]
 rom=Path(os.environ['ECG_CNN_PARAMETERS']).resolve();rom.relative_to(ROOT/'tmp')
 sources += [rom/'cnn_weights.c',rom/'cnn_offsets.h']
+if int8:
+    qrom=Path(os.environ['ECG_CNN_INT8_PARAMETERS']).resolve();qrom.relative_to(ROOT/'tmp')
+    sources += [cnn/'int8_arm.cpp',ROOT/'src/hls/ecg_cnn_int8/int8_core.h',qrom/'cnn_int8_weights.h']
 if pl:
     generated=workspace.parent/(workspace.name+'_sources');generated.mkdir(exist_ok=False)
     (generated/'cnn_features.c').write_bytes((cnn/'features.c').read_bytes())
@@ -51,6 +56,7 @@ try:
     component=workspace/'ecg_cnn_arm';config=component/'src/UserConfig.cmake'
     text=config.read_text();text=text.replace('set(USER_COMPILE_OPTIMIZATION_LEVEL -O0)','set(USER_COMPILE_OPTIMIZATION_LEVEL -O2)')
     flags=('-DECG_CNN_PL -DECG_HGB_PL -DECG_DUAL_MODEL ' if pl else '')+'-ffp-contract=off -fno-fast-math -fstack-usage -include '+(component/'frozen.h').as_posix()
+    if int8:flags='-DECG_CNN_INT8 '+flags
     text=text.replace('set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS )','set(USER_COMPILE_OPTIMIZATION_OTHER_FLAGS "'+flags+'")')
     libraries='"hgb_legacy" "m"' if archive else '"m"'
     text,n=re.subn(r'set\(USER_LINK_LIBRARIES\s*.*?\)','set(USER_LINK_LIBRARIES '+libraries+')',text,count=1,flags=re.S);assert n==1
@@ -58,6 +64,12 @@ try:
         text,n=re.subn(r'set\(USER_LINK_DIRECTORIES\s*.*?\)','set(USER_LINK_DIRECTORIES "'+archive.parent.as_posix()+'")',text,count=1,flags=re.S);assert n==1
     text,n=re.subn(r'set\(USER_LINK_OTHER_FLAGS\s*.*?\)','set(USER_LINK_OTHER_FLAGS "-Wl,-Map=ecg_cnn_arm.map")',text,count=1,flags=re.S);assert n==1
     config.write_text(text)
+    if int8:
+        cmake=component/'src/CMakeLists.txt';mixed=cmake.read_text()
+        # Vitis按cpp扩展名把整个工程标成c++，模板会错误改写C编译器。
+        assert 'set(CMAKE_C_COMPILER ${CMAKE_CXX_COMPILER})' in mixed
+        mixed=mixed.replace('set(CMAKE_C_COMPILER ${CMAKE_CXX_COMPILER})','# 保留C编译器；仅.cpp使用C++编译器')
+        cmake.write_text(mixed)
     linker=component/'src/lscript.ld';text=linker.read_text();text,n=re.subn(r'(_STACK_SIZE\s*=.*?:\s*)0x[0-9a-fA-F]+',r'\g<1>0x40000',text,count=1);assert n==1;linker.write_text(text)
     app.build()
     elf=component/'build/ecg_cnn_arm.elf';link_map=elf.with_name('ecg_cnn_arm.map')
@@ -67,5 +79,9 @@ try:
     assert fsbl.is_file() and init.is_file()
     result=dict(application='cnn_batch',protocol='ECG-DUAL-STREAM-1' if pl else 'CNN-BATCH-1',dual_protocol=True,model=params,elf=elf.relative_to(ROOT).as_posix(),bit=artifacts[0].relative_to(ROOT).as_posix(),init=init.relative_to(ROOT).as_posix(),files={p.relative_to(ROOT).as_posix():dict(bytes=p.stat().st_size,sha256=sha(p)) for p in artifacts+[elf,link_map,fsbl,init]},sources={**{p.relative_to(ROOT).as_posix():h for p,h in ((Path(k),v) for k,v in hashes.items())},**legacy_sources},legacy_commands=legacy_commands,stack_bytes=0x40000,scope='H27 FP32 CNN streaming and batch + HGB batch PL, with per-beat ARM comparison' if pl else 'H27 FP32 ARM CNN; not continuous scheduling or Flash')
     (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
+    if int8:
+        result['protocol']='ECG-TRIPLE-1';result['quantization']=json.loads((qrom/'export.json').read_text())
+        result['scope']='FP32 CNN + W8A8 CNN + HGB; each integer result checked against same-device integer ARM reference'
+        (workspace/'build_manifest.json').write_text(json.dumps(result,indent=2)+'\n')
     print('PASS CNN_ARM_BUILD '+str(elf),flush=True)
 finally:vitis.dispose()

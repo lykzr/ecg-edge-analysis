@@ -26,7 +26,7 @@ export function categoryFor(kind: string): LiveCategory {
 export type SourceSignal = 'original' | 'vendor' | 'baseline' | 'display' | 'resp';
 /** 切换通道时选该通道的默认显示；缺列仍由selectSourceTrace回退。 */
 export function defaultSourceTrace(channel: string): SourceTrace {
-  return channel==='resp'?'resp':'mv';
+  return channel==='resp'?'resp':'display_mv';
 }
 const finite = (value: unknown) => typeof value === 'number' && Number.isFinite(value);
 

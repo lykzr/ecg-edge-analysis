@@ -211,6 +211,8 @@ class LiveManager:
                 raise ValueError('实时节拍须为布尔值')
             board_model=config.get('board_model',False)
             classifier=config.get('board_classifier','hgb')
+            precision=config.get('board_precision','FP32')
+            if precision not in ('FP32','W8A8') or (precision=='W8A8' and (not board_model or classifier!='cnn')):raise ValueError('INT8仅支持板端CNN')
             streaming=config.get('board_streaming',False)
             if type(streaming) is not bool or (streaming and (not board_model or classifier!='cnn')):raise ValueError('流式分类目前须选择板端CNN')
             if classifier not in ('hgb','cnn'):raise ValueError('板端分类器必须为hgb或cnn')
@@ -237,7 +239,7 @@ class LiveManager:
                     selected_worker=CnnLiveWorker
                 worker=selected_worker(kind,capture['port'] if capture else source,zynq['port'],directory,
                     preprocess=config.get('standard_preprocess'),sample_limit=limit,realtime=realtime,
-                    zynq_device=zynq,source_device=capture,classifier=classifier)
+                    zynq_device=zynq,source_device=capture,classifier=classifier,precision=precision)
             elif kind in {'demo', 'log', 'result_serial'}:
                 worker = MonitorWorker(kind, zynq['port'] if zynq else source, directory,
                                        seconds=seconds, realtime=realtime)

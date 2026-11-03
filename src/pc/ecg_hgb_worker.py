@@ -12,7 +12,7 @@ from ecg_bridge_capture import NominalConverter
 
 class HgbWorker(threading.Thread):
     def __init__(self,kind,source,port,directory,*,preprocess=None,sample_limit=5000,
-                 realtime=True,zynq_device=None,source_device=None,port_factory=DuplexSerial,classifier='hgb'):
+                 realtime=True,zynq_device=None,source_device=None,port_factory=DuplexSerial,classifier='hgb',precision='FP32'):
         super().__init__(name='ecg-hgb-arm',daemon=False)
         if kind not in ('standard500','bridge_csv','bridge_serial'):raise ValueError('板端模型只接标准500Hz或厂商500Hz')
         if kind=='standard500' and preprocess not in ('hp05','raw'):raise ValueError('必须声明标准500Hz的hp05/raw状态')
@@ -20,6 +20,8 @@ class HgbWorker(threading.Thread):
         self.kind,self.source,self.port,self.directory=kind,source,port,Path(directory)
         if classifier not in ('hgb','cnn'):raise ValueError('板端分类器必须为hgb或cnn')
         self.classifier=classifier
+        if precision not in ('FP32','W8A8') or (precision=='W8A8' and classifier!='cnn'):raise ValueError('INT8仅支持CNN')
+        self.precision=precision
         if classifier=='cnn':
             from ecg_cnn import MODEL as selected_model
         else:selected_model=MODEL
@@ -28,7 +30,7 @@ class HgbWorker(threading.Thread):
         self.cancel=threading.Event();self.lock=threading.RLock()
         self.samples=deque(maxlen=4096);self.values=[];self.capture=None
         self.info=dict(state='starting',reason=None,error=None,source_samples=0,confirmed=0,done=False,
-                       execution_location='pending_board_identity',model_sha256=selected_model,qualified=False,classifier=classifier,
+                       execution_location='pending_board_identity',model_sha256=selected_model,qualified=False,classifier=classifier,precision=precision,
                        protocol='CNN-BATCH-1' if classifier=='cnn' else 'HGB-BATCH-1',sampling_hz=500,preprocess=self.mode,
                        zynq_device=zynq_device,source_device=source_device,upstream_source_drop=None)
         self.view=dict(header=None,samples=[],events=[],hr=None,rr_ms=None,cls='未提供',waveform_origin='host_input')
@@ -98,7 +100,8 @@ class HgbWorker(threading.Thread):
             selected_transfer=transfer
             if self.classifier=='cnn':
                 from ecg_cnn import transfer as selected_transfer
-            result=selected_transfer(self.values,serial,self.directory,self.mode,cancel=self.cancel,progress=progress)
+            options={'precision':self.precision} if self.precision=='W8A8' else {}
+            result=selected_transfer(self.values,serial,self.directory,self.mode,cancel=self.cancel,progress=progress,**options)
             rows=[];previous=None
             for event in result['events']:
                 rr=event['position']-previous if previous is not None else 0
@@ -114,7 +117,7 @@ class HgbWorker(threading.Thread):
                     events=rows[-256:],hr=last['hr'] if last else None,rr_ms=last['rr']*2 if last and last['rr'] else None,
                     cls=last['cls'] if last else '未提供',waveform_origin='host_input')
                 self.info.update(state='stopped',reason='completed',done=True,compute_us=result['compute_us'],clipped=result['clipped'],
-                    execution_location=result['execution_location'],performance=result['performance'],precision=result['precision'],
+                    execution_location=result['execution_location'],performance=result['performance'],precision=result['precision'],quantization_comparison=result.get('quantization_comparison'),
                     event_count=len(result['events']),class_counts={label:sum(e['label']==label for e in result['events']) for label in (('N','S','V','F','UNCLASSIFIED') if self.classifier=='cnn' else ('N','S','VF','UNCLASSIFIED'))})
         except InterruptedError as exc:self.info.update(state='stopped',reason='stopped_by_user',error=None,note=str(exc))
         except Exception as exc:self.info.update(state='error',reason='failed',error=type(exc).__name__+': '+str(exc))

@@ -23,6 +23,32 @@ def test_api_model_selection():
     assert Start(kind='bridge_csv',board_classifier='cnn').board_classifier=='cnn'
     assert Start(kind='bridge_csv').board_classifier=='hgb'
 
+
+def test_int8_selection_is_separate_and_validated(tmp_path):
+    import pytest
+    from ecg_web_service import LiveManager
+    assert Start(kind='bridge_csv',board_classifier='cnn').board_precision=='FP32'
+    assert Start(kind='bridge_csv',board_classifier='cnn',board_precision='W8A8').board_precision=='W8A8'
+    manager=LiveManager(tmp_path)
+    for fields in (dict(board_model=False,board_classifier='cnn'),dict(board_model=True,board_classifier='hgb')):
+        with pytest.raises(ValueError,match='INT8'):manager.start('owner',dict(kind='bridge_csv',board_precision='W8A8',**fields))
+
+
+def test_resource_evidence_pending_no_fabricated_numbers():
+    from ecg_accelerator_resources import resources
+    result=resources()
+    assert result['device']=='xc7z020clg400-2'
+    if result['stage']=='pending':assert result['rows']==[] and not result['board_verified']
+
+
+def test_resource_endpoint_requires_account(client):
+    from test_api_flow import account
+    assert client.get('/api/v1/live/accelerators').status_code==401
+    header=account(client,'resource-reader')
+    response=client.get('/api/v1/live/accelerators',headers=header)
+    assert response.status_code==200
+    assert response.json()['capacity']['bram36']==140
+
 def test_streaming_is_opt_in_and_cnn_only(tmp_path):
     import pytest
     from ecg_web_service import LiveManager

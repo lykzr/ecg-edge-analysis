@@ -51,13 +51,13 @@ class CnnLiveWorker(HgbWorker):
                     e['host_after_ready_ms']=max(0,(e['host_received_at']-arrivals[e['received_through']])*1000)
             for row,e in zip(rows,result['events'][-256:]):row['host_after_ready_ms']=e.get('host_after_ready_ms')
             self.info.update(confirmed=result['samples'],execution_location='zynq_pl',performance=result['performance'],
-                precision='FP32',event_count=len(result['events']),queue_depth=self.queue.qsize(),
+                precision=result.get('precision',self.precision),quantization_comparison=result.get('quantization_comparison'),event_count=len(result['events']),queue_depth=self.queue.qsize(),
                 class_counts={k:sum(e['label']==k for e in result['events']) for k in ('N','S','V','F','UNCLASSIFIED')},
                 compute_us=result['compute_us'],clipped=result['clipped'])
             self.info['latest_performance']=dict(beat_id=latest['beat_id'],
                 call_speedup=latest['arm_ticks']/latest['pl_call_ticks']) if latest else None
             self.view=dict(header=dict(firmware='cnn-stream-1',session=str(result['session']),source='ADC' if self.kind=='bridge_serial' else 'REPLAY',
-                detector='CNN-H27-fold0-PL-FP32-STREAM',fs=500,scale=1,caps=20),
+                detector='CNN-H27-fold0-PL-'+self.precision+'-STREAM',fs=500,scale=1,caps=20),
                 samples=[dict(seq=s['index'],index=s['index'],raw=s['ecg_nominal_mv'],filt=None) for s in self.samples],
                 events=rows,hr=last['hr'] if last else None,rr_ms=last['rr']*2 if last and last['rr'] else None,
                 cls=last['cls'] if last else '未提供',waveform_origin='host_input')
@@ -104,8 +104,9 @@ class CnnLiveWorker(HgbWorker):
             self.info['state']='connecting';serial=self.factory(self.port,115200)
             self.started=time.perf_counter();self.info['state']='running'
             with (self.directory/'input_mv.csv').open('w',encoding='utf-8',newline='\n') as writer:
+                options={'precision':self.precision} if self.precision=='W8A8' else {}
                 result=transfer_stream(self.blocks(writer),serial,self.directory,self.mode,self.limit,
-                    on_update=self.publish)
+                    on_update=self.publish,**options)
             self.publish(result)
             self.info.update(state='stopped',reason='stopped_by_user' if self.cancel.is_set() else 'completed',done=True,
                 wall_seconds=result['wall_seconds'])
